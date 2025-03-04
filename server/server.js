@@ -100,7 +100,8 @@ app.post('/signup', (req, res) => {
     users[email] = user;
 
     res.cookie('podvorot', id, {
-        expires: new Date(Date.now() + 1000 * 60 * 10)
+        expires: new Date(Date.now() + 1000 * 60 * 10),
+        httpOnly: true //временно пока нет настройки для https
     });
     res.status(201).json({ id });
 });
