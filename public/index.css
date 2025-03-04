@@ -1,44 +1,45 @@
 body {
     background-color: #FFF;
+    /*background: radial-gradient(100% 316.05% at 0% 0%, #CED8FF 0%, #4369FC 100%) для авторизации*/
     font-family: VK Sans Display, sans-serif;
 }
 
-#root {
-    display: grid;
-    grid-template-areas:
-        "logo . search  avatar ."
-        "menu . content side_menu .";
-
-    grid-template-rows: 48px 1fr; /* 48, чтобы сделать отступ между меню и лого*/
-    grid-template-columns:
-        168px /* меню */
-        calc((100% - 168px - 550px - 345px) / 2) /* левый отступ */
-        550px /* лента */
-        345px /* правое доп. меню */
-        calc((100% - 168px - 550px - 345px) / 2); /* правый отступ */
+.menu {
+    padding-top: 64px; /* Отступ сверху */
+    width: 220px; /* Ширина меню */
+    height: 1080px;
+    background: white;
+    display: flex;
+    flex-direction: column;
 }
 
-.menu {
-    grid-area: menu; /* Указываем, что menu должно быть в области "menu" */
-    padding-top: 20px;
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: fixed; /* Фиксируем хедер */
+    top: 0; /* Прижимаем к верху */
+    width: 100%; /* Растягиваем на всю ширину */
+    padding: 10px 20px; /* Дополнительные отступы, можно настроить */
+    background: white;
+    border-bottom: 1px solid #ddd;
 }
 
 .logo-item {
     align-self: start;
-    grid-area: logo;
     display: flex;
     align-items: center; /* Выравнивание по центру внут элементов*/
     gap: 8px; /* Расстояние между иконкой и текстом */
-    padding-left: 16px;
-    width: 100%;
-    height: 100%;
+    padding-top: 12px;
+    width: 175px;
+    height: 27px;
 }
 
 .search-container {
     align-self: center;
-    grid-area: search;
     display: flex;
     align-items: start;
+    margin: 0 0 0 calc((100% - 932px) / 2);
     background: #EDEEF0;
     border-radius: 8px;
     width: 220px;
@@ -49,6 +50,7 @@ body {
     border: none;
     outline: none;
     background: transparent;
+    align-items: start;
     width: 220px;
     height: 32px;
     font-size: 14px;
@@ -65,22 +67,21 @@ body {
 }
 
 .search-icon-container {
-    grid-area: search;
     align-self: center;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: left;
     width: 64px;
     height: 20px;
-    padding-left: 244px;
+    padding-left: 24px;
     gap: 24px; /* Расстояние между иконками */
 }
 
 .notice-icon {
+    display: flex;
     width: 20px;
     height: 20px;
     color: #FFFFFF;
-    margin-right: 8px;
 }
 
 .music-icon-top {
@@ -88,17 +89,16 @@ body {
     height: 20px;
     /*color: #FFFFFF; /*увы, если цвет уже задан, так его поменять нельзя, но можно сделать
     css для каждой иконки из меню, там покрасим ее, но кажется это нерационально"*/
-    margin-right: 8px;
+    /*margin-right: 8px;*/
 }
 
 .avatar-container {
-    grid-area: avatar;
     align-self: center;
     justify-self: end;
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 0px 8px;
+    padding-left: 524px;
     gap: 8px;
     width: 66px;
     height: 56px;
@@ -120,16 +120,22 @@ body {
 }
 
 .side-menu {
-    grid-area: side_menu;
     align-self: start;
     justify-self: end;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 16px;
+    position: fixed;
+    gap: 4px;
+    top: 60px;
+    right: 0;
+    padding: 16px;
     width: 363px;
     height: 210px;
+}
+
+.side-menu-item:hover {
+    background: #f0f0f0;
+    border-radius: 4px;
 }
 
 .side-menu-item {
@@ -143,14 +149,19 @@ body {
     border-radius: 4px;
 }
 
+.container {
+    display: flex;
+}
+
 .menu-item {
-    grid-area: menu;
     display: flex;
     align-items: center; /* Выравнивание по центру */
     gap: 8px; /* Расстояние между иконкой и текстом */
-    padding-top: 8px;
-    padding-left: 20px;
-    width: 100%;
+    overflow-y: auto;
+    padding-left: 12px;
+    width: 196px;
+    height: 32px;
+    margin: 8px;
 }
 
 .menu-icon {
@@ -159,9 +170,21 @@ body {
 }
 
 main {
-    grid-area: content;
-    padding: 0 40px 40px
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+    padding-top: 90px;
+    margin-left: 220px;
+    width: 554px;
 }
+
+.feed-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Отступ между картинками */
+}
+
 
 a {
     display: block;
@@ -169,18 +192,20 @@ a {
     text-decoration: none;
 }
 
-aside a {
-    margin-bottom: 20px; /* Отступ снизу между пунктами */
-}
+/*aside a {*/
+/*    margin-bottom: 20px; !* Отступ снизу между пунктами *!*/
+/*}*/
 
 input {
     display: block;
     height: 60px;
     font-size: 40px;
     margin-bottom: 15px;
+
 }
 
 .active {
     font-weight: bold;
 }
+
 

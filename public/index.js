@@ -1,12 +1,26 @@
 const root = document.getElementById('root');
 
-renderHeader();
+const container = document.createElement('div');
+container.classList.add('container');
+root.appendChild(container);
+
 
 const menuContainer = document.createElement('aside');
 menuContainer.classList.add('menu'); // Добавляем класс для сетки
 const pageContainer = document.createElement('main');
-root.appendChild(menuContainer);
-root.appendChild(pageContainer);
+
+
+const headerContainer = document.createElement('header');
+headerContainer.classList.add('header');
+container.appendChild(menuContainer);
+container.appendChild(pageContainer);
+container.appendChild(headerContainer);
+
+import Menu from './Menu.js';
+import Ajax from './ajax.js';
+
+
+renderHeader();
 
 const config = {
     menu: {
@@ -46,18 +60,18 @@ const config = {
             icon: 'photo-icon',
             render: renderPhoto
         },
-        music: {
-            href: '/music',
-            text: 'Музыка',
-            icon: 'music-icon',
-            render: renderMusic
-        },
-        video: {
-            href: '/video',
-            text: 'Видео',
-            icon: 'video-icon',
-            render: renderVideo
-        },
+        // music: {
+        //     href: '/music',
+        //     text: 'Музыка',
+        //     icon: 'music-icon',
+        //     render: renderMusic
+        // },
+        // video: {
+        //     href: '/video',
+        //     text: 'Видео',
+        //     icon: 'video-icon',
+        //     render: renderVideo
+        // },
         games: {
             href: '/games',
             text: 'Игры',
@@ -104,48 +118,29 @@ const config = {
     // }
 };
 
-const appState = {
-    activePageLink: null,
-    menuElements: {}
-};
+// const appState = {
+//     activePageLink: null,
+//     menuElements: {}
+// };
 
-function ajax(method, url, body = null, callback) {
-    const xhr = new XMLHttpRequest();
-    xhr.open(method, url, true);
-    xhr.withCredentials = true;
 
-    xhr.addEventListener('readystatechange', function () {
-        if (xhr.readyState !== XMLHttpRequest.DONE) return;
-
-        callback(xhr.status, xhr.responseText);
-    });
-
-    if (body) {
-        xhr.setRequestHeader('Content-type', 'application/json; charset=utf8');
-        xhr.send(JSON.stringify(body));
-        return;
-    }
-
-    xhr.send();
-}
-
-function goToPage(menuElement) {
-    pageContainer.innerHTML = '';
-
-    //временное решение пока не буду закидывать side-menu в pageContainer
-    const sideMenu = document.querySelector('.side-menu');
-    if (sideMenu) {
-        sideMenu.remove();
-    }
-
-    appState.activePageLink.classList.remove('active');
-    menuElement.classList.add('active');
-    appState.activePageLink = menuElement;
-
-    const element = config.menu[menuElement.dataset.section].render();
-
-    pageContainer.appendChild(element);
-}
+// function goToPage(menuElement) {
+//     pageContainer.innerHTML = '';
+//
+//     //временное решение пока не буду закидывать side-menu в pageContainer
+//     const sideMenu = document.querySelector('.side-menu');
+//     if (sideMenu) {
+//         sideMenu.remove();
+//     }
+//
+//     appState.activePageLink.classList.remove('active');
+//     menuElement.classList.add('active');
+//     appState.activePageLink = menuElement;
+//
+//     const element = config.menu[menuElement.dataset.section].render();
+//
+//     pageContainer.appendChild(element);
+// }
 
 function createInput(type, text, name) {
     const input = document.createElement('input');
@@ -176,11 +171,18 @@ function renderLogin() {
         const email = emailInput.value.trim();
         const password = passwordInput.value;
 
-        ajax('POST', '/login', { email, password }, (status) => {
-            status === 200
-                ? goToPage(appState.menuElements.profile)
-                : alert('НЕВЕРНЫЙ ЛОГИН ИЛИ ПАРОЛЬ');
-        });
+        Ajax.post({
+            url: '/login',
+            body: {password, email},
+            callback: (status) => {
+                if(status === 200) {
+                    menu.goToPage(menu.menuElements.feed)
+                    return;
+                }
+
+                alert('НЕВЕРНЫЙ ЕМЕЙЛ ИЛИ ПАРОЛЬ');
+            }
+        })
     });
 
     return form;
@@ -220,38 +222,44 @@ function renderFeed() {
             sideMenu.appendChild(menuItem);
         });
 
-        root.appendChild(sideMenu); //лучше в pageContainer, но не смог в нем выровнять пока
+        container.appendChild(sideMenu); //лучше в pageContainer, но не смог в нем выровнять пока
     }
 
     renderSideMenu()
 
-    ajax('GET', '/feed', null, (status, response) => {
-        const isAuthorized = status === 200;
-        if (!isAuthorized) {
-            goToPage(appState.menuElements.login);
-            return;
-        }
+    Ajax.get({
+        url: '/feed',
+        callback: (status, responseString) => {
+            let isAuthorized = status === 200;
 
-        const images = JSON.parse(response);
+            if (!isAuthorized) {
+                alert('Нет авторизации!');
+                menu.goToPage(menu.menuElements.login);
+                // goToPage(appState.menuElements.login);
+                return;
+            }
 
-        if (images && Array.isArray(images)) {
-            const div = document.createElement('div');
-            feed.appendChild(div);
+            const images = JSON.parse(responseString);
 
-            images.forEach(({ src, likes, id }) => {
-                div.innerHTML += `<img src="${src}" alt="image" width="500">`;
-                const likeContainer = document.createElement('div');
-                div.appendChild(likeContainer);
+            if (images && Array.isArray(images)) {
+                const div = document.createElement('div');
+                feed.appendChild(div);
 
-                likeContainer.innerHTML = `<span>${likes} лайков</span>`;
+                images.forEach(({ src, likes, id }) => {
+                    div.innerHTML += `<img src="${src}" alt="image" width="500">`;
+                    const likeContainer = document.createElement('div');
+                    div.appendChild(likeContainer);
 
-                const likeBtn = document.createElement('button');
-                likeBtn.textContent = 'Лайк!';
-                likeBtn.type = 'button';
-                likeBtn.dataset.imageId = id;
+                    likeContainer.innerHTML = `<span>${likes} лайков</span>`;
 
-                likeContainer.appendChild(likeBtn);
-            });
+                    const likeBtn = document.createElement('button');
+                    likeBtn.textContent = 'Лайк!';
+                    likeBtn.type = 'button';
+                    likeBtn.dataset.imageId = id;
+
+                    likeContainer.appendChild(likeBtn);
+                });
+            }
         }
     });
 
@@ -259,12 +267,12 @@ function renderFeed() {
         if (event.target.tagName.toLocaleLowerCase() === 'button' && event.target.dataset.imageId) {
             const { imageId: id } = event.target.dataset;
 
-            ajax('POST', '/like', { id }, (status) => {
+            Ajax.post( {url: '/like', body: { id }, callback: (status) => {
                 if (status === 200) {
                     const likeContainer = event.target.parentNode;
                     const likeCount = likeContainer.querySelector('span');
                     likeCount.textContent = `${parseInt(likeCount.textContent) + 1} лайков`;
-                }
+                }}
             });
         }
     });
@@ -272,44 +280,49 @@ function renderFeed() {
     return feed;
 }
 
-function renderMenu() {
-    Object.entries(config.menu).forEach(([key, { href, text, icon }], index) => {
-        const menuElement = document.createElement('a');
-        menuElement.href = href;
-        menuElement.classList.add('menu-item'); // Добавляем класс
+// function renderMenu() {
+//     Object.entries(config.menu).forEach(([key, { href, text, icon }], index) => {
+//         const menuElement = document.createElement('a');
+//         menuElement.href = href;
+//         menuElement.classList.add('menu-item'); // Добавляем класс
+//
+//         // Создаем элемент иконки
+//         const iconElement = document.createElement('img');
+//         iconElement.src = `/static/img/${icon}.svg`;
+//         iconElement.classList.add('menu-icon');
+//
+//
+//
+//         // Добавляем иконку и текст
+//         menuElement.appendChild(iconElement);
+//         menuElement.appendChild(document.createTextNode(` ${text}`));
+//
+//         menuElement.dataset.section = key;
+//
+//         if (index === 0) {
+//             menuElement.classList.add('active');
+//             appState.activePageLink = menuElement;
+//         }
+//
+//         appState.menuElements[key] = menuElement;
+//         menuContainer.appendChild(menuElement);
+//     });
+//
+//     menuContainer.addEventListener('click', (event) => {
+//         if (
+//             event.target.tagName.toLocaleLowerCase() === 'a' ||
+//             event.target instanceof HTMLAnchorElement
+//         ) {
+//             event.preventDefault(); //перехват поведения по умолчанию
+//             goToPage(event.target);
+//         }
+//     });
+// }
 
-        // Создаем элемент иконки
-        const iconElement = document.createElement('img');
-        iconElement.src = `/static/img/${icon}.svg`;
-        iconElement.classList.add('menu-icon');
 
-        iconElement.classList.add(...icon.split(' ')); // Добавляем классы иконки
-
-        // Добавляем иконку и текст
-        menuElement.appendChild(iconElement);
-        menuElement.appendChild(document.createTextNode(` ${text}`));
-
-        menuElement.dataset.section = key;
-
-        if (index === 0) {
-            menuElement.classList.add('active');
-            appState.activePageLink = menuElement;
-        }
-
-        appState.menuElements[key] = menuElement;
-        menuContainer.appendChild(menuElement);
-    });
-
-    menuContainer.addEventListener('click', (event) => {
-        if (
-            event.target.tagName.toLocaleLowerCase() === 'a' ||
-            event.target instanceof HTMLAnchorElement
-        ) {
-            event.preventDefault();
-            goToPage(event.target);
-        }
-    });
-}
+const menu = new Menu(config, menuContainer);
+menu.render();
+menu.goToPage(menu.menuElements.feed)
 
 function renderHeader() {
     function renderLogo() {
@@ -324,11 +337,12 @@ function renderHeader() {
         logo.appendChild(iconElement); // Добавляем иконку
         logo.appendChild(nameElement); // Добавляем текст
 
-        root.appendChild(logo);
+        headerContainer.appendChild(logo);
 
         logo.addEventListener('click', (event) => {
             event.preventDefault();  // Отменяем стандартный переход
-            goToPage(appState.menuElements.feed);  // Переход на страницу ленты через JS
+            // goToPage(appState.menuElements.feed);  // Переход на страницу ленты через JS
+            menu.goToPage(menu.menuElements.feed);
         });
     }
 
@@ -365,12 +379,13 @@ function renderHeader() {
         iconContainer.appendChild(musicIcon);
 
 
-        root.appendChild(searchContainer); // Добавляем контейнер в DOM
-        root.appendChild(iconContainer);
+        headerContainer.appendChild(searchContainer); // Добавляем контейнер в DOM
+        headerContainer.appendChild(iconContainer);
 
         searchContainer.addEventListener('click', (event) => {
             event.preventDefault();  // Отменяем стандартный переход
-            goToPage(appState.menuElements.feed);  // Переход на страницу ленты через JS
+            // goToPage(appState.menuElements.feed);  // Переход на страницу ленты через JS
+            menu.goToPage(menu.menuElements.feed);
         });
 
     }
@@ -390,7 +405,7 @@ function renderHeader() {
         avatarContainer.appendChild(avatar);
         avatarContainer.appendChild(dropdownButton);
 
-        root.appendChild(avatarContainer);
+        headerContainer.appendChild(avatarContainer);
     }
 
     renderLogo()
@@ -404,27 +419,32 @@ function renderHeader() {
 function renderProfile() {
     const profile = document.createElement('div');
 
-    ajax('GET', '/me', null, (status, responseString) => {
-        const isAuthorized = status === 200;
+    Ajax.get({
+        url: '/me',
+        callback: (status, responseString) => {
+            const isAuthorized = status === 200;
 
-        if (!isAuthorized) {
-            alert('АХТУНГ! НЕТ АВТОРИЗАЦИИ');
-            goToPage(appState.menuElements.login);
-        }
+            if (!isAuthorized) {
+                alert('АХТУНГ! нет авторизации');
+                // goToPage(appState.menuElements.login);
+                menu.goToPage(appState.menuElements.login);
+                return;
+            }
 
-        const { age, email, images } = JSON.parse(responseString);
+            const {email, age, images} = JSON.parse(responseString);
 
-        const span = document.createElement('span');
-        span.innerText = `Возраст: ${age}, email: ${email}`;
-        profile.appendChild(span);
+            const span = document.createElement('span');
+            span.textContent = `${email} ${age} лет`;
+            profile.appendChild(span);
 
-        if (images && Array.isArray(images)) {
-            const div = document.createElement('div');
-            profile.appendChild(div);
+            if (images && Array.isArray(images)) {
+                const div = document.createElement('div');
+                profile.appendChild(div);
 
-            images.forEach(({ src, likes }) => {
-                div.innerHTML += `<img src="${src}" width="500"/><div>${likes} Лайков</div>`;
-            });
+                images.forEach(({src, likes}) => {
+                    div.innerHTML += `<img src="${src}" width="500"/><div>${likes} лайков</div>`
+                });
+            }
         }
     });
 
@@ -477,5 +497,5 @@ function renderHelp() {
 }
 
 
-renderMenu();
-goToPage(appState.menuElements.feed);
+// renderMenu();
+// goToPage(appState.menuElements.feed);
