@@ -2,10 +2,10 @@
   "name": "QuickFlow",
   "version": "1.0.0",
   "description": "",
-  "main": "modules/server.js",
+  "main": "server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "DEBUG=* && node modules/server.js"
+    "start": "DEBUG=* && node server/server.js"
   },
   "author": "Илья",
   "license": "ISC",
