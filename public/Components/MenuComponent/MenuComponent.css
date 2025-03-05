@@ -1,0 +1,24 @@
+.menu-item:hover {
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center; /* Выравнивание по центру */
+    gap: 8px; /* Расстояние между иконкой и текстом */
+    overflow-y: auto;
+    padding-left: 12px;
+    width: 196px;
+    height: 32px;
+    margin: 8px;
+}
+
+.menu-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.active {
+    font-weight: bold;
+}

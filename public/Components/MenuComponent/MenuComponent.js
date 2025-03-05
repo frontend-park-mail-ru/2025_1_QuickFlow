@@ -1,7 +1,8 @@
-console.log("Menu.js загружен!");
+console.log("MenuComponent.js загружен!");
 
 
-export default class Menu {
+
+export default class MenuComponent {
     constructor(config, container) {
         this.config = config;
         this.container = container;

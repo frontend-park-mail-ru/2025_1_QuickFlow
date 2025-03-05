@@ -9,6 +9,7 @@ const menuContainer = document.createElement('aside');
 menuContainer.classList.add('menu'); // Добавляем класс для сетки
 const pageContainer = document.createElement('main');
 
+import HeaderComponent from './Components/HeaderComponent/HeaderComponent.js';
 
 const headerContainer = document.createElement('header');
 headerContainer.classList.add('header');
@@ -16,11 +17,18 @@ container.appendChild(menuContainer);
 container.appendChild(pageContainer);
 container.appendChild(headerContainer);
 
-import Menu from './Views/Menu.js';
+import MenuComponent from './Components/MenuComponent/MenuComponent.js';
 import Ajax from './modules/ajax.js';
+import createInput from './Components/InputComponent/InputComponent.js';
+// import LoginForm from '/Views/LoginView/LoginView.js';
+
+const link = document.createElement('link');
+link.rel = 'stylesheet';
+link.href = '/Components/MenuComponent/MenuComponent.css';
+document.head.appendChild(link);
 
 
-renderHeader();
+// renderHeader();
 
 const config = {
     menu: {
@@ -60,18 +68,18 @@ const config = {
             icon: 'photo-icon',
             render: renderPhoto
         },
-        // music: {
-        //     href: '/music',
-        //     text: 'Музыка',
-        //     icon: 'music-icon',
-        //     render: renderMusic
-        // },
-        // video: {
-        //     href: '/video',
-        //     text: 'Видео',
-        //     icon: 'video-icon',
-        //     render: renderVideo
-        // },
+        music: {
+            href: '/music',
+            text: 'Музыка',
+            icon: 'music-icon',
+            render: renderMusic
+        },
+        video: {
+            href: '/video',
+            text: 'Видео',
+            icon: 'video-icon',
+            render: renderVideo
+        },
         games: {
             href: '/games',
             text: 'Игры',
@@ -96,6 +104,12 @@ const config = {
             icon: 'login-icon',
             render: renderLogin
         },
+        signup: {
+            href: '/signup',
+            text: 'Регистрация',
+            icon: 'signup-icon',
+            render: renderSignup
+        }
     },
 
     // как будто в этом случае не нужно. Или нужно все-таки?)
@@ -142,14 +156,20 @@ const config = {
 //     pageContainer.appendChild(element);
 // }
 
-function createInput(type, text, name) {
-    const input = document.createElement('input');
-    input.type = type;
-    input.name = name;
-    input.placeholder = text;
+// function createInput(type, text, name) {
+//     const input = document.createElement('input');
+//     input.type = type;
+//     input.name = name;
+//     input.placeholder = text;
+//
+//     return input;
+// }
 
-    return input;
-}
+// Пока что не работает, надо исправлять
+// function renderLogin() {
+//     const loginForm = new LoginForm(); // Создаём объект формы
+//     document.body.appendChild(loginForm.getForm()); // Добавляем форму на страницу
+// }
 
 function renderLogin() {
     const form = document.createElement('form');
@@ -320,100 +340,103 @@ function renderFeed() {
 // }
 
 
-const menu = new Menu(config, menuContainer);
+const menu = new MenuComponent(config, menuContainer);
 menu.render();
 menu.goToPage(menu.menuElements.feed)
 
-function renderHeader() {
-    function renderLogo() {
-        const logo = document.createElement('a');
-        logo.href = '/feed'
-        logo.classList.add('logo-item');
-        const iconElement = document.createElement('img');
-        const nameElement = document.createElement('img');
-        iconElement.src = `/static/img/logo-icon.svg`;
-        nameElement.src = `/static/img/quickFlow-icon.svg`;
+const header = new HeaderComponent(headerContainer, menu);
+header.render();
 
-        logo.appendChild(iconElement); // Добавляем иконку
-        logo.appendChild(nameElement); // Добавляем текст
-
-        headerContainer.appendChild(logo);
-
-        logo.addEventListener('click', (event) => {
-            event.preventDefault();  // Отменяем стандартный переход
-            // goToPage(appState.menuElements.feed);  // Переход на страницу ленты через JS
-            menu.goToPage(menu.menuElements.feed);
-        });
-    }
-
-    function renderSearch() {
-        const searchContainer = document.createElement('a');
-        searchContainer.classList.add('search-container');
-        searchContainer.href = '/feed' /*временная заглушка*/
-
-        const search = document.createElement('input');
-        search.classList.add('search-item');
-        search.setAttribute('type', 'text');
-        search.setAttribute('placeholder', 'Поиск');
-
-        const icon = document.createElement('img');
-        icon.src = '/static/img/search-icon.svg'; // Путь к иконке
-        icon.classList.add('search-icon'); // Класс для иконки
-
-        const iconContainer = document.createElement('a');
-        iconContainer.classList.add('search-icon-container');
-
-        const notIcon = document.createElement('img');
-        notIcon.src = '/static/img/notice-icon.svg';
-        notIcon.classList.add('notice-icon');
-
-        const musicIcon = document.createElement('img');
-        musicIcon.src = '/static/img/music-icon-top.svg';
-        musicIcon.classList.add('music-icon-top');
-
-
-        searchContainer.appendChild(icon); // Добавляем иконку в контейнер
-        searchContainer.appendChild(search); // Добавляем инпут в контейнер
-
-        iconContainer.appendChild(notIcon);
-        iconContainer.appendChild(musicIcon);
-
-
-        headerContainer.appendChild(searchContainer); // Добавляем контейнер в DOM
-        headerContainer.appendChild(iconContainer);
-
-        searchContainer.addEventListener('click', (event) => {
-            event.preventDefault();  // Отменяем стандартный переход
-            // goToPage(appState.menuElements.feed);  // Переход на страницу ленты через JS
-            menu.goToPage(menu.menuElements.feed);
-        });
-
-    }
-
-    function renderAvatar() {
-        const avatarContainer = document.createElement('div');
-        avatarContainer.classList.add('avatar-container');
-
-        const avatar = document.createElement('img');
-        avatar.src = '/static/img/avatar.jpg';
-        avatar.classList.add('avatar');
-
-        const dropdownButton = document.createElement('button');
-        dropdownButton.classList.add('dropdown-button');
-        dropdownButton.innerHTML = '&#9662;'; // Символ галочки вниз
-
-        avatarContainer.appendChild(avatar);
-        avatarContainer.appendChild(dropdownButton);
-
-        headerContainer.appendChild(avatarContainer);
-    }
-
-    renderLogo()
-    renderSearch()
-    renderAvatar()
-
-    // return logo;
-}
+// function renderHeader() {
+//     function renderLogo() {
+//         const logo = document.createElement('a');
+//         logo.href = '/feed'
+//         logo.classList.add('logo-item');
+//         const iconElement = document.createElement('img');
+//         const nameElement = document.createElement('img');
+//         iconElement.src = `/static/img/logo-icon.svg`;
+//         nameElement.src = `/static/img/quickFlow-icon.svg`;
+//
+//         logo.appendChild(iconElement); // Добавляем иконку
+//         logo.appendChild(nameElement); // Добавляем текст
+//
+//         headerContainer.appendChild(logo);
+//
+//         logo.addEventListener('click', (event) => {
+//             event.preventDefault();  // Отменяем стандартный переход
+//             // goToPage(appState.menuElements.feed);  // Переход на страницу ленты через JS
+//             menu.goToPage(menu.menuElements.feed);
+//         });
+//     }
+//
+//     function renderSearch() {
+//         const searchContainer = document.createElement('a');
+//         searchContainer.classList.add('search-container');
+//         searchContainer.href = '/feed' /*временная заглушка*/
+//
+//         const search = document.createElement('input');
+//         search.classList.add('search-item');
+//         search.setAttribute('type', 'text');
+//         search.setAttribute('placeholder', 'Поиск');
+//
+//         const icon = document.createElement('img');
+//         icon.src = '/static/img/search-icon.svg'; // Путь к иконке
+//         icon.classList.add('search-icon'); // Класс для иконки
+//
+//         const iconContainer = document.createElement('a');
+//         iconContainer.classList.add('search-icon-container');
+//
+//         const notIcon = document.createElement('img');
+//         notIcon.src = '/static/img/notice-icon.svg';
+//         notIcon.classList.add('notice-icon');
+//
+//         const musicIcon = document.createElement('img');
+//         musicIcon.src = '/static/img/music-icon-top.svg';
+//         musicIcon.classList.add('music-icon-top');
+//
+//
+//         searchContainer.appendChild(icon); // Добавляем иконку в контейнер
+//         searchContainer.appendChild(search); // Добавляем инпут в контейнер
+//
+//         iconContainer.appendChild(notIcon);
+//         iconContainer.appendChild(musicIcon);
+//
+//
+//         headerContainer.appendChild(searchContainer); // Добавляем контейнер в DOM
+//         headerContainer.appendChild(iconContainer);
+//
+//         searchContainer.addEventListener('click', (event) => {
+//             event.preventDefault();  // Отменяем стандартный переход
+//             // goToPage(appState.menuElements.feed);  // Переход на страницу ленты через JS
+//             menu.goToPage(menu.menuElements.feed);
+//         });
+//
+//     }
+//
+//     function renderAvatar() {
+//         const avatarContainer = document.createElement('div');
+//         avatarContainer.classList.add('avatar-container');
+//
+//         const avatar = document.createElement('img');
+//         avatar.src = '/static/img/avatar.jpg';
+//         avatar.classList.add('avatar');
+//
+//         const dropdownButton = document.createElement('button');
+//         dropdownButton.classList.add('dropdown-button');
+//         dropdownButton.innerHTML = '&#9662;'; // Символ галочки вниз
+//
+//         avatarContainer.appendChild(avatar);
+//         avatarContainer.appendChild(dropdownButton);
+//
+//         headerContainer.appendChild(avatarContainer);
+//     }
+//
+//     renderLogo()
+//     renderSearch()
+//     renderAvatar()
+//
+//     // return logo;
+// }
 
 
 function renderProfile() {
@@ -427,7 +450,7 @@ function renderProfile() {
             if (!isAuthorized) {
                 alert('АХТУНГ! нет авторизации');
                 // goToPage(appState.menuElements.login);
-                menu.goToPage(appState.menuElements.login);
+                menu.goToPage(menu.menuElements.login);
                 return;
             }
 

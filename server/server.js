@@ -12,8 +12,10 @@ const crypto = require('crypto');
 app.use(morgan('dev'));
 app.use(express.static(path.resolve(__dirname, '..', 'public')));
 app.use(express.static(path.resolve(__dirname, 'images')));
+app.use('/static', express.static('static'));
 app.use(body.json());
 app.use(cookie());
+
 
 const images = [
     {
@@ -94,14 +96,14 @@ app.post('/signup', (req, res) => {
         return res.status(400).json({ error: 'Пользователь уже существует' });
     }
 
-    const id = uuid();
+    const id = crypto.randomUUID();
     const user = { password, email, age, images: [] };
     ids[id] = email;
     users[email] = user;
 
     res.cookie('podvorot', id, {
-        expires: new Date(Date.now() + 1000 * 60 * 10),
-        // httpOnly: true //временно пока нет настройки для https
+        expires: new Date(Date.now() + 10000 * 60 * 10),
+        httpOnly: true
     });
     res.status(201).json({ id });
 });
