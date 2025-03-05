@@ -101,7 +101,7 @@ app.post('/signup', (req, res) => {
 
     res.cookie('podvorot', id, {
         expires: new Date(Date.now() + 1000 * 60 * 10),
-        httpOnly: true //временно пока нет настройки для https
+        // httpOnly: true //временно пока нет настройки для https
     });
     res.status(201).json({ id });
 });
@@ -120,8 +120,8 @@ app.post('/login', (req, res) => {
     ids[id] = email;
 
     res.cookie('podvorot', id, {
-        expires: new Date(Date.now() + 1000 * 60 * 10),
-        secure: true,
+        expires: new Date(Date.now() + 10000 * 60 * 10),
+        // secure: true,
         httpOnly: true
     });
     res.status(200).json({ id });

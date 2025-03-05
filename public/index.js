@@ -16,8 +16,8 @@ container.appendChild(menuContainer);
 container.appendChild(pageContainer);
 container.appendChild(headerContainer);
 
-import Menu from './Menu.js';
-import Ajax from './ajax.js';
+import Menu from './Views/Menu.js';
+import Ajax from './modules/ajax.js';
 
 
 renderHeader();
