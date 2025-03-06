@@ -1,6 +1,5 @@
 //Пока что не работает, надо исправлять
 
-
 // import createInput from '../../Components/InputComponent/InputComponent.js';
 // import Ajax from '../../modules/ajax.js';
 //

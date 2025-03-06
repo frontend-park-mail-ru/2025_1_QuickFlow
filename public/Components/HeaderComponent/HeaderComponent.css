@@ -1,68 +1,67 @@
 .logo-item {
-    align-self: start;
     display: flex;
-    align-items: center; /* Выравнивание по центру внут элементов*/
-    gap: 8px; /* Расстояние между иконкой и текстом */
-    padding-top: 12px;
-    width: 175px;
-    height: 27px;
+    align-items: center;
+    gap: 8px;
+    padding-left: 20px;
+}
+
+.container_header {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
 }
 
 .search-container {
     align-self: center;
     display: flex;
     align-items: start;
-    margin: 0 0 0 calc((100% - 932px) / 2);
-    background: #EDEEF0;
+    justify-content: space-between;
+    background: #edeef0;
     border-radius: 8px;
     width: 220px;
     height: 32px;
+    gap: 8px;
 }
 
 .search-item {
     border: none;
     outline: none;
     background: transparent;
-    align-items: start;
     width: 220px;
     height: 32px;
     font-size: 14px;
     padding-left: 8px;
-    flex-grow: 1; /* Поле ввода будет занимать оставшееся пространство */
-    text-align: left; /* Ьекст по левому краю */
+
+    flex-grow: 1;
+    text-align: left;
 }
 
 .search-icon {
     align-self: center;
+    padding-left: 16px;
     width: 16px;
     height: 16px;
-    margin-left: 8px; /* Расстояние между лупой и полем ввода */
 }
 
 .search-icon-container {
     align-self: center;
     display: flex;
     align-items: center;
-    justify-content: left;
     width: 64px;
     height: 20px;
-    padding-left: 24px;
-    gap: 24px; /* Расстояние между иконками */
+    gap: 24px;
 }
 
 .notice-icon {
     display: flex;
     width: 20px;
     height: 20px;
-    color: #FFFFFF;
+    color: #ffffff;
 }
 
 .music-icon-top {
     width: 20px;
     height: 20px;
-    /*color: #FFFFFF; /*увы, если цвет уже задан, так его поменять нельзя, но можно сделать
-    css для каждой иконки из меню, там покрасим ее, но кажется это нерационально"*/
-    /*margin-right: 8px;*/
 }
 
 .avatar-container {
@@ -71,7 +70,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding-left: 524px;
+    padding-right: 44px;
     gap: 8px;
     width: 66px;
     height: 56px;
@@ -81,7 +80,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    aspect-ratio: 1 / 1; /*хз, без явного задания делал аву 35 на 40*/
+    aspect-ratio: 1 / 1;
     object-fit: cover;
 }
 

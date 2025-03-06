@@ -4,7 +4,7 @@ const HTTP_METHOD_POST = 'POST';
 class Ajax {
     async get({ url, callback = () => {} }) {
         try {
-            const response = await fetch(url, { credentials: 'include' });
+            const response = await fetch(url, { method: HTTP_METHOD_GET, credentials: 'include' });
             const text = await response.text();
             callback(response.status, text);
         } catch (error) {

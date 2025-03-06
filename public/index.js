@@ -4,7 +4,6 @@ const container = document.createElement('div');
 container.classList.add('container');
 root.appendChild(container);
 
-
 const menuContainer = document.createElement('aside');
 menuContainer.classList.add('menu'); // Добавляем класс для сетки
 const pageContainer = document.createElement('main');
@@ -26,7 +25,6 @@ const link = document.createElement('link');
 link.rel = 'stylesheet';
 link.href = '/Components/MenuComponent/MenuComponent.css';
 document.head.appendChild(link);
-
 
 // renderHeader();
 
@@ -110,7 +108,7 @@ const config = {
             icon: 'signup-icon',
             render: renderSignup
         }
-    },
+    }
 
     // как будто в этом случае не нужно. Или нужно все-таки?)
     // side_menu: {
@@ -136,7 +134,6 @@ const config = {
 //     activePageLink: null,
 //     menuElements: {}
 // };
-
 
 // function goToPage(menuElement) {
 //     pageContainer.innerHTML = '';
@@ -193,16 +190,16 @@ function renderLogin() {
 
         Ajax.post({
             url: '/login',
-            body: {password, email},
+            body: { password, email },
             callback: (status) => {
-                if(status === 200) {
-                    menu.goToPage(menu.menuElements.feed)
+                if (status === 200) {
+                    menu.goToPage(menu.menuElements.feed);
                     return;
                 }
 
                 alert('НЕВЕРНЫЙ ЕМЕЙЛ ИЛИ ПАРОЛЬ');
             }
-        })
+        });
     });
 
     return form;
@@ -235,7 +232,7 @@ function renderFeed() {
 
         // Добавляем несколько элементов в меню (например, ссылки)
         const menuItems = ['Лента', 'Рекомендации', 'Поиск', 'Комментарии', 'Реакции'];
-        menuItems.forEach(itemText => {
+        menuItems.forEach((itemText) => {
             const menuItem = document.createElement('a');
             menuItem.classList.add('side-menu-item');
             menuItem.textContent = itemText;
@@ -245,7 +242,7 @@ function renderFeed() {
         container.appendChild(sideMenu); //лучше в pageContainer, но не смог в нем выровнять пока
     }
 
-    renderSideMenu()
+    renderSideMenu();
 
     Ajax.get({
         url: '/feed',
@@ -287,12 +284,16 @@ function renderFeed() {
         if (event.target.tagName.toLocaleLowerCase() === 'button' && event.target.dataset.imageId) {
             const { imageId: id } = event.target.dataset;
 
-            Ajax.post( {url: '/like', body: { id }, callback: (status) => {
-                if (status === 200) {
-                    const likeContainer = event.target.parentNode;
-                    const likeCount = likeContainer.querySelector('span');
-                    likeCount.textContent = `${parseInt(likeCount.textContent) + 1} лайков`;
-                }}
+            Ajax.post({
+                url: '/like',
+                body: { id },
+                callback: (status) => {
+                    if (status === 200) {
+                        const likeContainer = event.target.parentNode;
+                        const likeCount = likeContainer.querySelector('span');
+                        likeCount.textContent = `${parseInt(likeCount.textContent) + 1} лайков`;
+                    }
+                }
             });
         }
     });
@@ -339,10 +340,9 @@ function renderFeed() {
 //     });
 // }
 
-
 const menu = new MenuComponent(config, menuContainer);
 menu.render();
-menu.goToPage(menu.menuElements.feed)
+menu.goToPage(menu.menuElements.feed);
 
 const header = new HeaderComponent(headerContainer, menu);
 header.render();
@@ -438,6 +438,7 @@ header.render();
 //     // return logo;
 // }
 
+// import profileTemplateSrc from '/Views/ProfileView/ProfileView.hbs';
 
 function renderProfile() {
     const profile = document.createElement('div');
@@ -454,7 +455,11 @@ function renderProfile() {
                 return;
             }
 
-            const {email, age, images} = JSON.parse(responseString);
+            // const data = JSON.parse(responseString);
+            // const template = Handlebars.compile(profileTemplateSrc);
+            // profile.innerHTML = template(data);
+
+            const { email, age, images } = JSON.parse(responseString);
 
             const span = document.createElement('span');
             span.textContent = `${email} ${age} лет`;
@@ -464,8 +469,8 @@ function renderProfile() {
                 const div = document.createElement('div');
                 profile.appendChild(div);
 
-                images.forEach(({src, likes}) => {
-                    div.innerHTML += `<img src="${src}" width="500"/><div>${likes} лайков</div>`
+                images.forEach(({ src, likes }) => {
+                    div.innerHTML += `<img src="${src}" width="500"/><div>${likes} лайков</div>`;
                 });
             }
         }
@@ -518,7 +523,6 @@ function renderHelp() {
     const help = document.createElement('div');
     return help;
 }
-
 
 // renderMenu();
 // goToPage(appState.menuElements.feed);

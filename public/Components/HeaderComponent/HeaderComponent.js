@@ -1,4 +1,4 @@
-console.log("HeaderComponent.js загружен!");
+console.log('HeaderComponent.js загружен!');
 
 export class LogoComponent {
     constructor(container, menu) {
@@ -34,6 +34,9 @@ export class SearchComponent {
     }
 
     render() {
+        const container = document.createElement('div');
+        container.classList.add('container_header');
+
         const searchContainer = document.createElement('a');
         searchContainer.classList.add('search-container');
         searchContainer.href = '/feed'; // Временная заглушка
@@ -58,14 +61,20 @@ export class SearchComponent {
         musicIcon.src = '/static/img/music-icon-top.svg';
         musicIcon.classList.add('music-icon-top');
 
-        searchContainer.appendChild(icon);
-        searchContainer.appendChild(search);
-
         iconContainer.appendChild(noticeIcon);
         iconContainer.appendChild(musicIcon);
 
-        this.container.appendChild(searchContainer);
-        this.container.appendChild(iconContainer);
+        searchContainer.appendChild(icon);
+        searchContainer.appendChild(search);
+
+        container.appendChild(searchContainer);
+        container.appendChild(iconContainer);
+
+        this.container.appendChild(container);
+
+        search.addEventListener('click', (event) => {
+            event.preventDefault();
+        });
     }
 }
 

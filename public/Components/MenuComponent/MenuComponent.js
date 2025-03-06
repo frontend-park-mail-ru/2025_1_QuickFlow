@@ -1,6 +1,4 @@
-console.log("MenuComponent.js загружен!");
-
-
+// import Handlebars from 'handlebars';
 
 export default class MenuComponent {
     constructor(config, container) {
