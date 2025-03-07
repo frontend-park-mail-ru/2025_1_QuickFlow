@@ -1,0 +1,47 @@
+:root {
+	--icon-accent: #4369fc;
+	--background-white-transparent: rgba(255, 255, 255, 0.5);
+	--icon-black-transparent: rgba(0, 0, 0, 0.5);
+	--background-white-transparent-hover: rgba(255, 255, 255, 0.8);
+	--background-black-transparent: rgba(0, 0, 0, 0.5);
+	--icon-red: #ff3b2f;
+	--icon-primary: #99a2ad;
+	--text-secondary: #818c99;
+	--text-white: #fff;
+	--text-accent: #4369fc;
+	--background-white: #fff;
+	--background-gray: #edeef0;
+	--background-light-gray: #f5f6f7;
+	--text-primary: #000;
+	--stroke-primary: #dce1e5;
+	--icon-primary-disabled: #dce1e5;
+	--text-accent-hover: #1438c3;
+	--text-secondary-hover: #a7aeb8;
+	--icon-primary-hover: #b8bec6;
+	--background-gray-hover: #e4e5e9;
+	--icon-white: #fff;
+	--button-primary: #4369fc;
+	--button-secondary: #fff;
+	--button-primary-hover: #3b60ed;
+	--button-primary-active: #3155e0;
+	--button-primary-disabled: #849cfb;
+	--stroke-checkbox: #99a2ad;
+	--stroke-primary-hover: #d0d5d9;
+	--stroke-primary-focus: #c4c8cc;
+	--text-secondary-disabled: #bcc3cc;
+	--stroke-error: #ff3b2f;
+	--text-error: #ff3b2f;
+	--background-error: #ffeceb;
+	--button-secondary-hover: #f5f6f7;
+	--button-secondary-active: #edeef0;
+	--stroke-white: #fff;
+	--icon-green: #24b324;
+	--stroke-white-transparent: rgba(255, 255, 255, 0.25);
+	--button-transparent: rgba(0, 0, 0, 0.5);
+	--button-transparent-hover: rgba(0, 0, 0, 0.55);
+	--button-transparent-active: rgba(0, 0, 0, 0.6);
+}
+
+:root {
+    --font-family: "VK Sans Display", sans-serif;
+  }
