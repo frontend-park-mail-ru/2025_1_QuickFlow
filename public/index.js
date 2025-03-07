@@ -1,14 +1,19 @@
+import Ajax from './modules/ajax.js';
+import LoginView from './Views/LoginView/LoginView.js';
+import SignupView from './Views/SignupView/SignupView.js';
+import HeaderComponent from './Components/HeaderComponent/HeaderComponent.js';
+import MenuComponent from './Components/MenuComponent/MenuComponent.js';
+
 const root = document.getElementById('root');
 
 const container = document.createElement('div');
 container.classList.add('container');
 root.appendChild(container);
 
+
 const menuContainer = document.createElement('aside');
 menuContainer.classList.add('menu'); // Добавляем класс для сетки
 const pageContainer = document.createElement('main');
-
-import HeaderComponent from './Components/HeaderComponent/HeaderComponent.js';
 
 const headerContainer = document.createElement('header');
 headerContainer.classList.add('header');
@@ -16,17 +21,10 @@ container.appendChild(menuContainer);
 container.appendChild(pageContainer);
 container.appendChild(headerContainer);
 
-import MenuComponent from './Components/MenuComponent/MenuComponent.js';
-import Ajax from './modules/ajax.js';
-import createInput from './Components/InputComponent/InputComponent.js';
-// import LoginForm from '/Views/LoginView/LoginView.js';
-
 const link = document.createElement('link');
 link.rel = 'stylesheet';
 link.href = '/Components/MenuComponent/MenuComponent.css';
 document.head.appendChild(link);
-
-// renderHeader();
 
 const config = {
     menu: {
@@ -100,128 +98,34 @@ const config = {
             href: '/login',
             text: 'Авторизация',
             icon: 'login-icon',
-            render: renderLogin
+            render: () => new LoginView(menu).render(),
         },
         signup: {
             href: '/signup',
             text: 'Регистрация',
             icon: 'signup-icon',
-            render: renderSignup
+            render: () => new SignupView(menu).render(),
         }
-    }
-
-    // как будто в этом случае не нужно. Или нужно все-таки?)
-    // side_menu: {
-    //     feed: {
-    //         text: 'Лента'
-    //     },
-    //     recommendations: {
-    //         text: 'Рекомендации'
-    //     },
-    //     search: {
-    //         text: 'Поиск'
-    //     },
-    //     comments: {
-    //         text: 'Комментарии'
-    //     },
-    //     reactions: {
-    //         text: 'Реакции'
-    //     }
-    // }
+    },
 };
 
-// const appState = {
-//     activePageLink: null,
-//     menuElements: {}
-// };
+// function renderSignup() {
+//     const form = document.createElement('form');
 
-// function goToPage(menuElement) {
-//     pageContainer.innerHTML = '';
-//
-//     //временное решение пока не буду закидывать side-menu в pageContainer
-//     const sideMenu = document.querySelector('.side-menu');
-//     if (sideMenu) {
-//         sideMenu.remove();
-//     }
-//
-//     appState.activePageLink.classList.remove('active');
-//     menuElement.classList.add('active');
-//     appState.activePageLink = menuElement;
-//
-//     const element = config.menu[menuElement.dataset.section].render();
-//
-//     pageContainer.appendChild(element);
+//     const emailInput = createInput('email', 'Емайл', 'email');
+//     const passwordInput = createInput('password', 'Пароль', 'password');
+//     const ageInput = createInput('number', 'Возраст', 'age');
+
+//     const submitBtn = document.createElement('input');
+//     submitBtn.type = 'submit';
+//     submitBtn.value = 'Зарегистрироваться!';
+
+//     form.appendChild(emailInput);
+//     form.appendChild(passwordInput);
+//     form.appendChild(ageInput);
+//     form.appendChild(submitBtn);
+//     return form;
 // }
-
-// function createInput(type, text, name) {
-//     const input = document.createElement('input');
-//     input.type = type;
-//     input.name = name;
-//     input.placeholder = text;
-//
-//     return input;
-// }
-
-// Пока что не работает, надо исправлять
-// function renderLogin() {
-//     const loginForm = new LoginForm(); // Создаём объект формы
-//     document.body.appendChild(loginForm.getForm()); // Добавляем форму на страницу
-// }
-
-function renderLogin() {
-    const form = document.createElement('form');
-
-    const emailInput = createInput('email', 'Емайл', 'email');
-    const passwordInput = createInput('password', 'Пароль', 'password');
-
-    const submitBtn = document.createElement('input');
-    submitBtn.type = 'submit';
-    submitBtn.value = 'Войти!';
-
-    form.appendChild(emailInput);
-    form.appendChild(passwordInput);
-    form.appendChild(submitBtn);
-
-    form.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        const email = emailInput.value.trim();
-        const password = passwordInput.value;
-
-        Ajax.post({
-            url: '/login',
-            body: { password, email },
-            callback: (status) => {
-                if (status === 200) {
-                    menu.goToPage(menu.menuElements.feed);
-                    return;
-                }
-
-                alert('НЕВЕРНЫЙ ЕМЕЙЛ ИЛИ ПАРОЛЬ');
-            }
-        });
-    });
-
-    return form;
-}
-
-function renderSignup() {
-    const form = document.createElement('form');
-
-    const emailInput = createInput('email', 'Емайл', 'email');
-    const passwordInput = createInput('password', 'Пароль', 'password');
-    const ageInput = createInput('number', 'Возраст', 'age');
-
-    const submitBtn = document.createElement('input');
-    submitBtn.type = 'submit';
-    submitBtn.value = 'Зарегистрироваться!';
-
-    form.appendChild(emailInput);
-    form.appendChild(passwordInput);
-    form.appendChild(ageInput);
-    form.appendChild(submitBtn);
-    return form;
-}
 
 function renderFeed() {
     const feed = document.createElement('div');
@@ -232,7 +136,7 @@ function renderFeed() {
 
         // Добавляем несколько элементов в меню (например, ссылки)
         const menuItems = ['Лента', 'Рекомендации', 'Поиск', 'Комментарии', 'Реакции'];
-        menuItems.forEach((itemText) => {
+        menuItems.forEach(itemText => {
             const menuItem = document.createElement('a');
             menuItem.classList.add('side-menu-item');
             menuItem.textContent = itemText;
@@ -242,7 +146,7 @@ function renderFeed() {
         container.appendChild(sideMenu); //лучше в pageContainer, но не смог в нем выровнять пока
     }
 
-    renderSideMenu();
+    renderSideMenu()
 
     Ajax.get({
         url: '/feed',
@@ -251,8 +155,8 @@ function renderFeed() {
 
             if (!isAuthorized) {
                 alert('Нет авторизации!');
-                menu.goToPage(menu.menuElements.login);
-                // goToPage(appState.menuElements.login);
+                menu.goToPage(menu.menuElements.signup);
+                // window.location.replace("/login");
                 return;
             }
 
@@ -284,16 +188,12 @@ function renderFeed() {
         if (event.target.tagName.toLocaleLowerCase() === 'button' && event.target.dataset.imageId) {
             const { imageId: id } = event.target.dataset;
 
-            Ajax.post({
-                url: '/like',
-                body: { id },
-                callback: (status) => {
-                    if (status === 200) {
-                        const likeContainer = event.target.parentNode;
-                        const likeCount = likeContainer.querySelector('span');
-                        likeCount.textContent = `${parseInt(likeCount.textContent) + 1} лайков`;
-                    }
-                }
+            Ajax.post( {url: '/like', body: { id }, callback: (status) => {
+                if (status === 200) {
+                    const likeContainer = event.target.parentNode;
+                    const likeCount = likeContainer.querySelector('span');
+                    likeCount.textContent = `${parseInt(likeCount.textContent) + 1} лайков`;
+                }}
             });
         }
     });
@@ -301,144 +201,12 @@ function renderFeed() {
     return feed;
 }
 
-// function renderMenu() {
-//     Object.entries(config.menu).forEach(([key, { href, text, icon }], index) => {
-//         const menuElement = document.createElement('a');
-//         menuElement.href = href;
-//         menuElement.classList.add('menu-item'); // Добавляем класс
-//
-//         // Создаем элемент иконки
-//         const iconElement = document.createElement('img');
-//         iconElement.src = `/static/img/${icon}.svg`;
-//         iconElement.classList.add('menu-icon');
-//
-//
-//
-//         // Добавляем иконку и текст
-//         menuElement.appendChild(iconElement);
-//         menuElement.appendChild(document.createTextNode(` ${text}`));
-//
-//         menuElement.dataset.section = key;
-//
-//         if (index === 0) {
-//             menuElement.classList.add('active');
-//             appState.activePageLink = menuElement;
-//         }
-//
-//         appState.menuElements[key] = menuElement;
-//         menuContainer.appendChild(menuElement);
-//     });
-//
-//     menuContainer.addEventListener('click', (event) => {
-//         if (
-//             event.target.tagName.toLocaleLowerCase() === 'a' ||
-//             event.target instanceof HTMLAnchorElement
-//         ) {
-//             event.preventDefault(); //перехват поведения по умолчанию
-//             goToPage(event.target);
-//         }
-//     });
-// }
-
 const menu = new MenuComponent(config, menuContainer);
 menu.render();
-menu.goToPage(menu.menuElements.feed);
+menu.goToPage(menu.menuElements.feed)
 
 const header = new HeaderComponent(headerContainer, menu);
 header.render();
-
-// function renderHeader() {
-//     function renderLogo() {
-//         const logo = document.createElement('a');
-//         logo.href = '/feed'
-//         logo.classList.add('logo-item');
-//         const iconElement = document.createElement('img');
-//         const nameElement = document.createElement('img');
-//         iconElement.src = `/static/img/logo-icon.svg`;
-//         nameElement.src = `/static/img/quickFlow-icon.svg`;
-//
-//         logo.appendChild(iconElement); // Добавляем иконку
-//         logo.appendChild(nameElement); // Добавляем текст
-//
-//         headerContainer.appendChild(logo);
-//
-//         logo.addEventListener('click', (event) => {
-//             event.preventDefault();  // Отменяем стандартный переход
-//             // goToPage(appState.menuElements.feed);  // Переход на страницу ленты через JS
-//             menu.goToPage(menu.menuElements.feed);
-//         });
-//     }
-//
-//     function renderSearch() {
-//         const searchContainer = document.createElement('a');
-//         searchContainer.classList.add('search-container');
-//         searchContainer.href = '/feed' /*временная заглушка*/
-//
-//         const search = document.createElement('input');
-//         search.classList.add('search-item');
-//         search.setAttribute('type', 'text');
-//         search.setAttribute('placeholder', 'Поиск');
-//
-//         const icon = document.createElement('img');
-//         icon.src = '/static/img/search-icon.svg'; // Путь к иконке
-//         icon.classList.add('search-icon'); // Класс для иконки
-//
-//         const iconContainer = document.createElement('a');
-//         iconContainer.classList.add('search-icon-container');
-//
-//         const notIcon = document.createElement('img');
-//         notIcon.src = '/static/img/notice-icon.svg';
-//         notIcon.classList.add('notice-icon');
-//
-//         const musicIcon = document.createElement('img');
-//         musicIcon.src = '/static/img/music-icon-top.svg';
-//         musicIcon.classList.add('music-icon-top');
-//
-//
-//         searchContainer.appendChild(icon); // Добавляем иконку в контейнер
-//         searchContainer.appendChild(search); // Добавляем инпут в контейнер
-//
-//         iconContainer.appendChild(notIcon);
-//         iconContainer.appendChild(musicIcon);
-//
-//
-//         headerContainer.appendChild(searchContainer); // Добавляем контейнер в DOM
-//         headerContainer.appendChild(iconContainer);
-//
-//         searchContainer.addEventListener('click', (event) => {
-//             event.preventDefault();  // Отменяем стандартный переход
-//             // goToPage(appState.menuElements.feed);  // Переход на страницу ленты через JS
-//             menu.goToPage(menu.menuElements.feed);
-//         });
-//
-//     }
-//
-//     function renderAvatar() {
-//         const avatarContainer = document.createElement('div');
-//         avatarContainer.classList.add('avatar-container');
-//
-//         const avatar = document.createElement('img');
-//         avatar.src = '/static/img/avatar.jpg';
-//         avatar.classList.add('avatar');
-//
-//         const dropdownButton = document.createElement('button');
-//         dropdownButton.classList.add('dropdown-button');
-//         dropdownButton.innerHTML = '&#9662;'; // Символ галочки вниз
-//
-//         avatarContainer.appendChild(avatar);
-//         avatarContainer.appendChild(dropdownButton);
-//
-//         headerContainer.appendChild(avatarContainer);
-//     }
-//
-//     renderLogo()
-//     renderSearch()
-//     renderAvatar()
-//
-//     // return logo;
-// }
-
-// import profileTemplateSrc from '/Views/ProfileView/ProfileView.hbs';
 
 function renderProfile() {
     const profile = document.createElement('div');
@@ -455,11 +223,7 @@ function renderProfile() {
                 return;
             }
 
-            // const data = JSON.parse(responseString);
-            // const template = Handlebars.compile(profileTemplateSrc);
-            // profile.innerHTML = template(data);
-
-            const { email, age, images } = JSON.parse(responseString);
+            const {email, age, images} = JSON.parse(responseString);
 
             const span = document.createElement('span');
             span.textContent = `${email} ${age} лет`;
@@ -469,8 +233,8 @@ function renderProfile() {
                 const div = document.createElement('div');
                 profile.appendChild(div);
 
-                images.forEach(({ src, likes }) => {
-                    div.innerHTML += `<img src="${src}" width="500"/><div>${likes} лайков</div>`;
+                images.forEach(({src, likes}) => {
+                    div.innerHTML += `<img src="${src}" width="500"/><div>${likes} лайков</div>`
                 });
             }
         }
@@ -523,6 +287,3 @@ function renderHelp() {
     const help = document.createElement('div');
     return help;
 }
-
-// renderMenu();
-// goToPage(appState.menuElements.feed);

@@ -1,3 +1,13 @@
+@import url(./Components/constants.css);
+@import url(./Components/ButtonComponent/ButtonComponent.css);
+@import url(./Components/LoginFormComponent/LoginFormComponent.css);
+@import url(./Components/SignupFormComponent/SignupFormComponent.css);
+@import url(./Components/RadioComponent/RadioComponent.css);
+
+* {
+    box-sizing: border-box;
+}
+
 body {
     background-color: #fff;
     /*background: radial-gradient(100% 316.05% at 0% 0%, #CED8FF 0%, #4369FC 100%) для авторизации*/
@@ -16,22 +26,15 @@ body {
 }
 
 .header {
-    /*display: flex;*/
-    /*flex-direction: row;*/
-    /*align-items: center;*/
-    /*position: fixed; !* Фиксируем хедер *!*/
-    /*top: 0; !* Прижимаем к верху *!*/
-    /*width: 100%; !* Растягиваем на всю ширину *!*/
-    /*padding: 10px 20px; !* Дополнительные отступы, можно настроить *!*/
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: fixed; /* Фиксируем хедер */
+    top: 0; /* Прижимаем к верху */
+    width: 100%; /* Растягиваем на всю ширину */
+    padding: 10px 20px; /* Дополнительные отступы, можно настроить */
     background: white;
     border-bottom: 1px solid #ddd;
-    display: flex;
-    position: fixed;
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
-    height: 56px;
-    align-items: center;
 }
 
 /*.logo-item {*/
@@ -214,4 +217,23 @@ a {
 
 .active {
     font-weight: bold;
+}
+
+h1 {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 130%;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.p1 {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 130%;
+    text-align: center;
+    color: var(--text-secondary);
+    margin: 0;
 }
