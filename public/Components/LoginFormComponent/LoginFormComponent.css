@@ -1,0 +1,60 @@
+@import url(../constants.css);
+
+.auth-form-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.auth-form-logo {
+    width: 48px;
+}
+
+fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.login-email {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.auth-form {
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: var(--background-white);
+    border: 1px solid var(--stroke-primary);
+    border-radius: 12px;
+    padding: 24px 28px;
+    width: 360px;
+    box-sizing: border-box;
+}
+
+input[type='checkbox'] {
+    margin: 0;
+    width: 16px;
+    height: 16px;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 130%;
+    color: var(--text-primary);
+}
+
+.auth-form-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
