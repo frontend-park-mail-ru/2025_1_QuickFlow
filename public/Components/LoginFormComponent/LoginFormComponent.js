@@ -9,14 +9,14 @@ export default class LoginFormComponent {
         this.step = 1;
         this.email = '';
         this.passwordInput = null;
-        this.emailInput = null;
+        this.usernameInput = null;
 
         this.continueBtn = null; // Кнопка "Продолжить"
         // this.errorMessage = null; // Сообщение об ошибке email
         this.config = {
             emailTitle: 'Вход QuickFlow',
             pwdTitle: 'Введите пароль',
-            emailDescription: 'Введите логин, который привязан<br>к вашему аккаунту',
+            emailDescription: 'Введите имя пользователя, которое привязано к вашему аккаунту',
             pwdDescription: 'Введите ваш текущий пароль,<br>привязанный к @rvasutenko',
             continueBtnText: 'Продолжить',
             signupBtnText: 'Создать аккаунт',
@@ -97,15 +97,14 @@ export default class LoginFormComponent {
         const fieldsetEmail = document.createElement('fieldset');
         fieldsetEmail.classList.add('login-email');
 
-        this.emailInput = new InputComponent(fieldsetEmail, {
-            type: 'email',
-            placeholder: 'Email',
-            autocomplete: 'email',
-            validation: 'email',
+        this.usernameInput = new InputComponent(fieldsetEmail, {
+            type: 'text',
+            placeholder: 'Имя пользователя',
+            autocomplete: 'username',
             required: true,
             showRequired: false
         });
-        this.emailInput.render();
+        this.usernameInput.render();
 
         const checkboxWrapper = document.createElement('div');
         checkboxWrapper.classList.add('checkbox-wrapper');
@@ -123,10 +122,10 @@ export default class LoginFormComponent {
         fieldsetEmail.appendChild(checkboxWrapper);
 
         // Добавляем событие input для блокировки/разблокировки кнопки "Продолжить"
-        this.emailInput.input.addEventListener('input', () => {
+        this.usernameInput.input.addEventListener('input', () => {
             if (
-                this.emailInput.input.classList.contains('invalid') ||
-                this.emailInput.input.value === ''
+                this.usernameInput.input.classList.contains('invalid') ||
+                this.usernameInput.input.value === ''
             ) {
                 this.continueBtn.buttonElement.disabled = true;
             } else {
@@ -152,7 +151,7 @@ export default class LoginFormComponent {
 
     continueBtnOnClick(event) {
         event.preventDefault();
-        this.email = this.emailInput.input.value.trim();
+        this.email = this.usernameInput.input.value.trim();
         if (!this.email) {
             alert('Введите email!');
             return;

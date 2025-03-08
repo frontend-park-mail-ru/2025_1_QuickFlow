@@ -1,16 +1,43 @@
-.menu-item:hover {
-    background: #f0f0f0;
-    border-radius: 4px;
+aside {
+    width: 220px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    border-right: 1px solid var(--stroke-primary);
+    padding: 12px;
+    background: var(--background-white);
+    align-items: center;
+}
+
+.header-logo-wrapper {
+    height: fit-content;
+    width: fit-content;
+    align-self: start;
 }
 
 .menu-item {
     display: flex;
-    align-items: center; /* Выравнивание по центру */
-    gap: 8px; /* Расстояние между иконкой и текстом */
+    align-items: center;
+    gap: 12px;
     padding-left: 12px;
-    width: 196px;
-    height: 32px;
-    margin: 8px;
+    width: 100%;
+    height: 36px;
+    flex-direction: row;
+
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 100%;
+    color: var(--text-primary);
+}
+
+.menu-item:hover {
+    background: var(--button-secondary-hover);
+    border-radius: 8px;
 }
 
 .menu-icon {
@@ -19,5 +46,6 @@
 }
 
 .active {
-    font-weight: bold;
+    font-weight: 500;
+    color: var(--text-accent);
 }

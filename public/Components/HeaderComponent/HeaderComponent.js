@@ -1,32 +1,4 @@
-console.log('HeaderComponent.js загружен!');
-
-export class LogoComponent {
-    constructor(container, menu) {
-        this.container = container;
-        this.menu = menu;
-    }
-
-    render() {
-        const logo = document.createElement('a');
-        logo.href = '/feed';
-        logo.classList.add('logo-item');
-
-        const iconElement = document.createElement('img');
-        iconElement.src = `/static/img/logo-icon.svg`;
-
-        const nameElement = document.createElement('img');
-        nameElement.src = `/static/img/quickFlow-icon.svg`;
-
-        logo.appendChild(iconElement);
-        logo.appendChild(nameElement);
-        this.container.appendChild(logo);
-
-        logo.addEventListener('click', (event) => {
-            event.preventDefault();
-            this.menu.goToPage(this.menu.menuElements.feed);
-        });
-    }
-}
+import InputComponent from '../InputComponent/InputComponent.js';
 
 export class SearchComponent {
     constructor(container) {
@@ -34,47 +6,38 @@ export class SearchComponent {
     }
 
     render() {
-        const container = document.createElement('div');
-        container.classList.add('container_header');
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('header-left');
 
-        const searchContainer = document.createElement('a');
-        searchContainer.classList.add('search-container');
-        searchContainer.href = '/feed'; // Временная заглушка
+        const searchInput = new InputComponent(wrapper, {
+            type: 'search',
+            placeholder: 'Поиск',
+            showRequired: false
+        });
+        searchInput.render();
 
-        const search = document.createElement('input');
-        search.classList.add('search-item');
-        search.setAttribute('type', 'text');
-        search.setAttribute('placeholder', 'Поиск');
+        searchInput.input.classList.add('header-search');
 
-        const icon = document.createElement('img');
-        icon.src = '/static/img/search-icon.svg';
-        icon.classList.add('search-icon');
+        const notificationsWrapper = document.createElement('a');
+        notificationsWrapper.classList.add('icon-wrapper');
+        const musicWrapper = document.createElement('a');
+        musicWrapper.classList.add('icon-wrapper');
 
-        const iconContainer = document.createElement('a');
-        iconContainer.classList.add('search-icon-container');
-
-        const noticeIcon = document.createElement('img');
-        noticeIcon.src = '/static/img/notice-icon.svg';
-        noticeIcon.classList.add('notice-icon');
+        const notificationsIcon = document.createElement('img');
+        notificationsIcon.src = '/static/img/notice-icon.svg';
+        notificationsIcon.classList.add('notice-icon');
 
         const musicIcon = document.createElement('img');
         musicIcon.src = '/static/img/music-icon-top.svg';
         musicIcon.classList.add('music-icon-top');
+        
+        notificationsWrapper.appendChild(notificationsIcon);
+        musicWrapper.appendChild(musicIcon);
 
-        iconContainer.appendChild(noticeIcon);
-        iconContainer.appendChild(musicIcon);
+        wrapper.appendChild(notificationsWrapper);
+        wrapper.appendChild(musicWrapper);
 
-        searchContainer.appendChild(icon);
-        searchContainer.appendChild(search);
-
-        container.appendChild(searchContainer);
-        container.appendChild(iconContainer);
-
-        this.container.appendChild(container);
-
-        search.addEventListener('click', (event) => {
-            event.preventDefault();
-        });
+        this.container.appendChild(wrapper);
     }
 }
 
@@ -84,20 +47,20 @@ export class AvatarComponent {
     }
 
     render() {
-        const avatarContainer = document.createElement('div');
-        avatarContainer.classList.add('avatar-container');
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('header-right');
 
         const avatar = document.createElement('img');
         avatar.src = '/static/img/avatar.jpg';
         avatar.classList.add('avatar');
 
-        const dropdownButton = document.createElement('button');
+        const dropdownButton = document.createElement('a');
         dropdownButton.classList.add('dropdown-button');
-        dropdownButton.innerHTML = '&#9662;';
+        // dropdownButton.innerHTML = '&#9662;';
 
-        avatarContainer.appendChild(avatar);
-        avatarContainer.appendChild(dropdownButton);
-        this.container.appendChild(avatarContainer);
+        wrapper.appendChild(avatar);
+        wrapper.appendChild(dropdownButton);
+        this.container.appendChild(wrapper);
     }
 }
 
@@ -108,8 +71,12 @@ export default class HeaderComponent {
     }
 
     render() {
-        new LogoComponent(this.container, this.menu).render();
-        new SearchComponent(this.container).render();
-        new AvatarComponent(this.container).render();
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('header-inner-wrapper');
+        
+        new SearchComponent(wrapper).render();
+        new AvatarComponent(wrapper).render();
+
+        this.container.appendChild(wrapper);
     }
 }

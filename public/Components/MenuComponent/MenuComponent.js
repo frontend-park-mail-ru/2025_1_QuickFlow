@@ -1,5 +1,30 @@
 // import Handlebars from 'handlebars';
 
+export class LogoComponent {
+    constructor(container, menu) {
+        this.container = container;
+        this.menu = menu;
+    }
+
+    render() {
+        const wrapper = document.createElement('a');
+        wrapper.classList.add('header-logo-wrapper');
+        wrapper.href = '/feed';
+
+        const logo = document.createElement('img');
+        logo.classList.add('header-logo');
+        logo.src = '/static/img/annotated-logo.svg';
+
+        wrapper.appendChild(logo);
+        this.container.appendChild(wrapper);
+
+        wrapper.addEventListener('click', (event) => {
+            event.preventDefault();
+            this.menu.goToPage(this.menu.menuElements.feed);
+        });
+    }
+}
+
 export default class MenuComponent {
     constructor(config, container) {
         this.config = config;
@@ -9,6 +34,8 @@ export default class MenuComponent {
     }
 
     render() {
+        new LogoComponent(this.container, this).render();
+
         Object.entries(this.config.menu).forEach(([key, { href, text, icon }], index) => {
             const menuElement = document.createElement('a');
             menuElement.href = href;

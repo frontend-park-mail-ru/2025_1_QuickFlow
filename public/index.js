@@ -4,6 +4,16 @@ import SignupView from './Views/SignupView/SignupView.js';
 import HeaderComponent from './Components/HeaderComponent/HeaderComponent.js';
 import MenuComponent from './Components/MenuComponent/MenuComponent.js';
 
+export default class App {
+    constructor() {
+
+    }
+
+    render() {
+
+    }
+}
+
 const root = document.getElementById('root');
 
 const container = document.createElement('div');
@@ -17,9 +27,10 @@ const pageContainer = document.createElement('main');
 
 const headerContainer = document.createElement('header');
 headerContainer.classList.add('header');
+
 container.appendChild(menuContainer);
-container.appendChild(pageContainer);
 container.appendChild(headerContainer);
+container.appendChild(pageContainer);
 
 const link = document.createElement('link');
 link.rel = 'stylesheet';
@@ -146,8 +157,6 @@ function renderFeed() {
         container.appendChild(sideMenu); //лучше в pageContainer, но не смог в нем выровнять пока
     }
 
-    renderSideMenu()
-
     Ajax.get({
         url: '/feed',
         callback: (status, responseString) => {
@@ -159,6 +168,8 @@ function renderFeed() {
                 // window.location.replace("/login");
                 return;
             }
+
+            renderSideMenu()
 
             const images = JSON.parse(responseString);
 

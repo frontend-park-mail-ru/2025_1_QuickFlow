@@ -27,6 +27,7 @@
 
 input[type='text'],
 input[type='email'],
+input[type='search'],
 input[type='password'] {
     border: 1px solid var(--stroke-primary);
     border-radius: 8px;
@@ -44,18 +45,21 @@ input[type='password'] {
 
 input[type='text']::placeholder,
 input[type='email']::placeholder,
+input[type='search']::placeholder,
 input[type='password']::placeholder {
     color: var(--text-secondary);
 }
 
 input[type='text']:hover,
 input[type='email']:hover,
+input[type='search']:hover,
 input[type='password']:hover {
     border: 1px solid var(--stroke-primary-hover);
 }
 
 input[type='text']:focus,
 input[type='email']:focus,
+input[type='search']:focus,
 input[type='password']:focus {
     border: 1px solid var(--stroke-primary-focus);
     outline: none;

@@ -16,27 +16,6 @@ body {
         sans-serif;
 }
 
-.menu {
-    padding-top: 64px; /* Отступ сверху */
-    width: 220px; /* Ширина меню */
-    height: 1080px;
-    background: white;
-    display: flex;
-    flex-direction: column;
-}
-
-.header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: fixed; /* Фиксируем хедер */
-    top: 0; /* Прижимаем к верху */
-    width: 100%; /* Растягиваем на всю ширину */
-    padding: 10px 20px; /* Дополнительные отступы, можно настроить */
-    background: white;
-    border-bottom: 1px solid #ddd;
-}
-
 /*.logo-item {*/
 /*    align-self: start;*/
 /*    display: flex;*/
@@ -182,13 +161,13 @@ body {
 /*}*/
 
 main {
+    padding: 24px 64px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    position: relative;
-    padding-top: 90px;
-    margin-left: 220px;
-    width: 554px;
+    position: absolute;
+    left: 220px;
+    top: 56px;
+    width: calc(100% - 220px);
 }
 
 .feed-container {
