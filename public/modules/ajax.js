@@ -24,6 +24,7 @@ class Ajax {
                 headers: { 'Content-Type': 'application/json; charset=utf-8' },
                 body: JSON.stringify(body)
             });
+            console.log(response);
             const data = await response.json();
             callback(response.status, data);
         } catch (error) {
