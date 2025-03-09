@@ -1,4 +1,5 @@
 header {
+    z-index: 1;
     display: flex;
     flex-direction: row;
     position: fixed;
@@ -68,15 +69,6 @@ a {
     align-items: center;
     gap: 8px;
     padding: 0 8px;
-}
-
-.avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    cursor: pointer;
 }
 
 .dropdown-button {

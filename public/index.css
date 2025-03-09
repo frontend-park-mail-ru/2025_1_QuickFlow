@@ -3,6 +3,8 @@
 @import url(./Components/UI/RadioComponent/RadioComponent.css);
 @import url(./Components/LoginFormComponent/LoginFormComponent.css);
 @import url(./Components/SignupFormComponent/SignupFormComponent.css);
+@import url(./Components/PostComponent/PostComponent.css);
+@import url(./Components/AvatarComponent/AvatarComponent.css);
 
 * {
     box-sizing: border-box;
@@ -178,7 +180,7 @@ main {
 
 a {
     display: block;
-    color: #333333;
+    color: var(--text-accent);
     text-decoration: none;
 }
 
@@ -207,6 +209,52 @@ h1 {
     margin: 0;
 }
 
+.h1 {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 130%;
+    margin: 0;
+}
+
+h2 {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 130%;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.h2 {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 130%;
+    margin: 0;
+}
+
+h3 {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 130%;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.h3 {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 130%;
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}
+
 .p1 {
     font-family: var(--font-family);
     font-weight: 400;
@@ -214,5 +262,4 @@ h1 {
     line-height: 130%;
     text-align: center;
     color: var(--text-secondary);
-    margin: 0;
 }

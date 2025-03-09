@@ -1,0 +1,122 @@
+.feed {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 48px;
+}
+
+.post {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 553px;
+    width: 553px;
+}
+
+.post-text-wrapper {
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.post-text-content {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 130%;
+    color: var(--text-primary);
+    margin: 0;
+
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+
+.post-text-content.expanded {
+    display: block;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    overflow: visible;
+}
+
+.post-read-more {
+    cursor: pointer;
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 130%;
+    color: var(--text-secondary);
+}
+
+.post-read-more:hover {
+    color: var(--text-secondary-hover);
+}
+
+.post-top-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 12px;
+    justify-content: space-between;
+}
+
+.post-author-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.post-top-right-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.post-date {
+    color: var(--text-secondary);
+}
+
+.post-name-date-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.a-btn:hover {
+    color: var(--text-accent-hover);
+}
+
+.post-options-wrapper {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.post-options-wrapper:hover {
+    background-color: var(--background-light-gray);
+}
+
+.post-options {
+    background: url(../../static/img/options-icon.svg) 0 0 no-repeat;
+    width: 16px;
+    height: 16px;
+}
+
+.post-pic {
+    border: 1px solid var(--stroke-primary);
+    border-radius: 8px;
+    width: 553px;
+    aspect-ratio: 4 / 5;
+}
+

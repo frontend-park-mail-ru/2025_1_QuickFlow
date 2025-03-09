@@ -2,6 +2,7 @@ import Ajax from './modules/ajax.js';
 import LoginView from './Views/LoginView/LoginView.js';
 import SignupView from './Views/SignupView/SignupView.js';
 import HeaderComponent from './Components/HeaderComponent/HeaderComponent.js';
+import PostComponent from './Components/PostComponent/PostComponent.js';
 import MenuComponent from './Components/MenuComponent/MenuComponent.js';
 
 // export default class App {
@@ -122,6 +123,7 @@ const config = {
 
 function renderFeed() {
     const feed = document.createElement('div');
+    feed.classList.add('feed');
 
     function renderSideMenu() {
         const sideMenu = document.createElement('a');
@@ -151,25 +153,53 @@ function renderFeed() {
 
             renderSideMenu()
 
-            const images = JSON.parse(responseString);
+            // const callbackFeed = JSON.stringify([
+            //     {
+            //         "id": "00000000-0000-0000-0000-000000000000",
+            //         "creator_id": "b0ce0ceb-0028-4cd1-a248-457dc151e97e",
+            //         "text": 'Аԥсны (Абхазия) в переводе с абхазского — "страна души". И действительно, поездка туда впечаталась в душу и стала испытанием для тела: пока это наше единственное путешествие, где мы три дня не мылись, купались в море с коровами, все время от чего-нибудь лечились, шарахались от машин на переходах и от собак в подворотнях, сгоняли кошек со стульев в кафе и вырывали наших детей из рук прохожих. Но поскольку мы все же благополучно вернулись домой, я могу обо всем подробнейшим образом написать здесь (от души, так скажем). Сейчас — вводный пост, потом будет весь наш маршрут поэтапно, а в конце моих путевых заметок подведем итоги по стоимости поездки.',
+            //         "pics": [
+            //             "/273153700_118738253861831_5906416883131394354_n.jpeg"
+            //         ],
+            //         "created_at": "2025-03-02 22:37:30",
+            //         "like_count": 0,
+            //         "repost_count": 0,
+            //         "comment_count": 0
+            //     },
+            //     {
+            //         "id": "dd9aeb03-225d-4119-9154-1e29ea354123",
+            //         "creator_id": "b0ce0ceb-0028-4cd1-a248-457dc151e97e",
+            //         "text": "Hello, this is my second post",
+            //         "pics": [
+            //             "/272708814_1158833634855293_1743973316352152210_n.webp.jpg"
+            //         ],
+            //         "created_at": "2025-03-05 22:46:19",
+            //         "like_count": 0,
+            //         "repost_count": 0,
+            //         "comment_count": 0
+            //     }
+            // ]);
 
-            if (images && Array.isArray(images)) {
-                const div = document.createElement('div');
-                feed.appendChild(div);
+            const feedData = JSON.parse(responseString);
+            // const feedData = JSON.parse(callbackFeed);
 
-                images.forEach(({ src, likes, id }) => {
-                    div.innerHTML += `<img src="${src}" alt="image" width="500">`;
-                    const likeContainer = document.createElement('div');
-                    div.appendChild(likeContainer);
+            if (feedData && Array.isArray(feedData)) {
+                // const div = document.createElement('div');
+                // feed.appendChild(div);
 
-                    likeContainer.innerHTML = `<span>${likes} лайков</span>`;
+                // console.log(feedData);
 
-                    const likeBtn = document.createElement('button');
-                    likeBtn.textContent = 'Лайк!';
-                    likeBtn.type = 'button';
-                    likeBtn.dataset.imageId = id;
-
-                    likeContainer.appendChild(likeBtn);
+                feedData.forEach(({ id, creator_id, text, pics, created_at, like_count, repost_count, comment_count }) => {
+                    new PostComponent(feed, {
+                        id,
+                        creator_id,
+                        text,
+                        pics,
+                        created_at,
+                        like_count,
+                        repost_count,
+                        comment_count,
+                    });
                 });
             }
         }
