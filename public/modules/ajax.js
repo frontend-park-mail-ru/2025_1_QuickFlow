@@ -24,13 +24,20 @@ class Ajax {
                 headers: { 'Content-Type': 'application/json; charset=utf-8' },
                 body: JSON.stringify(body)
             });
+    
             console.log(response);
-            const data = await response.json();
+    
+            let data = null;
+            if (response.headers.get('content-length') !== '0' && response.headers.get('content-type')?.includes('application/json')) {
+                data = await response.json();
+            }
+    
             callback(response.status, data);
         } catch (error) {
             console.error('POST request failed:', error);
         }
     }
+    
 }
 
 export default new Ajax();
