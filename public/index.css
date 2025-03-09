@@ -1,8 +1,8 @@
 @import url(./Components/constants.css);
-@import url(./Components/ButtonComponent/ButtonComponent.css);
+@import url(./Components/UI/ButtonComponent/ButtonComponent.css);
+@import url(./Components/UI/RadioComponent/RadioComponent.css);
 @import url(./Components/LoginFormComponent/LoginFormComponent.css);
 @import url(./Components/SignupFormComponent/SignupFormComponent.css);
-@import url(./Components/RadioComponent/RadioComponent.css);
 
 * {
     box-sizing: border-box;

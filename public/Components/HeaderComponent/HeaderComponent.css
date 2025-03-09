@@ -49,18 +49,6 @@ a {
     gap: 24px;
 }
 
-.search-container {
-    align-self: center;
-    display: flex;
-    align-items: start;
-    justify-content: space-between;
-    background: #edeef0;
-    border-radius: 8px;
-    width: 220px;
-    height: 32px;
-    gap: 8px;
-}
-
 .search-item {
     border: none;
     outline: none;
@@ -72,34 +60,6 @@ a {
 
     flex-grow: 1;
     text-align: left;
-}
-
-.search-icon {
-    align-self: center;
-    padding-left: 16px;
-    width: 16px;
-    height: 16px;
-}
-
-.search-icon-container {
-    align-self: center;
-    display: flex;
-    align-items: center;
-    width: 64px;
-    height: 20px;
-    gap: 24px;
-}
-
-.notice-icon {
-    display: flex;
-    width: 20px;
-    height: 20px;
-    color: #ffffff;
-}
-
-.music-icon-top {
-    width: 20px;
-    height: 20px;
 }
 
 .header-right {

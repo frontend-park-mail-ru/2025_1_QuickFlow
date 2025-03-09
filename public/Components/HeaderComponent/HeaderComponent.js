@@ -1,4 +1,4 @@
-import InputComponent from '../InputComponent/InputComponent.js';
+import InputComponent from '../UI/InputComponent/InputComponent.js';
 
 export class SearchComponent {
     constructor(container) {
@@ -25,11 +25,9 @@ export class SearchComponent {
 
         const notificationsIcon = document.createElement('img');
         notificationsIcon.src = '/static/img/notice-icon.svg';
-        notificationsIcon.classList.add('notice-icon');
 
         const musicIcon = document.createElement('img');
         musicIcon.src = '/static/img/music-icon-top.svg';
-        musicIcon.classList.add('music-icon-top');
         
         notificationsWrapper.appendChild(notificationsIcon);
         musicWrapper.appendChild(musicIcon);

@@ -1,6 +1,6 @@
 import Ajax from '../../modules/ajax.js';
-import InputComponent from '../InputComponent/InputComponent.js';
-import ButtonComponent from '../ButtonComponent/ButtonComponent.js';
+import InputComponent from '../UI/InputComponent/InputComponent.js';
+import ButtonComponent from '../UI/ButtonComponent/ButtonComponent.js';
 
 export default class LoginFormComponent {
     constructor(container, menu) {

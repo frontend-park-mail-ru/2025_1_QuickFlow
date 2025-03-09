@@ -4,15 +4,15 @@ import SignupView from './Views/SignupView/SignupView.js';
 import HeaderComponent from './Components/HeaderComponent/HeaderComponent.js';
 import MenuComponent from './Components/MenuComponent/MenuComponent.js';
 
-export default class App {
-    constructor() {
+// export default class App {
+//     constructor() {
 
-    }
+//     }
 
-    render() {
+//     render() {
 
-    }
-}
+//     }
+// }
 
 const root = document.getElementById('root');
 
@@ -120,24 +120,6 @@ const config = {
     },
 };
 
-// function renderSignup() {
-//     const form = document.createElement('form');
-
-//     const emailInput = createInput('email', 'Емайл', 'email');
-//     const passwordInput = createInput('password', 'Пароль', 'password');
-//     const ageInput = createInput('number', 'Возраст', 'age');
-
-//     const submitBtn = document.createElement('input');
-//     submitBtn.type = 'submit';
-//     submitBtn.value = 'Зарегистрироваться!';
-
-//     form.appendChild(emailInput);
-//     form.appendChild(passwordInput);
-//     form.appendChild(ageInput);
-//     form.appendChild(submitBtn);
-//     return form;
-// }
-
 function renderFeed() {
     const feed = document.createElement('div');
 
@@ -163,9 +145,7 @@ function renderFeed() {
             let isAuthorized = status === 200;
 
             if (!isAuthorized) {
-                alert('Нет авторизации!');
                 menu.goToPage(menu.menuElements.signup);
-                // window.location.replace("/login");
                 return;
             }
 
@@ -228,8 +208,6 @@ function renderProfile() {
             const isAuthorized = status === 200;
 
             if (!isAuthorized) {
-                alert('АХТУНГ! нет авторизации');
-                // goToPage(appState.menuElements.login);
                 menu.goToPage(menu.menuElements.login);
                 return;
             }
