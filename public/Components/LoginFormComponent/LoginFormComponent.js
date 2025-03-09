@@ -7,16 +7,15 @@ export default class LoginFormComponent {
         this.container = container;
         this.menu = menu;
         this.step = 1;
-        this.email = '';
+        this.username = '';
         this.passwordInput = null;
         this.usernameInput = null;
 
         this.continueBtn = null; // Кнопка "Продолжить"
-        // this.errorMessage = null; // Сообщение об ошибке email
         this.config = {
-            emailTitle: 'Вход QuickFlow',
+            usernameTitle: 'Вход QuickFlow',
             pwdTitle: 'Введите пароль',
-            emailDescription: 'Введите имя пользователя, которое привязано к вашему аккаунту',
+            usernameDescription: 'Введите имя пользователя, которое привязано к вашему аккаунту',
             pwdDescription: 'Введите ваш текущий пароль,<br>привязанный к @rvasutenko',
             continueBtnText: 'Продолжить',
             signupBtnText: 'Создать аккаунт',
@@ -32,7 +31,7 @@ export default class LoginFormComponent {
         form.classList.add('auth-form');
 
         if (this.step === 1) {
-            this.renderEmailStep(form);
+            this.renderUsernameStep(form);
         } else if (this.step === 2) {
             this.renderPasswordStep(form);
         }
@@ -49,12 +48,12 @@ export default class LoginFormComponent {
         logo.classList.add('auth-form-logo');
 
         const title = document.createElement('h1');
-        title.textContent = this.step === 1 ? this.config.emailTitle : this.config.pwdTitle;
+        title.textContent = this.step === 1 ? this.config.usernameTitle : this.config.pwdTitle;
 
         const description = document.createElement('p');
         description.classList.add('p1');
         description.innerHTML =
-            this.step === 1 ? this.config.emailDescription : this.config.pwdDescription;
+            this.step === 1 ? this.config.usernameDescription : this.config.pwdDescription;
 
         topWrapper.appendChild(logo);
         topWrapper.appendChild(title);
@@ -75,7 +74,7 @@ export default class LoginFormComponent {
                 this.step === 1
                     ? this.continueBtnOnClick.bind(this)
                     : this.signinBtnOnClick.bind(this),
-            disabled: this.step === 1 // Кнопка "Продолжить" отключена на шаге email
+            disabled: this.step === 1
         });
         this.continueBtn.render();
 
@@ -91,13 +90,13 @@ export default class LoginFormComponent {
         }
     }
 
-    renderEmailStep(form) {
+    renderUsernameStep(form) {
         this.renderTopWrapper(form);
 
-        const fieldsetEmail = document.createElement('fieldset');
-        fieldsetEmail.classList.add('login-email');
+        const fieldsetUsername = document.createElement('fieldset');
+        fieldsetUsername.classList.add('login-username');
 
-        this.usernameInput = new InputComponent(fieldsetEmail, {
+        this.usernameInput = new InputComponent(fieldsetUsername, {
             type: 'text',
             placeholder: 'Имя пользователя',
             autocomplete: 'username',
@@ -119,7 +118,7 @@ export default class LoginFormComponent {
 
         checkboxWrapper.appendChild(rememberMe);
         checkboxWrapper.appendChild(label);
-        fieldsetEmail.appendChild(checkboxWrapper);
+        fieldsetUsername.appendChild(checkboxWrapper);
 
         // Добавляем событие input для блокировки/разблокировки кнопки "Продолжить"
         this.usernameInput.input.addEventListener('input', () => {
@@ -133,7 +132,7 @@ export default class LoginFormComponent {
             }
         });
 
-        form.appendChild(fieldsetEmail);
+        form.appendChild(fieldsetUsername);
         this.renderBottomWrapper(form);
     }
 
@@ -151,9 +150,9 @@ export default class LoginFormComponent {
 
     continueBtnOnClick(event) {
         event.preventDefault();
-        this.email = this.usernameInput.input.value.trim();
-        if (!this.email) {
-            alert('Введите email!');
+        this.username = this.usernameInput.input.value.trim();
+        if (!this.username) {
+            alert('Введите имя пользователя!');
             return;
         }
         this.step = 2;
@@ -164,7 +163,7 @@ export default class LoginFormComponent {
         event.preventDefault();
         const password = this.passwordInput.input.value.trim();
         if (!password) {
-            alert('Введите пароль!');
+            alert('Введите пароль');
             return;
         }
         this.submitLogin(password);
@@ -173,12 +172,15 @@ export default class LoginFormComponent {
     submitLogin(password) {
         Ajax.post({
             url: '/login',
-            body: { email: this.email, password },
+            body: {
+                username: this.username,
+                password
+            },
             callback: (status) => {
                 if (status === 200) {
                     this.menu.goToPage(this.menu.menuElements.feed);
                 } else {
-                    this.passwordInput.showError('Неверный email или пароль');
+                    this.passwordInput.showError('Неверное имя пользователя или пароль');
                 }
             }
         });

@@ -55,10 +55,39 @@ export default class PostComponent {
         const likeWrapper = document.createElement('div');
         likeWrapper.classList.add('post-action-wrapper');
         actionsWrapper.appendChild(likeWrapper);
-
         const like = document.createElement('div');
         like.classList.add('post-like');
+        const likeCounter = document.createElement('div');
+        likeCounter.classList.add('post-action-counter');
+        likeCounter.textContent = this.data.like_count;
         likeWrapper.appendChild(like);
+        likeWrapper.appendChild(likeCounter);
+
+        const commentWrapper = document.createElement('div');
+        commentWrapper.classList.add('post-action-wrapper');
+        actionsWrapper.appendChild(commentWrapper);
+        const comment = document.createElement('div');
+        comment.classList.add('post-comment');
+        const commentCounter = document.createElement('div');
+        commentCounter.classList.add('post-action-counter');
+        commentCounter.textContent = this.data.comment_count;
+        commentWrapper.appendChild(comment);
+        commentWrapper.appendChild(commentCounter);
+
+        const repostWrapper = document.createElement('div');
+        repostWrapper.classList.add('post-action-wrapper');
+        actionsWrapper.appendChild(repostWrapper);
+        const repost = document.createElement('div');
+        repost.classList.add('post-repost');
+        const repostCounter = document.createElement('div');
+        repostCounter.classList.add('post-action-counter');
+        repostCounter.textContent = this.data.repost_count;
+        repostWrapper.appendChild(repost);
+        repostWrapper.appendChild(repostCounter);
+
+        const bookmark = document.createElement('div');
+        actionsWrapper.appendChild(bookmark);
+        bookmark.classList.add('post-bookmark');
     }
 
     renderText() {
