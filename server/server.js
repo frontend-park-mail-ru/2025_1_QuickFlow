@@ -10,7 +10,9 @@ const crypto = require('crypto');
 
 app.use(morgan('dev'));
 app.use(express.static(path.resolve(__dirname, '..', 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.resolve(__dirname, 'images')));
+app.use(express.static(path.resolve(__dirname, '..', 'node_modules')));
 app.use('/static', express.static('static'));
 app.use(body.json());
 app.use(cookie());
@@ -121,7 +123,7 @@ app.post('/login', (req, res) => {
 
     res.cookie('podvorot', id, {
         expires: new Date(Date.now() + 10000 * 60 * 10),
-        // secure: true,
+        secure: true,
         httpOnly: true
     });
     res.status(200).json({ id });

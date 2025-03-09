@@ -1,0 +1,20 @@
+<form class="auth-form">
+    <div class="auth-form-top">
+        <img class="auth-form-logo" src="/static/img/logo-icon.svg" alt="Logo">
+        <h1>{{emailTitle}}</h1>
+        <p class="p1">{{emailDescription}}</p>
+    </div>
+
+    <fieldset class="login-email">
+        <input type="text" class="input username-input" placeholder="Имя пользователя" autocomplete="username" required>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="rememberMe">
+            <label for="rememberMe">Запомнить меня</label>
+        </div>
+    </fieldset>
+
+    <div class="auth-form-bottom">
+        <button class="button button-primary continue-btn" disabled>{{continueBtnText}}</button>
+        <button class="button button-secondary signup-btn">Создать аккаунт</button>
+    </div>
+</form>

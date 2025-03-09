@@ -1,76 +1,28 @@
-console.log("RadioComponent.js загружен!");
-
+console.log('RadioComponent.js загружен!');
 
 export default class RadioComponent {
+    #container;
+    #config;
+    wrapper;
+
     constructor(container, config) {
-        this.config = config;
-        this.container = container;
+        this.#container = container;
+        this.#config = config;
         this.wrapper = null;
     }
 
     render() {
-        this.wrapper = document.createElement('div');
-        this.wrapper.classList.add('radio-wrapper');
+        const template = Handlebars.templates['RadioComponent.hbs'];
+        const radioHTML = template({
+            label: this.#config.label,
+            name: this.#config.name,
+            radios: this.#config.radios,
+            required: this.#config.required,
+            showRequired: this.#config.showRequired
+        });
 
-        // Label (если задан)
-        if (this.config.label) {
-            const label = document.createElement('label');
-            label.textContent = this.config.label;
-            label.classList.add('input-label');
-            if (this.config.showRequired === true) {
-                const requiredMark = document.createElement('span');
-                requiredMark.textContent = ' *';
-                requiredMark.classList.add('required');
-                label.appendChild(requiredMark);
-            }
-            this.wrapper.appendChild(label);
-        }
-
-        const choicesWrapper = document.createElement('div');
-        choicesWrapper.classList.add('choices-wrapper');
-        this.wrapper.appendChild(choicesWrapper);
-
-        for (const key in this.config.radios) {
-            const radioData = this.config.radios[key];
-            const choice = document.createElement('div');
-            choice.classList.add('choice');
-
-            const radio = document.createElement('input');
-            radio.type = 'radio';
-            radio.name = this.config.name;
-            radio.id = radioData.id;
-            radio.required = this.config.required || false;
-
-            const label = document.createElement('label');
-            label.textContent = radioData.label;
-            label.htmlFor = radioData.id;
-
-            choice.appendChild(radio);
-            choice.appendChild(label);
-            choicesWrapper.appendChild(choice);
-        }
-
-        // // Поле ввода
-        // const input = document.createElement('input');
-        // input.classList.add('input-field');
-        // input.type = this.config.type || 'text';
-        // input.autocomplete = this.config.autocomplete || 'off';
-        // input.placeholder = this.config.placeholder || '';
-        // input.maxLength = this.config.maxLength || this.defaultMaxLength;
-        // input.required = this.config.required || false;
-
-        // this.inputElement = input;
-        // this.wrapper.appendChild(input);
-
-        // this.inputError = document.createElement('div');
-        // this.inputError.classList.add('input-error');
-
-        // // Добавление обработчиков валидации
-        // if (this.config.validation === true) {
-        //     input.addEventListener('input', () => this.validate());
-        // }
-
-        this.container.appendChild(this.wrapper);
+        this.#container.insertAdjacentHTML('beforeend', radioHTML);
+        this.wrapper = this.#container.lastElementChild;
     }
 
     validate() {

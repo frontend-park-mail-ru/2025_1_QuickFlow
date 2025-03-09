@@ -1,0 +1,29 @@
+<form class="auth-form">
+    <div class="auth-form-top">
+        <h1>{{emailTitle}}</h1>
+        <p class="p1">{{emailDescription}}</p>
+    </div>
+
+    <fieldset class="signup-personal-info">
+        <div class="input-wrapper">
+            {{> InputComponent label="Имя пользователя" placeholder="Имя пользователя" name="username" required=true }}
+        </div>
+
+        <div class="signup-name-input-wrapper">
+            {{> InputComponent label="Имя" placeholder="Имя" name="firstName" required=true }}
+            {{> InputComponent label="Фамилия" placeholder="Фамилия" name="lastName" required=true }}
+        </div>
+
+        <div class="radio-wrapper">
+            {{> RadioComponent label="Пол" name="sex" radios=sexOptions required=true }}
+        </div>
+
+        <div class="input-wrapper">
+            {{> InputComponent label="Дата рождения" placeholder="дд.мм.гггг" name="birthDate" validation="date" required=true }}
+        </div>
+    </fieldset>
+
+    <div class="auth-form-bottom">
+        {{> ButtonComponent text=continueBtnText variant="primary" disabled=true }}
+    </div>
+</form>

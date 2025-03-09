@@ -4,14 +4,14 @@ import SignupView from './Views/SignupView/SignupView.js';
 import HeaderComponent from './Components/HeaderComponent/HeaderComponent.js';
 import MenuComponent from './Components/MenuComponent/MenuComponent.js';
 
+Handlebars.registerHelper('eq', function (a, b) {
+    return a === b;
+});
+
 export default class App {
-    constructor() {
+    constructor() {}
 
-    }
-
-    render() {
-
-    }
+    render() {}
 }
 
 const root = document.getElementById('root');
@@ -19,7 +19,6 @@ const root = document.getElementById('root');
 const container = document.createElement('div');
 container.classList.add('container');
 root.appendChild(container);
-
 
 const menuContainer = document.createElement('aside');
 menuContainer.classList.add('menu'); // Добавляем класс для сетки
@@ -109,15 +108,15 @@ const config = {
             href: '/login',
             text: 'Авторизация',
             icon: 'login-icon',
-            render: () => new LoginView(menu).render(),
+            render: () => new LoginView(menu).render()
         },
         signup: {
             href: '/signup',
             text: 'Регистрация',
             icon: 'signup-icon',
-            render: () => new SignupView(menu).render(),
+            render: () => new SignupView(menu).render()
         }
-    },
+    }
 };
 
 // function renderSignup() {
@@ -147,7 +146,7 @@ function renderFeed() {
 
         // Добавляем несколько элементов в меню (например, ссылки)
         const menuItems = ['Лента', 'Рекомендации', 'Поиск', 'Комментарии', 'Реакции'];
-        menuItems.forEach(itemText => {
+        menuItems.forEach((itemText) => {
             const menuItem = document.createElement('a');
             menuItem.classList.add('side-menu-item');
             menuItem.textContent = itemText;
@@ -169,7 +168,7 @@ function renderFeed() {
                 return;
             }
 
-            renderSideMenu()
+            renderSideMenu();
 
             const images = JSON.parse(responseString);
 
@@ -199,12 +198,16 @@ function renderFeed() {
         if (event.target.tagName.toLocaleLowerCase() === 'button' && event.target.dataset.imageId) {
             const { imageId: id } = event.target.dataset;
 
-            Ajax.post( {url: '/like', body: { id }, callback: (status) => {
-                if (status === 200) {
-                    const likeContainer = event.target.parentNode;
-                    const likeCount = likeContainer.querySelector('span');
-                    likeCount.textContent = `${parseInt(likeCount.textContent) + 1} лайков`;
-                }}
+            Ajax.post({
+                url: '/like',
+                body: { id },
+                callback: (status) => {
+                    if (status === 200) {
+                        const likeContainer = event.target.parentNode;
+                        const likeCount = likeContainer.querySelector('span');
+                        likeCount.textContent = `${parseInt(likeCount.textContent) + 1} лайков`;
+                    }
+                }
             });
         }
     });
@@ -214,7 +217,7 @@ function renderFeed() {
 
 const menu = new MenuComponent(config, menuContainer);
 menu.render();
-menu.goToPage(menu.menuElements.feed)
+menu.goToPage(menu.menuElements.feed);
 
 const header = new HeaderComponent(headerContainer, menu);
 header.render();
@@ -234,7 +237,7 @@ function renderProfile() {
                 return;
             }
 
-            const {email, age, images} = JSON.parse(responseString);
+            const { email, age, images } = JSON.parse(responseString);
 
             const span = document.createElement('span');
             span.textContent = `${email} ${age} лет`;
@@ -244,8 +247,8 @@ function renderProfile() {
                 const div = document.createElement('div');
                 profile.appendChild(div);
 
-                images.forEach(({src, likes}) => {
-                    div.innerHTML += `<img src="${src}" width="500"/><div>${likes} лайков</div>`
+                images.forEach(({ src, likes }) => {
+                    div.innerHTML += `<img src="${src}" width="500"/><div>${likes} лайков</div>`;
                 });
             }
         }

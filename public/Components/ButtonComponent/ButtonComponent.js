@@ -1,26 +1,26 @@
 export default class ButtonComponent {
+    #container;
+    #config;
+
     constructor(container, config) {
-        this.container = container;
-        this.config = config;
-        this.buttonElement = null;
+        this.#container = container;
+        this.#config = config;
+        this.buttonElement = null; // Добавляем сохранение кнопки
     }
 
     render() {
-        const button = document.createElement('button');
-        button.textContent = this.config.text || 'Click me';
-        button.classList.add('button', this.config.variant === 'secondary' ? 'button-secondary' : 'button-primary');
+        const template = Handlebars.templates['ButtonComponent.hbs'];
+        const buttonHTML = template({
+            text: this.#config.text || 'Click me',
+            isSecondary: this.#config.variant === 'secondary',
+            disabled: this.#config.disabled
+        });
 
-        if (this.config.disabled) {
-            button.disabled = true;
-            button.classList.add('button-disabled');
+        this.#container.insertAdjacentHTML('beforeend', buttonHTML);
+
+        this.buttonElement = this.#container.lastElementChild; // Сохраняем кнопку в this.buttonElement
+        if (this.#config.onClick && typeof this.#config.onClick === 'function') {
+            this.buttonElement.addEventListener('click', this.#config.onClick);
         }
-
-        // Если задан обработчик клика
-        if (this.config.onClick && typeof this.config.onClick === 'function') {
-            button.addEventListener('click', this.config.onClick);
-        }
-
-        this.buttonElement = button;
-        this.container.appendChild(button);
     }
 }

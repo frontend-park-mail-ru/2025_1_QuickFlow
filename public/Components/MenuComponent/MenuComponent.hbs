@@ -1,6 +1,6 @@
-{{#each menu}}
-    <a href='{{this.href}}' class='menu-item' data-section='{{@key}}'>
-        <img src='/static/img/{{this.icon}}.svg' class='menu-icon' alt='{{this.text}}' />
-        {{this.text}}
+{{#each menuItems}}
+    <a href="{{href}}" class="menu-item" data-section="{{key}}">
+        <img src="/static/img/{{icon}}.svg" class="menu-icon" alt="{{text}}">
+        {{text}}
     </a>
 {{/each}}

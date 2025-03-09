@@ -1,139 +1,111 @@
-console.log('InputComponent.js загружен!');
-
 export default class InputComponent {
+    #container;
+    #config;
+    inputElement;
+    inputError;
+    inputCounter;
+    wrapper;
+
     constructor(container, config) {
-        this.config = config;
-        this.defaultMaxLength = 256;
-        this.container = container;
-        this.input = null;
-        this.error = null;
+        this.#container = container;
+        this.#config = config;
+        this.inputElement = null;
+        this.inputError = null;
+        this.inputCounter = null;
         this.wrapper = null;
     }
 
     render() {
-        this.wrapper = document.createElement('div');
-        this.wrapper.classList.add('input-wrapper');
+        const template = Handlebars.templates['InputComponent.hbs'];
+        const inputHTML = template({
+            label: this.#config.label,
+            name: this.#config.name,
+            type: this.#config.type || 'text',
+            placeholder: this.#config.placeholder || '',
+            autocomplete: this.#config.autocomplete || 'off',
+            maxLength: this.#config.maxLength || 256,
+            required: this.#config.required,
+            showRequired: this.#config.showRequired,
+            description: this.#config.description,
+            isPassword: this.#config.type === 'password'
+        });
 
-        // Label (если задан)
-        if (this.config.label) {
-            const label = document.createElement('label');
-            label.textContent = this.config.label;
-            label.classList.add('input-label');
-            if (this.config.showRequired === true) {
-                const requiredMark = document.createElement('span');
-                requiredMark.textContent = ' *';
-                requiredMark.classList.add('required');
-                label.appendChild(requiredMark);
-            }
-            this.wrapper.appendChild(label);
+        this.#container.insertAdjacentHTML('beforeend', inputHTML);
+        this.wrapper = this.#container.lastElementChild;
+        this.inputElement = this.wrapper.querySelector('.input-field');
+        this.inputError = this.wrapper.querySelector('.input-error');
+        this.inputCounter = this.wrapper.querySelector('.input-counter');
+
+        if (this.#config.type === 'password') {
+            this.#setupPasswordToggle();
         }
 
-        // Поле ввода
-        this.input = document.createElement('input');
-        this.input.classList.add('input-field');
-        this.input.type = this.config.type || 'text';
-        this.input.autocomplete = this.config.autocomplete || 'off';
-        this.input.placeholder = this.config.placeholder || '';
-        this.input.maxLength = this.config.maxLength || this.defaultMaxLength;
-        this.input.required = this.config.required || false;
+        if (this.#config.validation) {
+            this.inputElement.addEventListener('input', () => this.validate());
+        }
 
-        const innnerWrapper = document.createElement('div');
-        innnerWrapper.classList.add('inner-wrapper');
-        this.wrapper.appendChild(innnerWrapper);
-        innnerWrapper.appendChild(this.input);
-
-        this.error = document.createElement('div');
-        this.error.classList.add('input-error');
-
-        if (this.input.type === 'password') {
-            const pwdControl = document.createElement('a');
-            pwdControl.classList.add('pwd-control');
-
-            pwdControl.addEventListener('click', () => {
-                if (this.input.getAttribute('type') === 'password') {
-                    pwdControl.classList.add('show');
-                    this.input.setAttribute('type', 'text');
-                } else {
-                    pwdControl.classList.remove('show');
-                    this.input.setAttribute('type', 'password');
-                }
+        if (this.inputCounter) {
+            this.inputElement.addEventListener('input', () => {
+                this.inputCounter.textContent =
+                    this.#config.maxLength - this.inputElement.value.length;
             });
-
-            innnerWrapper.appendChild(pwdControl);
         }
+    }
 
-        // Добавление обработчиков валидации
-        if (this.config.validation) {
-            this.input.addEventListener('input', () => this.validate());
-        }
-
-        // Описание (если задано)
-        if (this.config.description || this.config.maxLength) {
-            const descWrapper = document.createElement('div');
-            descWrapper.classList.add('description-wrapper');
-
-            if (this.config.description) {
-                const description = document.createElement('span');
-                description.textContent = this.config.description;
-                description.classList.add('input-description');
-                descWrapper.appendChild(description);
+    #setupPasswordToggle() {
+        const pwdControl = this.wrapper.querySelector('.pwd-control');
+        pwdControl.addEventListener('click', () => {
+            if (this.inputElement.type === 'password') {
+                pwdControl.classList.add('show');
+                this.inputElement.type = 'text';
+            } else {
+                pwdControl.classList.remove('show');
+                this.inputElement.type = 'password';
             }
-
-            if (this.config.maxLength) {
-                const counter = document.createElement('span');
-                counter.textContent = this.config.maxLength;
-                counter.classList.add('input-counter');
-
-                this.input.addEventListener('input', () => {
-                    counter.textContent = this.config.maxLength - this.input.value.length;
-                });
-
-                descWrapper.appendChild(counter);
-            }
-
-            this.wrapper.appendChild(descWrapper);
-        }
-
-        this.container.appendChild(this.wrapper);
+        });
     }
 
     validate() {
-        const value = this.input.value.trim();
+        const value = this.inputElement.value.trim();
 
-        if (this.config.validation === 'email') {
-            this.validateEmail(value);
-        } else if (this.config.validation === 'password') {
-            this.input.minLength = 8;
-            this.validatePassword(value);
-        } else if (this.config.validation === 'username') {
-            this.validateUsername(value);
-        } else if (this.config.validation === 'date') {
-            this.input.maxLength = 10;
-            this.input.addEventListener('input', this.formatDateInput);
-            if (value.length === 10) {
-                this.validateDate(value);
-            } else {
-                this.hideError();
-            }
+        switch (this.#config.validation) {
+            case 'email':
+                this.#validateEmail(value);
+                break;
+            case 'password':
+                this.inputElement.minLength = 8;
+                this.#validatePassword(value);
+                break;
+            case 'username':
+                this.#validateUsername(value);
+                break;
+            case 'date':
+                this.inputElement.maxLength = 10;
+                this.inputElement.addEventListener('input', this.#formatDateInput);
+                if (value.length === 10) {
+                    this.#validateDate(value);
+                } else {
+                    this.hideError();
+                }
+                break;
+            default:
+                break;
         }
     }
 
-    validateUsername(username) {
+    #validateUsername(username) {
         const usernameRegex = /^[a-zA-Z0-9._]+$/;
         if (!usernameRegex.test(username)) {
             this.showError(
                 'Имя пользователя может содержать только латинские буквы, цифры, "." и "_"'
             );
-            return false;
         } else {
             this.hideError();
-            return true;
         }
     }
 
-    validateEmail(email) {
+    #validateEmail(email) {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
         if (!emailPattern.test(email) && email) {
             this.showError('Некорректный Email');
         } else {
@@ -141,14 +113,13 @@ export default class InputComponent {
         }
     }
 
-    validatePassword(password) {
-        const chars = Array.from(password);
-        const hasUppercase = chars.some((char) => /[A-Z]/.test(char));
-        const hasLowercase = chars.some((char) => /[a-z]/.test(char));
-        const hasCyrillic = chars.some((char) => /^[\u0400-\u04FF]+$/.test(char));
-        const hasNumeric = chars.some((char) => !isNaN(char) && char !== ' ');
-        const hasSpaces = chars.some((char) => char === ' ');
-        const hasSpecial = chars.some((char) => /[!@#$%^&*(),.?":{}|<>]/.test(char));
+    #validatePassword(password) {
+        const hasUppercase = /[A-Z]/.test(password);
+        const hasLowercase = /[a-z]/.test(password);
+        const hasCyrillic = /[\u0400-\u04FF]/.test(password);
+        const hasNumeric = /\d/.test(password);
+        const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+        const hasSpaces = /\s/.test(password);
 
         if (!password) {
             this.showError('Введите пароль');
@@ -169,27 +140,16 @@ export default class InputComponent {
         }
     }
 
-    formatDateInput(event) {
+    #formatDateInput(event) {
         let value = event.target.value.replace(/\D/g, ''); // Удаляем все нецифровые символы
-
-        if (value.length > 8) {
-            value = value.slice(0, 8); // Ограничиваем ввод 8 символами
-        }
-
-        // Добавляем точки в нужные места, если их нет
-        if (value.length > 2 && value[2] !== '.') {
-            value = value.slice(0, 2) + '.' + value.slice(2);
-        }
-        if (value.length > 5 && value[5] !== '.') {
-            value = value.slice(0, 5) + '.' + value.slice(5);
-        }
-
+        if (value.length > 8) value = value.slice(0, 8);
+        if (value.length > 2 && value[2] !== '.') value = value.slice(0, 2) + '.' + value.slice(2);
+        if (value.length > 5 && value[5] !== '.') value = value.slice(0, 5) + '.' + value.slice(5);
         event.target.value = value;
     }
 
-    validateDate(date) {
+    #validateDate(date) {
         const datePattern = /^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[0-2])\.(\d{4})$/;
-
         if (!datePattern.test(date)) {
             this.showError('Некорректный формат даты');
             return;
@@ -199,13 +159,11 @@ export default class InputComponent {
         const inputDate = new Date(year, month - 1, day);
         const today = new Date();
 
-        // Проверка на будущее время
         if (inputDate > today) {
             this.showError('Дата не должна быть в будущем');
             return;
         }
 
-        // Проверка корректности даты
         if (
             inputDate.getDate() !== day ||
             inputDate.getMonth() + 1 !== month ||
@@ -215,20 +173,17 @@ export default class InputComponent {
             return;
         }
 
-        this.hideError(); // Если все ок, скрываем ошибку
+        this.hideError();
     }
 
     showError(message) {
-        this.wrapper.appendChild(this.error);
-        this.error.textContent = message;
-        this.error.style.display = 'block';
-        this.input.classList.add('invalid');
+        this.inputError.textContent = message;
+        this.inputError.style.display = 'block';
+        this.inputElement.classList.add('invalid');
     }
 
     hideError() {
-        if (this.input.classList.contains('invalid')) {
-            this.wrapper.removeChild(this.error);
-            this.input.classList.remove('invalid');
-        }
+        this.inputError.style.display = 'none';
+        this.inputElement.classList.remove('invalid');
     }
 }

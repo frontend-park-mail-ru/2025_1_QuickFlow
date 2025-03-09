@@ -1,0 +1,16 @@
+<div class="radio-wrapper">
+    {{#if label}}
+        <label class="input-label">
+            {{label}}
+            {{#if showRequired}}<span class="required"> *</span>{{/if}}
+        </label>
+    {{/if}}
+    <div class="choices-wrapper">
+        {{#each radios}}
+            <div class="choice">
+                <input type="radio" id="{{this.id}}" name="{{../name}}" value="{{@key}}" {{#if ../required}}required{{/if}}>
+                <label for="{{this.id}}">{{this.label}}</label>
+            </div>
+        {{/each}}
+    </div>
+</div>
