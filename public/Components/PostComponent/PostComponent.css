@@ -94,6 +94,7 @@
 /* убрать потом */
 .a-btn {
     color: var(--text-secondary-disabled);
+    cursor: default;
 }
 
 /* .a-btn:hover {
