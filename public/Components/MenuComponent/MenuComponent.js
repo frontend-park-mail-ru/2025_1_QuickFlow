@@ -37,6 +37,11 @@ export default class MenuComponent {
         new LogoComponent(this.container, this).render();
 
         Object.entries(this.config.menu).forEach(([key, { href, text, icon }], index) => {
+            // Пропускаем кнопки входа и регистрации, если пользователь уже залогинен
+            if (this.isUserLoggedIn() && (key === 'login' || key === 'signup')) {
+                return;
+            }
+
             const menuElement = document.createElement('a');
             menuElement.href = href;
             menuElement.classList.add('menu-item');
@@ -65,6 +70,12 @@ export default class MenuComponent {
                 this.checkAuthPage();
             }
         });
+    }
+
+    isUserLoggedIn() {
+        const cookies = document.cookie.split(';');
+        const sessionCookie = cookies.some(cookie => cookie.trim().startsWith('session='));
+        return sessionCookie !== null;
     }
 
     checkAuthPage() {
