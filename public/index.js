@@ -5,16 +5,6 @@ import HeaderComponent from './Components/HeaderComponent/HeaderComponent.js';
 import PostComponent from './Components/PostComponent/PostComponent.js';
 import MenuComponent from './Components/MenuComponent/MenuComponent.js';
 
-// export default class App {
-//     constructor() {
-
-//     }
-
-//     render() {
-
-//     }
-// }
-
 const root = document.getElementById('root');
 
 const container = document.createElement('div');

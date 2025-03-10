@@ -62,8 +62,20 @@ export default class MenuComponent {
             if (event.target.closest('a')) {
                 event.preventDefault();
                 this.goToPage(event.target.closest('a'));
+                this.checkAuthPage();
             }
         });
+    }
+
+    checkAuthPage() {
+        const path = this.activePageLink.href;
+        const href = path.substr(path.lastIndexOf('/') + 1);
+        if (href === 'login' || href === 'signup') {
+            document.body.classList.add("hide-interface");
+            document.querySelector('main').classList.add("hide-interface");
+        } else {
+            document.body.classList.remove("hide-interface");
+        }
     }
 
     goToPage(menuElement) {
