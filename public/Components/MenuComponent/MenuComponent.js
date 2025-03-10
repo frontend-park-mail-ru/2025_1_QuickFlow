@@ -72,10 +72,8 @@ export default class MenuComponent {
         const href = path.substr(path.lastIndexOf('/') + 1);
         if (href === 'login' || href === 'signup') {
             document.body.classList.add("hide-interface");
-            document.querySelector('main').classList.add("hide-interface");
         } else {
             document.body.classList.remove("hide-interface");
-            document.querySelector('main').classList.remove("hide-interface");
         }
     }
 
