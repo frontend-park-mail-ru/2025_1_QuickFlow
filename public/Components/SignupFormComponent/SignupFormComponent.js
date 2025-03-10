@@ -307,6 +307,7 @@ export default class SignupFormComponent {
             callback: (status) => {
                 if (status === 200) {
                     this.menu.goToPage(this.menu.menuElements.feed);
+                    this.menu.checkAuthPage();
                 } else {
                     this.passwordInput.showError('Что-то пошло не так :((');
                 }
