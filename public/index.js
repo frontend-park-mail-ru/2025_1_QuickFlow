@@ -117,15 +117,24 @@ const config = {
 };
 
 function renderLogout() {
-    // Устанавливаем дату истечения cookie в прошлом для ее удаления
-    document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    menu.goToPage(menu.menuElements.login);
-    menu.checkAuthPage();
+    Ajax.post({
+        url: '/logout',
+        callback: (status) => {
+            let isUnauthorized = status === 200;
+
+            if (!isUnauthorized) {
+                menu.goToPage(menu.menuElements.feed);
+                menu.checkAuthPage();
+                return;
+            }
+
+            menu.goToPage(menu.menuElements.login);
+            menu.checkAuthPage();
+        }
+    });
+    
     const logout = document.createElement('div');
     return logout;
-    
-    // Дополнительно, можно перенаправить пользователя на страницу входа или главную страницу
-    // window.location.href = '/login'; // Замените на нужный URL
 }
 
 function renderFeed() {
