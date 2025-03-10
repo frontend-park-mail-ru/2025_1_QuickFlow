@@ -19,7 +19,7 @@ export default class InputComponent {
             const label = document.createElement('label');
             label.textContent = this.config.label;
             label.classList.add('input-label');
-            if (this.config.showRequired === true) {
+            if (this.config.showRequired) {
                 const requiredMark = document.createElement('span');
                 requiredMark.textContent = ' *';
                 requiredMark.classList.add('required');

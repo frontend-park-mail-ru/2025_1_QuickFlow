@@ -1,19 +1,35 @@
 @import url(./Components/constants.css);
-@import url(./Components/ButtonComponent/ButtonComponent.css);
+@import url(./Components/UI/ButtonComponent/ButtonComponent.css);
+@import url(./Components/UI/RadioComponent/RadioComponent.css);
 @import url(./Components/LoginFormComponent/LoginFormComponent.css);
 @import url(./Components/SignupFormComponent/SignupFormComponent.css);
-@import url(./Components/RadioComponent/RadioComponent.css);
+@import url(./Components/PostComponent/PostComponent.css);
+@import url(./Components/AvatarComponent/AvatarComponent.css);
 
 * {
     box-sizing: border-box;
 }
 
+@font-face {
+    font-family: 'vk-sans';
+    src: url('../static/fonts/VKSansDisplay-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'vk-sans';
+    src: url('../static/fonts/VKSansDisplay-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
 body {
     background-color: #fff;
     /*background: radial-gradient(100% 316.05% at 0% 0%, #CED8FF 0%, #4369FC 100%) для авторизации*/
-    font-family:
-        VK Sans Display,
-        sans-serif;
+    font-family: 'vk-sans';
 }
 
 /*.logo-item {*/
@@ -178,7 +194,7 @@ main {
 
 a {
     display: block;
-    color: #333333;
+    color: var(--text-accent);
     text-decoration: none;
 }
 
@@ -207,6 +223,52 @@ h1 {
     margin: 0;
 }
 
+.h1 {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 130%;
+    margin: 0;
+}
+
+h2 {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 130%;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.h2 {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 130%;
+    margin: 0;
+}
+
+h3 {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 130%;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.h3 {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 130%;
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}
+
 .p1 {
     font-family: var(--font-family);
     font-weight: 400;
@@ -214,5 +276,4 @@ h1 {
     line-height: 130%;
     text-align: center;
     color: var(--text-secondary);
-    margin: 0;
 }

@@ -1,10 +1,19 @@
-import InputComponent from '../InputComponent/InputComponent.js';
+import InputComponent from '../UI/InputComponent/InputComponent.js';
 
+/**
+ * Компонент поиска в шапке сайта.
+ */
 export class SearchComponent {
+    /**
+     * @param {HTMLElement} container - Родительский контейнер, в который будет добавлен компонент.
+     */
     constructor(container) {
         this.container = container;
     }
 
+    /**
+     * Рендерит компонент поиска и добавляет его в контейнер.
+     */
     render() {
         const wrapper = document.createElement('div');
         wrapper.classList.add('header-left');
@@ -14,38 +23,45 @@ export class SearchComponent {
             placeholder: 'Поиск',
             showRequired: false
         });
-        searchInput.render();
 
+        searchInput.render();
         searchInput.input.classList.add('header-search');
 
-        const notificationsWrapper = document.createElement('a');
-        notificationsWrapper.classList.add('icon-wrapper');
-        const musicWrapper = document.createElement('a');
-        musicWrapper.classList.add('icon-wrapper');
+        // const notificationsWrapper = document.createElement('a');
+        // notificationsWrapper.classList.add('icon-wrapper');
+        // const musicWrapper = document.createElement('a');
+        // musicWrapper.classList.add('icon-wrapper');
 
-        const notificationsIcon = document.createElement('img');
-        notificationsIcon.src = '/static/img/notice-icon.svg';
-        notificationsIcon.classList.add('notice-icon');
+        // const notificationsIcon = document.createElement('img');
+        // notificationsIcon.src = '/static/img/notice-icon.svg';
 
-        const musicIcon = document.createElement('img');
-        musicIcon.src = '/static/img/music-icon-top.svg';
-        musicIcon.classList.add('music-icon-top');
+        // const musicIcon = document.createElement('img');
+        // musicIcon.src = '/static/img/music-icon-top.svg';
         
-        notificationsWrapper.appendChild(notificationsIcon);
-        musicWrapper.appendChild(musicIcon);
+        // notificationsWrapper.appendChild(notificationsIcon);
+        // musicWrapper.appendChild(musicIcon);
 
-        wrapper.appendChild(notificationsWrapper);
-        wrapper.appendChild(musicWrapper);
+        // wrapper.appendChild(notificationsWrapper);
+        // wrapper.appendChild(musicWrapper);
 
         this.container.appendChild(wrapper);
     }
 }
 
+/**
+ * Компонент аватара в шапке сайта.
+ */
 export class AvatarComponent {
+    /**
+     * @param {HTMLElement} container - Родительский контейнер, в который будет добавлен компонент.
+     */
     constructor(container) {
         this.container = container;
     }
 
+    /**
+     * Рендерит компонент аватара и добавляет его в контейнер.
+     */
     render() {
         const wrapper = document.createElement('div');
         wrapper.classList.add('header-right');
@@ -54,22 +70,31 @@ export class AvatarComponent {
         avatar.src = '/static/img/avatar.jpg';
         avatar.classList.add('avatar');
 
-        const dropdownButton = document.createElement('a');
-        dropdownButton.classList.add('dropdown-button');
-        // dropdownButton.innerHTML = '&#9662;';
+        // const dropdownButton = document.createElement('a');
+        // dropdownButton.classList.add('dropdown-button');
 
         wrapper.appendChild(avatar);
-        wrapper.appendChild(dropdownButton);
+        // wrapper.appendChild(dropdownButton);
         this.container.appendChild(wrapper);
     }
 }
 
+/**
+ * Компонент шапки сайта, включающий поиск и аватар.
+ */
 export default class HeaderComponent {
+    /**
+     * @param {HTMLElement} container - Родительский контейнер, в который будет добавлен компонент.
+     * @param {Object} menu - Объект меню для взаимодействия с шапкой.
+     */
     constructor(container, menu) {
         this.container = container;
         this.menu = menu;
     }
 
+    /**
+     * Рендерит шапку сайта, добавляя в неё поиск и аватар.
+     */
     render() {
         const wrapper = document.createElement('div');
         wrapper.classList.add('header-inner-wrapper');

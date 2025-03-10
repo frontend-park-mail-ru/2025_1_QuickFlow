@@ -7,9 +7,8 @@ export class LogoComponent {
     }
 
     render() {
-        const wrapper = document.createElement('a');
+        const wrapper = document.createElement('div');
         wrapper.classList.add('header-logo-wrapper');
-        wrapper.href = '/feed';
 
         const logo = document.createElement('img');
         logo.classList.add('header-logo');
@@ -18,10 +17,11 @@ export class LogoComponent {
         wrapper.appendChild(logo);
         this.container.appendChild(wrapper);
 
-        wrapper.addEventListener('click', (event) => {
-            event.preventDefault();
-            this.menu.goToPage(this.menu.menuElements.feed);
-        });
+        // wrapper.addEventListener('click', (event) => {
+        //     event.preventDefault();
+        //     this.menu.goToPage(this.menu.menuElements.feed);
+        //     this.menu.checkAuthPage();
+        // });
     }
 }
 
@@ -54,16 +54,54 @@ export default class MenuComponent {
                 this.activePageLink = menuElement;
             }
 
+            // if (this.isUserLoggedIn() && (key === 'login' || key === 'signup')) {
+            //     iconElement.classList.add('hidden');
+            // } else if (!this.isUserLoggedIn() && (key === 'logout')) {
+            //     iconElement.classList.add('hidden');
+            // }
+
             this.menuElements[key] = menuElement;
             this.container.appendChild(menuElement);
         });
+
+        this.updateMenuVisibility(this.config.isAuthorized);
 
         this.container.addEventListener('click', (event) => {
             if (event.target.closest('a')) {
                 event.preventDefault();
                 this.goToPage(event.target.closest('a'));
+                this.checkAuthPage();
             }
         });
+    }
+
+    // isUserLoggedIn() {
+    //     console.log(document.cookie);
+    //     console.log(document.cookie.split(';'));
+    //     console.log(document.cookie.split(';').some(cookie => cookie.trim().startsWith('session=')));
+    //     return document.cookie.split(';').some(cookie => cookie.trim().startsWith('session='));
+    // }
+
+    updateMenuVisibility(isAuthorized) {
+        if (this.menuElements.login) {
+            this.menuElements.login.style.display = isAuthorized ? 'none' : 'flex';
+        }
+        if (this.menuElements.signup) {
+            this.menuElements.signup.style.display = isAuthorized ? 'none' : 'flex';
+        }
+        if (this.menuElements.logout) {
+            this.menuElements.logout.style.display = isAuthorized ? 'flex' : 'none';
+        }
+    }
+
+    checkAuthPage() {
+        const path = this.activePageLink.href;
+        const href = path.substr(path.lastIndexOf('/') + 1);
+        if (href === 'login' || href === 'signup') {
+            document.body.classList.add("hide-interface");
+        } else {
+            document.body.classList.remove("hide-interface");
+        }
     }
 
     goToPage(menuElement) {
