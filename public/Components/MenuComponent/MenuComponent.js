@@ -37,11 +37,6 @@ export default class MenuComponent {
         new LogoComponent(this.container, this).render();
 
         Object.entries(this.config.menu).forEach(([key, { href, text, icon }], index) => {
-            // Пропускаем кнопки входа и регистрации, если пользователь уже залогинен
-            if (this.isUserLoggedIn() && (key === 'login' || key === 'signup')) {
-                return;
-            }
-
             const menuElement = document.createElement('a');
             menuElement.href = href;
             menuElement.classList.add('menu-item');
@@ -59,9 +54,17 @@ export default class MenuComponent {
                 this.activePageLink = menuElement;
             }
 
+            // if (this.isUserLoggedIn() && (key === 'login' || key === 'signup')) {
+            //     iconElement.classList.add('hidden');
+            // } else if (!this.isUserLoggedIn() && (key === 'logout')) {
+            //     iconElement.classList.add('hidden');
+            // }
+
             this.menuElements[key] = menuElement;
             this.container.appendChild(menuElement);
         });
+
+        this.updateMenuVisibility();
 
         this.container.addEventListener('click', (event) => {
             if (event.target.closest('a')) {
@@ -73,9 +76,21 @@ export default class MenuComponent {
     }
 
     isUserLoggedIn() {
-        const cookies = document.cookie.split(';');
-        const sessionCookie = cookies.some(cookie => cookie.trim().startsWith('session='));
-        return sessionCookie !== null;
+        return document.cookie.split(';').some(cookie => cookie.trim().startsWith('session='));
+    }
+
+    updateMenuVisibility() {
+        const isLoggedIn = this.isUserLoggedIn();
+
+        if (this.menuElements.login) {
+            this.menuElements.login.style.display = isLoggedIn ? 'none' : 'flex';
+        }
+        if (this.menuElements.signup) {
+            this.menuElements.signup.style.display = isLoggedIn ? 'none' : 'flex';
+        }
+        if (this.menuElements.logout) {
+            this.menuElements.logout.style.display = isLoggedIn ? 'flex' : 'none';
+        }
     }
 
     checkAuthPage() {
