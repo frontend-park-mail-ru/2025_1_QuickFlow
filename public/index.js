@@ -30,72 +30,72 @@ document.head.appendChild(link);
 
 const config = {
     menu: {
-        profile: {
-            href: '/profile',
-            text: 'Профиль',
-            icon: 'profile-icon',
-            render: renderProfile
-        },
+        // profile: {
+        //     href: '/profile',
+        //     text: 'Профиль',
+        //     icon: 'profile-icon',
+        //     render: renderProfile
+        // },
         feed: {
             href: '/feed',
             text: 'Лента',
             icon: 'feed-icon',
             render: renderFeed
         },
-        messenger: {
-            href: '/messenger',
-            text: 'Мессенджер',
-            icon: 'messenger-icon',
-            render: renderMessenger
-        },
-        friends: {
-            href: '/friends',
-            text: 'Друзья',
-            icon: 'friends-icon',
-            render: renderFriends
-        },
-        communities: {
-            href: '/communities',
-            text: 'Сообщества',
-            icon: 'communities-icon',
-            render: renderCommunities
-        },
-        photo: {
-            href: '/photo',
-            text: 'Фото',
-            icon: 'photo-icon',
-            render: renderPhoto
-        },
-        music: {
-            href: '/music',
-            text: 'Музыка',
-            icon: 'music-icon',
-            render: renderMusic
-        },
-        video: {
-            href: '/video',
-            text: 'Видео',
-            icon: 'video-icon',
-            render: renderVideo
-        },
-        games: {
-            href: '/games',
-            text: 'Игры',
-            icon: 'games-icon',
-            render: renderGames
-        },
-        bookmarks: {
-            href: '/bookmarks',
-            text: 'Закладки',
-            icon: 'bookmarks-icon',
-            render: renderBookmarks
-        },
-        help: {
-            href: '/help',
-            text: 'Помощь',
-            icon: 'help-icon',
-            render: renderHelp
-        },
+        // messenger: {
+        //     href: '/messenger',
+        //     text: 'Мессенджер',
+        //     icon: 'messenger-icon',
+        //     render: renderMessenger
+        // },
+        // friends: {
+        //     href: '/friends',
+        //     text: 'Друзья',
+        //     icon: 'friends-icon',
+        //     render: renderFriends
+        // },
+        // communities: {
+        //     href: '/communities',
+        //     text: 'Сообщества',
+        //     icon: 'communities-icon',
+        //     render: renderCommunities
+        // },
+        // photo: {
+        //     href: '/photo',
+        //     text: 'Фото',
+        //     icon: 'photo-icon',
+        //     render: renderPhoto
+        // },
+        // music: {
+        //     href: '/music',
+        //     text: 'Музыка',
+        //     icon: 'music-icon',
+        //     render: renderMusic
+        // },
+        // video: {
+        //     href: '/video',
+        //     text: 'Видео',
+        //     icon: 'video-icon',
+        //     render: renderVideo
+        // },
+        // games: {
+        //     href: '/games',
+        //     text: 'Игры',
+        //     icon: 'games-icon',
+        //     render: renderGames
+        // },
+        // bookmarks: {
+        //     href: '/bookmarks',
+        //     text: 'Закладки',
+        //     icon: 'bookmarks-icon',
+        //     render: renderBookmarks
+        // },
+        // help: {
+        //     href: '/help',
+        //     text: 'Помощь',
+        //     icon: 'help-icon',
+        //     render: renderHelp
+        // },
         login: {
             href: '/login',
             text: 'Авторизация',

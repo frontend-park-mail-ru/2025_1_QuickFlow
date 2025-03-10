@@ -18,22 +18,22 @@ export class SearchComponent {
 
         searchInput.input.classList.add('header-search');
 
-        const notificationsWrapper = document.createElement('a');
-        notificationsWrapper.classList.add('icon-wrapper');
-        const musicWrapper = document.createElement('a');
-        musicWrapper.classList.add('icon-wrapper');
+        // const notificationsWrapper = document.createElement('a');
+        // notificationsWrapper.classList.add('icon-wrapper');
+        // const musicWrapper = document.createElement('a');
+        // musicWrapper.classList.add('icon-wrapper');
 
-        const notificationsIcon = document.createElement('img');
-        notificationsIcon.src = '/static/img/notice-icon.svg';
+        // const notificationsIcon = document.createElement('img');
+        // notificationsIcon.src = '/static/img/notice-icon.svg';
 
-        const musicIcon = document.createElement('img');
-        musicIcon.src = '/static/img/music-icon-top.svg';
+        // const musicIcon = document.createElement('img');
+        // musicIcon.src = '/static/img/music-icon-top.svg';
         
-        notificationsWrapper.appendChild(notificationsIcon);
-        musicWrapper.appendChild(musicIcon);
+        // notificationsWrapper.appendChild(notificationsIcon);
+        // musicWrapper.appendChild(musicIcon);
 
-        wrapper.appendChild(notificationsWrapper);
-        wrapper.appendChild(musicWrapper);
+        // wrapper.appendChild(notificationsWrapper);
+        // wrapper.appendChild(musicWrapper);
 
         this.container.appendChild(wrapper);
     }
@@ -52,12 +52,11 @@ export class AvatarComponent {
         avatar.src = '/static/img/avatar.jpg';
         avatar.classList.add('avatar');
 
-        const dropdownButton = document.createElement('a');
-        dropdownButton.classList.add('dropdown-button');
-        // dropdownButton.innerHTML = '&#9662;';
+        // const dropdownButton = document.createElement('a');
+        // dropdownButton.classList.add('dropdown-button');
 
         wrapper.appendChild(avatar);
-        wrapper.appendChild(dropdownButton);
+        // wrapper.appendChild(dropdownButton);
         this.container.appendChild(wrapper);
     }
 }
