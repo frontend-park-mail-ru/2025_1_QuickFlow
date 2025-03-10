@@ -76,6 +76,8 @@ export default class MenuComponent {
     }
 
     isUserLoggedIn() {
+        console.log(document.cookie.split(';'));
+        console.log(document.cookie.split(';').some(cookie => cookie.trim().startsWith('session=')));
         return document.cookie.split(';').some(cookie => cookie.trim().startsWith('session='));
     }
 
