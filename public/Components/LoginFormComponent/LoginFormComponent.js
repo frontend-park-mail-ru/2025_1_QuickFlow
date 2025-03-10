@@ -179,6 +179,7 @@ export default class LoginFormComponent {
             callback: (status) => {
                 if (status === 200) {
                     this.menu.goToPage(this.menu.menuElements.feed);
+                    this.menu.checkAuthPage();
                 } else {
                     this.passwordInput.showError('Неверное имя пользователя или пароль');
                 }
