@@ -16,7 +16,7 @@ export default class LoginFormComponent {
             usernameTitle: 'Вход QuickFlow',
             pwdTitle: 'Введите пароль',
             usernameDescription: 'Введите имя пользователя, которое привязано к вашему аккаунту',
-            pwdDescription: 'Введите ваш текущий пароль,<br>привязанный к @rvasutenko',
+            pwdDescription: 'Введите ваш текущий пароль,<br>привязанный к ',
             continueBtnText: 'Продолжить',
             signupBtnText: 'Создать аккаунт',
             signinBtnText: 'Войти'
@@ -53,7 +53,7 @@ export default class LoginFormComponent {
         const description = document.createElement('p');
         description.classList.add('p1');
         description.innerHTML =
-            this.step === 1 ? this.config.usernameDescription : this.config.pwdDescription;
+            this.step === 1 ? this.config.usernameDescription : `${this.config.pwdDescription}@${this.usernameInput.input.value.trim()}`;
 
         topWrapper.appendChild(logo);
         topWrapper.appendChild(title);
