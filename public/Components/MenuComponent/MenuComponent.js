@@ -70,6 +70,7 @@ export default class MenuComponent {
     checkAuthPage() {
         const path = this.activePageLink.href;
         const href = path.substr(path.lastIndexOf('/') + 1);
+        console.log(href);
         if (href === 'login' || href === 'signup') {
             document.body.classList.add("hide-interface");
         } else {
