@@ -7,7 +7,7 @@ export class LogoComponent {
     }
 
     render() {
-        const wrapper = document.createElement('a');
+        const wrapper = document.createElement('div');
         wrapper.classList.add('header-logo-wrapper');
 
         const logo = document.createElement('img');
@@ -17,11 +17,11 @@ export class LogoComponent {
         wrapper.appendChild(logo);
         this.container.appendChild(wrapper);
 
-        wrapper.addEventListener('click', (event) => {
-            event.preventDefault();
-            this.menu.goToPage(this.menu.menuElements.feed);
-            this.menu.checkAuthPage();
-        });
+        // wrapper.addEventListener('click', (event) => {
+        //     event.preventDefault();
+        //     this.menu.goToPage(this.menu.menuElements.feed);
+        //     this.menu.checkAuthPage();
+        // });
     }
 }
 
