@@ -173,6 +173,7 @@ function renderFeed() {
             //     }
             // ]);
 
+            console.log(responseString);
             const feedData = JSON.parse(responseString);
             // const feedData = JSON.parse(callbackFeed);
 
