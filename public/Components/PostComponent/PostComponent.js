@@ -9,23 +9,13 @@ export default class PostComponent {
         this.wrapper = document.createElement('div');
         this.wrapper.classList.add('post');
         this.data = data;
-
-        // id,
-        // creator_id,
-        // text,
-        // pics,
-        // created_at,
-        // like_count,
-        // repost_count,
-        // comment_count,
-
         this.render();
     }
 
     render() {
         this.renderTop();
-        this.renderPics();
-        this.renderActions();
+        // this.renderPics();
+        // this.renderActions();
         this.renderText();
 
         this.container.appendChild(this.wrapper);
