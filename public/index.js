@@ -11,7 +11,6 @@ const container = document.createElement('div');
 container.classList.add('container');
 root.appendChild(container);
 
-
 const menuContainer = document.createElement('aside');
 menuContainer.classList.add('menu');
 const pageContainer = document.createElement('main');
