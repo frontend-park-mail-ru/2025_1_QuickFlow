@@ -141,6 +141,7 @@ function renderFeed() {
 
             if (!isAuthorized) {
                 menu.goToPage(menu.menuElements.signup);
+                menu.checkAuthPage();
                 return;
             }
 
