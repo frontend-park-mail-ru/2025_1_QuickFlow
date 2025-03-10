@@ -141,8 +141,11 @@ function renderFeed() {
         container.appendChild(sideMenu); //лучше в pageContainer, но не смог в нем выровнять пока
     }
 
-    Ajax.get({
+    Ajax.post({
         url: '/feed',
+        body: {
+            posts_count: 10
+        },
         callback: (status, responseString) => {
             let isAuthorized = status === 200;
 
