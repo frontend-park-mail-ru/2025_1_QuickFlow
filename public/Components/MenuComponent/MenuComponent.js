@@ -75,6 +75,7 @@ export default class MenuComponent {
             document.querySelector('main').classList.add("hide-interface");
         } else {
             document.body.classList.remove("hide-interface");
+            document.querySelector('main').classList.remove("hide-interface");
         }
     }
 
