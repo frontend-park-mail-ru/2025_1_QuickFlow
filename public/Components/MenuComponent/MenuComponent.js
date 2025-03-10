@@ -64,7 +64,7 @@ export default class MenuComponent {
             this.container.appendChild(menuElement);
         });
 
-        this.updateMenuVisibility();
+        this.updateMenuVisibility(this.config.isAuthorized);
 
         this.container.addEventListener('click', (event) => {
             if (event.target.closest('a')) {
@@ -75,24 +75,22 @@ export default class MenuComponent {
         });
     }
 
-    isUserLoggedIn() {
-        console.log(document.cookie);
-        console.log(document.cookie.split(';'));
-        console.log(document.cookie.split(';').some(cookie => cookie.trim().startsWith('session=')));
-        return document.cookie.split(';').some(cookie => cookie.trim().startsWith('session='));
-    }
+    // isUserLoggedIn() {
+    //     console.log(document.cookie);
+    //     console.log(document.cookie.split(';'));
+    //     console.log(document.cookie.split(';').some(cookie => cookie.trim().startsWith('session=')));
+    //     return document.cookie.split(';').some(cookie => cookie.trim().startsWith('session='));
+    // }
 
-    updateMenuVisibility() {
-        const isLoggedIn = this.isUserLoggedIn();
-
+    updateMenuVisibility(isAuthorized) {
         if (this.menuElements.login) {
-            this.menuElements.login.style.display = isLoggedIn ? 'none' : 'flex';
+            this.menuElements.login.style.display = isAuthorized ? 'none' : 'flex';
         }
         if (this.menuElements.signup) {
-            this.menuElements.signup.style.display = isLoggedIn ? 'none' : 'flex';
+            this.menuElements.signup.style.display = isAuthorized ? 'none' : 'flex';
         }
         if (this.menuElements.logout) {
-            this.menuElements.logout.style.display = isLoggedIn ? 'flex' : 'none';
+            this.menuElements.logout.style.display = isAuthorized ? 'flex' : 'none';
         }
     }
 

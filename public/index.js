@@ -58,6 +58,7 @@ const config = {
             render: renderLogout,
         }
     },
+    isAuthorized: true,
 };
 
 /**
@@ -104,6 +105,7 @@ function renderFeed() {
 
             if (!isAuthorized) {
                 menu.goToPage(menu.menuElements.login);
+                menu.updateMenuVisibility(false);
                 menu.checkAuthPage();
                 return;
             }

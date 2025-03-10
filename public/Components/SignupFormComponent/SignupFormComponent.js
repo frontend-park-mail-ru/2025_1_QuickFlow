@@ -308,6 +308,7 @@ export default class SignupFormComponent {
                 if (status === 200) {
                     this.menu.goToPage(this.menu.menuElements.feed);
                     this.menu.checkAuthPage();
+                    this.menu.updateMenuVisibility(true);
                 } else {
                     this.passwordInput.showError('Что-то пошло не так :((');
                 }

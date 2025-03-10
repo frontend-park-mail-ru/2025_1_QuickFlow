@@ -180,6 +180,7 @@ export default class LoginFormComponent {
                 if (status === 200) {
                     this.menu.goToPage(this.menu.menuElements.feed);
                     this.menu.checkAuthPage();
+                    this.menu.updateMenuVisibility(true);
                 } else {
                     this.passwordInput.showError('Неверное имя пользователя или пароль');
                 }
