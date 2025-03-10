@@ -89,11 +89,11 @@ input.invalid {
     width: 16px;
     height: 16px;
     margin: 10px 12px;
-    background: url(../../static/img/show-icon.svg) 0 0 no-repeat;
+    background: url(../../../static/img/show-icon.svg) 0 0 no-repeat;
     background-size: contain;
     cursor: pointer;
 }
 
 .pwd-control.show {
-    background: url(../../static/img/hide-icon.svg) 0 0 no-repeat;
+    background: url(../../../static/img/hide-icon.svg) 0 0 no-repeat;
 }
