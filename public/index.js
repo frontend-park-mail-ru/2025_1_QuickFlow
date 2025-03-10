@@ -115,21 +115,21 @@ function renderFeed() {
     const feed = document.createElement('div');
     feed.classList.add('feed');
 
-    function renderSideMenu() {
-        const sideMenu = document.createElement('a');
-        sideMenu.classList.add('side-menu');
+    // function renderSideMenu() {
+    //     const sideMenu = document.createElement('a');
+    //     sideMenu.classList.add('side-menu');
 
-        // Добавляем несколько элементов в меню (например, ссылки)
-        const menuItems = ['Лента', 'Рекомендации', 'Поиск', 'Комментарии', 'Реакции'];
-        menuItems.forEach(itemText => {
-            const menuItem = document.createElement('a');
-            menuItem.classList.add('side-menu-item');
-            menuItem.textContent = itemText;
-            sideMenu.appendChild(menuItem);
-        });
+    //     // Добавляем несколько элементов в меню (например, ссылки)
+    //     const menuItems = ['Лента', 'Рекомендации', 'Поиск', 'Комментарии', 'Реакции'];
+    //     menuItems.forEach(itemText => {
+    //         const menuItem = document.createElement('a');
+    //         menuItem.classList.add('side-menu-item');
+    //         menuItem.textContent = itemText;
+    //         sideMenu.appendChild(menuItem);
+    //     });
 
-        container.appendChild(sideMenu); //лучше в pageContainer, но не смог в нем выровнять пока
-    }
+    //     container.appendChild(sideMenu); //лучше в pageContainer, но не смог в нем выровнять пока
+    // }
 
     Ajax.post({
         url: '/feed',
@@ -144,7 +144,7 @@ function renderFeed() {
                 return;
             }
 
-            renderSideMenu()
+            // renderSideMenu()
 
             // const callbackFeed = JSON.stringify([
             //     {
