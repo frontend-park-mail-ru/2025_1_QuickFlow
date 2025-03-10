@@ -9,7 +9,6 @@ export class LogoComponent {
     render() {
         const wrapper = document.createElement('a');
         wrapper.classList.add('header-logo-wrapper');
-        wrapper.href = '/feed';
 
         const logo = document.createElement('img');
         logo.classList.add('header-logo');
@@ -21,6 +20,7 @@ export class LogoComponent {
         wrapper.addEventListener('click', (event) => {
             event.preventDefault();
             this.menu.goToPage(this.menu.menuElements.feed);
+            this.menu.checkAuthPage();
         });
     }
 }
