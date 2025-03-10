@@ -27,74 +27,18 @@ link.rel = 'stylesheet';
 link.href = '/Components/MenuComponent/MenuComponent.css';
 document.head.appendChild(link);
 
+/**
+ * Конфигурация меню с маршрутами и функциями рендера
+ * @type {Object}
+ */
 const config = {
     menu: {
-        // profile: {
-        //     href: '/profile',
-        //     text: 'Профиль',
-        //     icon: 'profile-icon',
-        //     render: renderProfile
-        // },
         feed: {
             href: '/feed',
             text: 'Лента',
             icon: 'feed-icon',
             render: renderFeed
         },
-        // messenger: {
-        //     href: '/messenger',
-        //     text: 'Мессенджер',
-        //     icon: 'messenger-icon',
-        //     render: renderMessenger
-        // },
-        // friends: {
-        //     href: '/friends',
-        //     text: 'Друзья',
-        //     icon: 'friends-icon',
-        //     render: renderFriends
-        // },
-        // communities: {
-        //     href: '/communities',
-        //     text: 'Сообщества',
-        //     icon: 'communities-icon',
-        //     render: renderCommunities
-        // },
-        // photo: {
-        //     href: '/photo',
-        //     text: 'Фото',
-        //     icon: 'photo-icon',
-        //     render: renderPhoto
-        // },
-        // music: {
-        //     href: '/music',
-        //     text: 'Музыка',
-        //     icon: 'music-icon',
-        //     render: renderMusic
-        // },
-        // video: {
-        //     href: '/video',
-        //     text: 'Видео',
-        //     icon: 'video-icon',
-        //     render: renderVideo
-        // },
-        // games: {
-        //     href: '/games',
-        //     text: 'Игры',
-        //     icon: 'games-icon',
-        //     render: renderGames
-        // },
-        // bookmarks: {
-        //     href: '/bookmarks',
-        //     text: 'Закладки',
-        //     icon: 'bookmarks-icon',
-        //     render: renderBookmarks
-        // },
-        // help: {
-        //     href: '/help',
-        //     text: 'Помощь',
-        //     icon: 'help-icon',
-        //     render: renderHelp
-        // },
         login: {
             href: '/login',
             text: 'Авторизация',
@@ -116,6 +60,11 @@ const config = {
     },
 };
 
+/**
+ * Функция выхода пользователя
+ * Выполняет AJAX-запрос на выход и перенаправляет на страницу авторизации
+ * @returns {HTMLElement} - пустой div для рендера
+ */
 function renderLogout() {
     Ajax.post({
         url: '/logout',
@@ -132,30 +81,18 @@ function renderLogout() {
             menu.checkAuthPage();
         }
     });
-    
-    const logout = document.createElement('div');
-    return logout;
+
+    return document.createElement('div');
 }
 
+/**
+ * Функция рендера ленты новостей
+ * Загружает посты через AJAX и отображает их на странице
+ * @returns {HTMLElement} - контейнер с лентой
+ */
 function renderFeed() {
     const feed = document.createElement('div');
     feed.classList.add('feed');
-
-    // function renderSideMenu() {
-    //     const sideMenu = document.createElement('a');
-    //     sideMenu.classList.add('side-menu');
-
-    //     // Добавляем несколько элементов в меню (например, ссылки)
-    //     const menuItems = ['Лента', 'Рекомендации', 'Поиск', 'Комментарии', 'Реакции'];
-    //     menuItems.forEach(itemText => {
-    //         const menuItem = document.createElement('a');
-    //         menuItem.classList.add('side-menu-item');
-    //         menuItem.textContent = itemText;
-    //         sideMenu.appendChild(menuItem);
-    //     });
-
-    //     container.appendChild(sideMenu); //лучше в pageContainer, но не смог в нем выровнять пока
-    // }
 
     Ajax.post({
         url: '/feed',
@@ -170,8 +107,6 @@ function renderFeed() {
                 menu.checkAuthPage();
                 return;
             }
-
-            // renderSideMenu()
 
             if (feedData && Array.isArray(feedData)) {
                 feedData.forEach(({ id, creator_id, text, pics, created_at, like_count, repost_count, comment_count }) => {
@@ -190,16 +125,21 @@ function renderFeed() {
         }
     });
 
+    // Обработчик лайков на постах
     feed.addEventListener('click', (event) => {
-        if (event.target.tagName.toLocaleLowerCase() === 'button' && event.target.dataset.imageId) {
+        if (event.target.tagName.toLowerCase() === 'button' && event.target.dataset.imageId) {
             const { imageId: id } = event.target.dataset;
 
-            Ajax.post( {url: '/like', body: { id }, callback: (status) => {
-                if (status === 200) {
-                    const likeContainer = event.target.parentNode;
-                    const likeCount = likeContainer.querySelector('span');
-                    likeCount.textContent = `${parseInt(likeCount.textContent) + 1} лайков`;
-                }}
+            Ajax.post({
+                url: '/like',
+                body: { id },
+                callback: (status) => {
+                    if (status === 200) {
+                        const likeContainer = event.target.parentNode;
+                        const likeCount = likeContainer.querySelector('span');
+                        likeCount.textContent = `${parseInt(likeCount.textContent) + 1} лайков`;
+                    }
+                }
             });
         }
     });
@@ -207,9 +147,10 @@ function renderFeed() {
     return feed;
 }
 
+// Создание меню и хедера
 const menu = new MenuComponent(config, menuContainer);
 menu.render();
-menu.goToPage(menu.menuElements.feed)
+menu.goToPage(menu.menuElements.feed);
 
 const header = new HeaderComponent(headerContainer, menu);
 header.render();

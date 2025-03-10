@@ -40,6 +40,10 @@ aside {
     border-radius: 8px;
 }
 
+.menu-item.hidden {
+    display: none;
+}
+
 .menu-icon {
     width: 16px;
     height: 16px;
