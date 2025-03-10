@@ -136,7 +136,7 @@ function renderFeed() {
         body: {
             posts_count: 10
         },
-        callback: (status, responseString) => {
+        callback: (status, feedData) => {
             let isAuthorized = status === 200;
 
             if (!isAuthorized) {
@@ -173,8 +173,8 @@ function renderFeed() {
             //     }
             // ]);
 
-            console.log(responseString);
-            const feedData = JSON.parse(responseString);
+            // console.log(responseString);
+            // const feedData = JSON.parse(responseString);
             // const feedData = JSON.parse(callbackFeed);
 
             if (feedData && Array.isArray(feedData)) {
