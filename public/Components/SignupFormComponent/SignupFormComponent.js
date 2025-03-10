@@ -21,9 +21,9 @@ export default class SignupFormComponent {
         this.continueBtn = null;
 
         this.config = {
-            emailTitle: 'Информация о себе',
+            userInfoTitle: 'Информация о себе',
             pwdTitle: 'Придумайте пароль',
-            emailDescription: 'Введите логин, который привязан<br>к вашему аккаунту',
+            userInfoDescription: 'Введите логин, который привязан<br>к вашему аккаунту',
             pwdDescription: 'Или используйте пароль, предложенный устройством',
             continueBtnText: 'Продолжить',
             signupBtnText: 'Создать аккаунт',
@@ -59,14 +59,14 @@ export default class SignupFormComponent {
         }
 
         const title = document.createElement('h1');
-        title.textContent = this.step === 1 ? this.config.emailTitle : this.config.pwdTitle;
+        title.textContent = this.step === 1 ? this.config.userInfoTitle : this.config.pwdTitle;
         topWrapper.appendChild(title);
 
         if (this.step === 2) {
             const description = document.createElement('p');
             description.classList.add('p1');
             description.innerHTML =
-                this.step === 1 ? this.config.emailDescription : this.config.pwdDescription;
+                this.step === 1 ? this.config.userInfoDescription : this.config.pwdDescription;
             topWrapper.appendChild(description);
         }
 
@@ -138,10 +138,12 @@ export default class SignupFormComponent {
             radios: {
                 male: {
                     id: 'radio-male',
+                    value: 'male',
                     label: 'Мужской'
                 },
                 female: {
                     id: 'radio-female',
+                    value: 'female',
                     label: 'Женский'
                 }
             },
@@ -280,14 +282,28 @@ export default class SignupFormComponent {
         this.submitSignup();
     }
 
+    convertDate(dateString) {
+        console.log(this.sexInput.getChecked().value);
+        const parts = dateString.split('.');
+        const day = parts[0];
+        const month = parts[1];
+        const year = parts[2];
+        return `${year}-${month}-${day}`;
+    }
+
     submitSignup() {
+        const body = {
+            username: this.usernameInput.input.value.trim(),
+            password: this.passwordInput.input.value.trim(),
+            firstname: this.firstNameInput.input.value.trim(),
+            lastname: this.lastNameInput.input.value.trim(),
+            sex: this.sexInput.getChecked().value === 'male' ? 1 : 2, 
+            birth_date: this.convertDate(this.birthDateInput.input.value.trim()),
+        }
+        console.log(body);
         Ajax.post({
             url: '/signup',
-            body: {
-                email: this.usernameInput.input.value.trim(),
-                password: this.passwordInput.input.value.trim(),
-                age: 18
-            },
+            body: body,
             callback: (status) => {
                 if (status === 200) {
                     this.menu.goToPage(this.menu.menuElements.feed);
