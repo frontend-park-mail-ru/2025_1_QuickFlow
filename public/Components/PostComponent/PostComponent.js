@@ -1,7 +1,7 @@
-import Ajax from '../../modules/ajax.js';
+// import Ajax from '../../modules/ajax.js';
 // import InputComponent from '../UI/InputComponent/InputComponent.js';
 // import RadioComponent from '../UI/RadioComponent/RadioComponent.js';
-import ButtonComponent from '../UI/ButtonComponent/ButtonComponent.js';
+// import ButtonComponent from '../UI/ButtonComponent/ButtonComponent.js';
 
 export default class PostComponent {
     constructor(container, data) {
@@ -14,7 +14,7 @@ export default class PostComponent {
 
     render() {
         this.renderTop();
-        // this.renderPics();
+        this.renderPics();
         // this.renderActions();
         this.renderText();
 
@@ -26,15 +26,21 @@ export default class PostComponent {
         picsWrapper.classList.add('post-pics-wrapper');
         this.wrapper.appendChild(picsWrapper);
 
-        if (this.data.pics && this.data.pics.length > 0) {
-            this.data.pics.forEach((pic) => {
-                const postPic = document.createElement('img');
-                postPic.src = pic;
-                postPic.alt = 'post image';
-                postPic.classList.add('post-pic');
-                picsWrapper.appendChild(postPic);
-            });
-        }
+        // if (this.data.pics && this.data.pics.length > 0) {
+        //     this.data.pics.forEach((pic) => {
+        //         const postPic = document.createElement('img');
+        //         postPic.src = pic;
+        //         postPic.alt = 'post image';
+        //         postPic.classList.add('post-pic');
+        //         picsWrapper.appendChild(postPic);
+        //     });
+        // }
+
+        const postPic = document.createElement('img');
+        postPic.src = "../../static/img/273153700_118738253861831_5906416883131394354_n.jpeg";
+        postPic.alt = 'post image';
+        postPic.classList.add('post-pic');
+        picsWrapper.appendChild(postPic);
     }
 
     renderActions() {
@@ -156,7 +162,8 @@ export default class PostComponent {
         date.textContent = `${this.formatTimeAgo(this.data.created_at)}`; // сделать имя пользователя
         nameDateWrapper.appendChild(date);
 
-        if (true) { // сделать проверку на то есть ли в друзьях
+        const flag = true;
+        if (flag) { // сделать проверку на то есть ли в друзьях
             const addToFriends = document.createElement('a');
             addToFriends.classList.add('h3');
             addToFriends.classList.add('a-btn');
@@ -178,12 +185,12 @@ export default class PostComponent {
         const diffInSeconds = Math.floor((now - date) / 1000);
         
         if (diffInSeconds < 60) {
-            return `${diffInSeconds} секунд${getEnding(diffInSeconds)} назад`;
+            return `${diffInSeconds} секунд${this.getEnding(diffInSeconds)} назад`;
         }
     
         const diffInMinutes = Math.floor(diffInSeconds / 60);
         if (diffInMinutes < 60) {
-            return `${diffInMinutes} минут${getEnding(diffInMinutes)} назад`;
+            return `${diffInMinutes} минут${this.getEnding(diffInMinutes)} назад`;
         }
     
         const diffInHours = Math.floor(diffInMinutes / 60);
