@@ -91,9 +91,14 @@
     gap: 8px;
 }
 
-.a-btn:hover {
-    color: var(--text-accent-hover);
+/* убрать потом */
+.a-btn {
+    color: var(--text-secondary-disabled);
 }
+
+/* .a-btn:hover {
+    color: var(--text-accent-hover);
+} */
 
 .post-options-wrapper {
     width: 32px;
@@ -101,13 +106,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
+    /* cursor: pointer; */
     border-radius: 50%;
 }
 
-.post-options-wrapper:hover {
+/* .post-options-wrapper:hover {
     background-color: var(--background-light-gray);
-}
+} */
 
 .post-options {
     background: url(../../static/img/options-icon.svg) 0 0 no-repeat;
