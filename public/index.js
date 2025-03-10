@@ -106,9 +106,27 @@ const config = {
             text: 'Регистрация',
             icon: 'signup-icon',
             render: () => new SignupView(menu).render(),
+        },
+        logout: {
+            href: '/logout',
+            text: 'Выйти',
+            icon: 'logout-icon',
+            render: renderLogout,
         }
     },
 };
+
+function renderLogout() {
+    // Устанавливаем дату истечения cookie в прошлом для ее удаления
+    document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    menu.goToPage(menu.menuElements.login);
+    menu.checkAuthPage();
+    const logout = document.createElement('div');
+    return logout;
+    
+    // Дополнительно, можно перенаправить пользователя на страницу входа или главную страницу
+    // window.location.href = '/login'; // Замените на нужный URL
+}
 
 function renderFeed() {
     const feed = document.createElement('div');
@@ -187,80 +205,80 @@ menu.goToPage(menu.menuElements.feed)
 const header = new HeaderComponent(headerContainer, menu);
 header.render();
 
-function renderProfile() {
-    const profile = document.createElement('div');
+// function renderProfile() {
+//     const profile = document.createElement('div');
 
-    Ajax.get({
-        url: '/me',
-        callback: (status, responseString) => {
-            const isAuthorized = status === 200;
+//     Ajax.get({
+//         url: '/me',
+//         callback: (status, responseString) => {
+//             const isAuthorized = status === 200;
 
-            if (!isAuthorized) {
-                menu.goToPage(menu.menuElements.login);
-                return;
-            }
+//             if (!isAuthorized) {
+//                 menu.goToPage(menu.menuElements.login);
+//                 return;
+//             }
 
-            const {email, age, images} = JSON.parse(responseString);
+//             const {email, age, images} = JSON.parse(responseString);
 
-            const span = document.createElement('span');
-            span.textContent = `${email} ${age} лет`;
-            profile.appendChild(span);
+//             const span = document.createElement('span');
+//             span.textContent = `${email} ${age} лет`;
+//             profile.appendChild(span);
 
-            if (images && Array.isArray(images)) {
-                const div = document.createElement('div');
-                profile.appendChild(div);
+//             if (images && Array.isArray(images)) {
+//                 const div = document.createElement('div');
+//                 profile.appendChild(div);
 
-                images.forEach(({src, likes}) => {
-                    div.innerHTML += `<img src="${src}" width="500"/><div>${likes} лайков</div>`
-                });
-            }
-        }
-    });
+//                 images.forEach(({src, likes}) => {
+//                     div.innerHTML += `<img src="${src}" width="500"/><div>${likes} лайков</div>`
+//                 });
+//             }
+//         }
+//     });
 
-    return profile;
-}
+//     return profile;
+// }
 
-function renderMessenger() {
-    const messenger = document.createElement('div');
-    return messenger;
-}
+// function renderMessenger() {
+//     const messenger = document.createElement('div');
+//     return messenger;
+// }
 
-function renderFriends() {
-    const friends = document.createElement('div');
-    return friends;
-}
+// function renderFriends() {
+//     const friends = document.createElement('div');
+//     return friends;
+// }
 
-function renderCommunities() {
-    const communities = document.createElement('div');
-    return communities;
-}
+// function renderCommunities() {
+//     const communities = document.createElement('div');
+//     return communities;
+// }
 
-function renderPhoto() {
-    const photo = document.createElement('div');
-    return photo;
-}
+// function renderPhoto() {
+//     const photo = document.createElement('div');
+//     return photo;
+// }
 
-function renderMusic() {
-    const music = document.createElement('div');
-    return music;
-}
+// function renderMusic() {
+//     const music = document.createElement('div');
+//     return music;
+// }
 
-function renderVideo() {
-    const video = document.createElement('div');
-    return video;
-}
+// function renderVideo() {
+//     const video = document.createElement('div');
+//     return video;
+// }
 
-function renderGames() {
-    const games = document.createElement('div');
-    return games;
-}
+// function renderGames() {
+//     const games = document.createElement('div');
+//     return games;
+// }
 
-function renderBookmarks() {
-    const bookmarks = document.createElement('div');
-    return bookmarks;
-}
+// function renderBookmarks() {
+//     const bookmarks = document.createElement('div');
+//     return bookmarks;
+// }
 
-function renderHelp() {
-    const help = document.createElement('div');
-    return help;
-}
+// function renderHelp() {
+//     const help = document.createElement('div');
+//     return help;
+// }
