@@ -13,7 +13,7 @@ root.appendChild(container);
 
 
 const menuContainer = document.createElement('aside');
-menuContainer.classList.add('menu'); // Добавляем класс для сетки
+menuContainer.classList.add('menu');
 const pageContainer = document.createElement('main');
 
 const headerContainer = document.createElement('header');
@@ -140,50 +140,14 @@ function renderFeed() {
             let isAuthorized = status === 200;
 
             if (!isAuthorized) {
-                menu.goToPage(menu.menuElements.signup);
+                menu.goToPage(menu.menuElements.login);
                 menu.checkAuthPage();
                 return;
             }
 
             // renderSideMenu()
 
-            // const callbackFeed = JSON.stringify([
-            //     {
-            //         "id": "00000000-0000-0000-0000-000000000000",
-            //         "creator_id": "b0ce0ceb-0028-4cd1-a248-457dc151e97e",
-            //         "text": 'Аԥсны (Абхазия) в переводе с абхазского — "страна души". И действительно, поездка туда впечаталась в душу и стала испытанием для тела: пока это наше единственное путешествие, где мы три дня не мылись, купались в море с коровами, все время от чего-нибудь лечились, шарахались от машин на переходах и от собак в подворотнях, сгоняли кошек со стульев в кафе и вырывали наших детей из рук прохожих. Но поскольку мы все же благополучно вернулись домой, я могу обо всем подробнейшим образом написать здесь (от души, так скажем). Сейчас — вводный пост, потом будет весь наш маршрут поэтапно, а в конце моих путевых заметок подведем итоги по стоимости поездки.',
-            //         "pics": [
-            //             "/273153700_118738253861831_5906416883131394354_n.jpeg"
-            //         ],
-            //         "created_at": "2025-03-02 22:37:30",
-            //         "like_count": 0,
-            //         "repost_count": 0,
-            //         "comment_count": 0
-            //     },
-            //     {
-            //         "id": "dd9aeb03-225d-4119-9154-1e29ea354123",
-            //         "creator_id": "b0ce0ceb-0028-4cd1-a248-457dc151e97e",
-            //         "text": "Hello, this is my second post",
-            //         "pics": [
-            //             "/272708814_1158833634855293_1743973316352152210_n.webp.jpg"
-            //         ],
-            //         "created_at": "2025-03-05 22:46:19",
-            //         "like_count": 0,
-            //         "repost_count": 0,
-            //         "comment_count": 0
-            //     }
-            // ]);
-
-            // console.log(responseString);
-            // const feedData = JSON.parse(responseString);
-            // const feedData = JSON.parse(callbackFeed);
-
             if (feedData && Array.isArray(feedData)) {
-                // const div = document.createElement('div');
-                // feed.appendChild(div);
-
-                // console.log(feedData);
-
                 feedData.forEach(({ id, creator_id, text, pics, created_at, like_count, repost_count, comment_count }) => {
                     new PostComponent(feed, {
                         id,

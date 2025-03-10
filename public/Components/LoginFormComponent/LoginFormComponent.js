@@ -83,7 +83,7 @@ export default class LoginFormComponent {
                 text: this.config.signupBtnText,
                 variant: 'secondary',
                 onClick: () => {
-                    window.location.href = '/signup';
+                    this.menu.goToPage(this.menu.menuElements.signup);
                 }
             });
             secondaryBtn.render();
