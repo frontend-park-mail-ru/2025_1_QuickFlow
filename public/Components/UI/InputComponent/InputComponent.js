@@ -153,7 +153,7 @@ export default class InputComponent {
 
         if (!password) {
             this.showError('Введите пароль');
-        } else if (!hasValidCharacters(password)) {
+        } else if (!hasValidCharacters) {
             this.showError('Пароль содержит некорректные символы');
         } else if (password.length < 8) {
             this.showError('Пароль должен содержать минимум 8 символов');
