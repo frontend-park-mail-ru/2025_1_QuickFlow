@@ -102,6 +102,7 @@ export default class SignupFormComponent {
             label: 'Имя пользователя',
             placeholder: 'Имя пользователя',
             autocomplete: 'username',
+            maxLength: 20,
             validation: 'username',
             required: true,
             showRequired: false
@@ -116,7 +117,8 @@ export default class SignupFormComponent {
             type: 'text',
             label: 'Имя',
             placeholder: 'Имя',
-            autocomplete: 'username',
+            maxLength: 25,
+            validation: 'name',
             required: true,
             showRequired: false
         });
@@ -126,7 +128,8 @@ export default class SignupFormComponent {
             type: 'text',
             label: 'Фамилия',
             placeholder: 'Фамилия',
-            autocomplete: 'username',
+            maxLength: 25,
+            validation: 'name',
             required: true,
             showRequired: false
         });
@@ -203,6 +206,7 @@ export default class SignupFormComponent {
         this.passwordInput = new InputComponent(form, {
             type: 'password',
             placeholder: 'Введите пароль',
+            maxLength: 32,
             validation: 'password',
             required: true,
             showRequired: false
@@ -212,6 +216,7 @@ export default class SignupFormComponent {
         this.passwordConfirmationInput = new InputComponent(form, {
             type: 'password',
             placeholder: 'Повторите пароль',
+            maxLength: 32,
             validation: 'password',
             required: true,
             showRequired: false

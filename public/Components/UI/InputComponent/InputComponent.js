@@ -107,6 +107,8 @@ export default class InputComponent {
             this.validatePassword(value);
         } else if (this.config.validation === 'username') {
             this.validateUsername(value);
+        } else if (this.config.validation === 'name') {
+            this.validateName(value);
         } else if (this.config.validation === 'date') {
             this.input.maxLength = 10;
             this.input.addEventListener('input', this.formatDateInput);
@@ -115,6 +117,19 @@ export default class InputComponent {
             } else {
                 this.hideError();
             }
+        }
+    }
+
+    validateName(name) {
+        const chars = Array.from(name);
+        const hasOnlyLetters = chars.every((char) => /^[\p{L}-]+$/u.test(char));
+
+        if (!name) {
+            this.showError('Введите ' + this.config.placeholder === 'Имя' ? 'имя' : 'фамилию');
+        } else if (!hasOnlyLetters) {
+            this.showError(this.config.placeholder + 'может содержать только буквы и "-"');
+        } else if (name.length < 2) {
+            this.showError('Слишком ' + this.config.placeholder === 'Имя' ? 'короткое имя' : 'короткая фамилия');
         }
     }
 
