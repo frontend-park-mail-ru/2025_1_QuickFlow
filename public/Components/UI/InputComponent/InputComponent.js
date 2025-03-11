@@ -98,7 +98,7 @@ export default class InputComponent {
     }
 
     validate() {
-        const value = this.input.value.trim();
+        const value = this.input.value;
 
         if (this.config.validation === 'email') {
             this.validateEmail(value);
