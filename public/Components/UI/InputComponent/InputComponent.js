@@ -119,15 +119,17 @@ export default class InputComponent {
     }
 
     validateUsername(username) {
-        const usernameRegex = /^[a-zA-Z0-9._]+$/;
-        if (!usernameRegex.test(username)) {
-            this.showError(
-                'Имя пользователя может содержать только латинские буквы, цифры, "." и "_"'
-            );
-            return false;
+        const chars = Array.from(username);
+        const hasValidCharacters = chars.every((char) => /^[a-zA-Z0-9._]+$/.test(char));
+
+        if (!username) {
+            this.showError('Введите имя пользователя');
+        } else if (!hasValidCharacters) {
+            this.showError('Имя пользователя может содержать только латинские буквы, цифры, "." и "_"');
+        } else if (chars[0] === '.' || chars[0] === '_') {
+            this.showError('Имя пользователя не должно начинаться с "." или "_"');
         } else {
             this.hideError();
-            return true;
         }
     }
 
@@ -146,9 +148,7 @@ export default class InputComponent {
         const hasValidCharacters = chars.every((char) => /[A-Za-z0-9_/!@#$%^&*(),.?":{}|<>]/.test(char));
         const hasUppercase = chars.some((char) => /[A-Z]/.test(char));
         const hasLowercase = chars.some((char) => /[a-z]/.test(char));
-        // const hasCyrillic = chars.some((char) => /^[\u0400-\u04FF]+$/.test(char));
         const hasNumeric = chars.some((char) => !isNaN(char) && char !== ' ');
-        // const hasSpaces = chars.some((char) => char === ' ');
         const hasSpecial = chars.some((char) => /[_/!@#$%^&*(),.?":{}|<>]/.test(char));
 
         if (!password) {
@@ -157,10 +157,6 @@ export default class InputComponent {
             this.showError('Пароль содержит некорректные символы');
         } else if (password.length < 8) {
             this.showError('Пароль должен содержать минимум 8 символов');
-        // } else if (hasCyrillic) {
-        //     this.showError('Пароль не должен содержать символов кириллицы');
-        // } else if (hasSpaces) {
-        //     this.showError('Пароль не должен содержать пробелы');
         } else if (!hasLowercase || !hasUppercase) {
             this.showError('Пароль должен содержать символы в верхнем и нижнем регистрах');
         } else if (!hasNumeric) {
