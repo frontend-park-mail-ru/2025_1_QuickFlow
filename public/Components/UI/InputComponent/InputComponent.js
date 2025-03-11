@@ -79,7 +79,7 @@ export default class InputComponent {
                 descWrapper.appendChild(description);
             }
 
-            if (this.config.maxLength) {
+            if (this.config.showCharactersLeft) {
                 const counter = document.createElement('span');
                 counter.textContent = this.config.maxLength;
                 counter.classList.add('input-counter');
