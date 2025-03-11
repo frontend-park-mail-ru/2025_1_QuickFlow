@@ -143,15 +143,18 @@ export default class InputComponent {
 
     validatePassword(password) {
         const chars = Array.from(password);
+        const isValid = chars.all((char) => /[A-Za-z_/!@#$%^&*(),.?":{}|<>1234567890]/.test(char));
         const hasUppercase = chars.some((char) => /[A-Z]/.test(char));
         const hasLowercase = chars.some((char) => /[a-z]/.test(char));
         const hasCyrillic = chars.some((char) => /^[\u0400-\u04FF]+$/.test(char));
         const hasNumeric = chars.some((char) => !isNaN(char) && char !== ' ');
         const hasSpaces = chars.some((char) => char === ' ');
-        const hasSpecial = chars.some((char) => /[!@#$%^&*(),.?":{}|<>_/]/.test(char));
+        const hasSpecial = chars.some((char) => /[_/!@#$%^&*(),.?":{}|<>]/.test(char));
 
         if (!password) {
             this.showError('Введите пароль');
+        } else if (!isValid(password)) {
+            this.showError('Пароль содержит некорректные символы');
         } else if (password.length < 8) {
             this.showError('Пароль должен содержать минимум 8 символов');
         } else if (hasCyrillic) {
