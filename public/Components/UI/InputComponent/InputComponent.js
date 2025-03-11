@@ -127,7 +127,7 @@ export default class InputComponent {
         if (!name) {
             this.showError('Введите ' + (this.config.placeholder === 'Имя' ? 'имя' : 'фамилию'));
         } else if (!hasValidCharacters) {
-            this.showError(this.config.placeholder + 'может содержать только буквы и "-"');
+            this.showError(this.config.placeholder + ' может содержать только буквы и "-"');
         } else if (name.length < 2) {
             this.showError('Слишком ' + (this.config.placeholder === 'Имя' ? 'короткое имя' : 'короткая фамилия'));
         } else {
