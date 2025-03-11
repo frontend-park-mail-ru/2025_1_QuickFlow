@@ -143,24 +143,24 @@ export default class InputComponent {
 
     validatePassword(password) {
         const chars = Array.from(password);
-        const isValid = chars.all((char) => /[A-Za-z_/!@#$%^&*(),.?":{}|<>1234567890]/.test(char));
+        const hasValidCharacters = chars.every((char) => /[A-Za-z0-9_/!@#$%^&*(),.?":{}|<>]/.test(char));
         const hasUppercase = chars.some((char) => /[A-Z]/.test(char));
         const hasLowercase = chars.some((char) => /[a-z]/.test(char));
-        const hasCyrillic = chars.some((char) => /^[\u0400-\u04FF]+$/.test(char));
+        // const hasCyrillic = chars.some((char) => /^[\u0400-\u04FF]+$/.test(char));
         const hasNumeric = chars.some((char) => !isNaN(char) && char !== ' ');
-        const hasSpaces = chars.some((char) => char === ' ');
+        // const hasSpaces = chars.some((char) => char === ' ');
         const hasSpecial = chars.some((char) => /[_/!@#$%^&*(),.?":{}|<>]/.test(char));
 
         if (!password) {
             this.showError('Введите пароль');
-        } else if (!isValid(password)) {
+        } else if (!hasValidCharacters(password)) {
             this.showError('Пароль содержит некорректные символы');
         } else if (password.length < 8) {
             this.showError('Пароль должен содержать минимум 8 символов');
-        } else if (hasCyrillic) {
-            this.showError('Пароль не должен содержать символов кириллицы');
-        } else if (hasSpaces) {
-            this.showError('Пароль не должен содержать пробелы');
+        // } else if (hasCyrillic) {
+        //     this.showError('Пароль не должен содержать символов кириллицы');
+        // } else if (hasSpaces) {
+        //     this.showError('Пароль не должен содержать пробелы');
         } else if (!hasLowercase || !hasUppercase) {
             this.showError('Пароль должен содержать символы в верхнем и нижнем регистрах');
         } else if (!hasNumeric) {
