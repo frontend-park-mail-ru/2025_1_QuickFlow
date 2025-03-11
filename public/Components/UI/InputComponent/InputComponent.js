@@ -122,14 +122,16 @@ export default class InputComponent {
 
     validateName(name) {
         const chars = Array.from(name);
-        const hasOnlyLetters = chars.every((char) => /^[\p{L}-]+$/u.test(char));
+        const hasValidCharacters = chars.every((char) => /^[\p{L}-]+$/u.test(char));
 
         if (!name) {
-            this.showError('Введите ' + this.config.placeholder === 'Имя' ? 'имя' : 'фамилию');
-        } else if (!hasOnlyLetters) {
+            this.showError('Введите ' + (this.config.placeholder === 'Имя' ? 'имя' : 'фамилию'));
+        } else if (!hasValidCharacters) {
             this.showError(this.config.placeholder + 'может содержать только буквы и "-"');
         } else if (name.length < 2) {
-            this.showError('Слишком ' + this.config.placeholder === 'Имя' ? 'короткое имя' : 'короткая фамилия');
+            this.showError('Слишком ' + (this.config.placeholder === 'Имя' ? 'короткое имя' : 'короткая фамилия'));
+        } else {
+            this.hideError();
         }
     }
 
