@@ -9,3 +9,12 @@
     flex-direction: column;
     gap: 8px;
 }
+
+.auth-form-back-btn {
+    background: url(../../static/img/arrow-back-icon.svg) 0 0 no-repeat;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: 0;
+    top: 0;
+}

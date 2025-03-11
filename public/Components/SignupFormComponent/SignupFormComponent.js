@@ -11,8 +11,8 @@ export default class SignupFormComponent {
         this.step = 1;
 
         this.usernameInput = null;
-        this.firstNameInput = null;
-        this.lastNameInput = null;
+        this.firstnameInput = null;
+        this.lastnameInput = null;
         this.sexInput = null;
         this.birthDateInput = null;
         this.passwordInput = null;
@@ -50,6 +50,23 @@ export default class SignupFormComponent {
     renderTopWrapper(form) {
         const topWrapper = document.createElement('div');
         topWrapper.classList.add('auth-form-top');
+
+        const backBtn = document.createElement('a');
+        backBtn.classList.add('auth-form-back-btn');
+        topWrapper.appendChild(backBtn);
+        backBtn.addEventListener('click', () => {
+            if (this.step === 1) {
+                localStorage.removeItem("username");
+                localStorage.removeItem("firstname");
+                localStorage.removeItem("lastname");
+                localStorage.removeItem("sex");
+                localStorage.removeItem("birthDate");
+                this.menu.goToPage(this.menu.menuElements.login);
+            } else {
+                this.step = 1;
+                this.render();
+            }
+        });
 
         if (this.step === 2) {
             const logo = document.createElement('img');
@@ -108,12 +125,13 @@ export default class SignupFormComponent {
             showRequired: false
         });
         this.usernameInput.render();
+        this.usernameInput.input.value = localStorage.getItem("username") || '';
 
         const nameInputWrapper = document.createElement('div');
         nameInputWrapper.classList.add('signup-name-input-wrapper');
         fieldsetPersonalInfo.appendChild(nameInputWrapper);
 
-        this.firstNameInput = new InputComponent(nameInputWrapper, {
+        this.firstnameInput = new InputComponent(nameInputWrapper, {
             type: 'text',
             label: 'Имя',
             placeholder: 'Имя',
@@ -122,9 +140,10 @@ export default class SignupFormComponent {
             required: true,
             showRequired: false
         });
-        this.firstNameInput.render();
+        this.firstnameInput.render();
+        this.firstnameInput.input.value = localStorage.getItem("firstname") || '';
 
-        this.lastNameInput = new InputComponent(nameInputWrapper, {
+        this.lastnameInput = new InputComponent(nameInputWrapper, {
             type: 'text',
             label: 'Фамилия',
             placeholder: 'Фамилия',
@@ -133,7 +152,8 @@ export default class SignupFormComponent {
             required: true,
             showRequired: false
         });
-        this.lastNameInput.render();
+        this.lastnameInput.render();
+        this.lastnameInput.input.value = localStorage.getItem("lastname") || '';
 
         this.sexInput = new RadioComponent(fieldsetPersonalInfo, {
             label: 'Пол',
@@ -154,6 +174,7 @@ export default class SignupFormComponent {
             showRequired: false
         });
         this.sexInput.render();
+        this.sexInput.setChecked(localStorage.getItem("sex"));
 
         this.birthDateInput = new InputComponent(fieldsetPersonalInfo, {
             type: 'text',
@@ -165,11 +186,12 @@ export default class SignupFormComponent {
             showRequired: false
         });
         this.birthDateInput.render();
+        this.birthDateInput.input.value = localStorage.getItem("birthDate") || '';
 
         const textInputs = [
             this.usernameInput,
-            this.firstNameInput,
-            this.lastNameInput,
+            this.firstnameInput,
+            this.lastnameInput,
             this.birthDateInput
         ];
 
@@ -179,11 +201,11 @@ export default class SignupFormComponent {
             'input',
             this.updateContinueButtonState.bind(this, textInputs, radioInputs)
         );
-        this.firstNameInput.input.addEventListener(
+        this.firstnameInput.input.addEventListener(
             'input',
             this.updateContinueButtonState.bind(this, textInputs, radioInputs)
         );
-        this.lastNameInput.input.addEventListener(
+        this.lastnameInput.input.addEventListener(
             'input',
             this.updateContinueButtonState.bind(this, textInputs, radioInputs)
         );
@@ -198,6 +220,8 @@ export default class SignupFormComponent {
 
         form.appendChild(fieldsetPersonalInfo);
         this.renderBottomWrapper(form);
+
+        this.updateContinueButtonState(textInputs, radioInputs);
     }
 
     renderCreatePasswordStep(form) {
@@ -272,12 +296,11 @@ export default class SignupFormComponent {
     }
 
     continueBtnOnClick() {
-        // event.preventDefault();
-        // this.email = this.usernameInput.input.value.trim();
-        // if (!this.email) {
-        //     alert('Введите email!');
-        //     return;
-        // }
+        localStorage.setItem("username", this.usernameInput.input.value.trim());
+        localStorage.setItem("firstname", this.firstnameInput.input.value.trim());
+        localStorage.setItem("lastname", this.lastnameInput.input.value.trim());
+        localStorage.setItem("sex", this.sexInput.getChecked().value);
+        localStorage.setItem("birthDate", this.birthDateInput.input.value.trim());
         this.step = 2;
         this.render();
     }
@@ -288,7 +311,6 @@ export default class SignupFormComponent {
     }
 
     convertDate(dateString) {
-        console.log(this.sexInput.getChecked().value);
         const parts = dateString.split('.');
         const day = parts[0];
         const month = parts[1];
@@ -300,8 +322,8 @@ export default class SignupFormComponent {
         const body = {
             username: this.usernameInput.input.value.trim(),
             password: this.passwordInput.input.value.trim(),
-            firstname: this.firstNameInput.input.value.trim(),
-            lastname: this.lastNameInput.input.value.trim(),
+            firstname: this.firstnameInput.input.value.trim(),
+            lastname: this.lastnameInput.input.value.trim(),
             sex: this.sexInput.getChecked().value === 'male' ? 1 : 2, 
             birth_date: this.convertDate(this.birthDateInput.input.value.trim()),
         }

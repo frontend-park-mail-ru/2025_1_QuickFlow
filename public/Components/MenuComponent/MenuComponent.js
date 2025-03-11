@@ -117,5 +117,7 @@ export default class MenuComponent {
             const element = this.config.menu[section].render();
             document.querySelector('main').appendChild(element);
         }
+        
+        this.checkAuthPage();
     }
 }

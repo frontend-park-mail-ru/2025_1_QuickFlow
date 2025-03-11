@@ -74,12 +74,10 @@ function renderLogout() {
 
             if (!isUnauthorized) {
                 menu.goToPage(menu.menuElements.feed);
-                menu.checkAuthPage();
                 return;
             }
 
             menu.goToPage(menu.menuElements.login);
-            menu.checkAuthPage();
         }
     });
 
@@ -106,7 +104,6 @@ function renderFeed() {
             if (!isAuthorized) {
                 menu.goToPage(menu.menuElements.login);
                 menu.updateMenuVisibility(false);
-                menu.checkAuthPage();
                 return;
             }
 

@@ -1,11 +1,16 @@
 const HTTP_METHOD_GET = 'GET';
 const HTTP_METHOD_POST = 'POST';
 const API_BASE_URL = 'https://quickflowapp.ru/api';
+const DEVELOP = false;
 
 class Ajax {
+    constructor() {
+        this.baseUrl = DEVELOP ? '' : API_BASE_URL;
+    }
+
     async get({ url, callback = () => {} }) {
         try {
-            const response = await fetch(`${API_BASE_URL}${url}`, {
+            const response = await fetch(`${this.baseUrl}${url}`, {
                 method: HTTP_METHOD_GET,
                 credentials: 'include'
             });
@@ -18,7 +23,7 @@ class Ajax {
 
     async post({ url, body, callback = () => {} }) {
         try {
-            const response = await fetch(`${API_BASE_URL}${url}`, {
+            const response = await fetch(`${this.baseUrl}${url}`, {
                 method: HTTP_METHOD_POST,
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json; charset=utf-8' },

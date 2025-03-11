@@ -15,66 +15,100 @@ app.use('/static', express.static('static'));
 app.use(body.json());
 app.use(cookie());
 
-const images = [
+const posts = [
     {
-        src: '/273153700_118738253861831_5906416883131394354_n.jpeg',
-        likes: 120
+        id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
+        creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
+        text: "Hello, this is my first post",
+        pics: [
+            "/273153700_118738253861831_5906416883131394354_n.jpeg",
+        ],
+        created_at: "2005-05-02",
+        like_count: 0,
+        repost_count: 0,
+        comment_count: 0
     },
     {
-        src: '/272708814_1158833634855293_1743973316352152210_n.webp.jpg',
-        likes: 250
+        id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
+        creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
+        text: "Hello, this is my first post",
+        pics: [
+            "/272708814_1158833634855293_1743973316352152210_n.webp.jpg",
+        ],
+        created_at: "2005-05-02",
+        like_count: 0,
+        repost_count: 0,
+        comment_count: 0
     },
     {
-        src: '/272464515_147005761018515_3100264353239753904_n.webp.jpg',
-        likes: 201
+        id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
+        creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
+        text: "Hello, this is my first post",
+        pics: [
+            "/272464515_147005761018515_3100264353239753904_n.webp.jpg",
+        ],
+        created_at: "2005-05-02",
+        like_count: 0,
+        repost_count: 0,
+        comment_count: 0
     },
     {
-        src: '/259096143_252774593424446_3292295880799640700_n.jpeg',
-        likes: 300
+        id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
+        creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
+        text: "Hello, this is my first post",
+        pics: [
+            "/259096143_252774593424446_3292295880799640700_n.jpeg",
+        ],
+        created_at: "2005-05-02",
+        like_count: 0,
+        repost_count: 0,
+        comment_count: 0
     },
     {
-        src: '/19984805_468099790230913_7469029070697660416_n.jpeg',
-        likes: 100500
+        id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
+        creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
+        text: "Hello, this is my first post",
+        pics: [
+            "/19984805_468099790230913_7469029070697660416_n.jpeg",
+        ],
+        created_at: "2005-05-02",
+        like_count: 0,
+        repost_count: 0,
+        comment_count: 0
     },
     {
-        src: '/16583858_168051673696142_846500378588479488_n.jpeg',
-        likes: 350
-    }
+        id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
+        creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
+        text: "Hello, this is my first post",
+        pics: [
+            "/16583858_168051673696142_846500378588479488_n.jpeg",
+        ],
+        created_at: "2005-05-02",
+        like_count: 0,
+        repost_count: 0,
+        comment_count: 0
+    },
 ];
 
 const users = {
-    'd.dorofeev@corp.mail.ru': {
-        email: 'd.dorofeev@corp.mail.ru',
-        password: 'password',
-        age: 21
+    rvasutenko: {
+        username: 'rvasutenko',
+        password: 'Qwerty1!',
+        firstname: 'rvasutenko',
+        lastname: 'rvasutenko',
+        sex: 1,
+        birth_date: '2005-05-02',
     },
-    's.volodin@corp.mail.ru': {
-        email: 's.volodin@corp.mail.ru',
-        password: 'password',
-        age: 27,
-        images: [0, 1, 2, 3]
-    },
-    'aleksandr.tsvetkov@corp.mail.ru': {
-        email: 'aleksandr.tsvetkov@corp.mail.ru',
-        password: 'password',
-        age: 30,
-        images: [4, 5]
-    },
-    'a.ostapenko@corp.mail.ru': {
-        email: 'a.ostapenko@corp.mail.ru',
-        password: 'password',
-        age: 21
-    }
 };
 const ids = {};
 
-function formUser(user) {
-    return {
-        ...user,
-        password: undefined,
-        images: user.images.map((id) => ({ ...images[id], id }))
-    };
-}
+// function formUser(user) {
+//     return {
+//         ...user,
+//         password: undefined,
+//         images: user.images.map((id) => ({ ...images[id], id }))
+//     };
+// }
 
 app.post('/signup', (req, res) => {
     const password = req.body.password;
@@ -108,63 +142,78 @@ app.post('/signup', (req, res) => {
 
 app.post('/login', (req, res) => {
     const password = req.body.password;
-    const email = req.body.email;
-    if (!password || !email) {
-        return res.status(400).json({ error: 'Не указан E-Mail или пароль' });
+    const username = req.body.username;
+    console.log(username, password);
+    if (!password || !username) {
+        return res.status(400).json({ error: 'Не указано имя пользователя или пароль' });
     }
-    if (!users[email] || users[email].password !== password) {
-        return res.status(400).json({ error: 'Не верный E-Mail и/или пароль' });
+    if (!users[username] || users[username].password !== password) {
+        return res.status(400).json({ error: 'Неверное имя пользователя или пароль' });
     }
 
     const id = crypto.randomUUID();
-    ids[id] = email;
+    ids[id] = username;
 
     res.cookie('podvorot', id, {
         expires: new Date(Date.now() + 10000 * 60 * 10),
-        // secure: true,
         httpOnly: true
     });
     res.status(200).json({ id });
 });
 
-app.get('/me', (req, res) => {
+app.post('/logout', (req, res) => {
     const id = req.cookies['podvorot'];
-    const email = ids[id];
-    if (!email || !users[email]) {
+    
+    if (!id) {
+        return res.status(400).end();
+    }
+
+    delete ids[id];
+    res.clearCookie('podvorot');
+
+    res.status(200).end();
+});
+
+
+// app.get('/me', (req, res) => {
+//     const id = req.cookies['podvorot'];
+//     const email = ids[id];
+//     if (!email || !users[email]) {
+//         return res.status(401).end();
+//     }
+
+//     res.json(formUser(users[email]));
+// });
+
+app.post('/feed', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+    if (!usernameSession || !users[usernameSession]) {
         return res.status(401).end();
     }
 
-    res.json(formUser(users[email]));
+    // const userSessionImagesSet = new Set(users[usernameSession].images);
+
+    // const result2 = images
+    //     .map((_, id) => ({ ..._, id }))
+    //     .filter((_, id) => !userSessionImagesSet.has(id));
+
+    // res.json(result2);
+    res.status(200).json(posts);
 });
 
-app.get('/feed', (req, res) => {
-    const id = req.cookies['podvorot'];
-    const emailSession = ids[id];
-    if (!emailSession || !users[emailSession]) {
-        return res.status(401).end();
-    }
+// app.post('/like', (req, res) => {
+//     const id = req.cookies['podvorot'];
+//     const emailSession = ids[id];
+//     if (!emailSession || !users[emailSession]) {
+//         return res.status(401).end();
+//     }
 
-    const userSessionImagesSet = new Set(users[emailSession].images);
+//     const { id: imageId } = req.body;
+//     images[imageId].likes++;
 
-    const result2 = images
-        .map((_, id) => ({ ..._, id }))
-        .filter((_, id) => !userSessionImagesSet.has(id));
-
-    res.json(result2);
-});
-
-app.post('/like', (req, res) => {
-    const id = req.cookies['podvorot'];
-    const emailSession = ids[id];
-    if (!emailSession || !users[emailSession]) {
-        return res.status(401).end();
-    }
-
-    const { id: imageId } = req.body;
-    images[imageId].likes++;
-
-    res.status(200).json({ status: 'ok' });
-});
+//     res.status(200).json({ status: 'ok' });
+// });
 
 const port = process.env.PORT || 3000;
 

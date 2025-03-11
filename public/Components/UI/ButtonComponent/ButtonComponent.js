@@ -7,6 +7,7 @@ export default class ButtonComponent {
 
     render() {
         const button = document.createElement('button');
+        button.type = this.config.type || 'button';
         button.textContent = this.config.text || 'Click me';
         button.classList.add('button', this.config.variant === 'secondary' ? 'button-secondary' : 'button-primary');
 

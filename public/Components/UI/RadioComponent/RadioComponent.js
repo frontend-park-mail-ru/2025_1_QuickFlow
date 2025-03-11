@@ -56,4 +56,11 @@ export default class RadioComponent {
     getChecked() {
         return this.wrapper.querySelector('input[type="radio"]:checked');
     }
+
+    setChecked(value) {
+        const radio = this.wrapper.querySelector(`input[type="radio"][value="${value}"]`);
+        if (radio) {
+            radio.checked = true;
+        }
+    }
 }
