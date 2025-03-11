@@ -148,7 +148,7 @@ export default class InputComponent {
         const hasCyrillic = chars.some((char) => /^[\u0400-\u04FF]+$/.test(char));
         const hasNumeric = chars.some((char) => !isNaN(char) && char !== ' ');
         const hasSpaces = chars.some((char) => char === ' ');
-        const hasSpecial = chars.some((char) => /[!@#$%^&*(),.?":{}|<>]/.test(char));
+        const hasSpecial = chars.some((char) => /[!@#$%^&*(),.?":{}|<>_/]/.test(char));
 
         if (!password) {
             this.showError('Введите пароль');
