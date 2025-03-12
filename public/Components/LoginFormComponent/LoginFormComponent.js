@@ -7,7 +7,6 @@ export default class LoginFormComponent {
         this.container = container;
         this.menu = menu;
         this.step = 1;
-        this.username = '';
         this.passwordInput = null;
         this.usernameInput = null;
 
@@ -42,6 +41,21 @@ export default class LoginFormComponent {
     renderTopWrapper(form) {
         const topWrapper = document.createElement('div');
         topWrapper.classList.add('auth-form-top');
+
+        if (this.step === 2) {
+            const backBtn = document.createElement('a');
+            backBtn.classList.add('auth-form-back-btn');
+            topWrapper.appendChild(backBtn);
+            backBtn.addEventListener('click', () => {
+                if (this.step === 1) {
+                    localStorage.removeItem("username");
+                    this.menu.goToPage(this.menu.menuElements.login);
+                } else {
+                    this.step = 1;
+                    this.render();
+                }
+            });
+        }
 
         const logo = document.createElement('img');
         logo.src = '/static/img/logo-icon.svg';
@@ -104,6 +118,7 @@ export default class LoginFormComponent {
             showRequired: false
         });
         this.usernameInput.render();
+        this.usernameInput.input.value = localStorage.getItem("username") || '';
 
         const checkboxWrapper = document.createElement('div');
         checkboxWrapper.classList.add('checkbox-wrapper');
@@ -120,20 +135,25 @@ export default class LoginFormComponent {
         checkboxWrapper.appendChild(label);
         fieldsetUsername.appendChild(checkboxWrapper);
 
-        // Добавляем событие input для блокировки/разблокировки кнопки "Продолжить"
-        this.usernameInput.input.addEventListener('input', () => {
-            if (
-                this.usernameInput.input.classList.contains('invalid') ||
-                this.usernameInput.input.value === ''
-            ) {
-                this.continueBtn.buttonElement.disabled = true;
-            } else {
-                this.continueBtn.buttonElement.disabled = false;
-            }
-        });
-
         form.appendChild(fieldsetUsername);
         this.renderBottomWrapper(form);
+
+        // Добавляем событие input для блокировки/разблокировки кнопки "Продолжить"
+        this.usernameInput.input.addEventListener('input', () => {
+            this.updateBtnState();
+        });
+        this.updateBtnState();
+    }
+
+    updateBtnState() {
+        if (
+            this.usernameInput.input.classList.contains('invalid') ||
+            this.usernameInput.input.value === ''
+        ) {
+            this.continueBtn.buttonElement.disabled = true;
+        } else {
+            this.continueBtn.buttonElement.disabled = false;
+        }
     }
 
     renderPasswordStep(form) {
@@ -148,13 +168,8 @@ export default class LoginFormComponent {
         this.renderBottomWrapper(form);
     }
 
-    continueBtnOnClick(event) {
-        event.preventDefault();
-        this.username = this.usernameInput.input.value.trim();
-        if (!this.username) {
-            alert('Введите имя пользователя!');
-            return;
-        }
+    continueBtnOnClick() {
+        localStorage.setItem("username", this.usernameInput.input.value.trim());
         this.step = 2;
         this.render();
     }
@@ -162,20 +177,18 @@ export default class LoginFormComponent {
     signinBtnOnClick(event) {
         event.preventDefault();
         const password = this.passwordInput.input.value.trim();
-        if (!password) {
-            alert('Введите пароль');
-            return;
-        }
         this.submitLogin(password);
     }
 
     submitLogin(password) {
+        const body = {
+            username: this.usernameInput.input.value.trim(),
+            password
+        };
+        console.log(body);
         Ajax.post({
             url: '/login',
-            body: {
-                username: this.username,
-                password
-            },
+            body,
             callback: (status) => {
                 if (status === 200) {
                     this.menu.goToPage(this.menu.menuElements.feed);
