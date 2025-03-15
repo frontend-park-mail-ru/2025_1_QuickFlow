@@ -5,6 +5,10 @@
 @import url(./Components/SignupFormComponent/SignupFormComponent.css);
 @import url(./Components/PostComponent/PostComponent.css);
 @import url(./Components/AvatarComponent/AvatarComponent.css);
+@import url(./Components/ContextMenuComponent/ContextMenuComponent.css);
+@import url(./Components/ProfileMenuComponent/ProfileMenuComponent.css);
+
+@import url(./Views/FeedView/FeedView.css);
 
 * {
     box-sizing: border-box;
@@ -28,103 +32,8 @@
 
 body {
     background-color: #fff;
-    /*background: radial-gradient(100% 316.05% at 0% 0%, #CED8FF 0%, #4369FC 100%) для авторизации*/
     font-family: 'vk-sans';
 }
-
-/*.logo-item {*/
-/*    align-self: start;*/
-/*    display: flex;*/
-/*    align-items: center; !* Выравнивание по центру внут элементов*!*/
-/*    gap: 8px; !* Расстояние между иконкой и текстом *!*/
-/*    padding-top: 12px;*/
-/*    width: 175px;*/
-/*    height: 27px;*/
-/*}*/
-
-/*.search-container {*/
-/*    align-self: center;*/
-/*    display: flex;*/
-/*    align-items: start;*/
-/*    margin: 0 0 0 calc((100% - 932px) / 2);*/
-/*    background: #EDEEF0;*/
-/*    border-radius: 8px;*/
-/*    width: 220px;*/
-/*    height: 32px;*/
-/*}*/
-
-/*.search-item {*/
-/*    border: none;*/
-/*    outline: none;*/
-/*    background: transparent;*/
-/*    align-items: start;*/
-/*    width: 220px;*/
-/*    height: 32px;*/
-/*    font-size: 14px;*/
-/*    padding-left: 8px;*/
-/*    flex-grow: 1; !* Поле ввода будет занимать оставшееся пространство *!*/
-/*    text-align: left; !* Ьекст по левому краю *!*/
-/*}*/
-
-/*.search-icon {*/
-/*    align-self: center;*/
-/*    width: 16px;*/
-/*    height: 16px;*/
-/*    margin-left: 8px; !* Расстояние между лупой и полем ввода *!*/
-/*}*/
-
-/*.search-icon-container {*/
-/*    align-self: center;*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    justify-content: left;*/
-/*    width: 64px;*/
-/*    height: 20px;*/
-/*    padding-left: 24px;*/
-/*    gap: 24px; !* Расстояние между иконками *!*/
-/*}*/
-
-/*.notice-icon {*/
-/*    display: flex;*/
-/*    width: 20px;*/
-/*    height: 20px;*/
-/*    color: #FFFFFF;*/
-/*}*/
-
-/*.music-icon-top {*/
-/*    width: 20px;*/
-/*    height: 20px;*/
-/*    !*color: #FFFFFF; !*увы, если цвет уже задан, так его поменять нельзя, но можно сделать*/
-/*    css для каждой иконки из меню, там покрасим ее, но кажется это нерационально"*!*/
-/*    !*margin-right: 8px;*!*/
-/*}*/
-
-/*.avatar-container {*/
-/*    align-self: center;*/
-/*    justify-self: end;*/
-/*    display: flex;*/
-/*    flex-direction: row;*/
-/*    align-items: center;*/
-/*    padding-left: 524px;*/
-/*    gap: 8px;*/
-/*    width: 66px;*/
-/*    height: 56px;*/
-/*}*/
-
-/*.avatar {*/
-/*    width: 40px;*/
-/*    height: 40px;*/
-/*    border-radius: 50%;*/
-/*    aspect-ratio: 1 / 1; !*хз, без явного задания делал аву 35 на 40*!*/
-/*    object-fit: cover;*/
-/*}*/
-
-/*.dropdown-button {*/
-/*    background: none;*/
-/*    border: none;*/
-/*    cursor: pointer;*/
-/*    font-size: 16px;*/
-/*}*/
 
 .side-menu {
     align-self: start;
@@ -151,30 +60,9 @@ body {
     cursor: pointer;
 }
 
-/*.menu-item:hover {*/
-/*    background: #f0f0f0;*/
-/*    border-radius: 4px;*/
-/*}*/
-
 .container {
     display: flex;
 }
-
-/*.menu-item {*/
-/*    display: flex;*/
-/*    align-items: center; !* Выравнивание по центру *!*/
-/*    gap: 8px; !* Расстояние между иконкой и текстом *!*/
-/*    overflow-y: auto;*/
-/*    padding-left: 12px;*/
-/*    width: 196px;*/
-/*    height: 32px;*/
-/*    margin: 8px;*/
-/*}*/
-
-/*.menu-icon {*/
-/*    width: 16px;*/
-/*    height: 16px;*/
-/*}*/
 
 main {
     padding: 24px 64px;
@@ -184,12 +72,7 @@ main {
     left: 220px;
     top: 56px;
     width: calc(100% - 220px);
-}
-
-.feed-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Отступ между картинками */
+    align-items: center;
 }
 
 a {
@@ -197,18 +80,6 @@ a {
     color: var(--text-accent);
     text-decoration: none;
 }
-
-/*aside a {*/
-/*    margin-bottom: 20px; !* Отступ снизу между пунктами *!*/
-/*}*/
-
-/*input {*/
-/*    display: block;*/
-/*    height: 60px;*/
-/*    font-size: 40px;*/
-/*    margin-bottom: 15px;*/
-
-/*}*/
 
 .active {
     font-weight: bold;

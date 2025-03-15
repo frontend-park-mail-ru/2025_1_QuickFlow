@@ -41,6 +41,8 @@ input[type='password'] {
     font-size: 14px;
     line-height: 130%;
     color: var(--text-primary);
+
+    transition: var(--trans-input);
 }
 
 input[type='text']::placeholder,

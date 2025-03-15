@@ -1,8 +1,8 @@
 import Ajax from './modules/ajax.js';
 import LoginView from './Views/LoginView/LoginView.js';
 import SignupView from './Views/SignupView/SignupView.js';
+import FeedView from './Views/FeedView/FeedView.js';
 import HeaderComponent from './Components/HeaderComponent/HeaderComponent.js';
-import PostComponent from './Components/PostComponent/PostComponent.js';
 import MenuComponent from './Components/MenuComponent/MenuComponent.js';
 
 const root = document.getElementById('root');
@@ -15,11 +15,7 @@ const menuContainer = document.createElement('aside');
 menuContainer.classList.add('menu');
 const pageContainer = document.createElement('main');
 
-const headerContainer = document.createElement('header');
-headerContainer.classList.add('header');
-
 container.appendChild(menuContainer);
-container.appendChild(headerContainer);
 container.appendChild(pageContainer);
 
 const link = document.createElement('link');
@@ -33,11 +29,17 @@ document.head.appendChild(link);
  */
 const config = {
     menu: {
+        profile: {
+            href: '/profile',
+            text: 'Профиль',
+            icon: 'profile-icon',
+            render: renderLogout,
+        },
         feed: {
             href: '/feed',
             text: 'Лента',
             icon: 'feed-icon',
-            render: renderFeed
+            render: () => new FeedView(menu).render(),
         },
         login: {
             href: '/login',
@@ -84,74 +86,12 @@ function renderLogout() {
     return document.createElement('div');
 }
 
-/**
- * Функция рендера ленты новостей
- * Загружает посты через AJAX и отображает их на странице
- * @returns {HTMLElement} - контейнер с лентой
- */
-function renderFeed() {
-    const feed = document.createElement('div');
-    feed.classList.add('feed');
-
-    Ajax.post({
-        url: '/feed',
-        body: {
-            posts_count: 10
-        },
-        callback: (status, feedData) => {
-            let isAuthorized = status === 200;
-
-            if (!isAuthorized) {
-                menu.goToPage(menu.menuElements.login);
-                menu.updateMenuVisibility(false);
-                return;
-            }
-
-            if (feedData && Array.isArray(feedData)) {
-                feedData.forEach(({ id, creator_id, text, pics, created_at, like_count, repost_count, comment_count }) => {
-                    new PostComponent(feed, {
-                        id,
-                        creator_id,
-                        text,
-                        pics,
-                        created_at,
-                        like_count,
-                        repost_count,
-                        comment_count,
-                    });
-                });
-            }
-        }
-    });
-
-    // Обработчик лайков на постах
-    feed.addEventListener('click', (event) => {
-        if (event.target.tagName.toLowerCase() === 'button' && event.target.dataset.imageId) {
-            const { imageId: id } = event.target.dataset;
-
-            Ajax.post({
-                url: '/like',
-                body: { id },
-                callback: (status) => {
-                    if (status === 200) {
-                        const likeContainer = event.target.parentNode;
-                        const likeCount = likeContainer.querySelector('span');
-                        likeCount.textContent = `${parseInt(likeCount.textContent) + 1} лайков`;
-                    }
-                }
-            });
-        }
-    });
-
-    return feed;
-}
-
 // Создание меню и хедера
 const menu = new MenuComponent(config, menuContainer);
 menu.render();
 menu.goToPage(menu.menuElements.feed);
 
-const header = new HeaderComponent(headerContainer, menu);
+const header = new HeaderComponent(container, menu);
 header.render();
 
 // function renderProfile() {

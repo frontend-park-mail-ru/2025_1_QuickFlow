@@ -45,3 +45,11 @@
 :root {
     --font-family: 'vk-sans';
 }
+
+:root {
+    --trans-input: all 0.15s ease-out;
+    --trans-btn: all 0.15s ease-out;
+    --trans-menu: all 0.15s ease-out;
+    --trans-dropdown: all 0.2s ease-out;
+    --trans-post-slider: all 0.2s ease;
+}

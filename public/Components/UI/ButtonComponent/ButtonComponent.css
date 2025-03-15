@@ -2,6 +2,7 @@
 
 button {
     cursor: pointer;
+    transition: var(--trans-btn);
 }
 
 button:disabled {

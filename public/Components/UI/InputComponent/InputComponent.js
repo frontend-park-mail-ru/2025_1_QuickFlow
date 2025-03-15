@@ -1,4 +1,5 @@
-console.log('InputComponent.js загружен!');
+import formatDateInput from '../../../utils/formatDateInput.js';
+
 
 export default class InputComponent {
     constructor(container, config) {
@@ -111,7 +112,7 @@ export default class InputComponent {
             this.validateName(value);
         } else if (this.config.validation === 'date') {
             this.input.maxLength = 10;
-            this.input.addEventListener('input', this.formatDateInput);
+            this.input.addEventListener('input', formatDateInput(this.input));
             if (value.length === 10) {
                 this.validateDate(value);
             } else {
@@ -183,24 +184,6 @@ export default class InputComponent {
         } else {
             this.hideError();
         }
-    }
-
-    formatDateInput(event) {
-        let value = event.target.value.replace(/\D/g, ''); // Удаляем все нецифровые символы
-
-        if (value.length > 8) {
-            value = value.slice(0, 8); // Ограничиваем ввод 8 символами
-        }
-
-        // Добавляем точки в нужные места, если их нет
-        if (value.length > 2 && value[2] !== '.') {
-            value = value.slice(0, 2) + '.' + value.slice(2);
-        }
-        if (value.length > 5 && value[5] !== '.') {
-            value = value.slice(0, 5) + '.' + value.slice(5);
-        }
-
-        event.target.value = value;
     }
 
     validateDate(date) {

@@ -11,6 +11,7 @@ aside {
     padding: 12px;
     background: var(--background-white);
     align-items: center;
+    z-index: 1;
 }
 
 .header-logo-wrapper {
@@ -27,17 +28,23 @@ aside {
     width: 100%;
     height: 36px;
     flex-direction: row;
+    border-radius: 8px;
 
     font-family: var(--font-family);
     font-weight: 400;
     font-size: 15px;
     line-height: 100%;
     color: var(--text-primary);
+
+    transition: var(--trans-menu);
 }
 
 .menu-item:hover {
     background: var(--button-secondary-hover);
-    border-radius: 8px;
+}
+
+.menu-item:active {
+    background: var(--button-secondary-active);
 }
 
 .menu-item.hidden {

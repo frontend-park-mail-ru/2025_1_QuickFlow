@@ -1,6 +1,3 @@
-console.log("RadioComponent.js загружен!");
-
-
 export default class RadioComponent {
     constructor(container, config) {
         this.config = config;

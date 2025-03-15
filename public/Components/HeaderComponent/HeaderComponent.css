@@ -29,7 +29,7 @@ a {
 
 .header-inner-wrapper {
     display: flex;
-    width: 932px;
+    width: 100%;
     height: 56px;
     max-width: 932px;
     justify-content: space-between;
@@ -69,6 +69,14 @@ a {
     align-items: center;
     gap: 8px;
     padding: 0 8px;
+    height: 100%;
+    cursor: pointer;
+    transition: var(--trans-menu);
+    position: relative;
+}
+
+.header-right:hover {
+    background: var(--background-light-gray);
 }
 
 .dropdown-button {

@@ -33,6 +33,7 @@
 }
 
 input[type='radio'] {
+    transition: var(--trans-input);
     width: 16px;
     height: 16px;
     margin: 0;

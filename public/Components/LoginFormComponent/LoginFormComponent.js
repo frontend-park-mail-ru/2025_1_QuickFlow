@@ -28,6 +28,7 @@ export default class LoginFormComponent {
 
         const form = document.createElement('form');
         form.classList.add('auth-form');
+        this.handleFormSubmission(form);
 
         if (this.step === 1) {
             this.renderUsernameStep(form);
@@ -36,6 +37,17 @@ export default class LoginFormComponent {
         }
 
         this.container.appendChild(form);
+    }
+
+    handleFormSubmission(form) {
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (this.step === 1) {
+                this.continueBtnOnClick();
+            } else {
+                this.signinBtnOnClick(event);
+            }
+        });
     }
 
     renderTopWrapper(form) {
@@ -119,6 +131,7 @@ export default class LoginFormComponent {
         });
         this.usernameInput.render();
         this.usernameInput.input.value = localStorage.getItem("username") || '';
+        setTimeout(() => this.usernameInput.input.focus(), 0);
 
         const checkboxWrapper = document.createElement('div');
         checkboxWrapper.classList.add('checkbox-wrapper');
@@ -164,6 +177,7 @@ export default class LoginFormComponent {
             placeholder: 'Пароль'
         });
         this.passwordInput.render();
+        setTimeout(() => this.passwordInput.input.focus(), 0);
 
         this.renderBottomWrapper(form);
     }

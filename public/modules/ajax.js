@@ -8,20 +8,28 @@ class Ajax {
         this.baseUrl = DEVELOP ? '' : API_BASE_URL;
     }
 
-    async get({ url, callback = () => {} }) {
+    async get({ url, params = {}, callback = () => {} }) {
         try {
-            const response = await fetch(`${this.baseUrl}${url}`, {
+            const queryString = new URLSearchParams(params).toString();
+            const fullUrl = `${this.baseUrl}${url}${queryString ? `?${queryString}` : ''}`;
+    
+            const response = await fetch(fullUrl, {
                 method: HTTP_METHOD_GET,
                 credentials: 'include'
             });
-            const data = await response.json();
+    
+            let data = null;
+            if (response.headers.get('content-length') !== '0' && response.headers.get('content-type')?.includes('application/json')) {
+                data = await response.json();
+            }
+
             callback(response.status, data);
         } catch (error) {
             console.error('GET request failed:', error);
         }
     }
 
-    async post({ url, body, callback = () => {} }) {
+    async post({ url, body = {}, callback = () => {} }) {
         try {
             const response = await fetch(`${this.baseUrl}${url}`, {
                 method: HTTP_METHOD_POST,
@@ -29,8 +37,6 @@ class Ajax {
                 headers: { 'Content-Type': 'application/json; charset=utf-8' },
                 body: JSON.stringify(body)
             });
-    
-            console.log(response);
     
             let data = null;
             if (response.headers.get('content-length') !== '0' && response.headers.get('content-type')?.includes('application/json')) {

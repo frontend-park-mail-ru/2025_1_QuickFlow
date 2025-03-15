@@ -12,9 +12,23 @@
 
 .auth-form-back-btn {
     background: url(../../static/img/arrow-back-icon.svg) 0 0 no-repeat;
-    width: 20px;
-    height: 20px;
+    width: 32px;
+    height: 32px;
     position: absolute;
-    left: 0;
-    top: 0;
+    left: -4px;
+    top: -2px;
+    border-radius: 50%;
+    transition: var(--trans-btn);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-position: center;
+}
+
+.auth-form-back-btn:hover {
+    background-color: var(--button-secondary-hover);
+}
+
+.auth-form-back-btn:active {
+    background-color: var(--button-secondary-active);
 }

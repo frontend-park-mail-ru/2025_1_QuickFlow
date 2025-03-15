@@ -1,0 +1,107 @@
+.profile-menu-wrapper {
+    top: 56px;
+    right: 0;
+    position: absolute;
+    width: 300px;
+    box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.16);
+    background: var(--background-white);
+    border-bottom: 1px solid var(--stroke-primary);
+    border-left: 1px solid var(--stroke-primary);
+    border-right: 1px solid var(--stroke-primary);
+    border-radius: 0 0 12px 12px;
+    padding: 28px 8px 12px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+
+    opacity: 0;
+    transform: scale(0.98) translateY(-12px);
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    pointer-events: none;
+
+    clip-path: inset(0 -100px -100px -100px);
+    cursor: default;
+}
+
+.header-right:hover .profile-menu-wrapper {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    z-index: 0;
+    pointer-events: auto;
+}
+
+.profile-menu-top-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.profile-menu-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-menu-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.profile-menu-name {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 130%;
+    color: var(--text-primary);
+}
+
+.profile-menu-username {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 130%;
+    color: var(--text-secondary);
+}
+
+.profile-menu-items {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.profile-menu-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px;
+    height: 36px;
+    width: 100%;
+    border-radius: 8px;
+    transition: var(--trans-menu);
+    cursor: pointer;
+}
+
+.profile-menu-item-text {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 100%;
+    color: var(--text-primary);
+}
+
+.profile-menu-item:hover {
+    background: var(--button-secondary-hover);
+}
+
+.profile-menu-item:active {
+    background: var(--button-secondary-active);
+}

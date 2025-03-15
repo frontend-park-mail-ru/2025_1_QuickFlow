@@ -1,4 +1,5 @@
 import InputComponent from '../UI/InputComponent/InputComponent.js';
+import ProfileMenuComponent from '../ProfileMenuComponent/ProfileMenuComponent.js';
 
 /**
  * Компонент поиска в шапке сайта.
@@ -70,11 +71,36 @@ export class AvatarComponent {
         avatar.src = '/static/img/avatar.jpg';
         avatar.classList.add('avatar');
 
-        // const dropdownButton = document.createElement('a');
-        // dropdownButton.classList.add('dropdown-button');
+        const dropdownButton = document.createElement('a');
+        dropdownButton.classList.add('dropdown-button');
 
         wrapper.appendChild(avatar);
-        // wrapper.appendChild(dropdownButton);
+        wrapper.appendChild(dropdownButton);
+
+        new ProfileMenuComponent(wrapper, {
+            data: {
+                name: 'Роман Васютенко',
+                username: 'rvasutenko',
+                menuItems: {
+                    settings: {
+                        href: '/settings',
+                        text: 'Настройки',
+                        icon: 'settings-icon'
+                    },
+                    help: {
+                        href: '/help',
+                        text: 'Помощь',
+                        icon: 'help-icon'
+                    },
+                    logout: {
+                        href: '/logout',
+                        text: 'Выйти',
+                        icon: 'logout-icon'
+                    },
+                },
+            }
+        });
+
         this.container.appendChild(wrapper);
     }
 }
@@ -89,6 +115,9 @@ export default class HeaderComponent {
      */
     constructor(container, menu) {
         this.container = container;
+        this.wrapper = document.createElement('header');
+        this.wrapper.classList.add('header');
+        this.container.appendChild(this.wrapper);
         this.menu = menu;
     }
 
@@ -102,6 +131,6 @@ export default class HeaderComponent {
         new SearchComponent(wrapper).render();
         new AvatarComponent(wrapper).render();
 
-        this.container.appendChild(wrapper);
+        this.wrapper.appendChild(wrapper);
     }
 }

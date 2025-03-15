@@ -46,7 +46,7 @@ export default class MenuComponent {
             iconElement.classList.add('menu-icon');
 
             menuElement.appendChild(iconElement);
-            menuElement.appendChild(document.createTextNode(` ${text}`));
+            menuElement.appendChild(document.createTextNode(`${text}`));
             menuElement.dataset.section = key;
 
             if (index === 0) {
@@ -117,7 +117,7 @@ export default class MenuComponent {
             const element = this.config.menu[section].render();
             document.querySelector('main').appendChild(element);
         }
-        
+
         this.checkAuthPage();
     }
 }

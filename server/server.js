@@ -19,9 +19,15 @@ const posts = [
     {
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
-        text: "Hello, this is my first post",
+        text: 'Аԥсны (Абхазия) в переводе с абхазского — "страна души". И действительно, поездка туда впечаталась в душу и стала испытанием для тела: пока это наше единственное путешествие, где мы три дня не мылись, купались в море с коровами, все время от чего-нибудь лечились, шарахались от машин на переходах и от собак в подворотнях, сгоняли кошек со стульев в кафе и вырывали наших детей из рук прохожих. Но поскольку мы все же благополучно вернулись домой, я могу обо всем подробнейшим образом написать здесь (от души, так скажем). Сейчас — вводный пост, потом будет весь наш маршрут поэтапно, а в конце моих путевых заметок подведем итоги по стоимости поездки.',
         pics: [
+            "IMG_6776.jpg",
             "/273153700_118738253861831_5906416883131394354_n.jpeg",
+            "/272708814_1158833634855293_1743973316352152210_n.webp.jpg",
+            "/272464515_147005761018515_3100264353239753904_n.webp.jpg",
+            "/259096143_252774593424446_3292295880799640700_n.jpeg",
+            "/19984805_468099790230913_7469029070697660416_n.jpeg",
+            "/16583858_168051673696142_846500378588479488_n.jpeg",
         ],
         created_at: "2005-05-02",
         like_count: 0,
@@ -33,7 +39,9 @@ const posts = [
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
         text: "Hello, this is my first post",
         pics: [
-            "/272708814_1158833634855293_1743973316352152210_n.webp.jpg",
+            "https://quickflowapp.ru/images/image1.jpg",
+            "https://quickflowapp.ru/images/image2.jpg",
+            "https://quickflowapp.ru/images/image3.jpg",
         ],
         created_at: "2005-05-02",
         like_count: 0,
@@ -185,12 +193,22 @@ app.post('/logout', (req, res) => {
 //     res.json(formUser(users[email]));
 // });
 
-app.post('/feed', (req, res) => {
+app.get('/feed', (req, res) => {
     const id = req.cookies['podvorot'];
     const usernameSession = ids[id];
+
     if (!usernameSession || !users[usernameSession]) {
         return res.status(401).end();
     }
+
+    // const { posts_count } = req.query;
+
+    // let responsePosts = [...posts]
+    // if (posts_count) {
+    //     const pageNum = page ? parseInt(page, 10) : 1;
+    //     const startIndex = (pageNum - 1) * parseInt(posts_count, 10);
+    //     responsePosts = responsePosts.slice(startIndex, startIndex + parseInt(posts_count, 10));
+    // }
 
     // const userSessionImagesSet = new Set(users[usernameSession].images);
 

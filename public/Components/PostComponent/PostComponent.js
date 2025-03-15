@@ -2,6 +2,8 @@
 // import InputComponent from '../UI/InputComponent/InputComponent.js';
 // import RadioComponent from '../UI/RadioComponent/RadioComponent.js';
 // import ButtonComponent from '../UI/ButtonComponent/ButtonComponent.js';
+import ContextMenuComponent from '../ContextMenuComponent/ContextMenuComponent.js';
+import formatTimeAgo from '../../utils/formatTimeAgo.js';
 
 export default class PostComponent {
     constructor(container, data) {
@@ -26,21 +28,74 @@ export default class PostComponent {
         picsWrapper.classList.add('post-pics-wrapper');
         this.wrapper.appendChild(picsWrapper);
 
-        // if (this.data.pics && this.data.pics.length > 0) {
-        //     this.data.pics.forEach((pic) => {
-        //         const postPic = document.createElement('img');
-        //         postPic.src = pic;
-        //         postPic.alt = 'post image';
-        //         postPic.classList.add('post-pic');
-        //         picsWrapper.appendChild(postPic);
-        //     });
-        // }
+        const slider = document.createElement('div');
+        slider.classList.add('post-pics-slider');
+        picsWrapper.appendChild(slider);
 
-        const postPic = document.createElement('img');
-        postPic.src = "../../static/img/273153700_118738253861831_5906416883131394354_n.jpeg";
-        postPic.alt = 'post image';
-        postPic.classList.add('post-pic');
-        picsWrapper.appendChild(postPic);
+        if (this.data.pics && this.data.pics.length > 0) {
+            this.data.pics.forEach((pic) => {
+                const postPic = document.createElement('img');
+                postPic.src = pic;
+                postPic.alt = 'post image';
+                postPic.classList.add('post-pic');
+                slider.appendChild(postPic);
+            });
+        }
+
+        let currentIndex = 0;
+        const picWidth = 553;
+        const totalPics = this.data.pics.length;
+
+        if (totalPics > 1) {
+            const paginator = document.createElement('div');
+            paginator.classList.add('post-pics-paginator');
+            paginator.innerText = `${currentIndex + 1}/${totalPics}`;
+            picsWrapper.appendChild(paginator);
+
+            const prevBtn = document.createElement('div');
+            prevBtn.classList.add('post-nav-btn', 'post-prev-btn', 'hidden');
+            const prevIcon = document.createElement('img');
+            prevIcon.src = 'static/img/prev-arrow-icon.svg';
+            prevBtn.appendChild(prevIcon);
+            picsWrapper.appendChild(prevBtn);
+
+            const nextBtn = document.createElement('div');
+            nextBtn.classList.add('post-nav-btn', 'post-next-btn');
+            const nextIcon = document.createElement('img');
+            nextIcon.src = 'static/img/next-arrow-icon.svg';
+            nextBtn.appendChild(nextIcon);
+            picsWrapper.appendChild(nextBtn);
+
+            prevBtn.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    slider.style.transform = `translateX(-${currentIndex * picWidth}px)`;
+                    paginator.innerText = `${currentIndex + 1}/${totalPics}`;
+
+                    if (currentIndex === 0) {
+                        prevBtn.classList.add('hidden');
+                    }
+                    if (currentIndex < totalPics - 1) {
+                        nextBtn.classList.remove('hidden');
+                    }
+                }
+            });
+    
+            nextBtn.addEventListener('click', () => {
+                if (currentIndex < totalPics - 1) {
+                    currentIndex++;
+                    slider.style.transform = `translateX(-${currentIndex * picWidth}px)`;
+                    paginator.innerText = `${currentIndex + 1}/${totalPics}`;
+
+                    if (currentIndex > 0) {
+                        prevBtn.classList.remove('hidden');
+                    }
+                    if (currentIndex === totalPics - 1) {
+                        nextBtn.classList.add('hidden');
+                    }
+                }
+            });
+        }
     }
 
     renderActions() {
@@ -48,9 +103,13 @@ export default class PostComponent {
         actionsWrapper.classList.add('post-actions-wrapper');
         this.wrapper.appendChild(actionsWrapper);
 
+        const countedActions = document.createElement('div');
+        countedActions.classList.add('post-actions-counted');
+        actionsWrapper.appendChild(countedActions);
+
         const likeWrapper = document.createElement('div');
         likeWrapper.classList.add('post-action-wrapper');
-        actionsWrapper.appendChild(likeWrapper);
+        countedActions.appendChild(likeWrapper);
         const like = document.createElement('div');
         like.classList.add('post-like');
         const likeCounter = document.createElement('div');
@@ -61,7 +120,7 @@ export default class PostComponent {
 
         const commentWrapper = document.createElement('div');
         commentWrapper.classList.add('post-action-wrapper');
-        actionsWrapper.appendChild(commentWrapper);
+        countedActions.appendChild(commentWrapper);
         const comment = document.createElement('div');
         comment.classList.add('post-comment');
         const commentCounter = document.createElement('div');
@@ -72,7 +131,7 @@ export default class PostComponent {
 
         const repostWrapper = document.createElement('div');
         repostWrapper.classList.add('post-action-wrapper');
-        actionsWrapper.appendChild(repostWrapper);
+        countedActions.appendChild(repostWrapper);
         const repost = document.createElement('div');
         repost.classList.add('post-repost');
         const repostCounter = document.createElement('div');
@@ -83,7 +142,7 @@ export default class PostComponent {
 
         const bookmark = document.createElement('div');
         actionsWrapper.appendChild(bookmark);
-        bookmark.classList.add('post-bookmark');
+        bookmark.classList.add('post-action-bookmark');
     }
 
     renderText() {
@@ -159,7 +218,7 @@ export default class PostComponent {
         const date = document.createElement('div');
         date.classList.add('post-date');
         date.classList.add('p1');
-        date.textContent = `${this.formatTimeAgo(this.data.created_at)}`; // сделать имя пользователя
+        date.textContent = `${formatTimeAgo(this.data.created_at)}`; // сделать имя пользователя
         nameDateWrapper.appendChild(date);
 
         const flag = true;
@@ -171,60 +230,46 @@ export default class PostComponent {
             topRightWrapper.appendChild(addToFriends);
         }
 
+        const dropdown = document.createElement('div');
+        dropdown.classList.add('dropdown');
+        topWrapper.appendChild(dropdown);
+
         const options = document.createElement('div');
         options.classList.add('post-options');
         const optionsWrapper = document.createElement('div');
+
         optionsWrapper.classList.add('post-options-wrapper');
         optionsWrapper.appendChild(options);
-        topWrapper.appendChild(optionsWrapper);
-    }
+        dropdown.appendChild(optionsWrapper);
 
-    formatTimeAgo(dateString) {
-        const date = new Date(dateString);
-        const now = new Date();
-        const diffInSeconds = Math.floor((now - date) / 1000);
-        
-        if (diffInSeconds < 60) {
-            return `${diffInSeconds} секунд${this.getEnding(diffInSeconds)} назад`;
-        }
-    
-        const diffInMinutes = Math.floor(diffInSeconds / 60);
-        if (diffInMinutes < 60) {
-            return `${diffInMinutes} минут${this.getEnding(diffInMinutes)} назад`;
-        }
-    
-        const diffInHours = Math.floor(diffInMinutes / 60);
-        if (diffInHours < 24) {
-            return diffInHours === 1 ? '1 час назад' : `${diffInHours} часов назад`;
-        }
-    
-        const diffInDays = Math.floor(diffInHours / 24);
-        if (diffInDays === 1) {
-            return 'Вчера';
-        }
-        if (diffInDays < 7) {
-            return `${diffInDays} дней назад`;
-        }
-    
-        const options = { day: 'numeric', month: 'long' };
-        return date.toLocaleDateString('ru-RU', options);
-    }
-    
-    getEnding(number) {
-        const lastDigit = number % 10;
-        const lastTwoDigits = number % 100;
-    
-        if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
-            return '';
-        }
-    
-        if (lastDigit === 1) {
-            return 'у';
-        }
-        if (lastDigit >= 2 && lastDigit <= 4) {
-            return 'ы';
-        }
-    
-        return '';
+
+        new ContextMenuComponent(dropdown, {
+            data: {
+                notify: {
+                    href: '/notify',
+                    text: 'Уведомлять о постах',
+                    icon: 'notice-icon',
+                    isCritical: false
+                },
+                copyLink: {
+                    href: '/copy-link',
+                    text: 'Скопировать ссылку',
+                    icon: 'copy-icon',
+                    isCritical: false
+                },
+                notInterested: {
+                    href: '/not-interested',
+                    text: 'Не интересно',
+                    icon: 'cross-circle-icon',
+                    isCritical: false
+                },
+                ban: {
+                    href: '/ban',
+                    text: 'Пожаловаться',
+                    icon: 'ban-icon',
+                    isCritical: true
+                }
+            }
+        });
     }
 }
