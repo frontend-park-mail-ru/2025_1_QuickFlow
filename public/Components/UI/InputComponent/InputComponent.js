@@ -4,11 +4,12 @@ import formatDateInput from '../../../utils/formatDateInput.js';
 export default class InputComponent {
     constructor(container, config) {
         this.config = config;
-        this.defaultMaxLength = 256;
         this.container = container;
+
         this.input = null;
         this.error = null;
         this.wrapper = null;
+        this.render();
     }
 
     render() {
@@ -35,7 +36,7 @@ export default class InputComponent {
         this.input.type = this.config.type || 'text';
         this.input.autocomplete = this.config.autocomplete || 'off';
         this.input.placeholder = this.config.placeholder || '';
-        this.input.maxLength = this.config.maxLength || this.defaultMaxLength;
+        this.input.maxLength = this.config.maxLength || 256;
         this.input.required = this.config.required || false;
 
         const innnerWrapper = document.createElement('div');
@@ -61,6 +62,10 @@ export default class InputComponent {
             });
 
             innnerWrapper.appendChild(pwdControl);
+        } else if (this.input.type === 'search') {
+            const searchIcon = document.createElement('div');
+            searchIcon.classList.add('search-icon');
+            innnerWrapper.appendChild(searchIcon);
         }
 
         // Добавление обработчиков валидации
@@ -96,6 +101,20 @@ export default class InputComponent {
         }
 
         this.container.appendChild(this.wrapper);
+    }
+
+    addListener(listener) {
+        this.input.addEventListener('input', listener);
+    }
+
+    isValid() {
+        if (!this || !this.input) {
+            return false;
+        }
+        if (this.config.validation === 'date' && this.input.value.trim().length < 10) {
+            return false;
+        }
+        return this.input.value.trim() !== '' && !this.input.classList.contains('invalid');
     }
 
     validate() {

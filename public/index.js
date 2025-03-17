@@ -1,7 +1,9 @@
-import Ajax from './modules/ajax.js';
 import LoginView from './Views/LoginView/LoginView.js';
 import SignupView from './Views/SignupView/SignupView.js';
 import FeedView from './Views/FeedView/FeedView.js';
+import LogoutView from './Views/LogoutView/LogoutView.js';
+import ProfileView from './Views/ProfileView/ProfileView.js';
+
 import HeaderComponent from './Components/HeaderComponent/HeaderComponent.js';
 import MenuComponent from './Components/MenuComponent/MenuComponent.js';
 
@@ -23,17 +25,13 @@ link.rel = 'stylesheet';
 link.href = '/Components/MenuComponent/MenuComponent.css';
 document.head.appendChild(link);
 
-/**
- * Конфигурация меню с маршрутами и функциями рендера
- * @type {Object}
- */
 const config = {
     menu: {
         profile: {
             href: '/profile',
             text: 'Профиль',
             icon: 'profile-icon',
-            render: renderLogout,
+            render: () => new ProfileView(menu).render(),
         },
         feed: {
             href: '/feed',
@@ -57,39 +55,16 @@ const config = {
             href: '/logout',
             text: 'Выйти',
             icon: 'logout-icon',
-            render: renderLogout,
+            render: () => new LogoutView(menu).render(),
         }
     },
     isAuthorized: true,
 };
 
-/**
- * Функция выхода пользователя
- * Выполняет AJAX-запрос на выход и перенаправляет на страницу авторизации
- * @returns {HTMLElement} - пустой div для рендера
- */
-function renderLogout() {
-    Ajax.post({
-        url: '/logout',
-        callback: (status) => {
-            let isUnauthorized = status === 200;
-
-            if (!isUnauthorized) {
-                menu.goToPage(menu.menuElements.feed);
-                return;
-            }
-
-            menu.goToPage(menu.menuElements.login);
-        }
-    });
-
-    return document.createElement('div');
-}
-
 // Создание меню и хедера
-const menu = new MenuComponent(config, menuContainer);
+const menu = new MenuComponent(menuContainer, config);
 menu.render();
-menu.goToPage(menu.menuElements.feed);
+menu.goToPage(menu.menuElements.profile);
 
 const header = new HeaderComponent(container, menu);
 header.render();

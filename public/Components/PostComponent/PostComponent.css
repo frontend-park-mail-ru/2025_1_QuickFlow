@@ -85,9 +85,12 @@
     gap: 8px;
 }
 
+.a-btn {
+    transition: var(--trans-menu);
+}
+
 .a-btn:hover {
     color: var(--text-accent-hover);
-    transition: var(--trans-menu);
 }
 
 .post-options-wrapper {
@@ -190,7 +193,7 @@
 .post-nav-btn {
     position: absolute;
     background: var(--background-white);
-    align-self: anchor-center;
+    align-self: center;
     width: 28px;
     height: 28px;
     border-radius: 50%;

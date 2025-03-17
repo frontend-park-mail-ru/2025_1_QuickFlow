@@ -3,13 +3,13 @@ export default class RadioComponent {
         this.config = config;
         this.container = container;
         this.wrapper = null;
+        this.render();
     }
 
     render() {
         this.wrapper = document.createElement('div');
         this.wrapper.classList.add('radio-wrapper');
 
-        // Label (если задан)
         if (this.config.label) {
             const label = document.createElement('label');
             label.textContent = this.config.label;
@@ -48,6 +48,17 @@ export default class RadioComponent {
             choicesWrapper.appendChild(choice);
         }
         this.container.appendChild(this.wrapper);
+    }
+
+    addListener(listener) {
+        this.wrapper.addEventListener('change', listener);
+    }
+
+    isValid() {
+        if (!this) {
+            return false;
+        }
+        return this.wrapper.querySelector('input[type="radio"]:checked') !== null;
     }
 
     getChecked() {

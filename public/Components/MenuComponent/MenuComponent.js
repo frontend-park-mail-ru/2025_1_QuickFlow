@@ -1,5 +1,3 @@
-// import Handlebars from 'handlebars';
-
 export class LogoComponent {
     constructor(container, menu) {
         this.container = container;
@@ -16,21 +14,15 @@ export class LogoComponent {
 
         wrapper.appendChild(logo);
         this.container.appendChild(wrapper);
-
-        // wrapper.addEventListener('click', (event) => {
-        //     event.preventDefault();
-        //     this.menu.goToPage(this.menu.menuElements.feed);
-        //     this.menu.checkAuthPage();
-        // });
     }
 }
 
 export default class MenuComponent {
-    constructor(config, container) {
-        this.config = config;
+    constructor(container, config) {
         this.container = container;
         this.menuElements = {};
         this.activePageLink = null;
+        this.config = config;
     }
 
     render() {

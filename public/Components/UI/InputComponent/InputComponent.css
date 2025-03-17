@@ -90,7 +90,7 @@ input.invalid {
 
 .pwd-control {
     position: absolute;
-    align-self: anchor-center;
+    top: 0;
     right: 0;
     width: 16px;
     height: 16px;
@@ -102,4 +102,19 @@ input.invalid {
 
 .pwd-control.show {
     background: url(../../../static/img/hide-icon.svg) 0 0 no-repeat;
+}
+
+input[type='search'] {
+    padding-left: 36px;
+}
+
+.search-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    margin: 10px 10px 10px 12px;
+    background: url(../../../static/img/search-icon.svg) 0 0 no-repeat;
+    background-size: contain;
 }

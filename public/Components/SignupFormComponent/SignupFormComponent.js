@@ -102,10 +102,21 @@ export default class SignupFormComponent {
                 this.step === 1
                     ? this.continueBtnOnClick.bind(this)
                     : this.signupBtnOnClick.bind(this),
-            disabled: true
+            disabled: true,
+            stateUpdaters: 
+                this.step === 1
+                ? [
+                    this.usernameInput,
+                    this.firstnameInput,
+                    this.lastnameInput,
+                    this.birthDateInput,
+                    this.sexInput
+                ]
+                : [
+                    this.passwordInput,
+                    this.passwordConfirmationInput
+                ]
         });
-
-        this.continueBtn.render();
     }
 
     renderPersonalInfoStep(form) {
@@ -124,7 +135,6 @@ export default class SignupFormComponent {
             required: true,
             showRequired: false
         });
-        this.usernameInput.render();
         this.usernameInput.input.value = localStorage.getItem("username") || '';
 
         const nameInputWrapper = document.createElement('div');
@@ -140,7 +150,6 @@ export default class SignupFormComponent {
             required: true,
             showRequired: false
         });
-        this.firstnameInput.render();
         this.firstnameInput.input.value = localStorage.getItem("firstname") || '';
 
         this.lastnameInput = new InputComponent(nameInputWrapper, {
@@ -152,7 +161,6 @@ export default class SignupFormComponent {
             required: true,
             showRequired: false
         });
-        this.lastnameInput.render();
         this.lastnameInput.input.value = localStorage.getItem("lastname") || '';
 
         this.sexInput = new RadioComponent(fieldsetPersonalInfo, {
@@ -173,7 +181,6 @@ export default class SignupFormComponent {
             required: true,
             showRequired: false
         });
-        this.sexInput.render();
         this.sexInput.setChecked(localStorage.getItem("sex"));
 
         this.birthDateInput = new InputComponent(fieldsetPersonalInfo, {
@@ -185,43 +192,42 @@ export default class SignupFormComponent {
             required: true,
             showRequired: false
         });
-        this.birthDateInput.render();
         this.birthDateInput.input.value = localStorage.getItem("birthDate") || '';
 
-        const textInputs = [
-            this.usernameInput,
-            this.firstnameInput,
-            this.lastnameInput,
-            this.birthDateInput
-        ];
+        // const textInputs = [
+        //     this.usernameInput,
+        //     this.firstnameInput,
+        //     this.lastnameInput,
+        //     this.birthDateInput
+        // ];
 
-        const radioInputs = [this.sexInput];
+        // const radioInputs = [this.sexInput];
 
-        this.usernameInput.input.addEventListener(
-            'input',
-            this.updateContinueButtonState.bind(this, textInputs, radioInputs)
-        );
-        this.firstnameInput.input.addEventListener(
-            'input',
-            this.updateContinueButtonState.bind(this, textInputs, radioInputs)
-        );
-        this.lastnameInput.input.addEventListener(
-            'input',
-            this.updateContinueButtonState.bind(this, textInputs, radioInputs)
-        );
-        this.birthDateInput.input.addEventListener(
-            'input',
-            this.updateContinueButtonState.bind(this, textInputs, radioInputs)
-        );
-        this.sexInput.wrapper.addEventListener(
-            'change',
-            this.updateContinueButtonState.bind(this, textInputs, radioInputs)
-        );
+        // this.usernameInput.input.addEventListener(
+        //     'input',
+        //     this.updateContinueButtonState.bind(this, textInputs, radioInputs)
+        // );
+        // this.firstnameInput.input.addEventListener(
+        //     'input',
+        //     this.updateContinueButtonState.bind(this, textInputs, radioInputs)
+        // );
+        // this.lastnameInput.input.addEventListener(
+        //     'input',
+        //     this.updateContinueButtonState.bind(this, textInputs, radioInputs)
+        // );
+        // this.birthDateInput.input.addEventListener(
+        //     'input',
+        //     this.updateContinueButtonState.bind(this, textInputs, radioInputs)
+        // );
+        // this.sexInput.wrapper.addEventListener(
+        //     'change',
+        //     this.updateContinueButtonState.bind(this, textInputs, radioInputs)
+        // );
 
         form.appendChild(fieldsetPersonalInfo);
         this.renderBottomWrapper(form);
 
-        this.updateContinueButtonState(textInputs, radioInputs);
+        // this.updateContinueButtonState(textInputs, radioInputs);
     }
 
     renderCreatePasswordStep(form) {
@@ -235,7 +241,6 @@ export default class SignupFormComponent {
             required: true,
             showRequired: false
         });
-        this.passwordInput.render();
 
         this.passwordConfirmationInput = new InputComponent(form, {
             type: 'password',
@@ -245,7 +250,6 @@ export default class SignupFormComponent {
             required: true,
             showRequired: false
         });
-        this.passwordConfirmationInput.render();
 
         const textInputs = [this.passwordInput, this.passwordConfirmationInput];
 

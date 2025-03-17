@@ -1,0 +1,30 @@
+textarea {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 130%;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    border: 1px solid var(--stroke-primary);
+    border-radius: 8px;
+    padding: 8px 12px;
+    background: var(--background-light-gray);
+    transition: var(--trans-input);
+}
+
+textarea:hover {
+    border: 1px solid var(--stroke-primary-hover);
+}
+
+textarea:focus {
+    border: 1px solid var(--stroke-primary-focus);
+    outline: none;
+}
+
+textarea::placeholder {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 130%;
+    color: var(--text-secondary);
+}

@@ -1,23 +1,21 @@
 import Ajax from '../../modules/ajax.js';
 import PostComponent from '../../Components/PostComponent/PostComponent.js';
+import ModalWindowComponent from '../../Components/UI/ModalWindowComponent/ModalWindowComponent.js';
+import MainLayoutComponent from '../../Components/MainLayoutComponent/MainLayoutComponent.js';
 
 export default class FeedView {
     constructor(menu) {
         this.menu = menu;
-        this.formWrapper = document.createElement('div');
     }
 
     render() {
-        const feed = document.createElement('div');
-        feed.classList.add('feed');
-
-        const feedLeft = document.createElement('div');
-        feedLeft.classList.add('feed-left');
-        feed.appendChild(feedLeft);
+        const containerObj = new MainLayoutComponent({
+            type: 'default',
+        });
 
         const feedFilter = document.createElement('div');
         feedFilter.classList.add('feed-filter');
-        feed.appendChild(feedFilter);
+        containerObj.right.appendChild(feedFilter);
 
         const filterCategories = {
             'Лента': {},
@@ -35,12 +33,27 @@ export default class FeedView {
 
         const createPostBtn = document.createElement('button');
         createPostBtn.classList.add('post-create-btn');
-        createPostBtn.textContent = 'Создать пост';
-        feedLeft.appendChild(createPostBtn);
+        containerObj.left.appendChild(createPostBtn);
+
+        const createPostIcon = document.createElement('img');
+        createPostIcon.classList.add('post-create-icon');
+        createPostIcon.src = '/static/img/add-icon.svg';
+        createPostBtn.appendChild(createPostIcon);
+
+        const createPostText = document.createElement('div');
+        createPostText.classList.add('post-create-text');
+        createPostText.textContent = 'Создать пост';
+        createPostBtn.appendChild(createPostText);
 
         const postsWrapper = document.createElement('div');
         postsWrapper.classList.add('feed-posts-wrapper');
-        feedLeft.appendChild(postsWrapper);
+        containerObj.left.appendChild(postsWrapper);
+
+        createPostBtn.addEventListener('click', () => {
+            new ModalWindowComponent(containerObj.container, {
+                type: 'create-post',
+            });
+        });
 
         Ajax.get({
             url: '/feed',
@@ -73,27 +86,27 @@ export default class FeedView {
             }
         });
 
-        // Обработчик лайков на постах
-        feed.addEventListener('click', (event) => {
-            if (event.target.tagName.toLowerCase() === 'button' && event.target.dataset.imageId) {
-                const { imageId: id } = event.target.dataset;
+        // // Обработчик лайков на постах
+        // feed.addEventListener('click', (event) => {
+        //     if (event.target.tagName.toLowerCase() === 'button' && event.target.dataset.imageId) {
+        //         const { imageId: id } = event.target.dataset;
 
-                Ajax.post({
-                    url: '/like',
-                    body: { id },
-                    callback: (status) => {
-                        if (status === 200) {
-                            const likeContainer = event.target.parentNode;
-                            const likeCount = likeContainer.querySelector('span');
-                            likeCount.textContent = `${parseInt(likeCount.textContent) + 1} лайков`;
-                        } else if (status === 500) {
-                            // TODO: дописать обработку ошибки + ретрай
-                        }
-                    }
-                });
-            }
-        });
+        //         Ajax.post({
+        //             url: '/like',
+        //             body: { id },
+        //             callback: (status) => {
+        //                 if (status === 200) {
+        //                     const likeContainer = event.target.parentNode;
+        //                     const likeCount = likeContainer.querySelector('span');
+        //                     likeCount.textContent = `${parseInt(likeCount.textContent) + 1} лайков`;
+        //                 } else if (status === 500) {
+        //                     // TODO: дописать обработку ошибки + ретрай
+        //                 }
+        //             }
+        //         });
+        //     }
+        // });
 
-        return feed;
+        return containerObj.container;
     }
 }

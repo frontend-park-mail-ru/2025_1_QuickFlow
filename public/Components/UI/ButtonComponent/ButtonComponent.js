@@ -1,27 +1,44 @@
 export default class ButtonComponent {
     constructor(container, config) {
         this.container = container;
+        this.buttonElement = document.createElement('button');
+        this.container.appendChild(this.buttonElement);
         this.config = config;
-        this.buttonElement = null;
+        this.render();
     }
 
     render() {
-        const button = document.createElement('button');
-        button.type = this.config.type || 'button';
-        button.textContent = this.config.text || 'Click me';
-        button.classList.add('button', this.config.variant === 'secondary' ? 'button-secondary' : 'button-primary');
+        this.buttonElement.type = this.config.type || 'button';
+        this.buttonElement.textContent = this.config.text || '';
+        this.buttonElement.classList.add(
+            'button',
+            this.config.variant === 'secondary' ? 'button-secondary' : 'button-primary',
+            this.config.size || 'large'
+        );
 
         if (this.config.disabled) {
-            button.disabled = true;
-            button.classList.add('button-disabled');
+            this.buttonElement.disabled = true;
+            this.buttonElement.classList.add('button-disabled');
         }
 
-        // Если задан обработчик клика
         if (this.config.onClick && typeof this.config.onClick === 'function') {
-            button.addEventListener('click', this.config.onClick);
+            this.buttonElement.addEventListener('click', this.config.onClick);
         }
 
-        this.buttonElement = button;
-        this.container.appendChild(button);
+        if (this.config.stateUpdaters) {
+            if (Array.isArray(this.config.stateUpdaters) && this.config.stateUpdaters.length > 0) {
+                this.config.stateUpdaters.forEach(stateUpdater => {
+                    stateUpdater.addListener(() => this.updateBtnState());
+                });
+            }
+            this.updateBtnState()
+        }
+    }
+
+    updateBtnState() {
+        const isAllValid = this.config.stateUpdaters.every((stateUpdater) => {
+            return stateUpdater.isValid();
+        });
+        this.buttonElement.disabled = !isAllValid;
     }
 }

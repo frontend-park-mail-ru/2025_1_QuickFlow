@@ -3,22 +3,31 @@
 button {
     cursor: pointer;
     transition: var(--trans-btn);
+    padding: 0 12px;
 }
 
 button:disabled {
     cursor: not-allowed;
 }
 
+button.large {
+    height: 36px;
+    font-size: 15px;
+}
+
+button.small {
+    height: 32px;
+    font-size: 14px;
+}
+
 .button-primary {
     border-radius: 8px;
     width: auto;
-    height: 36px;
     background: var(--button-primary);
     border: none;
 
     font-family: var(--font-family);
     font-weight: 500;
-    font-size: 15px;
     line-height: 130%;
     color: var(--text-white);
 }
@@ -37,14 +46,12 @@ button:disabled {
 
 .button-secondary {
     width: auto;
-    height: 36px;
     border-radius: 8px;
     background: var(--button-secondary);
     border: 1px solid var(--stroke-primary);
 
     font-family: var(--font-family);
     font-weight: 500;
-    font-size: 15px;
     line-height: 130%;
     color: var(--text-primary);
 }

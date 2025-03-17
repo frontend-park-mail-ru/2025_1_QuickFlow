@@ -1,8 +1,5 @@
-// import Ajax from '../../modules/ajax.js';
-// import InputComponent from '../UI/InputComponent/InputComponent.js';
-// import RadioComponent from '../UI/RadioComponent/RadioComponent.js';
-// import ButtonComponent from '../UI/ButtonComponent/ButtonComponent.js';
-import ContextMenuComponent from '../ContextMenuComponent/ContextMenuComponent.js';
+import ContextMenuComponent from '../ContextMenuComponent/ContextMenuComponent.js'
+import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
 import formatTimeAgo from '../../utils/formatTimeAgo.js';
 
 export default class PostComponent {
@@ -191,11 +188,9 @@ export default class PostComponent {
         authorWrapper.classList.add('post-author-wrapper');
         topWrapper.appendChild(authorWrapper);
 
-        const avatar = document.createElement('img');
-        avatar.classList.add('avatar');
-        avatar.classList.add('s');
-        avatar.src = 'static/img/avatar.jpg'; // сделать аватар пользователя
-        authorWrapper.appendChild(avatar);
+        new AvatarComponent(authorWrapper, {
+            size: 's'
+        });
 
         const topRightWrapper = document.createElement('div');
         topRightWrapper.classList.add('post-top-right-wrapper');

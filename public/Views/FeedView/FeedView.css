@@ -1,12 +1,3 @@
-.feed {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 16px;
-    max-width: 932px;
-    width: 100%;
-}
-
 .feed-filter {
     border: 1px solid var(--stroke-primary);
     border-radius: 12px;
@@ -55,6 +46,11 @@
     font-size: 15px;
     line-height: 130%;
     color: var(--text-accent);
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
 }
 
 .post-create-btn:hover {
@@ -63,15 +59,6 @@
 
 .post-create-btn:active {
     background: var(--background-gray);
-}
-
-.feed-left {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 24px;
-    max-width: 553px;
-    width: 100%;
 }
 
 .feed-posts-wrapper {

@@ -1,4 +1,4 @@
-
+import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
 
 export default class ProfileMenuComponent {
     constructor(container, config) {
@@ -11,13 +11,12 @@ export default class ProfileMenuComponent {
     }
 
     render() {
-        const avatar = document.createElement('img');
-        avatar.classList.add('profile-menu-avatar');
-        avatar.src = '/static/img/avatar.jpg';
-
         const topWrapper = document.createElement('div');
         topWrapper.classList.add('profile-menu-top-wrapper');
-        topWrapper.appendChild(avatar);
+
+        new AvatarComponent(topWrapper, {
+            size: 'xl'
+        });
 
         const userInfo = document.createElement('div');
         userInfo.classList.add('profile-menu-user-info');
@@ -34,9 +33,6 @@ export default class ProfileMenuComponent {
         userInfo.appendChild(username);
 
         this.wrapper.appendChild(topWrapper);
-
-
-
 
         const menuItems = document.createElement('div');
         menuItems.classList.add('profile-menu-items');

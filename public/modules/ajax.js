@@ -1,7 +1,7 @@
 const HTTP_METHOD_GET = 'GET';
 const HTTP_METHOD_POST = 'POST';
 const API_BASE_URL = 'https://quickflowapp.ru/api';
-const DEVELOP = false;
+const DEVELOP = true;
 
 class Ajax {
     constructor() {

@@ -100,19 +100,21 @@ export default class LoginFormComponent {
                 this.step === 1
                     ? this.continueBtnOnClick.bind(this)
                     : this.signinBtnOnClick.bind(this),
-            disabled: this.step === 1
+            disabled: this.step === 1,
+            stateUpdaters:
+                this.step === 1
+                ? [this.usernameInput]
+                : [this.passwordInput]
         });
-        this.continueBtn.render();
 
         if (this.step === 1) {
-            const secondaryBtn = new ButtonComponent(bottomWrapper, {
+            new ButtonComponent(bottomWrapper, {
                 text: this.config.signupBtnText,
                 variant: 'secondary',
                 onClick: () => {
                     this.menu.goToPage(this.menu.menuElements.signup);
                 }
             });
-            secondaryBtn.render();
         }
     }
 
@@ -129,7 +131,6 @@ export default class LoginFormComponent {
             required: true,
             showRequired: false
         });
-        this.usernameInput.render();
         this.usernameInput.input.value = localStorage.getItem("username") || '';
         setTimeout(() => this.usernameInput.input.focus(), 0);
 
@@ -152,10 +153,10 @@ export default class LoginFormComponent {
         this.renderBottomWrapper(form);
 
         // Добавляем событие input для блокировки/разблокировки кнопки "Продолжить"
-        this.usernameInput.input.addEventListener('input', () => {
-            this.updateBtnState();
-        });
-        this.updateBtnState();
+        // this.usernameInput.input.addEventListener('input', () => {
+        //     this.updateBtnState();
+        // });
+        // this.updateBtnState();
     }
 
     updateBtnState() {
@@ -176,7 +177,6 @@ export default class LoginFormComponent {
             type: 'password',
             placeholder: 'Пароль'
         });
-        this.passwordInput.render();
         setTimeout(() => this.passwordInput.input.focus(), 0);
 
         this.renderBottomWrapper(form);
