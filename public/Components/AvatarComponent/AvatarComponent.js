@@ -1,3 +1,5 @@
+const DEFAULT_SIZE_CLASS = 'm';
+
 export default class AvatarComponent {
     #parent
     #config
@@ -10,7 +12,7 @@ export default class AvatarComponent {
 
     render() {
         this.wrapper = document.createElement('div');
-        this.wrapper.classList.add('avatar-wrapper', this.#config.size || 'm');
+        this.wrapper.classList.add('avatar-wrapper', this.#config.size || DEFAULT_SIZE_CLASS);
         if (this.#config.class) {
             this.wrapper.classList.add(this.#config.class);
         }
@@ -18,7 +20,7 @@ export default class AvatarComponent {
 
         const avatar = document.createElement('img');
         this.wrapper.appendChild(avatar);
-        avatar.src = '/static/img/avatar.jpg';
+        avatar.src = `/static/img/${this.#config.src}`;
         avatar.classList.add('avatar');
 
         if (this.#config.status) {

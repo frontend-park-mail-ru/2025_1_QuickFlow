@@ -102,10 +102,11 @@ const users = {
     rvasutenko: {
         username: 'rvasutenko',
         password: 'Qwerty1!',
-        firstname: 'rvasutenko',
-        lastname: 'rvasutenko',
+        firstname: 'Васютенко',
+        lastname: 'Роман',
         sex: 1,
         birth_date: '2005-05-02',
+        avatar: 'avatar.jpg',
     },
 };
 const ids = {};
@@ -201,23 +202,20 @@ app.get('/feed', (req, res) => {
         return res.status(401).end();
     }
 
-    // const { posts_count } = req.query;
-
-    // let responsePosts = [...posts]
-    // if (posts_count) {
-    //     const pageNum = page ? parseInt(page, 10) : 1;
-    //     const startIndex = (pageNum - 1) * parseInt(posts_count, 10);
-    //     responsePosts = responsePosts.slice(startIndex, startIndex + parseInt(posts_count, 10));
-    // }
-
-    // const userSessionImagesSet = new Set(users[usernameSession].images);
-
-    // const result2 = images
-    //     .map((_, id) => ({ ..._, id }))
-    //     .filter((_, id) => !userSessionImagesSet.has(id));
-
-    // res.json(result2);
     res.status(200).json(posts);
+});
+
+app.get('/user-info', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const username = ids[id];
+
+    if (!username || !users[username]) {
+        return res.status(401).end();
+    }
+
+    const userInfo = users[username];
+    
+    res.status(200).json(userInfo);
 });
 
 // app.post('/like', (req, res) => {

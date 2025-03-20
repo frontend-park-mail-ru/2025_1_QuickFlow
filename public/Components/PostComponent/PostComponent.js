@@ -2,6 +2,14 @@ import ContextMenuComponent from '../ContextMenuComponent/ContextMenuComponent.j
 import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
 import formatTimeAgo from '../../utils/formatTimeAgo.js';
 
+
+const AUTHOR_AVATAR_SIZE = 's';
+const PICTURE_WIDTH = 553;
+const READ_MORE_BTN_TEXT = 'Показать ещё';
+const READ_LESS_BTN_TEXT = 'Скрыть';
+const ADD_TO_FRIENDS_BTN_TEXT = 'Добавить в друзья';
+const AUTHOR_NAME_DATE_DIVIDER = '•';
+
 export default class PostComponent {
     constructor(container, data) {
         this.container = container;
@@ -40,7 +48,6 @@ export default class PostComponent {
         }
 
         let currentIndex = 0;
-        const picWidth = 553;
         const totalPics = this.data.pics.length;
 
         if (totalPics > 1) {
@@ -66,7 +73,7 @@ export default class PostComponent {
             prevBtn.addEventListener('click', () => {
                 if (currentIndex > 0) {
                     currentIndex--;
-                    slider.style.transform = `translateX(-${currentIndex * picWidth}px)`;
+                    slider.style.transform = `translateX(-${currentIndex * PICTURE_WIDTH}px)`;
                     paginator.innerText = `${currentIndex + 1}/${totalPics}`;
 
                     if (currentIndex === 0) {
@@ -81,7 +88,7 @@ export default class PostComponent {
             nextBtn.addEventListener('click', () => {
                 if (currentIndex < totalPics - 1) {
                     currentIndex++;
-                    slider.style.transform = `translateX(-${currentIndex * picWidth}px)`;
+                    slider.style.transform = `translateX(-${currentIndex * PICTURE_WIDTH}px)`;
                     paginator.innerText = `${currentIndex + 1}/${totalPics}`;
 
                     if (currentIndex > 0) {
@@ -155,7 +162,7 @@ export default class PostComponent {
         // Создаём кнопку "Читать дальше"
         const readMore = document.createElement('p');
         readMore.classList.add('post-read-more');
-        readMore.textContent = 'Показать ещё';
+        readMore.textContent = READ_MORE_BTN_TEXT;
         readMore.style.display = 'none';
 
         textWrapper.appendChild(readMore);
@@ -171,10 +178,10 @@ export default class PostComponent {
         readMore.addEventListener('click', () => {
             if (text.classList.contains('expanded')) {
                 text.classList.remove('expanded');
-                readMore.textContent = 'Показать ещё';
+                readMore.textContent = READ_MORE_BTN_TEXT;
             } else {
                 text.classList.add('expanded');
-                readMore.textContent = 'Скрыть';
+                readMore.textContent = READ_LESS_BTN_TEXT;
             }
         });
     }
@@ -189,7 +196,8 @@ export default class PostComponent {
         topWrapper.appendChild(authorWrapper);
 
         new AvatarComponent(authorWrapper, {
-            size: 's'
+            size: AUTHOR_AVATAR_SIZE,
+            src: 'avatar.jpg',
         });
 
         const topRightWrapper = document.createElement('div');
@@ -201,27 +209,27 @@ export default class PostComponent {
         topRightWrapper.appendChild(nameDateWrapper);
 
         const name = document.createElement('h2');
-        name.textContent = 'Илья Мациевский'; // сделать имя пользователя
+        name.textContent = 'Илья Мациевский'; // TODO: брать динамически
         nameDateWrapper.appendChild(name);
 
         const divider = document.createElement('div');
         divider.classList.add('post-date');
         divider.classList.add('p1');
-        divider.textContent = '•'; // сделать имя пользователя
+        divider.textContent = AUTHOR_NAME_DATE_DIVIDER;
         nameDateWrapper.appendChild(divider);
 
         const date = document.createElement('div');
         date.classList.add('post-date');
         date.classList.add('p1');
-        date.textContent = `${formatTimeAgo(this.data.created_at)}`; // сделать имя пользователя
+        date.textContent = `${formatTimeAgo(this.data.created_at)}`;
         nameDateWrapper.appendChild(date);
 
         const flag = true;
-        if (flag) { // сделать проверку на то есть ли в друзьях
+        if (flag) { // TODO: сделать проверку на то, есть ли в друзьях
             const addToFriends = document.createElement('a');
             addToFriends.classList.add('h3');
             addToFriends.classList.add('a-btn');
-            addToFriends.textContent = 'Добавить в друзья'; // сделать имя пользователя
+            addToFriends.textContent = ADD_TO_FRIENDS_BTN_TEXT; // сделать имя пользователя
             topRightWrapper.appendChild(addToFriends);
         }
 
@@ -236,7 +244,6 @@ export default class PostComponent {
         optionsWrapper.classList.add('post-options-wrapper');
         optionsWrapper.appendChild(options);
         dropdown.appendChild(optionsWrapper);
-
 
         new ContextMenuComponent(dropdown, {
             data: {

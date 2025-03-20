@@ -18,8 +18,8 @@ export default class MainLayoutComponent {
         this.container.classList.add('container', this.#config.type);
         this.#parent.appendChild(this.container);
 
-        if (this.#config.type === 'default') {
-            this.renderDefault();
+        if (this.#config.type === 'feed') {
+            this.renderFeed();
         } else if (this.#config.type === 'profile') {
             this.renderProfile();
         }
@@ -43,7 +43,7 @@ export default class MainLayoutComponent {
         bottom.appendChild(this.right);
     }
 
-    renderDefault() {
+    renderFeed() {
         this.left = document.createElement('div');
         this.left.classList.add('container-left');
         this.container.appendChild(this.left);

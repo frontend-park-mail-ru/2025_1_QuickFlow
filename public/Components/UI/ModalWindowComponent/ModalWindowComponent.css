@@ -72,7 +72,7 @@
     resize: none;
 }
 
-.modal-window-info-items {
+.modal-window-items-default {
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -92,14 +92,14 @@
     width: 100%;
 }
 
-.modal-window-counted-items {
+.modal-window-items-counted {
     display: flex;
     align-items: center;
     flex-direction: row;
     gap: 32px;
 }
 
-.modal-window-counted-item {
+.modal-window-item-counted {
     display: flex;
     flex-direction: column;
 }

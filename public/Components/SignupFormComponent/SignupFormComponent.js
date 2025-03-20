@@ -3,12 +3,18 @@ import InputComponent from '../UI/InputComponent/InputComponent.js';
 import RadioComponent from '../UI/RadioComponent/RadioComponent.js';
 import ButtonComponent from '../UI/ButtonComponent/ButtonComponent.js';
 
+
+const LOGO_SRC = '/static/img/logo-icon.svg';
+const DEFAULT_INPUT_VALUE = '';
+const CREATION_ERROR_MESSAGE = 'Не удалось создать аккаунт';
+
 export default class SignupFormComponent {
+    #config
+    #step
+    #menu
     constructor(container, menu) {
         this.container = container;
-        this.menu = menu;
-
-        this.step = 1;
+        this.#menu = menu;
 
         this.usernameInput = null;
         this.firstnameInput = null;
@@ -20,7 +26,8 @@ export default class SignupFormComponent {
 
         this.continueBtn = null;
 
-        this.config = {
+        this.#step = 1;
+        this.#config = {
             userInfoTitle: 'Информация о себе',
             pwdTitle: 'Придумайте пароль',
             userInfoDescription: 'Введите логин, который привязан<br>к вашему аккаунту',
@@ -38,9 +45,9 @@ export default class SignupFormComponent {
         const form = document.createElement('form');
         form.classList.add('auth-form');
 
-        if (this.step === 1) {
+        if (this.#step === 1) {
             this.renderPersonalInfoStep(form);
-        } else if (this.step === 2) {
+        } else if (this.#step === 2) {
             this.renderCreatePasswordStep(form);
         }
 
@@ -55,35 +62,35 @@ export default class SignupFormComponent {
         backBtn.classList.add('auth-form-back-btn');
         topWrapper.appendChild(backBtn);
         backBtn.addEventListener('click', () => {
-            if (this.step === 1) {
+            if (this.#step === 1) {
                 localStorage.removeItem("username");
                 localStorage.removeItem("firstname");
                 localStorage.removeItem("lastname");
                 localStorage.removeItem("sex");
                 localStorage.removeItem("birthDate");
-                this.menu.goToPage(this.menu.menuElements.login);
+                this.#menu.goToPage(this.#menu.menuElements.login);
             } else {
-                this.step = 1;
+                this.#step = 1;
                 this.render();
             }
         });
 
-        if (this.step === 2) {
+        if (this.#step === 2) {
             const logo = document.createElement('img');
-            logo.src = '/static/img/logo-icon.svg';
+            logo.src = LOGO_SRC;
             logo.classList.add('auth-form-logo');
             topWrapper.appendChild(logo);
         }
 
         const title = document.createElement('h1');
-        title.textContent = this.step === 1 ? this.config.userInfoTitle : this.config.pwdTitle;
+        title.textContent = this.#step === 1 ? this.#config.userInfoTitle : this.#config.pwdTitle;
         topWrapper.appendChild(title);
 
-        if (this.step === 2) {
+        if (this.#step === 2) {
             const description = document.createElement('p');
             description.classList.add('p1');
             description.innerHTML =
-                this.step === 1 ? this.config.userInfoDescription : this.config.pwdDescription;
+                this.#step === 1 ? this.#config.userInfoDescription : this.#config.pwdDescription;
             topWrapper.appendChild(description);
         }
 
@@ -96,15 +103,15 @@ export default class SignupFormComponent {
         form.appendChild(bottomWrapper);
 
         this.continueBtn = new ButtonComponent(bottomWrapper, {
-            text: this.config.continueBtnText,
+            text: this.#config.continueBtnText,
             variant: 'primary',
             onClick:
-                this.step === 1
+                this.#step === 1
                     ? this.continueBtnOnClick.bind(this)
                     : this.signupBtnOnClick.bind(this),
             disabled: true,
             stateUpdaters: 
-                this.step === 1
+                this.#step === 1
                 ? [
                     this.usernameInput,
                     this.firstnameInput,
@@ -135,7 +142,7 @@ export default class SignupFormComponent {
             required: true,
             showRequired: false
         });
-        this.usernameInput.input.value = localStorage.getItem("username") || '';
+        this.usernameInput.input.value = localStorage.getItem("username") || DEFAULT_INPUT_VALUE;
 
         const nameInputWrapper = document.createElement('div');
         nameInputWrapper.classList.add('signup-name-input-wrapper');
@@ -150,7 +157,7 @@ export default class SignupFormComponent {
             required: true,
             showRequired: false
         });
-        this.firstnameInput.input.value = localStorage.getItem("firstname") || '';
+        this.firstnameInput.input.value = localStorage.getItem("firstname") || DEFAULT_INPUT_VALUE;
 
         this.lastnameInput = new InputComponent(nameInputWrapper, {
             type: 'text',
@@ -161,7 +168,7 @@ export default class SignupFormComponent {
             required: true,
             showRequired: false
         });
-        this.lastnameInput.input.value = localStorage.getItem("lastname") || '';
+        this.lastnameInput.input.value = localStorage.getItem("lastname") || DEFAULT_INPUT_VALUE;
 
         this.sexInput = new RadioComponent(fieldsetPersonalInfo, {
             label: 'Пол',
@@ -192,42 +199,10 @@ export default class SignupFormComponent {
             required: true,
             showRequired: false
         });
-        this.birthDateInput.input.value = localStorage.getItem("birthDate") || '';
-
-        // const textInputs = [
-        //     this.usernameInput,
-        //     this.firstnameInput,
-        //     this.lastnameInput,
-        //     this.birthDateInput
-        // ];
-
-        // const radioInputs = [this.sexInput];
-
-        // this.usernameInput.input.addEventListener(
-        //     'input',
-        //     this.updateContinueButtonState.bind(this, textInputs, radioInputs)
-        // );
-        // this.firstnameInput.input.addEventListener(
-        //     'input',
-        //     this.updateContinueButtonState.bind(this, textInputs, radioInputs)
-        // );
-        // this.lastnameInput.input.addEventListener(
-        //     'input',
-        //     this.updateContinueButtonState.bind(this, textInputs, radioInputs)
-        // );
-        // this.birthDateInput.input.addEventListener(
-        //     'input',
-        //     this.updateContinueButtonState.bind(this, textInputs, radioInputs)
-        // );
-        // this.sexInput.wrapper.addEventListener(
-        //     'change',
-        //     this.updateContinueButtonState.bind(this, textInputs, radioInputs)
-        // );
+        this.birthDateInput.input.value = localStorage.getItem("birthDate") || DEFAULT_INPUT_VALUE;
 
         form.appendChild(fieldsetPersonalInfo);
         this.renderBottomWrapper(form);
-
-        // this.updateContinueButtonState(textInputs, radioInputs);
     }
 
     renderCreatePasswordStep(form) {
@@ -305,7 +280,7 @@ export default class SignupFormComponent {
         localStorage.setItem("lastname", this.lastnameInput.input.value.trim());
         localStorage.setItem("sex", this.sexInput.getChecked().value);
         localStorage.setItem("birthDate", this.birthDateInput.input.value.trim());
-        this.step = 2;
+        this.#step = 2;
         this.render();
     }
 
@@ -337,11 +312,11 @@ export default class SignupFormComponent {
             body: body,
             callback: (status) => {
                 if (status === 200) {
-                    this.menu.goToPage(this.menu.menuElements.feed);
-                    this.menu.checkAuthPage();
-                    this.menu.updateMenuVisibility(true);
+                    this.#menu.goToPage(this.#menu.menuElements.feed);
+                    this.#menu.checkAuthPage();
+                    this.#menu.updateMenuVisibility(true);
                 } else {
-                    this.passwordInput.showError('Что-то пошло не так :((');
+                    this.passwordInput.showError(CREATION_ERROR_MESSAGE);
                 }
             }
         });

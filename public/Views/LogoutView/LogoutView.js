@@ -10,13 +10,7 @@ export default class LogoutView {
             url: '/logout',
             callback: (status) => {
                 let isUnauthorized = status === 200;
-    
-                if (!isUnauthorized) {
-                    this.menu.goToPage(this.menu.menuElements.feed);
-                    return;
-                }
-    
-                this.menu.goToPage(this.menu.menuElements.login);
+                this.menu.goToPage(!isUnauthorized ? this.menu.menuElements.feed : this.menu.menuElements.login);
             }
         });
     

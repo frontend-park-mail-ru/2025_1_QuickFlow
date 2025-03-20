@@ -1,22 +1,21 @@
+const DEFAULT_PLACEHOLDER = '';
+
 export default class TextareaComponent {
+    #config
     constructor(container, config) {
         this.container = container;
         this.textarea = null;
-        this.config = config || {};
+        this.#config = config || {};
         this.render();
     }
 
     render() {
         this.textarea = document.createElement('textarea');
-        if (this.config.class) {
-            this.textarea.classList.add(this.config.class);
+        if (this.#config.class) {
+            this.textarea.classList.add(this.#config.class);
         }
-        this.textarea.placeholder = this.config.placeholder || '';
+        this.textarea.placeholder = this.#config.placeholder || DEFAULT_PLACEHOLDER;
         this.container.appendChild(this.textarea);
-
-        // if (this.config.btn) {
-        //     this.textarea.addEventListener('input', this.updateBtnState.bind(this));
-        // }
     }
 
     addListener(listener) {

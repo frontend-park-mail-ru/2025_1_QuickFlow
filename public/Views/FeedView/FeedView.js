@@ -3,6 +3,8 @@ import PostComponent from '../../Components/PostComponent/PostComponent.js';
 import ModalWindowComponent from '../../Components/UI/ModalWindowComponent/ModalWindowComponent.js';
 import MainLayoutComponent from '../../Components/MainLayoutComponent/MainLayoutComponent.js';
 
+import createElement from '../../utils/createElement.js';
+
 export default class FeedView {
     constructor(menu) {
         this.menu = menu;
@@ -10,7 +12,7 @@ export default class FeedView {
 
     render() {
         const containerObj = new MainLayoutComponent({
-            type: 'default',
+            type: 'feed',
         });
 
         const feedFilter = document.createElement('div');
@@ -31,19 +33,21 @@ export default class FeedView {
             feedFilter.appendChild(filterCategory);
         });
 
-        const createPostBtn = document.createElement('button');
-        createPostBtn.classList.add('post-create-btn');
-        containerObj.left.appendChild(createPostBtn);
-
-        const createPostIcon = document.createElement('img');
-        createPostIcon.classList.add('post-create-icon');
-        createPostIcon.src = '/static/img/add-icon.svg';
-        createPostBtn.appendChild(createPostIcon);
-
-        const createPostText = document.createElement('div');
-        createPostText.classList.add('post-create-text');
-        createPostText.textContent = 'Создать пост';
-        createPostBtn.appendChild(createPostText);
+        const createPostBtn = createElement({
+            parent: containerObj.left,
+            tag: 'button',
+            classes: ['post-create-btn']
+        });
+        createElement({
+            parent: createPostBtn,
+            tag: 'div',
+            classes: ['post-create-icon']
+        });
+        createElement({
+            parent: createPostBtn,
+            text: 'Создать пост',
+            classes: ['post-create-text']
+        });
 
         const postsWrapper = document.createElement('div');
         postsWrapper.classList.add('feed-posts-wrapper');

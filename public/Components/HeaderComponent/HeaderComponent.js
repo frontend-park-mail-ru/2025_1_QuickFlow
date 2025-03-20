@@ -1,3 +1,4 @@
+import Ajax from '../../modules/ajax.js';
 import InputComponent from '../UI/InputComponent/InputComponent.js';
 import ProfileMenuComponent from '../ProfileMenuComponent/ProfileMenuComponent.js';
 import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
@@ -20,13 +21,13 @@ export default class HeaderComponent {
         this.wrapper = document.createElement('div');
         this.wrapper.classList.add('header-inner-wrapper');
         
-        this.renderLeft();
-        this.renderRight();
+        this.renderActions();
+        this.renderAvatarMenu();
         
         header.appendChild(this.wrapper);
     }
 
-    renderLeft() {
+    renderActions() {
         const leftWrapper = document.createElement('div');
         leftWrapper.classList.add('header-left');
 
@@ -57,44 +58,61 @@ export default class HeaderComponent {
         this.wrapper.appendChild(leftWrapper);
     }
 
-    renderRight() {
+    renderAvatarMenu() {
         const rightWrapper = document.createElement('div');
         rightWrapper.classList.add('header-right');
         this.wrapper.appendChild(rightWrapper);
 
-        const avatar = document.createElement('img');
-        avatar.src = '/static/img/avatar.jpg';
-        avatar.classList.add('avatar');
-        new AvatarComponent(rightWrapper, {
-            size: 'xs'
-        });
+        // const avatar = document.createElement('img');
+        // avatar.src = '/static/img/avatar.jpg';
+        // avatar.classList.add('avatar');
 
-        const dropdownButton = document.createElement('a');
-        dropdownButton.classList.add('dropdown-button');
+        Ajax.get({
+            url: '/user-info',
+            // params: {
+            //     target: 'avatar',
+            // },
+            callback: (status, userInfo) => {
+                let isAuthorized = status === 200;
 
-        rightWrapper.appendChild(dropdownButton);
+                if (!isAuthorized) {
+                    this.#menu.goToPage(this.#menu.menuElements.login);
+                    this.#menu.updateMenuVisibility(false);
+                    return;
+                }
 
-        new ProfileMenuComponent(rightWrapper, {
-            data: {
-                name: 'Илья Мациевский',
-                username: 'rvasutenko',
-                menuItems: {
-                    settings: {
-                        href: '/settings',
-                        text: 'Настройки',
-                        icon: 'settings-icon'
-                    },
-                    help: {
-                        href: '/help',
-                        text: 'Помощь',
-                        icon: 'help-icon'
-                    },
-                    logout: {
-                        href: '/logout',
-                        text: 'Выйти',
-                        icon: 'logout-icon'
-                    },
-                },
+                if (userInfo) {
+                    new AvatarComponent(rightWrapper, {
+                        size: 'xs',
+                        src: userInfo.avatar,
+                    });
+
+                    const dropdownButton = document.createElement('a');
+                    dropdownButton.classList.add('dropdown-button');
+
+                    rightWrapper.appendChild(dropdownButton);
+
+                    new ProfileMenuComponent(rightWrapper, {
+                        userInfo,
+                        menuItems: {
+                            settings: {
+                                href: '/settings',
+                                text: 'Настройки',
+                                icon: 'settings-icon'
+                            },
+                            help: {
+                                href: '/help',
+                                text: 'Помощь',
+                                icon: 'help-icon'
+                            },
+                            logout: {
+                                href: '/logout',
+                                text: 'Выйти',
+                                icon: 'logout-icon'
+                            },
+                        },
+                    });
+                }
             }
         });
     }

@@ -1,14 +1,16 @@
 export default class ContextMenuComponent {
+    #config
     constructor(container, config) {
         this.container = container;
-        this.wrapper = document.createElement('div');
-        this.wrapper.classList.add('context-menu');
-        this.config = config;
+        this.#config = config;
         this.render();
     }
 
     render() {
-        Object.entries(this.config.data).forEach(([, { href, text, icon, isCritical }],) => {
+        this.wrapper = document.createElement('div');
+        this.wrapper.classList.add('context-menu');
+
+        Object.entries(this.#config.data).forEach(([, { href, text, icon, isCritical }],) => {
             const menuOption = document.createElement('div');
             menuOption.classList.add('menu-option');
             menuOption.dataset.href = href;
@@ -27,6 +29,7 @@ export default class ContextMenuComponent {
             }
             menuOption.appendChild(textElement);
         });
+        
         this.container.appendChild(this.wrapper);
     }
 }

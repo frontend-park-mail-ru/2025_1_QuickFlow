@@ -1,6 +1,9 @@
+const DEFAULT_REQUIRED = false;
+
 export default class RadioComponent {
+    #config
     constructor(container, config) {
-        this.config = config;
+        this.#config = config;
         this.container = container;
         this.wrapper = null;
         this.render();
@@ -10,11 +13,11 @@ export default class RadioComponent {
         this.wrapper = document.createElement('div');
         this.wrapper.classList.add('radio-wrapper');
 
-        if (this.config.label) {
+        if (this.#config.label) {
             const label = document.createElement('label');
-            label.textContent = this.config.label;
+            label.textContent = this.#config.label;
             label.classList.add('input-label');
-            if (this.config.showRequired === true) {
+            if (this.#config.showRequired === true) {
                 const requiredMark = document.createElement('span');
                 requiredMark.textContent = ' *';
                 requiredMark.classList.add('required');
@@ -27,17 +30,17 @@ export default class RadioComponent {
         choicesWrapper.classList.add('choices-wrapper');
         this.wrapper.appendChild(choicesWrapper);
 
-        for (const key in this.config.radios) {
-            const radioData = this.config.radios[key];
+        for (const key in this.#config.radios) {
+            const radioData = this.#config.radios[key];
             const choice = document.createElement('div');
             choice.classList.add('choice');
 
             const radio = document.createElement('input');
             radio.type = 'radio';
-            radio.name = this.config.name;
+            radio.name = this.#config.name;
             radio.value = radioData.value;
             radio.id = radioData.id;
-            radio.required = this.config.required || false;
+            radio.required = this.#config.required || DEFAULT_REQUIRED;
 
             const label = document.createElement('label');
             label.textContent = radioData.label;

@@ -9,8 +9,9 @@ export default class LoginFormComponent {
         this.step = 1;
         this.passwordInput = null;
         this.usernameInput = null;
+        this.continueBtn = null;
+        this.focusTimer = null;
 
-        this.continueBtn = null; // Кнопка "Продолжить"
         this.config = {
             usernameTitle: 'Вход QuickFlow',
             pwdTitle: 'Введите пароль',
@@ -132,7 +133,9 @@ export default class LoginFormComponent {
             showRequired: false
         });
         this.usernameInput.input.value = localStorage.getItem("username") || '';
-        setTimeout(() => this.usernameInput.input.focus(), 0);
+        
+        this.clearFocusTimer();
+        this.focusTimer = setTimeout(() => this.usernameInput.input.focus(), 0);
 
         const checkboxWrapper = document.createElement('div');
         checkboxWrapper.classList.add('checkbox-wrapper');
@@ -177,7 +180,9 @@ export default class LoginFormComponent {
             type: 'password',
             placeholder: 'Пароль'
         });
-        setTimeout(() => this.passwordInput.input.focus(), 0);
+
+        this.clearFocusTimer();
+        this.focusTimer = setTimeout(() => this.passwordInput.input.focus(), 0);
 
         this.renderBottomWrapper(form);
     }
@@ -213,5 +218,12 @@ export default class LoginFormComponent {
                 }
             }
         });
+    }
+
+    clearFocusTimer() {
+        if (this.focusTimer) {
+            clearTimeout(this.focusTimer);
+            this.focusTimer = null;
+        }
     }
 }

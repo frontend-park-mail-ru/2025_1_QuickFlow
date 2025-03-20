@@ -1,14 +1,26 @@
 import formatDateInput from '../../../utils/formatDateInput.js';
 
 
+const DEFAULT_MAX_LENGTH = 256;
+const DEFAULT_AUTOCOMPLETE = 'off';
+const DEFAULT_PLACEHOLDER = '';
+const DEFAULT_TYPE = 'text';
+const DEFAULT_REQUIRED = false;
+const REQUIRED_MARK_TEXT = ' *';
+const MAX_DATE_INPUT_LENGTH = 10;
+const MIN_NAME_INPUT_LENGTH = 2;
+const MIN_PASSWORD_INPUT_LENGTH = 8;
+
 export default class InputComponent {
+    #config
     constructor(container, config) {
-        this.config = config;
+        this.#config = config;
         this.container = container;
 
         this.input = null;
         this.error = null;
         this.wrapper = null;
+        
         this.render();
     }
 
@@ -17,13 +29,13 @@ export default class InputComponent {
         this.wrapper.classList.add('input-wrapper');
 
         // Label (если задан)
-        if (this.config.label) {
+        if (this.#config.label) {
             const label = document.createElement('label');
-            label.textContent = this.config.label;
+            label.textContent = this.#config.label;
             label.classList.add('input-label');
-            if (this.config.showRequired) {
+            if (this.#config.showRequired) {
                 const requiredMark = document.createElement('span');
-                requiredMark.textContent = ' *';
+                requiredMark.textContent = REQUIRED_MARK_TEXT;
                 requiredMark.classList.add('required');
                 label.appendChild(requiredMark);
             }
@@ -33,11 +45,11 @@ export default class InputComponent {
         // Поле ввода
         this.input = document.createElement('input');
         this.input.classList.add('input-field');
-        this.input.type = this.config.type || 'text';
-        this.input.autocomplete = this.config.autocomplete || 'off';
-        this.input.placeholder = this.config.placeholder || '';
-        this.input.maxLength = this.config.maxLength || 256;
-        this.input.required = this.config.required || false;
+        this.input.type = this.#config.type || DEFAULT_TYPE;
+        this.input.autocomplete = this.#config.autocomplete || DEFAULT_AUTOCOMPLETE;
+        this.input.placeholder = this.#config.placeholder || DEFAULT_PLACEHOLDER;
+        this.input.maxLength = this.#config.maxLength || DEFAULT_MAX_LENGTH;
+        this.input.required = this.#config.required || DEFAULT_REQUIRED;
 
         const innnerWrapper = document.createElement('div');
         innnerWrapper.classList.add('inner-wrapper');
@@ -69,29 +81,29 @@ export default class InputComponent {
         }
 
         // Добавление обработчиков валидации
-        if (this.config.validation) {
+        if (this.#config.validation) {
             this.input.addEventListener('input', () => this.validate());
         }
 
         // Описание (если задано)
-        if (this.config.description || this.config.maxLength) {
+        if (this.#config.description || this.#config.maxLength) {
             const descWrapper = document.createElement('div');
             descWrapper.classList.add('description-wrapper');
 
-            if (this.config.description) {
+            if (this.#config.description) {
                 const description = document.createElement('span');
-                description.textContent = this.config.description;
+                description.textContent = this.#config.description;
                 description.classList.add('input-description');
                 descWrapper.appendChild(description);
             }
 
-            if (this.config.showCharactersLeft) {
+            if (this.#config.showCharactersLeft) {
                 const counter = document.createElement('span');
-                counter.textContent = this.config.maxLength;
+                counter.textContent = this.#config.maxLength;
                 counter.classList.add('input-counter');
 
                 this.input.addEventListener('input', () => {
-                    counter.textContent = this.config.maxLength - this.input.value.length;
+                    counter.textContent = this.#config.maxLength - this.input.value.length;
                 });
 
                 descWrapper.appendChild(counter);
@@ -111,7 +123,7 @@ export default class InputComponent {
         if (!this || !this.input) {
             return false;
         }
-        if (this.config.validation === 'date' && this.input.value.trim().length < 10) {
+        if (this.#config.validation === 'date' && this.input.value.trim().length < MAX_DATE_INPUT_LENGTH) {
             return false;
         }
         return this.input.value.trim() !== '' && !this.input.classList.contains('invalid');
@@ -120,19 +132,19 @@ export default class InputComponent {
     validate() {
         const value = this.input.value;
 
-        if (this.config.validation === 'email') {
+        if (this.#config.validation === 'email') {
             this.validateEmail(value);
-        } else if (this.config.validation === 'password') {
-            this.input.minLength = 8;
+        } else if (this.#config.validation === 'password') {
+            this.input.minLength = MIN_PASSWORD_INPUT_LENGTH;
             this.validatePassword(value);
-        } else if (this.config.validation === 'username') {
+        } else if (this.#config.validation === 'username') {
             this.validateUsername(value);
-        } else if (this.config.validation === 'name') {
+        } else if (this.#config.validation === 'name') {
             this.validateName(value);
-        } else if (this.config.validation === 'date') {
-            this.input.maxLength = 10;
+        } else if (this.#config.validation === 'date') {
+            this.input.maxLength = MAX_DATE_INPUT_LENGTH;
             this.input.addEventListener('input', formatDateInput(this.input));
-            if (value.length === 10) {
+            if (value.length === MAX_DATE_INPUT_LENGTH) {
                 this.validateDate(value);
             } else {
                 this.hideError();
@@ -145,11 +157,11 @@ export default class InputComponent {
         const hasValidCharacters = chars.every((char) => /^[\p{L}-]+$/u.test(char));
 
         if (!name) {
-            this.showError('Введите ' + (this.config.placeholder === 'Имя' ? 'имя' : 'фамилию'));
+            this.showError('Введите ' + (this.#config.placeholder === 'Имя' ? 'имя' : 'фамилию'));
         } else if (!hasValidCharacters) {
-            this.showError(this.config.placeholder + ' может содержать только буквы и "-"');
-        } else if (name.length < 2) {
-            this.showError('Слишком ' + (this.config.placeholder === 'Имя' ? 'короткое имя' : 'короткая фамилия'));
+            this.showError(this.#config.placeholder + ' может содержать только буквы и "-"');
+        } else if (name.length < MIN_NAME_INPUT_LENGTH) {
+            this.showError('Слишком ' + (this.#config.placeholder === 'Имя' ? 'короткое имя' : 'короткая фамилия'));
         } else {
             this.hideError();
         }
@@ -192,7 +204,7 @@ export default class InputComponent {
             this.showError('Введите пароль');
         } else if (!hasValidCharacters) {
             this.showError('Пароль содержит некорректные символы');
-        } else if (password.length < 8) {
+        } else if (password.length < MIN_PASSWORD_INPUT_LENGTH) {
             this.showError('Пароль должен содержать минимум 8 символов');
         } else if (!hasLowercase || !hasUppercase) {
             this.showError('Пароль должен содержать символы в верхнем и нижнем регистрах');

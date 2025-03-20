@@ -1,10 +1,12 @@
 import ButtonComponent from '../ButtonComponent/ButtonComponent.js';
 import TextareaComponent from '../TextareaComponent/TextareaComponent.js';
+import createElement from '../../../utils/createElement.js';
 
 export default class ModalWindowComponent {
+    #config
     constructor(container, config) {
         this.container = container;
-        this.config = config;
+        this.#config = config;
 
         this.wrapper = null;
         this.modalWindow = null;
@@ -39,9 +41,9 @@ export default class ModalWindowComponent {
             this.close();
         });
 
-        if (this.config.type === 'create-post') {
+        if (this.#config.type === 'create-post') {
             this.renderPostInner();
-        } else if (this.config.type === 'profile-full-info') {
+        } else if (this.#config.type === 'profile-full-info') {
             this.renderProfileInfoInner();
         }
     }
@@ -80,56 +82,50 @@ export default class ModalWindowComponent {
         contentWrapper.classList.add('modal-window-content');
         this.modalWindow.appendChild(contentWrapper);
 
-        this.renderInfoItems(contentWrapper);
+        const items = document.createElement('div');
+        items.classList.add('modal-window-items-default');
+        contentWrapper.appendChild(items);
+
+        Object.values(this.#config.data.fullInfo).forEach(({value, icon}) => {
+            const item = createElement({
+                parent: items,
+                classes: ['profile-info-item']
+            });
+            createElement({
+                parent: item,
+                classes: ['profile-info-icon'],
+                attrs: {src: `/static/img/${icon}-icon.svg`}
+            });
+            createElement({
+                parent: item,
+                classes: ['profile-info-text'],
+                text: value
+            });
+        });
 
         const divider = document.createElement('div');
         divider.classList.add('modal-window-divider');
         contentWrapper.appendChild(divider);
 
-        this.renderCountedInfoItems(contentWrapper);
-    }
+        const countedItems = document.createElement('div');
+        countedItems.classList.add('modal-window-items-counted');
+        contentWrapper.appendChild(countedItems);
 
-    renderCountedInfoItems(parent) {
-        const countedInfoItems = document.createElement('div');
-        countedInfoItems.classList.add('modal-window-counted-items');
-        parent.appendChild(countedInfoItems);
-
-        Object.entries(this.config.data.countedInfo).forEach(([, {title, value}],) => {
-            const countedInfoItem = document.createElement('div');
-            countedInfoItem.classList.add('modal-window-counted-item');
-            countedInfoItems.appendChild(countedInfoItem);
-
-            const count = document.createElement('div');
-            count.classList.add('modal-window-count');
-            count.textContent = value;
-            countedInfoItem.appendChild(count);
-    
-            const titleElement = document.createElement('div');
-            titleElement.classList.add('profile-info-text');
-            titleElement.textContent = title;
-            countedInfoItem.appendChild(titleElement);
-        });
-    }
-
-    renderInfoItems(parent) {
-        const infoItems = document.createElement('div');
-        infoItems.classList.add('modal-window-info-items');
-        parent.appendChild(infoItems);
-
-        Object.entries(this.config.data.fullInfo).forEach(([, {title, value, icon}],) => {
-            const infoItem = document.createElement('div');
-            infoItem.classList.add('profile-info-item');
-            infoItems.appendChild(infoItem);
-    
-            const infoIcon = document.createElement('img');
-            infoIcon.src = `/static/img/${icon}-icon.svg`;
-            infoIcon.classList.add('profile-info-icon');
-            infoItem.appendChild(infoIcon);
-    
-            const infoText = document.createElement('div');
-            infoText.classList.add('profile-info-text');
-            infoText.textContent = `${title}: ${value}`;
-            infoItem.appendChild(infoText);
+        Object.values(this.#config.data.countedInfo).forEach(({value, title}) => {
+            const item = createElement({
+                parent: countedItems,
+                classes: ['modal-window-item-counted']
+            });
+            createElement({
+                parent: item,
+                text: value,
+                classes: ['modal-window-count'],
+            });
+            createElement({
+                parent: item,
+                classes: ['profile-info-text'],
+                text: title
+            });
         });
     }
 }

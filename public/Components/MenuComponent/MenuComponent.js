@@ -18,17 +18,18 @@ export class LogoComponent {
 }
 
 export default class MenuComponent {
+    #config
     constructor(container, config) {
         this.container = container;
         this.menuElements = {};
         this.activePageLink = null;
-        this.config = config;
+        this.#config = config;
     }
 
     render() {
         new LogoComponent(this.container, this).render();
 
-        Object.entries(this.config.menu).forEach(([key, { href, text, icon }], index) => {
+        Object.entries(this.#config.menu).forEach(([key, { href, text, icon }], index) => {
             const menuElement = document.createElement('a');
             menuElement.href = href;
             menuElement.classList.add('menu-item');
@@ -56,7 +57,7 @@ export default class MenuComponent {
             this.container.appendChild(menuElement);
         });
 
-        this.updateMenuVisibility(this.config.isAuthorized);
+        this.updateMenuVisibility(this.#config.isAuthorized);
 
         this.container.addEventListener('click', (event) => {
             if (event.target.closest('a')) {
@@ -66,13 +67,6 @@ export default class MenuComponent {
             }
         });
     }
-
-    // isUserLoggedIn() {
-    //     console.log(document.cookie);
-    //     console.log(document.cookie.split(';'));
-    //     console.log(document.cookie.split(';').some(cookie => cookie.trim().startsWith('session=')));
-    //     return document.cookie.split(';').some(cookie => cookie.trim().startsWith('session='));
-    // }
 
     updateMenuVisibility(isAuthorized) {
         if (this.menuElements.login) {
@@ -105,8 +99,8 @@ export default class MenuComponent {
         this.activePageLink = menuElement;
 
         const section = menuElement.dataset.section;
-        if (this.config.menu[section].render) {
-            const element = this.config.menu[section].render();
+        if (this.#config.menu[section].render) {
+            const element = this.#config.menu[section].render();
             document.querySelector('main').appendChild(element);
         }
 

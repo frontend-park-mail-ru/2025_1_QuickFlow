@@ -1,8 +1,13 @@
 import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
 
+
+const AVATAR_SIZE = 'xl';
+const USERNAME_PREFIX = '@';
+
 export default class ProfileMenuComponent {
+    #config
     constructor(container, config) {
-        this.config = config;
+        this.#config = config;
         this.container = container;
         this.wrapper = document.createElement('div');
         this.wrapper.classList.add('profile-menu-wrapper');
@@ -15,7 +20,8 @@ export default class ProfileMenuComponent {
         topWrapper.classList.add('profile-menu-top-wrapper');
 
         new AvatarComponent(topWrapper, {
-            size: 'xl'
+            size: AVATAR_SIZE,
+            src: this.#config.userInfo.avatar,
         });
 
         const userInfo = document.createElement('div');
@@ -24,12 +30,12 @@ export default class ProfileMenuComponent {
 
         const name = document.createElement('div');
         name.classList.add('profile-menu-name');
-        name.textContent = this.config.data.name;
+        name.textContent = `${this.#config.userInfo.lastname} ${this.#config.userInfo.firstname}`;
         userInfo.appendChild(name);
 
         const username = document.createElement('div');
         username.classList.add('profile-menu-username');
-        username.textContent = `@${this.config.data.username}`;
+        username.textContent = `${USERNAME_PREFIX}${this.#config.userInfo.username}`;
         userInfo.appendChild(username);
 
         this.wrapper.appendChild(topWrapper);
@@ -38,7 +44,7 @@ export default class ProfileMenuComponent {
         menuItems.classList.add('profile-menu-items');
         this.wrapper.appendChild(menuItems);
 
-        Object.entries(this.config.data.menuItems).forEach(([, { href, text, icon }],) => {
+        Object.entries(this.#config.menuItems).forEach(([, { href, text, icon }],) => {
             const menuItem = document.createElement('a');
             menuItem.href = href;
             menuItem.classList.add('profile-menu-item');
