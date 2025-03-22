@@ -20,13 +20,17 @@ export default class InputComponent {
         this.input = null;
         this.error = null;
         this.wrapper = null;
-        
+        this.innnerWrapper = null;
+
         this.render();
     }
 
     render() {
         this.wrapper = document.createElement('div');
         this.wrapper.classList.add('input-wrapper');
+        if (this.#config.classes) {
+            this.#config.classes.forEach(className => this.wrapper.classList.add(className));
+        }
 
         // Label (если задан)
         if (this.#config.label) {
@@ -45,16 +49,17 @@ export default class InputComponent {
         // Поле ввода
         this.input = document.createElement('input');
         this.input.classList.add('input-field');
+
         this.input.type = this.#config.type || DEFAULT_TYPE;
         this.input.autocomplete = this.#config.autocomplete || DEFAULT_AUTOCOMPLETE;
         this.input.placeholder = this.#config.placeholder || DEFAULT_PLACEHOLDER;
         this.input.maxLength = this.#config.maxLength || DEFAULT_MAX_LENGTH;
         this.input.required = this.#config.required || DEFAULT_REQUIRED;
 
-        const innnerWrapper = document.createElement('div');
-        innnerWrapper.classList.add('inner-wrapper');
-        this.wrapper.appendChild(innnerWrapper);
-        innnerWrapper.appendChild(this.input);
+        this.innnerWrapper = document.createElement('div');
+        this.innnerWrapper.classList.add('inner-wrapper');
+        this.wrapper.appendChild(this.innnerWrapper);
+        this.innnerWrapper.appendChild(this.input);
 
         this.error = document.createElement('div');
         this.error.classList.add('input-error');
@@ -73,11 +78,15 @@ export default class InputComponent {
                 }
             });
 
-            innnerWrapper.appendChild(pwdControl);
+            this.innnerWrapper.appendChild(pwdControl);
         } else if (this.input.type === 'search') {
             const searchIcon = document.createElement('div');
             searchIcon.classList.add('search-icon');
-            innnerWrapper.appendChild(searchIcon);
+            this.innnerWrapper.appendChild(searchIcon);
+        }
+
+        if (this.#config.value) {
+            this.input.value = this.#config.value;
         }
 
         // Добавление обработчиков валидации
@@ -249,7 +258,7 @@ export default class InputComponent {
     }
 
     showError(message) {
-        this.wrapper.appendChild(this.error);
+        this.innnerWrapper.appendChild(this.error);
         this.error.textContent = message;
         this.error.style.display = 'block';
         this.input.classList.add('invalid');
@@ -257,7 +266,7 @@ export default class InputComponent {
 
     hideError() {
         if (this.input.classList.contains('invalid')) {
-            this.wrapper.removeChild(this.error);
+            this.innnerWrapper.removeChild(this.error);
             this.input.classList.remove('invalid');
         }
     }

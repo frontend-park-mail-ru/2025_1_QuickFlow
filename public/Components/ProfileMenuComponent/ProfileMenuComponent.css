@@ -54,18 +54,16 @@
 }
 
 .profile-menu-name {
-    font-family: var(--font-family);
-    font-weight: 500;
-    font-size: 15px;
-    line-height: 130%;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-l);
+    line-height: var(--line-height-m);
     color: var(--text-primary);
 }
 
 .profile-menu-username {
-    font-family: var(--font-family);
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 130%;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-m);
     color: var(--text-secondary);
 }
 
@@ -91,9 +89,8 @@
 }
 
 .profile-menu-item-text {
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 15px;
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-l);
     line-height: 100%;
     color: var(--text-primary);
 }

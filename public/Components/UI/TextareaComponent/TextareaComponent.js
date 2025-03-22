@@ -1,21 +1,41 @@
+import createElement from "../../../utils/createElement.js";
+
+
 const DEFAULT_PLACEHOLDER = '';
+
 
 export default class TextareaComponent {
     #config
     constructor(container, config) {
         this.container = container;
-        this.textarea = null;
         this.#config = config || {};
+
+        this.wrapper = null;
+        this.textarea = null;
         this.render();
     }
 
     render() {
-        this.textarea = document.createElement('textarea');
-        if (this.#config.class) {
-            this.textarea.classList.add(this.#config.class);
+        this.wrapper = createElement({
+            classes: ['textarea-wrapper'],
+        });
+
+        if (this.#config.classes) {
+            this.#config.classes.forEach(className => this.wrapper.classList.add(className));
         }
+
+        if (this.#config.label) {
+            const label = document.createElement('label');
+            label.textContent = this.#config.label;
+            label.classList.add('input-label');
+            this.wrapper.appendChild(label);
+        }
+
+        this.textarea = document.createElement('textarea');
         this.textarea.placeholder = this.#config.placeholder || DEFAULT_PLACEHOLDER;
-        this.container.appendChild(this.textarea);
+        
+        this.wrapper.appendChild(this.textarea);
+        this.container.appendChild(this.wrapper);
     }
 
     addListener(listener) {

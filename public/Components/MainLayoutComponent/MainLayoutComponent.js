@@ -25,6 +25,11 @@ export default class MainLayoutComponent {
         }
     }
 
+    clear() {
+        this.container.innerHTML = '';
+        document.querySelector('main').removeChild(this.container);
+    }
+
     renderProfile() {
         this.top = document.createElement('div');
         this.top.classList.add('container-row');

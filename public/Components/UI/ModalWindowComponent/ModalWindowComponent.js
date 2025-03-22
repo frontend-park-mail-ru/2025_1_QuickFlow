@@ -1,6 +1,7 @@
 import ButtonComponent from '../ButtonComponent/ButtonComponent.js';
 import TextareaComponent from '../TextareaComponent/TextareaComponent.js';
 import createElement from '../../../utils/createElement.js';
+import {profileDataLayout} from '../../../Views/ProfileView/ProfileView.js'
 
 export default class ModalWindowComponent {
     #config
@@ -17,27 +18,32 @@ export default class ModalWindowComponent {
     render() {
         document.body.style.overflow = 'hidden';
 
-        this.wrapper = document.createElement('div');
-        this.wrapper.classList.add('modal-window-bg');
-        this.container.appendChild(this.wrapper);
+        this.wrapper = createElement({
+            parent: this.container,
+            classes: ['modal-window-bg'],
+        });
 
-        this.modalWindow = document.createElement('div');
-        this.modalWindow.classList.add('modal-window');
-        this.wrapper.appendChild(this.modalWindow);
+        this.modalWindow = createElement({
+            parent: this.wrapper,
+            classes: ['modal-window'],
+        });
 
-        const modalTop = document.createElement('div');
-        modalTop.classList.add('modal-window-top');
-        this.modalWindow.appendChild(modalTop);
+        const modalTop = createElement({
+            parent: this.modalWindow,
+            classes: ['modal-window-top'],
+        });
 
-        this.title = document.createElement('div');
-        this.title.classList.add('modal-window-title');
-        modalTop.appendChild(this.title);
+        this.title = createElement({
+            parent: modalTop,
+            classes: ['modal-window-title']
+        });
 
-        const closeBtn = document.createElement('button');
-        closeBtn.classList.add('modal-window-close-btn');
-        modalTop.appendChild(closeBtn);
-
-        closeBtn.addEventListener('click', () => {
+        createElement({
+            tag: 'button',
+            parent: modalTop,
+            classes: ['modal-window-close-btn']
+        })
+        .addEventListener('click', () => {
             this.close();
         });
 
@@ -59,7 +65,7 @@ export default class ModalWindowComponent {
 
         const textarea = new TextareaComponent(this.modalWindow, {
             placeholder: 'Поделитесь своими мыслями',
-            class: 'modal-window-textarea'
+            classes: ['modal-window-textarea']
         });
 
         new ButtonComponent(this.modalWindow, {
@@ -67,7 +73,7 @@ export default class ModalWindowComponent {
             variant: 'primary',
             size: 'small',
             onClick: () => {
-
+                // TODO: publish post request
             },
             disabled: true,
             stateUpdaters: [textarea]
@@ -78,54 +84,35 @@ export default class ModalWindowComponent {
         this.modalWindow.classList.add('modal-window-profile');
         this.title.textContent = 'Подробная информация';
 
-        const contentWrapper = document.createElement('div');
-        contentWrapper.classList.add('modal-window-content');
-        this.modalWindow.appendChild(contentWrapper);
-
-        const items = document.createElement('div');
-        items.classList.add('modal-window-items-default');
-        contentWrapper.appendChild(items);
-
-        Object.values(this.#config.data.fullInfo).forEach(({value, icon}) => {
-            const item = createElement({
-                parent: items,
-                classes: ['profile-info-item']
-            });
-            createElement({
-                parent: item,
-                classes: ['profile-info-icon'],
-                attrs: {src: `/static/img/${icon}-icon.svg`}
-            });
-            createElement({
-                parent: item,
-                classes: ['profile-info-text'],
-                text: value
-            });
+        const contentWrapper = createElement({
+            parent: this.modalWindow,
+            classes: ['modal-window-content'],
         });
 
-        const divider = document.createElement('div');
-        divider.classList.add('modal-window-divider');
-        contentWrapper.appendChild(divider);
-
-        const countedItems = document.createElement('div');
-        countedItems.classList.add('modal-window-items-counted');
-        contentWrapper.appendChild(countedItems);
-
-        Object.values(this.#config.data.countedInfo).forEach(({value, title}) => {
-            const item = createElement({
-                parent: countedItems,
-                classes: ['modal-window-item-counted']
-            });
-            createElement({
-                parent: item,
-                text: value,
-                classes: ['modal-window-count'],
-            });
-            createElement({
-                parent: item,
-                classes: ['profile-info-text'],
-                text: title
-            });
+        const items = createElement({
+            parent: contentWrapper,
+            classes: ['modal-window-items-default'],
         });
+
+        this.#config.createInfoItem(items, profileDataLayout['username'].icon, this.#config.data.username);
+        for (const key in this.#config.data.additionalData) {
+            const value = this.#config.data.additionalData[key];
+            this.#config.createInfoItem(items, profileDataLayout[key].icon, value);
+        }
+
+        createElement({
+            parent: contentWrapper,
+            classes: ['divider'],
+        });
+
+        const countedItems = createElement({
+            parent: contentWrapper,
+            classes: ['modal-window-items-counted'],
+        });
+
+        for (const key in this.#config.data.countedData) {
+            const value = this.#config.data.countedData[key];
+            this.#config.createCountedItem(countedItems, profileDataLayout[key].text, value);
+        }
     }
 }

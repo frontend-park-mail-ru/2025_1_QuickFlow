@@ -30,6 +30,7 @@
     align-items: flex-start;
     gap: 24px;
     max-width: 553px;
+    min-width: 553px;
     width: 100%;
 }
 

@@ -9,10 +9,10 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 130%;
+
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-m);
     color: var(--text-secondary);
 }
 
@@ -36,12 +36,10 @@ input[type='password'] {
     height: 36px;
     background: var(--background-light-gray);
 
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 130%;
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-m);
     color: var(--text-primary);
-
     transition: var(--trans-input);
 }
 
@@ -77,15 +75,17 @@ input.invalid {
 }
 
 .input-error {
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 130%;
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-m);
     color: var(--text-error);
 }
 
 .inner-wrapper {
     position: relative;
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
 }
 
 .pwd-control {

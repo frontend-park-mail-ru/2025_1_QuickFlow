@@ -5,16 +5,14 @@ export default function createElement({
     classes = [],
     text = '',
 } = {}) {
-    console.log(tag, attrs, classes);
     const element = document.createElement(tag);
 
-    Object.keys(attrs).forEach(
-        key => element.setAttribute(key, attrs[key])
-    );
+    for (const attr in attrs) {
+        element.setAttribute(attr, attrs[attr]);
+    }
 
-    classes.forEach(
-        className => element.classList.add(className)
-    );
+    const _classes =  Array.from(classes);
+    if (_classes.length) element.classList.add(..._classes);
 
     element.textContent = text;
 

@@ -1,49 +1,51 @@
 :root {
+    --icon-primary: #99a2ad;
+    --icon-primary-hover: #b8bec6;
+    --icon-primary-disabled: #dce1e5;
     --icon-accent: #4369fc;
-    --background-white-transparent: rgba(255, 255, 255, 0.5);
+    --icon-white: #fff;
+    --icon-green: #24b324;
+    --icon-red: #ff3b2f;
     --icon-black-transparent: rgba(0, 0, 0, 0.5);
+
+    --background-gray: #edeef0;
+    --background-gray-hover: #e4e5e9;
+    --background-light-gray: #f5f6f7;
+    --background-white: #fff;
+    --background-white-transparent: rgba(255, 255, 255, 0.5);
     --background-white-transparent-hover: rgba(255, 255, 255, 0.8);
     --background-black-transparent: rgba(0, 0, 0, 0.5);
-    --icon-red: #ff3b2f;
-    --icon-primary: #99a2ad;
+    --background-error: #ffeceb;
+
+    --text-primary: #000;
     --text-secondary: #818c99;
+    --text-secondary-hover: #a7aeb8;
+    --text-secondary-disabled: #bcc3cc;
     --text-white: #fff;
     --text-accent: #4369fc;
-    --background-white: #fff;
-    --background-gray: #edeef0;
-    --background-light-gray: #f5f6f7;
-    --text-primary: #000;
-    --stroke-primary: #dce1e5;
-    --icon-primary-disabled: #dce1e5;
     --text-accent-hover: #1438c3;
-    --text-secondary-hover: #a7aeb8;
-    --icon-primary-hover: #b8bec6;
-    --background-gray-hover: #e4e5e9;
-    --icon-white: #fff;
+    --text-error: #ff3b2f;
+
+    --stroke-primary: #dce1e5;
+    --stroke-primary-hover: #d0d5d9;
+    --stroke-primary-focus: #c4c8cc;
+    --stroke-white-transp: rgba(255, 255, 255, 0.25);
+    --stroke-white-transp-hover: rgba(255, 255, 255, 0.4);
+    --stroke-white-transp-active: rgba(255, 255, 255, 0.55);
+    --stroke-checkbox: #99a2ad;
+    --stroke-error: #ff3b2f;
+    --stroke-white: #fff;
+
     --button-primary: #4369fc;
-    --button-secondary: #fff;
     --button-primary-hover: #3b60ed;
     --button-primary-active: #3155e0;
     --button-primary-disabled: #849cfb;
-    --stroke-checkbox: #99a2ad;
-    --stroke-primary-hover: #d0d5d9;
-    --stroke-primary-focus: #c4c8cc;
-    --text-secondary-disabled: #bcc3cc;
-    --stroke-error: #ff3b2f;
-    --text-error: #ff3b2f;
-    --background-error: #ffeceb;
+    --button-secondary: #fff;
     --button-secondary-hover: #f5f6f7;
     --button-secondary-active: #edeef0;
-    --stroke-white: #fff;
-    --icon-green: #24b324;
-    --stroke-white-transparent: rgba(255, 255, 255, 0.25);
-    --button-transparent: rgba(0, 0, 0, 0.5);
-    --button-transparent-hover: rgba(0, 0, 0, 0.55);
-    --button-transparent-active: rgba(0, 0, 0, 0.6);
-}
-
-:root {
-    --font-family: 'vk-sans';
+    --button-overlay: rgba(0, 0, 0, 0.5);
+    --button-overlay-hover: rgba(0, 0, 0, 0.65);
+    --button-overlay-active: rgba(0, 0, 0, 0.8);
 }
 
 :root {
@@ -52,4 +54,18 @@
     --trans-menu: all 0.15s ease-out;
     --trans-dropdown: all 0.2s ease-out;
     --trans-post-slider: all 0.2s ease;
+}
+
+:root {
+    --font-family: 'vk-sans';
+
+    --font-size-xs: 0.65rem;
+    --font-size-s: 0.7rem;
+    --font-size-l: 0.75rem;
+    --font-size-xl: 1rem;
+
+    --font-weight-regular: 400;
+    --font-weight-bold: 500;
+
+    --line-height-m: 130%;
 }

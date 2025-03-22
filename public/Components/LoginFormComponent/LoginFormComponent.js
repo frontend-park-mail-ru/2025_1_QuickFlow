@@ -46,6 +46,7 @@ export default class LoginFormComponent {
             if (this.step === 1) {
                 this.continueBtnOnClick();
             } else {
+                if (this.passwordInput.input.classList.contains('invalid')) return;
                 this.signinBtnOnClick(event);
             }
         });
@@ -163,14 +164,13 @@ export default class LoginFormComponent {
     }
 
     updateBtnState() {
-        if (
-            this.usernameInput.input.classList.contains('invalid') ||
-            this.usernameInput.input.value === ''
-        ) {
-            this.continueBtn.buttonElement.disabled = true;
+        let disabled;
+        if (this.step === 1) {
+            disabled = this.usernameInput.input.classList.contains('invalid') || this.usernameInput.input.value === '';
         } else {
-            this.continueBtn.buttonElement.disabled = false;
+            disabled = this.passwordInput.input.classList.contains('invalid') || this.passwordInput.input.value === '';
         }
+        this.continueBtn.buttonElement.disabled = disabled;
     }
 
     renderPasswordStep(form) {
@@ -178,7 +178,10 @@ export default class LoginFormComponent {
 
         this.passwordInput = new InputComponent(form, {
             type: 'password',
-            placeholder: 'Пароль'
+            placeholder: 'Пароль',
+            autocomplete: 'password',
+            required: true,
+            showRequired: false
         });
 
         this.clearFocusTimer();
@@ -215,6 +218,11 @@ export default class LoginFormComponent {
                     this.menu.updateMenuVisibility(true);
                 } else {
                     this.passwordInput.showError('Неверное имя пользователя или пароль');
+                    this.passwordInput.addListener(() => {
+                        this.passwordInput.hideError();
+                        this.updateBtnState();
+                    });
+                    this.updateBtnState();
                 }
             }
         });

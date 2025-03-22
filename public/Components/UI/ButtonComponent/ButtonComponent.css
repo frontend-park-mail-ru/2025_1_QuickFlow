@@ -12,12 +12,12 @@ button:disabled {
 
 button.large {
     height: 36px;
-    font-size: 15px;
+    font-size: var(--font-size-l);
 }
 
 button.small {
     height: 32px;
-    font-size: 14px;
+    font-size: var(--font-size-s);
 }
 
 .button-primary {
@@ -26,9 +26,8 @@ button.small {
     background: var(--button-primary);
     border: none;
 
-    font-family: var(--font-family);
-    font-weight: 500;
-    line-height: 130%;
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-m);
     color: var(--text-white);
 }
 
@@ -50,9 +49,8 @@ button.small {
     background: var(--button-secondary);
     border: 1px solid var(--stroke-primary);
 
-    font-family: var(--font-family);
-    font-weight: 500;
-    line-height: 130%;
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-m);
     color: var(--text-primary);
 }
 
@@ -62,4 +60,30 @@ button.small {
 
 .button-secondary:active {
     background: var(--button-secondary-active);
+}
+
+.button-overlay {
+    width: auto;
+    border-radius: 8px;
+    backdrop-filter: blur(20px);
+    background: var(--button-overlay);
+    border: 1px solid var(--stroke-white-transp);
+
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-m);
+    color: var(--text-white);
+}
+
+.button-overlay.small {
+    font-size: var(--font-size-xs);
+}
+
+.button-overlay:hover {
+    background: var(--button-overlay-hover);
+    border: 1px solid var(--stroke-white-transp-hover);
+}
+
+.button-overlay:active {
+    background: var(--button-overlay-active);
+    border: 1px solid var(--stroke-white-transp-active);
 }

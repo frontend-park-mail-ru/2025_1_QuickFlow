@@ -1,0 +1,57 @@
+.cover-edit-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+
+.profile-edit-input.input-wrapper {
+    gap: 0;
+    flex-direction: row;
+    align-items: start;
+    width: 100%;
+}
+
+.profile-edit-input .inner-wrapper {
+    width: 67%;
+}
+
+.profile-edit-input .input-label {
+    width: 33%;
+    height: 36px;
+    align-content: center;
+}
+
+.profile-edit-form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profile-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+}
+
+.profile-edit-fieldset {
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+}
+
+.profile-edit-btn {
+    width: fit-content;
+    margin-left: 33%;
+}
+
+.profile-edit-input.textarea-wrapper {
+    gap: 0;
+    flex-direction: row;
+    align-items: start;
+    width: 100%;
+}
+
+.profile-edit-input textarea {
+    width: 67%;
+}

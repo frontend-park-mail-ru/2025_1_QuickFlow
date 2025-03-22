@@ -15,11 +15,16 @@ export default class ButtonComponent {
     render() {
         this.buttonElement.type = this.#config.type || DEFAULT_TYPE;
         this.buttonElement.textContent = this.#config.text || DEFAULT_TEXT_CONTENT;
+
         this.buttonElement.classList.add(
             'button',
-            this.#config.variant === 'secondary' ? 'button-secondary' : 'button-primary',
+            `button-${this.#config.variant}`,
             this.#config.size || DEFAULT_SIZE_CLASS
         );
+        if (this.#config.classes) {
+            this.#config.classes.forEach(className => this.buttonElement.classList.add(className))
+        }
+        
 
         if (this.#config.disabled) {
             this.buttonElement.disabled = true;

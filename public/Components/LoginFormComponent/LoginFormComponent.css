@@ -47,10 +47,10 @@ input[type='checkbox'] {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 130%;
+
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-m);
     color: var(--text-primary);
 }
 
