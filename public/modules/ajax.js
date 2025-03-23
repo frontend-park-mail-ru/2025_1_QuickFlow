@@ -16,8 +16,10 @@ class Ajax {
         try {
             if (url === 'user') {
                 callback(200, users['rvasutenko']);
+                return;
             } else if (url === 'feed') {
                 callback(200, posts);
+                return;
             }
 
             const queryString = new URLSearchParams(params).toString();
