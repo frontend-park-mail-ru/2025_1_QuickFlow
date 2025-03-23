@@ -161,7 +161,7 @@ export default class ProfileView {
         });
 
         if (feedData && Array.isArray(feedData)) {
-            feedData.forEach(({ id, creator_id, text, pics, created_at, like_count, repost_count, comment_count }) => {
+            feedData.forEach(({ avatar, id, creator_id, text, pics, created_at, like_count, repost_count, comment_count }) => {
                 new PostComponent(postsWrapper, {
                     id,
                     creator_id,
@@ -171,6 +171,7 @@ export default class ProfileView {
                     like_count,
                     repost_count,
                     comment_count,
+                    avatar,
                 });
             });
         }
