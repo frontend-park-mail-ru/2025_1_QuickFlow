@@ -21,22 +21,22 @@ export default class ProfileMenuComponent {
 
         new AvatarComponent(topWrapper, {
             size: AVATAR_SIZE,
-            src: this.#config.userInfo.avatar,
+            src: this.#config.userData.avatar,
         });
 
-        const userInfo = document.createElement('div');
-        userInfo.classList.add('profile-menu-user-info');
-        topWrapper.appendChild(userInfo);
+        const userData = document.createElement('div');
+        userData.classList.add('profile-menu-user-info');
+        topWrapper.appendChild(userData);
 
         const name = document.createElement('div');
         name.classList.add('profile-menu-name');
-        name.textContent = `${this.#config.userInfo.lastname} ${this.#config.userInfo.firstname}`;
-        userInfo.appendChild(name);
+        name.textContent = `${this.#config.userData.lastname} ${this.#config.userData.firstname}`;
+        userData.appendChild(name);
 
         const username = document.createElement('div');
         username.classList.add('profile-menu-username');
-        username.textContent = `${USERNAME_PREFIX}${this.#config.userInfo.username}`;
-        userInfo.appendChild(username);
+        username.textContent = `${USERNAME_PREFIX}${this.#config.userData.username}`;
+        userData.appendChild(username);
 
         this.wrapper.appendChild(topWrapper);
 

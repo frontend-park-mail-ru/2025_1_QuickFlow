@@ -6,7 +6,7 @@ import AvatarComponent from '../../Components/AvatarComponent/AvatarComponent.js
 import ModalWindowComponent from '../../Components/UI/ModalWindowComponent/ModalWindowComponent.js';
 import ButtonComponent from '../../Components/UI/ButtonComponent/ButtonComponent.js';
 import createElement from '../../utils/createElement.js';
-import {profileData, profileFriends} from '../mocks.js';
+import {profileFriends} from '../mocks.js';
 
 
 export const profileDataLayout = {
@@ -42,47 +42,19 @@ export default class ProfileView {
             type: 'profile',
         });
 
-        const profileHeader = createElement({
-            parent: this.#containerObj.top,
-            classes: ['profile-header']
-        });
+        Ajax.get({
+            url: '/user',
+            callback: (status, userData) => {
+                let isAuthorized = status === 200;
+    
+                if (!isAuthorized) {
+                    this.#menu.goToPage(this.#menu.menuElements.login);
+                    this.#menu.updateMenuVisibility(false);
+                    return;
+                }
 
-        const coverWrapper = createElement({
-            parent: profileHeader,
-            classes: ['profile-cover-wrapper']
-        });
-
-        createElement({
-            parent: coverWrapper,
-            classes: ['profile-cover'],
-            attrs: {src: '/static/img/profile-header.jpg'}
-        });
-
-        new AvatarComponent(profileHeader, {
-            size: 'xxxl',
-            class: 'profile-avatar',
-            type: 'status',
-            src: 'avatar.jpg',
-        });
-
-        const profileBottom = createElement({
-            parent: profileHeader,
-            classes: ['profile-bottom'],
-        });
-
-        const data = profileData; // TODO: надо дергать метод
-        this.renderProfileInfo(profileBottom, data);
-
-        const profileActions = createElement({
-            parent: profileBottom,
-            classes: ['profile-actions'],
-        });
-
-        new ButtonComponent(profileActions, {
-            text: 'Редактировать профиль',
-            variant: 'secondary',
-            size: 'small',
-            onClick: () => new EditProfileView(this.#containerObj).render(),
+                this.renderProfileInfo(userData);
+            }
         });
 
         this.renderFeed();
@@ -204,9 +176,37 @@ export default class ProfileView {
         }
     }
 
-    renderProfileInfo(parent, data) {   
+    renderProfileInfo(data) { 
+        const profileHeader = createElement({
+            parent: this.#containerObj.top,
+            classes: ['profile-header']
+        });
+
+        const coverWrapper = createElement({
+            parent: profileHeader,
+            classes: ['profile-cover-wrapper']
+        });
+
+        createElement({
+            parent: coverWrapper,
+            classes: ['profile-cover'],
+            attrs: {src: '/static/img/profile-header.jpg'}
+        });
+
+        new AvatarComponent(profileHeader, {
+            size: 'xxxl',
+            class: 'profile-avatar',
+            type: 'status',
+            src: 'avatar.jpg',
+        });
+
+        const profileBottom = createElement({
+            parent: profileHeader,
+            classes: ['profile-bottom'],
+        });
+
         const profileInfo = createElement({
-            parent,
+            parent: profileBottom,
             classes: ['profile-info']
         });
 
@@ -236,6 +236,18 @@ export default class ProfileView {
                 })
             });
         }
+
+        const profileActions = createElement({
+            parent: profileBottom,
+            classes: ['profile-actions'],
+        });
+
+        new ButtonComponent(profileActions, {
+            text: 'Редактировать профиль',
+            variant: 'secondary',
+            size: 'small',
+            onClick: () => new EditProfileView(this.#containerObj, this.#menu).render(),
+        });
     }
 
     createCountedItem(parent, title, value) {

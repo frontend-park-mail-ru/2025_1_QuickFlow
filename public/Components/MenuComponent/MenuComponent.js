@@ -19,11 +19,18 @@ export class LogoComponent {
 
 export default class MenuComponent {
     #config
+    #header
     constructor(container, config) {
         this.container = container;
-        this.menuElements = {};
-        this.activePageLink = null;
         this.#config = config;
+
+        this.menuElements = {};
+        this.#header = null;
+        this.activePageLink = null;
+    }
+
+    addHeader(header) {
+        this.#header = header;
     }
 
     render() {
@@ -95,6 +102,7 @@ export default class MenuComponent {
         if (this.activePageLink) {
             this.activePageLink.classList.remove('active');
         }
+
         menuElement.classList.add('active');
         this.activePageLink = menuElement;
 
@@ -103,7 +111,11 @@ export default class MenuComponent {
             const element = this.#config.menu[section].render();
             document.querySelector('main').appendChild(element);
         }
+        console.log(this.#header);
 
+        if (this.#header) {
+            this.#header.renderAvatarMenu();
+        }
         this.checkAuthPage();
     }
 }

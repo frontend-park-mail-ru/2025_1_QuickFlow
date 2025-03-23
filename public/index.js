@@ -68,6 +68,7 @@ menu.goToPage(menu.menuElements.profile);
 
 const header = new HeaderComponent(container, menu);
 header.render();
+// menu.addHeader(header);
 
 // function renderProfile() {
 //     const profile = document.createElement('div');

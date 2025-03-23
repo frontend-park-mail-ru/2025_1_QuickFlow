@@ -6,6 +6,7 @@ export default class LoginFormComponent {
     constructor(container, menu) {
         this.container = container;
         this.menu = menu;
+        
         this.step = 1;
         this.passwordInput = null;
         this.usernameInput = null;

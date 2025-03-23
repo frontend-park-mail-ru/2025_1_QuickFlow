@@ -1,3 +1,5 @@
+import Ajax from '../../modules/ajax.js';
+
 import RadioMenuComponent from '../../Components/RadioMenuComponent/RadioMenuComponent.js';
 import MainLayoutComponent from '../../Components/MainLayoutComponent/MainLayoutComponent.js';
 import AvatarComponent from '../../Components/AvatarComponent/AvatarComponent.js';
@@ -6,8 +8,6 @@ import InputComponent from '../../Components/UI/InputComponent/InputComponent.js
 import FileInputComponent from '../../Components/UI/FileInputComponent/FileInputComponent.js';
 
 import createElement from '../../utils/createElement.js';
-
-import {profileData} from '../mocks.js';
 import TextareaComponent from '../../Components/UI/TextareaComponent/TextareaComponent.js';
 
 
@@ -16,44 +16,44 @@ const forms = {
         header: true,
         fields: [
             [{
+                key: 'username',
                 config: {
                     label: 'Имя пользователя',
                     validation: 'username',
-                    value: profileData.username,
                     required: true
                 }
             }],
             [{
+                key: 'firstname',
                 config: {
                     label: 'Имя',
                     validation: 'name',
-                    value: profileData.firstname,
                     required: true
                 }
             },
             {
+                key: 'lastname',
                 config: {
                     label: 'Фамилия',
                     validation: 'name',
-                    value: profileData.lastname,
                     required: true
                 }
             },
             {
+                key: 'birthDate',
                 config: {
                     label: 'Дата рождения',
                     validation: 'date',
                     autocomplete: 'date',
                     placeholder: 'дд.мм.гггг',
-                    value: profileData.additionalData.birthDate,
                     required: true
                 }
             }],
             [{
+                key: 'bio',
                 type: 'textarea',
                 config: {
                     label: 'Краткая информация',
-                    value: profileData.additionalData.bio,
                     placeholder: 'Расскажите о себе'
                 }
             }]
@@ -63,21 +63,21 @@ const forms = {
         title: 'Контакты',
         fields: [
             [{
+                key: 'city',
                 config: {
                     label: 'Город',
-                    value: profileData.additionalData.city,
                 }
             }],
             [{
+                key: 'phoneNumber',
                 config: {
                     label: 'Телефон',
-                    value: profileData.additionalData.phoneNumber,
                 }
             },
             {
+                key: 'email',
                 config: {
                     label: 'Почта',
-                    value: profileData.additionalData.email,
                 }
             }]
         ]
@@ -86,39 +86,39 @@ const forms = {
         title: 'Образование',
         fields: [
             [{
+                key: 'schoolCity',
                 config: {
                     label: 'Город',
-                    value: profileData.additionalData.schoolCity,
                 }
             },
             {
+                key: 'school',
                 config: {
                     label: 'Школа',
-                    value: profileData.additionalData.school,
                 }
             }],
             [{
+                key: 'universityCity',
                 config: {
                     label: 'Город',
-                    value: profileData.additionalData.universityCity,
                 }
             },
             {
+                key: 'university',
                 config: {
                     label: 'Высшее учебное заведение',
-                    value: profileData.additionalData.university,
                 }
             },
             {
+                key: 'department',
                 config: {
                     label: 'Факультет',
-                    value: profileData.additionalData.department,
                 }
             },
             {
+                key: 'finishYear',
                 config: {
                     label: 'Год выпуска',
-                    value: profileData.additionalData.finishYear,
                 }
             }]
         ]
@@ -128,8 +128,10 @@ const forms = {
 
 export default class EditProfileView {
     #containerObj
-    constructor(containerObj) {
+    #menu
+    constructor(containerObj, menu) {
         this.#containerObj = containerObj;
+        this.#menu = menu;
     }
 
     render() {
@@ -167,38 +169,41 @@ export default class EditProfileView {
     renderSection(data) {
         this.#containerObj.left.innerHTML = '';
 
-        if (data.header) {
-            this.renderEditHeader();
-        }
-        
+        Ajax.get({
+            url: '/user',
+            callback: (status, userData) => {
+                let isAuthorized = status === 200;
+    
+                if (!isAuthorized) {
+                    this.#menu.goToPage(this.#menu.menuElements.login);
+                    this.#menu.updateMenuVisibility(false);
+                    return;
+                }
+
+                if (data.header) {
+                    this.renderEditHeader();
+                }
+                
+                this.renderForm(data.fields, userData);
+            }
+        });
+    }
+
+    renderForm(fields, userData) {
         const form = createElement({
             parent: this.#containerObj.left,
             tag: 'form',
             classes: ['profile-edit-form']
         });
 
-        if (data.title) {
+        if (userData.title) {
             createElement({
                 parent: form,
                 tag: 'h1',
-                text: data.title
+                text: userData.title
             });
         }
 
-        this.renderFormFields(form, data.fields);
-        
-        new ButtonComponent(form, {
-            text: 'Сохранить',
-            variant: 'primary',
-            size: 'large',
-            classes: ['profile-edit-btn'],
-            onClick: () => {
-                // TODO: сохранить изменения
-            },
-        });
-    }
-
-    renderFormFields(form, fields) {
         const formFields = createElement({
             parent: form,
             classes: ['profile-edit-form-fields']
@@ -215,10 +220,12 @@ export default class EditProfileView {
         
             for (const field of fieldset) {
                 if (field.type === 'textarea') {
-                    field.config.classes = ['profile-edit-input', 'modal-window-textarea']
+                    field.config.classes = ['profile-edit-input', 'modal-window-textarea'];
+                    field.config.value = userData[field.key] || userData.additionalData[field.key];
                     new TextareaComponent(fieldsetElement, field.config);
                 } else {
                     field.config.classes = ['profile-edit-input']
+                    field.config.value = userData[field.key] || userData.additionalData[field.key];
                     field.config.placeholder ? null : field.config.placeholder = field.config.label;
                     new InputComponent(fieldsetElement, field.config);
                 }
@@ -231,6 +238,16 @@ export default class EditProfileView {
                 });
             }
         }
+
+        new ButtonComponent(form, {
+            text: 'Сохранить',
+            variant: 'primary',
+            size: 'large',
+            classes: ['profile-edit-btn'],
+            onClick: () => {
+                // TODO: сохранить изменения
+            },
+        });
     }
 
     renderEditHeader() {

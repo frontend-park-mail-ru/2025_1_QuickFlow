@@ -21,13 +21,13 @@ const posts = [
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
         text: 'Аԥсны (Абхазия) в переводе с абхазского — "страна души". И действительно, поездка туда впечаталась в душу и стала испытанием для тела: пока это наше единственное путешествие, где мы три дня не мылись, купались в море с коровами, все время от чего-нибудь лечились, шарахались от машин на переходах и от собак в подворотнях, сгоняли кошек со стульев в кафе и вырывали наших детей из рук прохожих. Но поскольку мы все же благополучно вернулись домой, я могу обо всем подробнейшим образом написать здесь (от души, так скажем). Сейчас — вводный пост, потом будет весь наш маршрут поэтапно, а в конце моих путевых заметок подведем итоги по стоимости поездки.',
         pics: [
-            "IMG_6776.jpg",
-            "/273153700_118738253861831_5906416883131394354_n.jpeg",
-            "/272708814_1158833634855293_1743973316352152210_n.webp.jpg",
-            "/272464515_147005761018515_3100264353239753904_n.webp.jpg",
-            "/259096143_252774593424446_3292295880799640700_n.jpeg",
-            "/19984805_468099790230913_7469029070697660416_n.jpeg",
-            "/16583858_168051673696142_846500378588479488_n.jpeg",
+            "/posts/IMG_6776.jpg",
+            "/posts/273153700_118738253861831_5906416883131394354_n.jpeg",
+            "/posts/272708814_1158833634855293_1743973316352152210_n.webp.jpg",
+            "/posts/272464515_147005761018515_3100264353239753904_n.webp.jpg",
+            "/posts/259096143_252774593424446_3292295880799640700_n.jpeg",
+            "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
+            "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
         ],
         created_at: "2005-05-02",
         like_count: 0,
@@ -53,7 +53,7 @@ const posts = [
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
         text: "Hello, this is my first post",
         pics: [
-            "/272464515_147005761018515_3100264353239753904_n.webp.jpg",
+            "/posts/272464515_147005761018515_3100264353239753904_n.webp.jpg",
         ],
         created_at: "2005-05-02",
         like_count: 0,
@@ -65,7 +65,7 @@ const posts = [
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
         text: "Hello, this is my first post",
         pics: [
-            "/259096143_252774593424446_3292295880799640700_n.jpeg",
+            "/posts/259096143_252774593424446_3292295880799640700_n.jpeg",
         ],
         created_at: "2005-05-02",
         like_count: 0,
@@ -77,7 +77,7 @@ const posts = [
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
         text: "Hello, this is my first post",
         pics: [
-            "/19984805_468099790230913_7469029070697660416_n.jpeg",
+            "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
         ],
         created_at: "2005-05-02",
         like_count: 0,
@@ -89,7 +89,7 @@ const posts = [
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
         text: "Hello, this is my first post",
         pics: [
-            "/16583858_168051673696142_846500378588479488_n.jpeg",
+            "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
         ],
         created_at: "2005-05-02",
         like_count: 0,
@@ -102,11 +102,80 @@ const users = {
     rvasutenko: {
         username: 'rvasutenko',
         password: 'Qwerty1!',
-        firstname: 'Васютенко',
-        lastname: 'Роман',
+        firstname: 'Роман',
+        lastname: 'Васютенко',
         sex: 1,
-        birth_date: '2005-05-02',
+        birth_date: '2005-05-02', // TODO: change to camelCase: birthDate
         avatar: 'avatar.jpg',
+        cover: '',
+        additionalData: {
+            birthDate: '02.05.2005',
+            location: 'Москва',
+            education: 'МГТУ им. Н.Э. Баумана',
+            phoneNumber: '+7 (964) 882 64-55',
+            email: 'vasyutenko20050205@mail.ru',
+        },
+        countedData: {
+            friends: 165,
+            subscribers: 187,
+            subscribes: 68,
+        },
+        friends: {
+            andrew: {
+                name: 'Андрей',
+                avatar: 'avatar.jpg'
+            },
+            maxim: {
+                name: 'Максим',
+                avatar: 'avatar.jpg'
+            },
+            olga: {
+                name: 'Ольга',
+                avatar: 'avatar.jpg'
+            },
+            anatoliy34: {
+                name: 'Анатолий',
+                avatar: 'avatar.jpg'
+            },
+            ann1997: {
+                name: 'Анна',
+                avatar: 'avatar.jpg'
+            },
+            poporkaaa: {
+                name: 'Лилия',
+                avatar: 'avatar.jpg'
+            },
+            maxutka_super: {
+                name: 'Максим',
+                avatar: 'avatar.jpg'
+            },
+            ooooolchik: {
+                name: 'Ольга',
+                avatar: 'avatar.jpg'
+            },
+        }
+    },
+    andrew: {
+        username: 'andrew',
+        password: 'Qwerty1!',
+        firstname: 'Андрей',
+        lastname: 'Самарский',
+        sex: 1,
+        birth_date: '2000-01-28', // TODO: change to camelCase: birthDate
+        avatar: 'avatar.jpg',
+        cover: '',
+        additionalData: {
+            birthDate: '28.01.2000',
+            location: 'Москва',
+            education: 'МГТУ им. Н.Э. Баумана',
+            phoneNumber: '8 800 555 35 35',
+            email: 'andrew@mail.ru',
+        },
+        countedData: {
+            friends: 165,
+            subscribers: 187,
+            subscribes: 68,
+        },
     },
 };
 const ids = {};
@@ -205,17 +274,22 @@ app.get('/feed', (req, res) => {
     res.status(200).json(posts);
 });
 
-app.get('/user-info', (req, res) => {
+app.get('/user', (req, res) => {
     const id = req.cookies['podvorot'];
     const username = ids[id];
-
     if (!username || !users[username]) {
         return res.status(401).end();
     }
 
-    const userInfo = users[username];
+    if (req.query && req.query.username ) {
+        const queryUsername = req.query.username;
+        if (!queryUsername || !users[queryUsername]) {
+            return res.status(401).end();
+        }
+        return res.status(200).json(users[queryUsername]);
+    }
     
-    res.status(200).json(userInfo);
+    res.status(200).json(users[username]);
 });
 
 // app.post('/like', (req, res) => {

@@ -10,6 +10,8 @@ export default class HeaderComponent {
         this.#parent = parent;
         this.#menu = menu;
 
+        this.rightWrapper = null;
+
         console.log(this.#menu); // for linter
     }
 
@@ -59,61 +61,62 @@ export default class HeaderComponent {
     }
 
     renderAvatarMenu() {
-        const rightWrapper = document.createElement('div');
-        rightWrapper.classList.add('header-right');
-        this.wrapper.appendChild(rightWrapper);
+        this.rightWrapper = document.createElement('div');
+        this.rightWrapper.classList.add('header-right');
+        this.wrapper.appendChild(this.rightWrapper);
 
         // const avatar = document.createElement('img');
         // avatar.src = '/static/img/avatar.jpg';
         // avatar.classList.add('avatar');
 
         Ajax.get({
-            url: '/user-info',
-            // params: {
-            //     target: 'avatar',
-            // },
-            callback: (status, userInfo) => {
-                let isAuthorized = status === 200;
-
-                if (!isAuthorized) {
-                    this.#menu.goToPage(this.#menu.menuElements.login);
-                    this.#menu.updateMenuVisibility(false);
-                    return;
-                }
-
-                if (userInfo) {
-                    new AvatarComponent(rightWrapper, {
-                        size: 'xs',
-                        src: userInfo.avatar,
-                    });
-
-                    const dropdownButton = document.createElement('a');
-                    dropdownButton.classList.add('dropdown-button');
-
-                    rightWrapper.appendChild(dropdownButton);
-
-                    new ProfileMenuComponent(rightWrapper, {
-                        userInfo,
-                        menuItems: {
-                            settings: {
-                                href: '/settings',
-                                text: 'Настройки',
-                                icon: 'settings-icon'
-                            },
-                            help: {
-                                href: '/help',
-                                text: 'Помощь',
-                                icon: 'help-icon'
-                            },
-                            logout: {
-                                href: '/logout',
-                                text: 'Выйти',
-                                icon: 'logout-icon'
-                            },
-                        },
-                    });
-                }
+            url: '/user',
+            callback: (status, userData) => {
+                this.renderAvatarCallback(status, userData);
             }
         });
+    }
+
+    renderAvatarCallback(status, userData) {
+        let isAuthorized = status === 200;
+
+        if (!isAuthorized) {
+            this.#menu.goToPage(this.#menu.menuElements.login);
+            this.#menu.updateMenuVisibility(false);
+            return;
+        }
+
+        if (userData) {
+            new AvatarComponent(this.rightWrapper, {
+                size: 'xs',
+                src: userData.avatar,
+            });
+
+            const dropdownButton = document.createElement('a');
+            dropdownButton.classList.add('dropdown-button');
+
+            this.rightWrapper.appendChild(dropdownButton);
+
+            new ProfileMenuComponent(this.rightWrapper, {
+                userData,
+                menuItems: {
+                    settings: {
+                        href: '/settings',
+                        text: 'Настройки',
+                        icon: 'settings-icon'
+                    },
+                    help: {
+                        href: '/help',
+                        text: 'Помощь',
+                        icon: 'help-icon'
+                    },
+                    logout: {
+                        href: '/logout',
+                        text: 'Выйти',
+                        icon: 'logout-icon'
+                    },
+                },
+            });
+        }
     }
 }
