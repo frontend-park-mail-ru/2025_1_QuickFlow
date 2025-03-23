@@ -25,7 +25,7 @@ export default class AvatarComponent {
 
         this.avatar = document.createElement('img');
         this.wrapper.appendChild(this.avatar);
-        this.avatar.src = `/static/img/${this.#config.src}`;
+        this.avatar.src = this.#config.src;
         this.avatar.classList.add('avatar');
 
         if (this.#config.type === 'status') {

@@ -181,7 +181,7 @@ export default class EditProfileView {
                 }
 
                 if (data.header) {
-                    this.renderEditHeader();
+                    this.renderEditHeader(userData);
                 }
                 
                 this.renderForm(data.fields, userData);
@@ -250,7 +250,7 @@ export default class EditProfileView {
         });
     }
 
-    renderEditHeader() {
+    renderEditHeader(userData) {
         const profileHeader = createElement({
             parent: this.#containerObj.left,
             classes: ['profile-header', 'edit']
@@ -264,7 +264,7 @@ export default class EditProfileView {
         const cover = createElement({
             parent: coverWrapper,
             classes: ['profile-cover', 'edit'],
-            attrs: {src: '/static/img/profile-header.jpg'}
+            attrs: {src: userData.cover}
         });
 
         const coverUploadBtn = new ButtonComponent(coverWrapper, {
@@ -283,7 +283,7 @@ export default class EditProfileView {
         const avatar = new AvatarComponent(profileHeader, {
             size: 'xxl',
             class: 'profile-avatar',
-            src: 'avatar.jpg',
+            src: userData.avatar,
             type: 'edit'
         });
 
