@@ -197,7 +197,7 @@ export default class PostComponent {
 
         new AvatarComponent(authorWrapper, {
             size: AUTHOR_AVATAR_SIZE,
-            src: 'avatar.jpg',
+            src: this.data.avatar,
         });
 
         const topRightWrapper = document.createElement('div');

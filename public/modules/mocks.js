@@ -1,5 +1,6 @@
 export const posts = [
     {
+        avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
         text: 'Аԥсны (Абхазия) в переводе с абхазского — "страна души". И действительно, поездка туда впечаталась в душу и стала испытанием для тела: пока это наше единственное путешествие, где мы три дня не мылись, купались в море с коровами, все время от чего-нибудь лечились, шарахались от машин на переходах и от собак в подворотнях, сгоняли кошек со стульев в кафе и вырывали наших детей из рук прохожих. Но поскольку мы все же благополучно вернулись домой, я могу обо всем подробнейшим образом написать здесь (от души, так скажем). Сейчас — вводный пост, потом будет весь наш маршрут поэтапно, а в конце моих путевых заметок подведем итоги по стоимости поездки.',
@@ -18,6 +19,7 @@ export const posts = [
         comment_count: 0
     },
     {
+        avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
         text: "Hello, this is my first post",
@@ -32,6 +34,7 @@ export const posts = [
         comment_count: 0
     },
     {
+        avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
         text: "Hello, this is my first post",
@@ -44,6 +47,7 @@ export const posts = [
         comment_count: 0
     },
     {
+        avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
         text: "Hello, this is my first post",
@@ -56,6 +60,7 @@ export const posts = [
         comment_count: 0
     },
     {
+        avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
         text: "Hello, this is my first post",
@@ -68,6 +73,7 @@ export const posts = [
         comment_count: 0
     },
     {
+        avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
         text: "Hello, this is my first post",
