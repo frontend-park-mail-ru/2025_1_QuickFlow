@@ -14,10 +14,10 @@ class Ajax {
 
     async get({ url, params = {}, callback = () => {} }) {
         try {
-            if (url === 'user') {
+            if (url === '/user') {
                 callback(200, users['rvasutenko']);
                 return;
-            } else if (url === 'feed') {
+            } else if (url === '/feed') {
                 callback(200, posts);
                 return;
             }
