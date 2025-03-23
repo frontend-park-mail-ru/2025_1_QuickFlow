@@ -1,7 +1,11 @@
+import { posts, users } from './mocks.js'
+
+
 const HTTP_METHOD_GET = 'GET';
 const HTTP_METHOD_POST = 'POST';
 const API_BASE_URL = 'https://quickflowapp.ru/api';
 const DEVELOP = false;
+
 
 class Ajax {
     constructor() {
@@ -10,6 +14,12 @@ class Ajax {
 
     async get({ url, params = {}, callback = () => {} }) {
         try {
+            if (url === 'user') {
+                callback(200, users['rvasutenko']);
+            } else if (url === 'feed') {
+                callback(200, posts);
+            }
+
             const queryString = new URLSearchParams(params).toString();
             const fullUrl = `${this.baseUrl}${url}${queryString ? `?${queryString}` : ''}`;
     
