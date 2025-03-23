@@ -1,34 +1,34 @@
 export const profileFriends = [
     {
         name: 'Андрей',
-        avatar: 'avatar.jpg'
+        avatar: '/avatars/avatar.jpg'
     },
     {
         name: 'Максим',
-        avatar: 'avatar.jpg'
+        avatar: '/avatars/avatar.jpg'
     },
     {
         name: 'Ольга',
-        avatar: 'avatar.jpg'
+        avatar: '/avatars/avatar.jpg'
     },
     {
         name: 'Анатолий',
-        avatar: 'avatar.jpg'
+        avatar: '/avatars/avatar.jpg'
     },
     {
         name: 'Анна',
-        avatar: 'avatar.jpg'
+        avatar: '/avatars/avatar.jpg'
     },
     {
         name: 'Лилия',
-        avatar: 'avatar.jpg'
+        avatar: '/avatars/avatar.jpg'
     },
     {
         name: 'Максим',
-        avatar: 'avatar.jpg'
+        avatar: '/avatars/avatar.jpg'
     },
     {
         name: 'Ольга',
-        avatar: 'avatar.jpg'
+        avatar: '/avatars/avatar.jpg'
     },
 ];

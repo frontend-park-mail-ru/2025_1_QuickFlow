@@ -89,8 +89,8 @@ export const users = {
         lastname: 'Васютенко',
         sex: 1,
         birth_date: '2005-05-02', // TODO: change to camelCase: birthDate
-        avatar: 'avatar.jpg',
-        cover: '',
+        avatar: '/avatars/avatar.jpg',
+        cover: '/covers/profile-header.jpg',
         additionalData: {
             birthDate: '02.05.2005',
             location: 'Москва',

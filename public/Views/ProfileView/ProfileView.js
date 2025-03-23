@@ -190,14 +190,14 @@ export default class ProfileView {
         createElement({
             parent: coverWrapper,
             classes: ['profile-cover'],
-            attrs: {src: '/static/img/profile-header.jpg'}
+            attrs: {src: data.cover}
         });
 
         new AvatarComponent(profileHeader, {
             size: 'xxxl',
             class: 'profile-avatar',
             type: 'status',
-            src: 'avatar.jpg',
+            src: data.avatar,
         });
 
         const profileBottom = createElement({
