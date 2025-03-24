@@ -22,7 +22,7 @@ class Ajax {
                     callback(200, posts);
                     return;
                 } else if (url === '/user-dev-false') {
-                    url = '/user';
+                    url = '/feed';
                 }
             }
 
