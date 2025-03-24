@@ -80,6 +80,10 @@ header.render();
 
 Ajax.get({
     url: '/user-dev-false',
+    params: {
+        posts_count: 10
+    },
+
     callback: (status) => {
         let isAuthorized = status === 200;
 
