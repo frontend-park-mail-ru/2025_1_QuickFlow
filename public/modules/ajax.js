@@ -1,4 +1,4 @@
-import { posts, users } from './mocks.js'
+import { posts, users } from '../mocks.js'
 
 
 const HTTP_METHOD_GET = 'GET';
@@ -14,12 +14,14 @@ class Ajax {
 
     async get({ url, params = {}, callback = () => {} }) {
         try {
-            if (url === '/user') {
-                callback(200, users['rvasutenko']);
-                return;
-            } else if (url === '/feed') {
-                callback(200, posts);
-                return;
+            if (!DEVELOP) {
+                if (url === '/user') {
+                    callback(200, users['rvasutenko']);
+                    return;
+                } else if (url === '/feed') {
+                    callback(200, posts);
+                    return;
+                }
             }
 
             const queryString = new URLSearchParams(params).toString();

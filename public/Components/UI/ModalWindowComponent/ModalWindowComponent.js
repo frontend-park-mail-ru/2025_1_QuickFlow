@@ -3,10 +3,12 @@ import TextareaComponent from '../TextareaComponent/TextareaComponent.js';
 import createElement from '../../../utils/createElement.js';
 import {profileDataLayout} from '../../../Views/ProfileView/ProfileView.js'
 
+
 export default class ModalWindowComponent {
+    #parent
     #config
-    constructor(container, config) {
-        this.container = container;
+    constructor(parent, config) {
+        this.#parent = parent;
         this.#config = config;
 
         this.wrapper = null;
@@ -19,7 +21,7 @@ export default class ModalWindowComponent {
         document.body.style.overflow = 'hidden';
 
         this.wrapper = createElement({
-            parent: this.container,
+            parent: this.#parent,
             classes: ['modal-window-bg'],
         });
 

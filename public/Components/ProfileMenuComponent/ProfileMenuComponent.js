@@ -1,64 +1,77 @@
 import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
+import createElement from '../../utils/createElement.js';
 
 
 const AVATAR_SIZE = 'xl';
 const USERNAME_PREFIX = '@';
 
+
 export default class ProfileMenuComponent {
+    #parent
     #config
-    constructor(container, config) {
+    constructor(parent, config) {
         this.#config = config;
-        this.container = container;
-        this.wrapper = document.createElement('div');
-        this.wrapper.classList.add('profile-menu-wrapper');
-        this.container.appendChild(this.wrapper);
+        this.#parent = parent;
+        
+        this.wrapper = null;
         this.render();
     }
 
     render() {
-        const topWrapper = document.createElement('div');
-        topWrapper.classList.add('profile-menu-top-wrapper');
+        this.wrapper = createElement({
+            parent: this.#parent,
+            classes: ['profile-menu-wrapper'],
+        });
+        
+        const topWrapper = createElement({
+            parent: this.wrapper,
+            classes: ['profile-menu-top-wrapper'],
+        });
 
         new AvatarComponent(topWrapper, {
             size: AVATAR_SIZE,
             src: this.#config.userData.avatar,
         });
 
-        const userData = document.createElement('div');
-        userData.classList.add('profile-menu-user-info');
-        topWrapper.appendChild(userData);
+        const userData = createElement({
+            parent: topWrapper,
+            classes: ['profile-menu-user-info'],
+        });
 
-        const name = document.createElement('div');
-        name.classList.add('profile-menu-name');
-        name.textContent = `${this.#config.userData.lastname} ${this.#config.userData.firstname}`;
-        userData.appendChild(name);
+        createElement({
+            parent: userData,
+            classes: ['profile-menu-name'],
+            text: `${this.#config.userData.lastname} ${this.#config.userData.firstname}`
+        });
 
-        const username = document.createElement('div');
-        username.classList.add('profile-menu-username');
-        username.textContent = `${USERNAME_PREFIX}${this.#config.userData.username}`;
-        userData.appendChild(username);
+        createElement({
+            parent: userData,
+            classes: ['profile-menu-username'],
+            text: `${USERNAME_PREFIX}${this.#config.userData.username}`
+        });
 
-        this.wrapper.appendChild(topWrapper);
-
-        const menuItems = document.createElement('div');
-        menuItems.classList.add('profile-menu-items');
-        this.wrapper.appendChild(menuItems);
+        const menuItems = createElement({
+            parent: this.wrapper,
+            classes: ['profile-menu-items'],
+        });
 
         Object.entries(this.#config.menuItems).forEach(([, { href, text, icon }],) => {
-            const menuItem = document.createElement('a');
-            menuItem.href = href;
-            menuItem.classList.add('profile-menu-item');
-            menuItems.appendChild(menuItem);
-
-            const menuItemIcon = document.createElement('img');
-            menuItemIcon.classList.add('profile-menu-icon');
-            menuItemIcon.src = `/static/img/${icon}.svg`;
-            menuItem.appendChild(menuItemIcon);
-
-            const menuItemText = document.createElement('div');
-            menuItemText.classList.add('profile-menu-item-text');
-            menuItemText.textContent = text;
-            menuItem.appendChild(menuItemText);
+            const menuItem = createElement({
+                tag: 'a',
+                parent: menuItems,
+                classes: ['profile-menu-item'],
+                attrs: {href}
+            });
+            createElement({
+                parent: menuItem,
+                classes: ['profile-menu-icon'],
+                attrs: {src: `/static/img/${icon}.svg`}
+            });
+            createElement({
+                parent: menuItem,
+                classes: ['profile-menu-item-text'],
+                text
+            });
         });
     }
 }

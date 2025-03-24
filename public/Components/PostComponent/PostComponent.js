@@ -1,6 +1,7 @@
 import ContextMenuComponent from '../ContextMenuComponent/ContextMenuComponent.js'
 import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
 import formatTimeAgo from '../../utils/formatTimeAgo.js';
+import createElement from '../../utils/createElement.js';
 
 
 const AUTHOR_AVATAR_SIZE = 's';
@@ -9,66 +10,83 @@ const READ_MORE_BTN_TEXT = 'Показать ещё';
 const READ_LESS_BTN_TEXT = 'Скрыть';
 const ADD_TO_FRIENDS_BTN_TEXT = 'Добавить в друзья';
 const AUTHOR_NAME_DATE_DIVIDER = '•';
+const DEAFULT_IMG_ALT = 'post image';
+const DISPLAYED_ACTIONS = ['like', 'comment', 'repost'];
+
 
 export default class PostComponent {
-    constructor(container, data) {
-        this.container = container;
-        this.wrapper = document.createElement('div');
-        this.wrapper.classList.add('post');
-        this.data = data;
+    #parent
+    #config
+    constructor(parent, config) {
+        this.#parent = parent;
+        this.#config = config;
+        
+        this.wrapper = null;
         this.render();
     }
 
     render() {
+        this.wrapper = createElement({
+            parent: this.#parent,
+            classes: ['post'],
+        });
+
         this.renderTop();
         this.renderPics();
         // this.renderActions();
         this.renderText();
-
-        this.container.appendChild(this.wrapper);
     }
 
     renderPics() {
-        const picsWrapper = document.createElement('div');
-        picsWrapper.classList.add('post-pics-wrapper');
-        this.wrapper.appendChild(picsWrapper);
+        const picsWrapper = createElement({
+            parent: this.wrapper,
+            classes: ['post-pics-wrapper'],
+        });
 
-        const slider = document.createElement('div');
-        slider.classList.add('post-pics-slider');
-        picsWrapper.appendChild(slider);
+        const slider = createElement({
+            parent: picsWrapper,
+            classes: ['post-pics-slider'],
+        });
 
-        if (this.data.pics && this.data.pics.length > 0) {
-            this.data.pics.forEach((pic) => {
-                const postPic = document.createElement('img');
-                postPic.src = pic;
-                postPic.alt = 'post image';
-                postPic.classList.add('post-pic');
-                slider.appendChild(postPic);
+        if (this.#config.pics && this.#config.pics.length > 0) {
+            this.#config.pics.forEach((pic) => {
+                createElement({
+                    parent: slider,
+                    classes: ['post-pic'],
+                    attrs: {src: pic, alt: DEAFULT_IMG_ALT}
+                });
             });
         }
 
         let currentIndex = 0;
-        const totalPics = this.data.pics.length;
+        const totalPics = this.#config.pics.length;
 
         if (totalPics > 1) {
-            const paginator = document.createElement('div');
-            paginator.classList.add('post-pics-paginator');
-            paginator.innerText = `${currentIndex + 1}/${totalPics}`;
-            picsWrapper.appendChild(paginator);
+            const paginator = createElement({
+                parent: picsWrapper,
+                classes: ['post-pics-paginator'],
+                text: `${currentIndex + 1}/${totalPics}`
+            });
 
-            const prevBtn = document.createElement('div');
-            prevBtn.classList.add('post-nav-btn', 'post-prev-btn', 'hidden');
-            const prevIcon = document.createElement('img');
-            prevIcon.src = 'static/img/prev-arrow-icon.svg';
-            prevBtn.appendChild(prevIcon);
-            picsWrapper.appendChild(prevBtn);
+            const prevBtn = createElement({
+                parent: picsWrapper,
+                classes: ['post-nav-btn', 'post-prev-btn', 'hidden'],
+            });
 
-            const nextBtn = document.createElement('div');
-            nextBtn.classList.add('post-nav-btn', 'post-next-btn');
-            const nextIcon = document.createElement('img');
-            nextIcon.src = 'static/img/next-arrow-icon.svg';
-            nextBtn.appendChild(nextIcon);
-            picsWrapper.appendChild(nextBtn);
+            createElement({
+                parent: prevBtn,
+                attrs: {src: 'static/img/prev-arrow-icon.svg'}
+            });
+
+            const nextBtn = createElement({
+                parent: picsWrapper,
+                classes: ['post-nav-btn', 'post-next-btn'],
+            });
+
+            createElement({
+                parent: nextBtn,
+                attrs: {src: 'static/img/next-arrow-icon.svg'}
+            });
 
             prevBtn.addEventListener('click', () => {
                 if (currentIndex > 0) {
@@ -103,69 +121,58 @@ export default class PostComponent {
     }
 
     renderActions() {
-        const actionsWrapper = document.createElement('div');
-        actionsWrapper.classList.add('post-actions-wrapper');
-        this.wrapper.appendChild(actionsWrapper);
+        const actionsWrapper = createElement({
+            parent: this.wrapper,
+            classes: ['post-actions-wrapper'],
+        });
 
-        const countedActions = document.createElement('div');
-        countedActions.classList.add('post-actions-counted');
-        actionsWrapper.appendChild(countedActions);
+        const countedActions = createElement({
+            parent: actionsWrapper,
+            classes: ['post-actions-counted'],
+        });
 
-        const likeWrapper = document.createElement('div');
-        likeWrapper.classList.add('post-action-wrapper');
-        countedActions.appendChild(likeWrapper);
-        const like = document.createElement('div');
-        like.classList.add('post-like');
-        const likeCounter = document.createElement('div');
-        likeCounter.classList.add('post-action-counter');
-        likeCounter.textContent = this.data.like_count;
-        likeWrapper.appendChild(like);
-        likeWrapper.appendChild(likeCounter);
+        for (const key of DISPLAYED_ACTIONS) {
+            const actionWrapper = createElement({
+                parent: countedActions,
+                classes: ['post-action-wrapper'],
+            });
+            createElement({
+                parent: actionWrapper,
+                classes: [`post-${key}`],
+            });
+            createElement({
+                parent: actionWrapper,
+                classes: ['post-action-counter'],
+                text: this.#config[`${key}_count`]
+            });
+        }
 
-        const commentWrapper = document.createElement('div');
-        commentWrapper.classList.add('post-action-wrapper');
-        countedActions.appendChild(commentWrapper);
-        const comment = document.createElement('div');
-        comment.classList.add('post-comment');
-        const commentCounter = document.createElement('div');
-        commentCounter.classList.add('post-action-counter');
-        commentCounter.textContent = this.data.comment_count;
-        commentWrapper.appendChild(comment);
-        commentWrapper.appendChild(commentCounter);
-
-        const repostWrapper = document.createElement('div');
-        repostWrapper.classList.add('post-action-wrapper');
-        countedActions.appendChild(repostWrapper);
-        const repost = document.createElement('div');
-        repost.classList.add('post-repost');
-        const repostCounter = document.createElement('div');
-        repostCounter.classList.add('post-action-counter');
-        repostCounter.textContent = this.data.repost_count;
-        repostWrapper.appendChild(repost);
-        repostWrapper.appendChild(repostCounter);
-
-        const bookmark = document.createElement('div');
-        actionsWrapper.appendChild(bookmark);
-        bookmark.classList.add('post-action-bookmark');
+        createElement({
+            parent: actionsWrapper,
+            classes: ['post-action-bookmark'],
+        });
     }
 
     renderText() {
-        const textWrapper = document.createElement('div');
-        textWrapper.classList.add('post-text-wrapper');
-        this.wrapper.appendChild(textWrapper);
+        const textWrapper = createElement({
+            parent: this.wrapper,
+            classes: ['post-text-wrapper'],
+        });
 
-        const text = document.createElement('p');
-        text.classList.add('post-text-content');
-        text.textContent = this.data.text;
-        textWrapper.appendChild(text);
+        const text = createElement({
+            tag: 'p',
+            parent: textWrapper,
+            classes: ['post-text-content'],
+            text: this.#config.text,
+        });
 
-        // Создаём кнопку "Читать дальше"
-        const readMore = document.createElement('p');
-        readMore.classList.add('post-read-more');
-        readMore.textContent = READ_MORE_BTN_TEXT;
-        readMore.style.display = 'none';
-
-        textWrapper.appendChild(readMore);
+        const readMore = createElement({
+            tag: 'p',
+            parent: textWrapper,
+            classes: ['post-read-more'],
+            text: READ_MORE_BTN_TEXT,
+            attrs: {style: 'display: none;'}
+        });
 
         // После рендеринга проверяем, обрезается ли текст
         requestAnimationFrame(() => {
@@ -187,63 +194,73 @@ export default class PostComponent {
     }
 
     renderTop() {
-        const topWrapper = document.createElement('div');
-        topWrapper.classList.add('post-top-wrapper');
-        this.wrapper.appendChild(topWrapper);
+        const topWrapper = createElement({
+            parent: this.wrapper,
+            classes: ['post-top-wrapper'],
+        });
 
-        const authorWrapper = document.createElement('div');
-        authorWrapper.classList.add('post-author-wrapper');
-        topWrapper.appendChild(authorWrapper);
+        const authorWrapper = createElement({
+            parent: topWrapper,
+            classes: ['post-author-wrapper'],
+        });
 
         new AvatarComponent(authorWrapper, {
             size: AUTHOR_AVATAR_SIZE,
-            src: this.data.avatar,
+            src: this.#config.avatar,
         });
 
-        const topRightWrapper = document.createElement('div');
-        topRightWrapper.classList.add('post-top-right-wrapper');
-        authorWrapper.appendChild(topRightWrapper);
+        const topRightWrapper = createElement({
+            parent: authorWrapper,
+            classes: ['post-top-right-wrapper'],
+        });
 
-        const nameDateWrapper = document.createElement('div');
-        nameDateWrapper.classList.add('post-name-date-wrapper');
-        topRightWrapper.appendChild(nameDateWrapper);
+        const nameDateWrapper = createElement({
+            parent: topRightWrapper,
+            classes: ['post-name-date-wrapper'],
+        });
 
-        const name = document.createElement('h2');
-        name.textContent = 'Илья Мациевский'; // TODO: брать динамически
-        nameDateWrapper.appendChild(name);
+        createElement({
+            tag: 'h2',
+            parent: nameDateWrapper,
+            text: `${this.#config.firstname} ${this.#config.lastname}`,
+        });
 
-        const divider = document.createElement('div');
-        divider.classList.add('post-date');
-        divider.classList.add('p1');
-        divider.textContent = AUTHOR_NAME_DATE_DIVIDER;
-        nameDateWrapper.appendChild(divider);
+        createElement({
+            classes: ['post-date', 'p1'],
+            parent: nameDateWrapper,
+            text: AUTHOR_NAME_DATE_DIVIDER,
+        });
 
-        const date = document.createElement('div');
-        date.classList.add('post-date');
-        date.classList.add('p1');
-        date.textContent = `${formatTimeAgo(this.data.created_at)}`;
-        nameDateWrapper.appendChild(date);
+        createElement({
+            classes: ['post-date', 'p1'],
+            parent: nameDateWrapper,
+            text: `${formatTimeAgo(this.#config.created_at)}`,
+        });
 
         const flag = true;
         if (flag) { // TODO: сделать проверку на то, есть ли в друзьях
-            const addToFriends = document.createElement('a');
-            addToFriends.classList.add('h3');
-            addToFriends.classList.add('a-btn');
-            addToFriends.textContent = ADD_TO_FRIENDS_BTN_TEXT; // сделать имя пользователя
-            topRightWrapper.appendChild(addToFriends);
+            createElement({
+                tag: 'a',
+                classes: ['h3', 'a-btn'],
+                parent: topRightWrapper,
+                text: ADD_TO_FRIENDS_BTN_TEXT,
+            });
         }
 
-        const dropdown = document.createElement('div');
-        dropdown.classList.add('dropdown');
-        topWrapper.appendChild(dropdown);
+        const dropdown = createElement({
+            classes: ['dropdown'],
+            parent: topWrapper,
+        });
 
-        const options = document.createElement('div');
-        options.classList.add('post-options');
-        const optionsWrapper = document.createElement('div');
+        const optionsWrapper = createElement({
+            classes: ['post-options-wrapper'],
+            parent: dropdown,
+        });
 
-        optionsWrapper.classList.add('post-options-wrapper');
-        optionsWrapper.appendChild(options);
-        dropdown.appendChild(optionsWrapper);
+        createElement({
+            classes: ['post-options'],
+            parent: optionsWrapper,
+        });
 
         new ContextMenuComponent(dropdown, {
             data: {
@@ -251,19 +268,16 @@ export default class PostComponent {
                     href: '/notify',
                     text: 'Уведомлять о постах',
                     icon: 'notice-icon',
-                    isCritical: false
                 },
                 copyLink: {
                     href: '/copy-link',
                     text: 'Скопировать ссылку',
                     icon: 'copy-icon',
-                    isCritical: false
                 },
                 notInterested: {
                     href: '/not-interested',
                     text: 'Не интересно',
                     icon: 'cross-circle-icon',
-                    isCritical: false
                 },
                 ban: {
                     href: '/ban',

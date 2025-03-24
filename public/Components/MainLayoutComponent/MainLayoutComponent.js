@@ -1,3 +1,5 @@
+import createElement from '../../utils/createElement.js';
+
 export default class MainLayoutComponent {
     #parent
     #config
@@ -14,9 +16,10 @@ export default class MainLayoutComponent {
     }
 
     render() {
-        this.container = document.createElement('div');
-        this.container.classList.add('container', this.#config.type);
-        this.#parent.appendChild(this.container);
+        this.container = createElement({
+            parent: this.#parent,
+            classes: ['container', this.#config.type],
+        });
 
         if (this.#config.type === 'feed') {
             this.renderFeed();
@@ -31,30 +34,36 @@ export default class MainLayoutComponent {
     }
 
     renderProfile() {
-        this.top = document.createElement('div');
-        this.top.classList.add('container-row');
-        this.container.appendChild(this.top);
+        this.top = createElement({
+            parent: this.container,
+            classes: ['container-row'],
+        });
 
-        const bottom = document.createElement('div');
-        bottom.classList.add('container-row');
-        this.container.appendChild(bottom);
+        const bottom = createElement({
+            parent: this.container,
+            classes: ['container-row'],
+        });
 
-        this.left = document.createElement('div');
-        this.left.classList.add('container-left');
-        bottom.appendChild(this.left);
+        this.left = createElement({
+            parent: bottom,
+            classes: ['container-left'],
+        });
 
-        this.right = document.createElement('div');
-        this.right.classList.add('container-right');
-        bottom.appendChild(this.right);
+        this.right = createElement({
+            parent: bottom,
+            classes: ['container-right'],
+        });
     }
 
     renderFeed() {
-        this.left = document.createElement('div');
-        this.left.classList.add('container-left');
-        this.container.appendChild(this.left);
+        this.left = createElement({
+            parent: this.container,
+            classes: ['container-left'],
+        });
 
-        this.right = document.createElement('div');
-        this.right.classList.add('container-right');
-        this.container.appendChild(this.right);
+        this.right = createElement({
+            parent: this.container,
+            classes: ['container-right'],
+        });
     }
 }

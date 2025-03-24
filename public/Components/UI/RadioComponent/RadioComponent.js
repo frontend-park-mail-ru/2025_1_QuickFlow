@@ -1,56 +1,79 @@
+import createElement from '../../../utils/createElement.js';
+
+
 const DEFAULT_REQUIRED = false;
+const REQUIRED_MARK_TEXT = ' *';
+
 
 export default class RadioComponent {
+    #parent
     #config
-    constructor(container, config) {
+    constructor(parent, config) {
+        this.#parent = parent;
         this.#config = config;
-        this.container = container;
+
         this.wrapper = null;
         this.render();
     }
 
     render() {
-        this.wrapper = document.createElement('div');
-        this.wrapper.classList.add('radio-wrapper');
+        this.wrapper = createElement({
+            parent: this.#parent,
+            classes: ['radio-wrapper'],
+        });
 
         if (this.#config.label) {
-            const label = document.createElement('label');
-            label.textContent = this.#config.label;
-            label.classList.add('input-label');
+            const label = createElement({
+                tag: 'label',
+                text: this.#config.label,
+                parent: this.wrapper,
+                classes: ['input-label'],
+            });
+
             if (this.#config.showRequired === true) {
-                const requiredMark = document.createElement('span');
-                requiredMark.textContent = ' *';
-                requiredMark.classList.add('required');
-                label.appendChild(requiredMark);
+                createElement({
+                    tag: 'span',
+                    text: REQUIRED_MARK_TEXT,
+                    parent: label,
+                    classes: ['required'],
+                });
             }
-            this.wrapper.appendChild(label);
         }
 
-        const choicesWrapper = document.createElement('div');
-        choicesWrapper.classList.add('choices-wrapper');
-        this.wrapper.appendChild(choicesWrapper);
+        const choicesWrapper = createElement({
+            parent: this.wrapper,
+            classes: ['choices-wrapper'],
+        });
 
         for (const key in this.#config.radios) {
             const radioData = this.#config.radios[key];
-            const choice = document.createElement('div');
-            choice.classList.add('choice');
 
-            const radio = document.createElement('input');
-            radio.type = 'radio';
-            radio.name = this.#config.name;
-            radio.value = radioData.value;
-            radio.id = radioData.id;
-            radio.required = this.#config.required || DEFAULT_REQUIRED;
+            const choice = createElement({
+                parent: choicesWrapper,
+                classes: ['choice'],
+            });
 
-            const label = document.createElement('label');
-            label.textContent = radioData.label;
-            label.htmlFor = radioData.id;
+            createElement({
+                tag: 'input',
+                parent: choice,
+                attrs: {
+                    type: 'radio',
+                    name: this.#config.name,
+                    value: radioData.value,
+                    id: radioData.id,
+                    required: this.#config.required || DEFAULT_REQUIRED,
+                },
+            });
 
-            choice.appendChild(radio);
-            choice.appendChild(label);
-            choicesWrapper.appendChild(choice);
+            createElement({
+                tag: 'label',
+                text: radioData.label,
+                parent: choice,
+                attrs: {
+                    htmlFor: radioData.id,
+                },
+            });
         }
-        this.container.appendChild(this.wrapper);
     }
 
     addListener(listener) {

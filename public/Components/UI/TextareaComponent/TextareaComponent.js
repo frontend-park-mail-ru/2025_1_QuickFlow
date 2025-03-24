@@ -5,9 +5,10 @@ const DEFAULT_PLACEHOLDER = '';
 
 
 export default class TextareaComponent {
+    #parent
     #config
-    constructor(container, config) {
-        this.container = container;
+    constructor(parent, config) {
+        this.#parent = parent;
         this.#config = config || {};
 
         this.wrapper = null;
@@ -17,6 +18,7 @@ export default class TextareaComponent {
 
     render() {
         this.wrapper = createElement({
+            parent: this.#parent,
             classes: ['textarea-wrapper'],
         });
 
@@ -25,17 +27,21 @@ export default class TextareaComponent {
         }
 
         if (this.#config.label) {
-            const label = document.createElement('label');
-            label.textContent = this.#config.label;
-            label.classList.add('input-label');
-            this.wrapper.appendChild(label);
+            createElement({
+                tag: 'label',
+                parent: this.wrapper,
+                text: this.#config.label,
+                classes: ['input-label'],
+            });
         }
 
-        this.textarea = document.createElement('textarea');
-        this.textarea.placeholder = this.#config.placeholder || DEFAULT_PLACEHOLDER;
-        
-        this.wrapper.appendChild(this.textarea);
-        this.container.appendChild(this.wrapper);
+        this.textarea = createElement({
+            tag: 'textarea',
+            parent: this.wrapper,
+            attrs: {
+                placeholder: this.#config.placeholder || DEFAULT_PLACEHOLDER,
+            },
+        });
     }
 
     addListener(listener) {

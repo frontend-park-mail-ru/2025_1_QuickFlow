@@ -1,11 +1,16 @@
 import Ajax from '../../modules/ajax.js';
 import InputComponent from '../UI/InputComponent/InputComponent.js';
 import ButtonComponent from '../UI/ButtonComponent/ButtonComponent.js';
+import createElement from '../../utils/createElement.js';
 
 export default class LoginFormComponent {
-    constructor(container, menu) {
-        this.container = container;
-        this.menu = menu;
+    #parent
+    #menu
+    #header
+    constructor(parent, menu, header) {
+        this.#parent = parent;
+        this.#menu = menu;
+        this.#header = header;
         
         this.step = 1;
         this.passwordInput = null;
@@ -17,7 +22,7 @@ export default class LoginFormComponent {
             usernameTitle: 'Вход QuickFlow',
             pwdTitle: 'Введите пароль',
             usernameDescription: 'Введите имя пользователя, которое привязано к вашему аккаунту',
-            pwdDescription: 'Введите ваш текущий пароль,<br>привязанный к ',
+            pwdDescription: 'Введите ваш текущий пароль,\r\nпривязанный к ',
             continueBtnText: 'Продолжить',
             signupBtnText: 'Создать аккаунт',
             signinBtnText: 'Войти'
@@ -26,10 +31,14 @@ export default class LoginFormComponent {
     }
 
     render() {
-        this.container.innerHTML = '';
+        this.#parent.innerHTML = '';
 
-        const form = document.createElement('form');
-        form.classList.add('auth-form');
+        const form = createElement({
+            tag: 'form',
+            parent: this.#parent,
+            classes: ['auth-form']
+        });
+
         this.handleFormSubmission(form);
 
         if (this.step === 1) {
@@ -37,8 +46,6 @@ export default class LoginFormComponent {
         } else if (this.step === 2) {
             this.renderPasswordStep(form);
         }
-
-        this.container.appendChild(form);
     }
 
     handleFormSubmission(form) {
@@ -54,17 +61,21 @@ export default class LoginFormComponent {
     }
 
     renderTopWrapper(form) {
-        const topWrapper = document.createElement('div');
-        topWrapper.classList.add('auth-form-top');
+        const topWrapper = createElement({
+            parent: form,
+            classes: ['auth-form-top']
+        });
 
         if (this.step === 2) {
-            const backBtn = document.createElement('a');
-            backBtn.classList.add('auth-form-back-btn');
-            topWrapper.appendChild(backBtn);
-            backBtn.addEventListener('click', () => {
+            createElement({
+                tag: 'a',
+                parent: topWrapper,
+                classes: ['auth-form-back-btn']
+            })
+            .addEventListener('click', () => {
                 if (this.step === 1) {
                     localStorage.removeItem("username");
-                    this.menu.goToPage(this.menu.menuElements.login);
+                    this.#menu.goToPage(this.#menu.menuElements.login);
                 } else {
                     this.step = 1;
                     this.render();
@@ -72,29 +83,31 @@ export default class LoginFormComponent {
             });
         }
 
-        const logo = document.createElement('img');
-        logo.src = '/static/img/logo-icon.svg';
-        logo.classList.add('auth-form-logo');
+        createElement({
+            parent: topWrapper,
+            classes: ['auth-form-logo'],
+            attrs: {src: '/static/img/logo-icon.svg'}
+        })
 
-        const title = document.createElement('h1');
-        title.textContent = this.step === 1 ? this.config.usernameTitle : this.config.pwdTitle;
+        createElement({
+            tag: 'h1',
+            text: this.step === 1 ? this.config.usernameTitle : this.config.pwdTitle,
+            parent: topWrapper,
+        })
 
-        const description = document.createElement('p');
-        description.classList.add('p1');
-        description.innerHTML =
-            this.step === 1 ? this.config.usernameDescription : `${this.config.pwdDescription}@${this.usernameInput.input.value.trim()}`;
-
-        topWrapper.appendChild(logo);
-        topWrapper.appendChild(title);
-        topWrapper.appendChild(description);
-
-        form.appendChild(topWrapper);
+        createElement({
+            tag: 'p',
+            classes: ['p1'],
+            text: this.step === 1 ? this.config.usernameDescription : `${this.config.pwdDescription}@${this.usernameInput.input.value.trim()}`,
+            parent: topWrapper,
+        })
     }
 
     renderBottomWrapper(form) {
-        const bottomWrapper = document.createElement('div');
-        bottomWrapper.classList.add('auth-form-bottom');
-        form.appendChild(bottomWrapper);
+        const bottomWrapper = createElement({
+            parent: form,
+            classes: ['auth-form-bottom'],
+        })
 
         this.continueBtn = new ButtonComponent(bottomWrapper, {
             text: this.step === 1 ? this.config.continueBtnText : this.config.signinBtnText,
@@ -115,7 +128,7 @@ export default class LoginFormComponent {
                 text: this.config.signupBtnText,
                 variant: 'secondary',
                 onClick: () => {
-                    this.menu.goToPage(this.menu.menuElements.signup);
+                    this.#menu.goToPage(this.#menu.menuElements.signup);
                 }
             });
         }
@@ -124,44 +137,44 @@ export default class LoginFormComponent {
     renderUsernameStep(form) {
         this.renderTopWrapper(form);
 
-        const fieldsetUsername = document.createElement('fieldset');
-        fieldsetUsername.classList.add('login-username');
+        const fieldsetUsername = createElement({
+            tag: 'fieldset',
+            parent: form,
+            classes: ['login-username'],
+        })
 
         this.usernameInput = new InputComponent(fieldsetUsername, {
             type: 'text',
             placeholder: 'Имя пользователя',
             autocomplete: 'username',
             required: true,
-            showRequired: false
+            showRequired: false,
+            value: localStorage.getItem("username") || ''
         });
-        this.usernameInput.input.value = localStorage.getItem("username") || '';
         
         this.clearFocusTimer();
         this.focusTimer = setTimeout(() => this.usernameInput.input.focus(), 0);
 
-        const checkboxWrapper = document.createElement('div');
-        checkboxWrapper.classList.add('checkbox-wrapper');
+        const checkboxWrapper = createElement({
+            parent: form,
+            classes: ['checkbox-wrapper'],
+        })
 
-        const rememberMe = document.createElement('input');
-        rememberMe.type = 'checkbox';
-        rememberMe.id = 'rememberMe';
+        createElement({
+            tag: 'input',
+            parent: checkboxWrapper,
+            classes: ['checkbox-wrapper'],
+            attrs: {type: 'checkbox', id:'rememberMe'}
+        })
 
-        const label = document.createElement('label');
-        label.htmlFor = 'rememberMe';
-        label.textContent = 'Запомнить меня';
+        createElement({
+            tag: 'label',
+            parent: checkboxWrapper,
+            attrs: {htmlFor: 'rememberMe'},
+            text: 'Запомнить меня'
+        })
 
-        checkboxWrapper.appendChild(rememberMe);
-        checkboxWrapper.appendChild(label);
-        fieldsetUsername.appendChild(checkboxWrapper);
-
-        form.appendChild(fieldsetUsername);
         this.renderBottomWrapper(form);
-
-        // Добавляем событие input для блокировки/разблокировки кнопки "Продолжить"
-        // this.usernameInput.input.addEventListener('input', () => {
-        //     this.updateBtnState();
-        // });
-        // this.updateBtnState();
     }
 
     updateBtnState() {
@@ -214,9 +227,10 @@ export default class LoginFormComponent {
             body,
             callback: (status) => {
                 if (status === 200) {
-                    this.menu.goToPage(this.menu.menuElements.feed);
-                    this.menu.checkAuthPage();
-                    this.menu.updateMenuVisibility(true);
+                    this.#menu.goToPage(this.#menu.menuElements.feed);
+                    this.#menu.checkAuthPage();
+                    this.#menu.updateMenuVisibility(true);
+                    this.#header.renderAvatarMenu();
                 } else {
                     this.passwordInput.showError('Неверное имя пользователя или пароль');
                     this.passwordInput.addListener(() => {

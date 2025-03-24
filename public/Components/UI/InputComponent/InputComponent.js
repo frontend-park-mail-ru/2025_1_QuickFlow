@@ -1,4 +1,5 @@
 import formatDateInput from '../../../utils/formatDateInput.js';
+import createElement from '../../../utils/createElement.js';
 
 
 const DEFAULT_MAX_LENGTH = 256;
@@ -6,16 +7,19 @@ const DEFAULT_AUTOCOMPLETE = 'off';
 const DEFAULT_PLACEHOLDER = '';
 const DEFAULT_TYPE = 'text';
 const DEFAULT_REQUIRED = false;
+const DEFAULT_INPUT_VALUE = '';
 const REQUIRED_MARK_TEXT = ' *';
 const MAX_DATE_INPUT_LENGTH = 10;
 const MIN_NAME_INPUT_LENGTH = 2;
 const MIN_PASSWORD_INPUT_LENGTH = 8;
 
+
 export default class InputComponent {
+    #parent
     #config
-    constructor(container, config) {
+    constructor(parent, config) {
         this.#config = config;
-        this.container = container;
+        this.#parent = parent;
 
         this.input = null;
         this.error = null;
@@ -26,47 +30,59 @@ export default class InputComponent {
     }
 
     render() {
-        this.wrapper = document.createElement('div');
-        this.wrapper.classList.add('input-wrapper');
-        if (this.#config.classes) {
-            this.#config.classes.forEach(className => this.wrapper.classList.add(className));
-        }
+        this.wrapper = createElement({
+            parent: this.#parent,
+            classes: [this.#config.classes, 'input-wrapper'],
+        });
 
         // Label (если задан)
         if (this.#config.label) {
-            const label = document.createElement('label');
-            label.textContent = this.#config.label;
-            label.classList.add('input-label');
+            const label = createElement({
+                tag: 'label',
+                text: this.#config.label,
+                parent: this.wrapper,
+                classes: ['input-label'],
+            });
             if (this.#config.showRequired) {
-                const requiredMark = document.createElement('span');
-                requiredMark.textContent = REQUIRED_MARK_TEXT;
-                requiredMark.classList.add('required');
-                label.appendChild(requiredMark);
+                createElement({ // TODO: протестировать
+                    tag: 'span',
+                    text: REQUIRED_MARK_TEXT,
+                    parent: label,
+                    classes: ['required'],
+                });
             }
-            this.wrapper.appendChild(label);
         }
+        
+        this.innnerWrapper = createElement({
+            parent: this.wrapper,
+            classes: ['inner-wrapper'],
+        });
 
         // Поле ввода
-        this.input = document.createElement('input');
-        this.input.classList.add('input-field');
+        this.input = createElement({
+            tag: 'input',
+            parent: this.innnerWrapper,
+            classes: ['input-field'],
+            attrs: {
+                type: this.#config.type || DEFAULT_TYPE,
+                autocomplete: this.#config.autocomplete || DEFAULT_AUTOCOMPLETE,
+                placeholder: this.#config.placeholder || DEFAULT_PLACEHOLDER,
+                maxLength: this.#config.maxLength || DEFAULT_MAX_LENGTH,
+                required: this.#config.required || DEFAULT_REQUIRED,
+                value: this.#config.value || DEFAULT_INPUT_VALUE,
+            },
+        });
 
-        this.input.type = this.#config.type || DEFAULT_TYPE;
-        this.input.autocomplete = this.#config.autocomplete || DEFAULT_AUTOCOMPLETE;
-        this.input.placeholder = this.#config.placeholder || DEFAULT_PLACEHOLDER;
-        this.input.maxLength = this.#config.maxLength || DEFAULT_MAX_LENGTH;
-        this.input.required = this.#config.required || DEFAULT_REQUIRED;
-
-        this.innnerWrapper = document.createElement('div');
-        this.innnerWrapper.classList.add('inner-wrapper');
-        this.wrapper.appendChild(this.innnerWrapper);
-        this.innnerWrapper.appendChild(this.input);
-
-        this.error = document.createElement('div');
-        this.error.classList.add('input-error');
+        this.error = createElement({
+            classes: ['input-error'],
+        });
 
         if (this.input.type === 'password') {
-            const pwdControl = document.createElement('a');
-            pwdControl.classList.add('pwd-control');
+            const pwdControl = createElement({
+                parent: this.innnerWrapper,
+                tag: 'a',
+                classes: ['pwd-control'],
+            });
 
             pwdControl.addEventListener('click', () => {
                 if (this.input.getAttribute('type') === 'password') {
@@ -77,16 +93,11 @@ export default class InputComponent {
                     this.input.setAttribute('type', 'password');
                 }
             });
-
-            this.innnerWrapper.appendChild(pwdControl);
         } else if (this.input.type === 'search') {
-            const searchIcon = document.createElement('div');
-            searchIcon.classList.add('search-icon');
-            this.innnerWrapper.appendChild(searchIcon);
-        }
-
-        if (this.#config.value) {
-            this.input.value = this.#config.value;
+            createElement({
+                parent: this.innnerWrapper,
+                classes: ['search-icon'],
+            });
         }
 
         // Добавление обработчиков валидации
@@ -95,33 +106,34 @@ export default class InputComponent {
         }
 
         // Описание (если задано)
-        if (this.#config.description || this.#config.maxLength) {
-            const descWrapper = document.createElement('div');
-            descWrapper.classList.add('description-wrapper');
+        if (this.#config.description || this.#config.maxLength) { // TODO: протестировать 
+            const descWrapper = createElement({
+                parent: this.wrapper,
+                classes: ['description-wrapper'],
+            });
 
             if (this.#config.description) {
-                const description = document.createElement('span');
-                description.textContent = this.#config.description;
-                description.classList.add('input-description');
-                descWrapper.appendChild(description);
+                createElement({
+                    tag: 'span',
+                    text: this.#config.description,
+                    parent: descWrapper,
+                    classes: ['input-description'],
+                });
             }
 
             if (this.#config.showCharactersLeft) {
-                const counter = document.createElement('span');
-                counter.textContent = this.#config.maxLength;
-                counter.classList.add('input-counter');
+                const counter = createElement({
+                    tag: 'span',
+                    text: this.#config.maxLength,
+                    parent: descWrapper,
+                    classes: ['input-counter'],
+                });
 
                 this.input.addEventListener('input', () => {
                     counter.textContent = this.#config.maxLength - this.input.value.length;
                 });
-
-                descWrapper.appendChild(counter);
             }
-
-            this.wrapper.appendChild(descWrapper);
         }
-
-        this.container.appendChild(this.wrapper);
     }
 
     addListener(listener) {

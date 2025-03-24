@@ -1,4 +1,6 @@
 import Ajax from '../../modules/ajax.js';
+import createElement from '../../utils/createElement.js';
+
 
 export default class LogoutView {
     constructor(menu) {
@@ -14,6 +16,6 @@ export default class LogoutView {
             }
         });
     
-        return document.createElement('div');
+        return createElement({});
     }
 }

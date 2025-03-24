@@ -2,19 +2,28 @@ import Ajax from '../../modules/ajax.js';
 import InputComponent from '../UI/InputComponent/InputComponent.js';
 import RadioComponent from '../UI/RadioComponent/RadioComponent.js';
 import ButtonComponent from '../UI/ButtonComponent/ButtonComponent.js';
+import createElement from '../../utils/createElement.js';
 
 
 const LOGO_SRC = '/static/img/logo-icon.svg';
 const DEFAULT_INPUT_VALUE = '';
 const CREATION_ERROR_MESSAGE = 'Не удалось создать аккаунт';
+const USER_INFO_TITLE = 'Информация о себе';
+const PWD_TITLE = 'Придумайте пароль';
+const PWD_TEXT = 'Или используйте пароль, предложенный устройством';
+const CONTINUE_BTN_TEXT = 'Продолжить';
+const PWD_INPUT_MAX_LENGTH = 32;
+
 
 export default class SignupFormComponent {
-    #config
+    #parent
     #step
     #menu
-    constructor(container, menu) {
-        this.container = container;
+    #header
+    constructor(parent, menu, header) {
+        this.#parent = parent;
         this.#menu = menu;
+        this.#header = header;
 
         this.usernameInput = null;
         this.firstnameInput = null;
@@ -27,41 +36,37 @@ export default class SignupFormComponent {
         this.continueBtn = null;
 
         this.#step = 1;
-        this.#config = {
-            userInfoTitle: 'Информация о себе',
-            pwdTitle: 'Придумайте пароль',
-            userInfoDescription: 'Введите логин, который привязан<br>к вашему аккаунту',
-            pwdDescription: 'Или используйте пароль, предложенный устройством',
-            continueBtnText: 'Продолжить',
-            signupBtnText: 'Создать аккаунт',
-            signinBtnText: 'Войти'
-        };
         this.render();
     }
 
     render() {
-        this.container.innerHTML = '';
+        this.#parent.innerHTML = '';
 
-        const form = document.createElement('form');
-        form.classList.add('auth-form');
+        const form = createElement({
+            tag: 'form',
+            parent: this.#parent,
+            classes: ['auth-form']
+        });
 
         if (this.#step === 1) {
             this.renderPersonalInfoStep(form);
         } else if (this.#step === 2) {
             this.renderCreatePasswordStep(form);
         }
-
-        this.container.appendChild(form);
     }
 
     renderTopWrapper(form) {
-        const topWrapper = document.createElement('div');
-        topWrapper.classList.add('auth-form-top');
+        const topWrapper = createElement({
+            parent: form,
+            classes: ['auth-form-top']
+        });
 
-        const backBtn = document.createElement('a');
-        backBtn.classList.add('auth-form-back-btn');
-        topWrapper.appendChild(backBtn);
-        backBtn.addEventListener('click', () => {
+        createElement({
+            tag: 'a',
+            parent: topWrapper,
+            classes: ['auth-form-back-btn']
+        })
+        .addEventListener('click', () => {
             if (this.#step === 1) {
                 localStorage.removeItem("username");
                 localStorage.removeItem("firstname");
@@ -76,34 +81,37 @@ export default class SignupFormComponent {
         });
 
         if (this.#step === 2) {
-            const logo = document.createElement('img');
-            logo.src = LOGO_SRC;
-            logo.classList.add('auth-form-logo');
-            topWrapper.appendChild(logo);
+            createElement({
+                parent: topWrapper,
+                classes: ['auth-form-logo'],
+                attrs: {src: LOGO_SRC}
+            })
         }
 
-        const title = document.createElement('h1');
-        title.textContent = this.#step === 1 ? this.#config.userInfoTitle : this.#config.pwdTitle;
-        topWrapper.appendChild(title);
+        createElement({
+            tag: 'h1',
+            parent: topWrapper,
+            text: this.#step === 1 ? USER_INFO_TITLE : PWD_TITLE
+        })
 
         if (this.#step === 2) {
-            const description = document.createElement('p');
-            description.classList.add('p1');
-            description.innerHTML =
-                this.#step === 1 ? this.#config.userInfoDescription : this.#config.pwdDescription;
-            topWrapper.appendChild(description);
+            createElement({
+                tag: 'p',
+                parent: topWrapper,
+                classes: ['p1'],
+                text: PWD_TEXT,
+            })
         }
-
-        form.appendChild(topWrapper);
     }
 
     renderBottomWrapper(form) {
-        const bottomWrapper = document.createElement('div');
-        bottomWrapper.classList.add('auth-form-bottom');
-        form.appendChild(bottomWrapper);
+        const bottomWrapper = createElement({
+            parent: form,
+            classes: ['auth-form-bottom'],
+        })
 
         this.continueBtn = new ButtonComponent(bottomWrapper, {
-            text: this.#config.continueBtnText,
+            text: CONTINUE_BTN_TEXT,
             variant: 'primary',
             onClick:
                 this.#step === 1
@@ -129,8 +137,11 @@ export default class SignupFormComponent {
     renderPersonalInfoStep(form) {
         this.renderTopWrapper(form);
 
-        const fieldsetPersonalInfo = document.createElement('fieldset');
-        fieldsetPersonalInfo.classList.add('signup-personal-info');
+        const fieldsetPersonalInfo = createElement({
+            tag: 'fieldset',
+            parent: form,
+            classes: ['signup-personal-info'],
+        })
 
         this.usernameInput = new InputComponent(fieldsetPersonalInfo, {
             type: 'text',
@@ -140,13 +151,14 @@ export default class SignupFormComponent {
             maxLength: 20,
             validation: 'username',
             required: true,
-            showRequired: false
+            showRequired: false,
+            value: localStorage.getItem("username") || DEFAULT_INPUT_VALUE
         });
-        this.usernameInput.input.value = localStorage.getItem("username") || DEFAULT_INPUT_VALUE;
 
-        const nameInputWrapper = document.createElement('div');
-        nameInputWrapper.classList.add('signup-name-input-wrapper');
-        fieldsetPersonalInfo.appendChild(nameInputWrapper);
+        const nameInputWrapper = createElement({
+            parent: fieldsetPersonalInfo,
+            classes: ['signup-name-input-wrapper'],
+        })
 
         this.firstnameInput = new InputComponent(nameInputWrapper, {
             type: 'text',
@@ -155,9 +167,9 @@ export default class SignupFormComponent {
             maxLength: 25,
             validation: 'name',
             required: true,
-            showRequired: false
+            showRequired: false,
+            value: localStorage.getItem("firstname") || DEFAULT_INPUT_VALUE,
         });
-        this.firstnameInput.input.value = localStorage.getItem("firstname") || DEFAULT_INPUT_VALUE;
 
         this.lastnameInput = new InputComponent(nameInputWrapper, {
             type: 'text',
@@ -166,9 +178,9 @@ export default class SignupFormComponent {
             maxLength: 25,
             validation: 'name',
             required: true,
-            showRequired: false
+            showRequired: false,
+            value: localStorage.getItem("lastname") || DEFAULT_INPUT_VALUE,
         });
-        this.lastnameInput.input.value = localStorage.getItem("lastname") || DEFAULT_INPUT_VALUE;
 
         this.sexInput = new RadioComponent(fieldsetPersonalInfo, {
             label: 'Пол',
@@ -197,11 +209,10 @@ export default class SignupFormComponent {
             autocomplete: 'date',
             validation: 'date',
             required: true,
-            showRequired: false
+            showRequired: false,
+            value: localStorage.getItem("birthDate") || DEFAULT_INPUT_VALUE,
         });
-        this.birthDateInput.input.value = localStorage.getItem("birthDate") || DEFAULT_INPUT_VALUE;
 
-        form.appendChild(fieldsetPersonalInfo);
         this.renderBottomWrapper(form);
     }
 
@@ -211,7 +222,7 @@ export default class SignupFormComponent {
         this.passwordInput = new InputComponent(form, {
             type: 'password',
             placeholder: 'Введите пароль',
-            maxLength: 32,
+            maxLength: PWD_INPUT_MAX_LENGTH,
             validation: 'password',
             required: true,
             showRequired: false
@@ -220,7 +231,7 @@ export default class SignupFormComponent {
         this.passwordConfirmationInput = new InputComponent(form, {
             type: 'password',
             placeholder: 'Повторите пароль',
-            maxLength: 32,
+            maxLength: PWD_INPUT_MAX_LENGTH,
             validation: 'password',
             required: true,
             showRequired: false
@@ -315,6 +326,7 @@ export default class SignupFormComponent {
                     this.#menu.goToPage(this.#menu.menuElements.feed);
                     this.#menu.checkAuthPage();
                     this.#menu.updateMenuVisibility(true);
+                    this.#header.renderAvatarMenu();
                 } else {
                     this.passwordInput.showError(CREATION_ERROR_MESSAGE);
                 }

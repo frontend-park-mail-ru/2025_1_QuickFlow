@@ -1,53 +1,61 @@
+import createElement from '../../utils/createElement.js';
+
 export class LogoComponent {
-    constructor(container, menu) {
-        this.container = container;
-        this.menu = menu;
+    #parent
+    #menu
+    constructor(parent, menu) {
+        this.#parent = parent;
+        this.#menu = menu;
+
+        console.log(this.#menu); // for linter
     }
 
     render() {
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('header-logo-wrapper');
+        const wrapper = createElement({
+            parent: this.#parent,
+            classes: ['header-logo-wrapper'],
+        });
 
-        const logo = document.createElement('img');
-        logo.classList.add('header-logo');
-        logo.src = '/static/img/annotated-logo.svg';
-
-        wrapper.appendChild(logo);
-        this.container.appendChild(wrapper);
+        createElement({
+            parent: wrapper,
+            classes: ['header-logo'],
+            attrs: {src: '/static/img/annotated-logo.svg'}
+        });
     }
 }
 
 export default class MenuComponent {
     #config
-    #header
+    #parent
     constructor(container, config) {
-        this.container = container;
+        this.#parent = container;
         this.#config = config;
 
-        this.menuElements = {};
-        this.#header = null;
         this.activePageLink = null;
-    }
-
-    addHeader(header) {
-        this.#header = header;
+        this.menuElements = {};
     }
 
     render() {
-        new LogoComponent(this.container, this).render();
+        new LogoComponent(this.#parent, this).render();
 
         Object.entries(this.#config.menu).forEach(([key, { href, text, icon }], index) => {
-            const menuElement = document.createElement('a');
-            menuElement.href = href;
-            menuElement.classList.add('menu-item');
+            const menuElement = createElement({
+                tag: 'a',
+                parent: this.#parent,
+                classes: ['menu-item'],
+                attrs: {href, 'data-section': key}
+            });
 
-            const iconElement = document.createElement('img');
-            iconElement.src = `/static/img/${icon}.svg`;
-            iconElement.classList.add('menu-icon');
+            createElement({
+                parent: menuElement,
+                classes: ['menu-icon'],
+                attrs: {src: `/static/img/${icon}.svg`}
+            });
 
-            menuElement.appendChild(iconElement);
-            menuElement.appendChild(document.createTextNode(`${text}`));
-            menuElement.dataset.section = key;
+            createElement({
+                parent: menuElement,
+                text
+            });
 
             if (index === 0) {
                 menuElement.classList.add('active');
@@ -61,12 +69,11 @@ export default class MenuComponent {
             // }
 
             this.menuElements[key] = menuElement;
-            this.container.appendChild(menuElement);
         });
 
         this.updateMenuVisibility(this.#config.isAuthorized);
 
-        this.container.addEventListener('click', (event) => {
+        this.#parent.addEventListener('click', (event) => {
             if (event.target.closest('a')) {
                 event.preventDefault();
                 this.goToPage(event.target.closest('a'));
@@ -111,11 +118,7 @@ export default class MenuComponent {
             const element = this.#config.menu[section].render();
             document.querySelector('main').appendChild(element);
         }
-        console.log(this.#header);
 
-        if (this.#header) {
-            this.#header.renderAvatarMenu();
-        }
         this.checkAuthPage();
     }
 }

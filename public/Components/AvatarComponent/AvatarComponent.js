@@ -16,17 +16,23 @@ export default class AvatarComponent {
     }
 
     render() {
-        this.wrapper = document.createElement('div');
-        this.wrapper.classList.add('avatar-wrapper', this.#config.size || DEFAULT_SIZE_CLASS);
+        this.wrapper = createElement({
+            parent: this.#parent,
+            classes: ['avatar-wrapper', this.#config.size || DEFAULT_SIZE_CLASS]
+        });
         if (this.#config.class) {
             this.wrapper.classList.add(this.#config.class);
         }
-        this.#parent.appendChild(this.wrapper);
 
-        this.avatar = document.createElement('img');
-        this.wrapper.appendChild(this.avatar);
-        this.avatar.src = this.#config.src;
-        this.avatar.classList.add('avatar');
+        this.avatar = createElement({
+            parent: this.wrapper,
+            attrs: {
+                src: this.#config.src,
+                alt: 'Аватар',
+                title: 'Аватар',
+            },
+            classes: ['avatar']
+        });
 
         if (this.#config.type === 'status') {
             this.renderStatus();
@@ -57,14 +63,16 @@ export default class AvatarComponent {
     renderStatus() {
         const status = 'online'; // TODO: получать данные запросом
         if (status === 'online') {
-            const onlineIcon = document.createElement('div');
-            onlineIcon.classList.add('avatar-status-online');
-            this.wrapper.appendChild(onlineIcon);
+            createElement({
+                parent: this.wrapper,
+                classes: ['avatar-status-online']
+            });
         } else {
-            const offlineIcon = document.createElement('div');
-            offlineIcon.textContent = this.#config.status;
-            offlineIcon.classList.add('avatar-status-offline');
-            this.wrapper.appendChild(offlineIcon);
+            createElement({
+                parent: this.wrapper,
+                classes: ['avatar-status-offline'],
+                text: this.#config.status
+            });
         }
     }
 }

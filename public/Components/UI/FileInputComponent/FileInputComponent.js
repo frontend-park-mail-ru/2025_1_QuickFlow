@@ -5,9 +5,10 @@ const DEFAULT_TYPE = 'file';
 const DEFAULT_REQUIRED = false;
 const DEFAULT_ACCEPT_IMAGE = 'image/*';
 
+
 export default class FileInputComponent {
-    #config
     #parent
+    #config
     constructor(parent, config) {
         this.#config = config;
         this.#parent = parent;

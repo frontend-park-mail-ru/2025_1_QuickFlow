@@ -2,6 +2,8 @@ import Ajax from '../../modules/ajax.js';
 import InputComponent from '../UI/InputComponent/InputComponent.js';
 import ProfileMenuComponent from '../ProfileMenuComponent/ProfileMenuComponent.js';
 import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
+import createElement from '../../utils/createElement.js';
+
 
 export default class HeaderComponent {
     #parent
@@ -11,27 +13,29 @@ export default class HeaderComponent {
         this.#menu = menu;
 
         this.rightWrapper = null;
-
-        console.log(this.#menu); // for linter
     }
 
     render() {
-        const header = document.createElement('header');
-        header.classList.add('header');
-        this.#parent.appendChild(header);
+        const header = createElement({
+            tag: 'header',
+            parent: this.#parent,
+            classes: ['header']
+        });
 
-        this.wrapper = document.createElement('div');
-        this.wrapper.classList.add('header-inner-wrapper');
+        this.wrapper = createElement({
+            parent: header,
+            classes: ['header-inner-wrapper']
+        });
         
         this.renderActions();
         this.renderAvatarMenu();
-        
-        header.appendChild(this.wrapper);
     }
 
     renderActions() {
-        const leftWrapper = document.createElement('div');
-        leftWrapper.classList.add('header-left');
+        const leftWrapper = createElement({
+            parent: this.wrapper,
+            classes: ['header-left']
+        });
 
         const searchInput = new InputComponent(leftWrapper, {
             type: 'search',
@@ -56,18 +60,17 @@ export default class HeaderComponent {
 
         // wrapper.appendChild(notificationsWrapper);
         // wrapper.appendChild(musicWrapper);
-
-        this.wrapper.appendChild(leftWrapper);
     }
 
     renderAvatarMenu() {
-        this.rightWrapper = document.createElement('div');
-        this.rightWrapper.classList.add('header-right');
-        this.wrapper.appendChild(this.rightWrapper);
+        if (this.rightWrapper) {
+            this.rightWrapper.innerHTML = '';
+        }
 
-        // const avatar = document.createElement('img');
-        // avatar.src = '/static/img/avatar.jpg';
-        // avatar.classList.add('avatar');
+        this.rightWrapper = createElement({
+            parent: this.wrapper,
+            classes: ['header-right']
+        });
 
         Ajax.get({
             url: '/user',
@@ -92,10 +95,11 @@ export default class HeaderComponent {
                 src: userData.avatar,
             });
 
-            const dropdownButton = document.createElement('a');
-            dropdownButton.classList.add('dropdown-button');
-
-            this.rightWrapper.appendChild(dropdownButton);
+            createElement({
+                tag: 'a',
+                parent: this.rightWrapper,
+                classes: ['dropdown-button']
+            });
 
             new ProfileMenuComponent(this.rightWrapper, {
                 userData,

@@ -1,5 +1,7 @@
 export const posts = [
     {
+        firstname: 'Илья',
+        lastname: 'Мациевский',
         avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
@@ -19,6 +21,8 @@ export const posts = [
         comment_count: 0
     },
     {
+        firstname: 'Илья',
+        lastname: 'Мациевский',
         avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
@@ -34,6 +38,8 @@ export const posts = [
         comment_count: 0
     },
     {
+        firstname: 'Илья',
+        lastname: 'Мациевский',
         avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
@@ -47,6 +53,8 @@ export const posts = [
         comment_count: 0
     },
     {
+        firstname: 'Илья',
+        lastname: 'Мациевский',
         avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
@@ -60,6 +68,8 @@ export const posts = [
         comment_count: 0
     },
     {
+        firstname: 'Илья',
+        lastname: 'Мациевский',
         avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
@@ -73,6 +83,8 @@ export const posts = [
         comment_count: 0
     },
     {
+        firstname: 'Илья',
+        lastname: 'Мациевский',
         avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
         creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
@@ -110,4 +122,61 @@ export const users = {
             subscribes: 68,
         },
     },
+    andrew: {
+        username: 'andrew',
+        password: 'Qwerty1!',
+        firstname: 'Андрей',
+        lastname: 'Самарский',
+        sex: 1,
+        birth_date: '2000-01-28', // TODO: change to camelCase: birthDate
+        avatar: '/avatars/avatar.jpg',
+        cover: '/covers/profile-header.jpg',
+        additionalData: {
+            birthDate: '28.01.2000',
+            location: 'Москва',
+            education: 'МГТУ им. Н.Э. Баумана',
+            phoneNumber: '8 800 555 35 35',
+            email: 'andrew@mail.ru',
+        },
+        countedData: {
+            friends: 165,
+            subscribers: 187,
+            subscribes: 68,
+        },
+    },
 };
+
+export const profileFriends = [
+    {
+        name: 'Андрей',
+        avatar: '/avatars/avatar.jpg'
+    },
+    {
+        name: 'Максим',
+        avatar: '/avatars/avatar.jpg'
+    },
+    {
+        name: 'Ольга',
+        avatar: '/avatars/avatar.jpg'
+    },
+    {
+        name: 'Анатолий',
+        avatar: '/avatars/avatar.jpg'
+    },
+    {
+        name: 'Анна',
+        avatar: '/avatars/avatar.jpg'
+    },
+    {
+        name: 'Лилия',
+        avatar: '/avatars/avatar.jpg'
+    },
+    {
+        name: 'Максим',
+        avatar: '/avatars/avatar.jpg'
+    },
+    {
+        name: 'Ольга',
+        avatar: '/avatars/avatar.jpg'
+    },
+];

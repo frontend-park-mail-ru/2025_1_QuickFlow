@@ -1,35 +1,40 @@
+import createElement from '../../utils/createElement.js';
+
+const DEFAULT_IS_CRITICAL = false;
+
 export default class ContextMenuComponent {
+    #parent
     #config
-    constructor(container, config) {
-        this.container = container;
+    constructor(parent, config) {
+        this.#parent = parent;
         this.#config = config;
         this.render();
     }
 
     render() {
-        this.wrapper = document.createElement('div');
-        this.wrapper.classList.add('context-menu');
+        this.wrapper = createElement({
+            parent: this.#parent,
+            classes: ['context-menu']
+        });
 
         Object.entries(this.#config.data).forEach(([, { href, text, icon, isCritical }],) => {
-            const menuOption = document.createElement('div');
-            menuOption.classList.add('menu-option');
-            menuOption.dataset.href = href;
-            this.wrapper.appendChild(menuOption);
-            
-            const iconElement = document.createElement('img');
-            iconElement.src = `/static/img/${icon}.svg`;
-            iconElement.classList.add('context-menu-icon');
-            menuOption.appendChild(iconElement);
+            const menuOption = createElement({
+                parent: this.wrapper,
+                classes: ['menu-option'],
+                attrs: {'data-href': href}
+            });
 
-            const textElement = document.createElement('div');
-            textElement.textContent = text;
-            textElement.classList.add('context-menu-text');
-            if (isCritical) {
-                textElement.classList.add('critical');
-            }
-            menuOption.appendChild(textElement);
+            createElement({
+                parent: menuOption,
+                classes: ['context-menu-icon'],
+                attrs: {src: `/static/img/${icon}.svg`}
+            });
+
+            createElement({
+                parent: menuOption,
+                classes: ['context-menu-text', (isCritical || DEFAULT_IS_CRITICAL) ? 'critical' : null],
+                text
+            });
         });
-        
-        this.container.appendChild(this.wrapper);
     }
 }

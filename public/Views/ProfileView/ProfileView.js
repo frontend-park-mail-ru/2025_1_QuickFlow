@@ -6,7 +6,7 @@ import AvatarComponent from '../../Components/AvatarComponent/AvatarComponent.js
 import ModalWindowComponent from '../../Components/UI/ModalWindowComponent/ModalWindowComponent.js';
 import ButtonComponent from '../../Components/UI/ButtonComponent/ButtonComponent.js';
 import createElement from '../../utils/createElement.js';
-import {profileFriends} from '../mocks.js';
+import {profileFriends} from '../../mocks.js';
 
 
 export const profileDataLayout = {
@@ -161,18 +161,8 @@ export default class ProfileView {
         });
 
         if (feedData && Array.isArray(feedData)) {
-            feedData.forEach(({ avatar, id, creator_id, text, pics, created_at, like_count, repost_count, comment_count }) => {
-                new PostComponent(postsWrapper, {
-                    id,
-                    creator_id,
-                    text,
-                    pics,
-                    created_at,
-                    like_count,
-                    repost_count,
-                    comment_count,
-                    avatar,
-                });
+            feedData.forEach((config) => {
+                new PostComponent(postsWrapper, config);
             });
         }
     }

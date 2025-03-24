@@ -1,34 +1,42 @@
+import createElement from '../../../utils/createElement.js';
+
+
 const DEFAULT_TYPE = 'button';
 const DEFAULT_TEXT_CONTENT = '';
 const DEFAULT_SIZE_CLASS = 'large';
 
+
 export default class ButtonComponent {
+    #parent
     #config
-    constructor(container, config) {
-        this.container = container;
-        this.buttonElement = document.createElement('button');
-        this.container.appendChild(this.buttonElement);
+    constructor(parent, config) {
+        this.#parent = parent;
         this.#config = config;
+
+        this.buttonElement = null;
         this.render();
     }
 
     render() {
-        this.buttonElement.type = this.#config.type || DEFAULT_TYPE;
-        this.buttonElement.textContent = this.#config.text || DEFAULT_TEXT_CONTENT;
+        this.buttonElement = createElement({
+            tag: 'button',
+            parent: this.#parent,
+            attrs: {
+                type: this.#config.type || DEFAULT_TYPE,
 
-        this.buttonElement.classList.add(
-            'button',
-            `button-${this.#config.variant}`,
-            this.#config.size || DEFAULT_SIZE_CLASS
-        );
-        if (this.#config.classes) {
-            this.#config.classes.forEach(className => this.buttonElement.classList.add(className))
-        }
+            },
+            classes: [
+                'button',
+                `button-${this.#config.variant}`,
+                this.#config.size || DEFAULT_SIZE_CLASS,
+                this.#config.classes ? [...this.#config.classes] : null, // TODO: протестировать
+            ],
+            text: this.#config.text || DEFAULT_TEXT_CONTENT,
+        });
         
 
         if (this.#config.disabled) {
             this.buttonElement.disabled = true;
-            this.buttonElement.classList.add('button-disabled');
         }
 
         if (this.#config.onClick && typeof this.#config.onClick === 'function') {
