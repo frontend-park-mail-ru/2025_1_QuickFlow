@@ -21,6 +21,8 @@ class Ajax {
                 } else if (url === '/feed') {
                     callback(200, posts);
                     return;
+                } else if (url === '/user-dev-false') {
+                    url = '/user';
                 }
             }
 

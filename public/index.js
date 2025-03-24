@@ -6,6 +6,8 @@ import ProfileView from './Views/ProfileView/ProfileView.js';
 import HeaderComponent from './Components/HeaderComponent/HeaderComponent.js';
 import MenuComponent from './Components/MenuComponent/MenuComponent.js';
 import createElement from './utils/createElement.js';
+import Ajax from './modules/ajax.js';
+
 
 const root = document.getElementById('root');
 
@@ -72,7 +74,21 @@ const config = {
 
 const menu = new MenuComponent(menuContainer, config);
 menu.render();
-menu.goToPage(menu.menuElements.profile);
 
 const header = new HeaderComponent(container, menu);
 header.render();
+
+Ajax.get({
+    url: '/user-dev-false',
+    callback: (status) => {
+        let isAuthorized = status === 200;
+
+        if (!isAuthorized) {
+            menu.goToPage(menu.menuElements.login);
+            menu.updateMenuVisibility(false);
+            return;
+        }
+
+        menu.goToPage(menu.menuElements.profile);
+    }
+});
