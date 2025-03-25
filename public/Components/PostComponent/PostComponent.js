@@ -38,6 +38,10 @@ export default class PostComponent {
     }
 
     renderPics() {
+        if (!this.#config.pics || this.#config.pics.length === 0) {
+            return;
+        }
+
         const picsWrapper = createElement({
             parent: this.wrapper,
             classes: ['post-pics-wrapper'],
