@@ -48,6 +48,7 @@ class Ajax {
     }
 
     async post({ url, body = {}, isFormData = false, callback = () => {} }) {
+        let response;
         try {
             const options = {
                 method: HTTP_METHOD_POST,
@@ -61,7 +62,7 @@ class Ajax {
                 options.headers = { 'Content-Type': 'application/json; charset=utf-8' };
             }
 
-            const response = await fetch(`${this.baseUrl}${url}`, options);
+            response = await fetch(`${this.baseUrl}${url}`, options);
     
             let data = null;
             if (
@@ -74,6 +75,7 @@ class Ajax {
             callback(response.status, data);
         } catch (error) {
             console.error('POST request failed:', error);
+            callback(response.status);
         }
     }
     

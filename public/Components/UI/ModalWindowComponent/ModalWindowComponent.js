@@ -98,16 +98,6 @@ export default class ModalWindowComponent {
             variant: 'primary',
             size: 'small',
             onClick: () => this.handlePostSubmit(textarea.textarea.value.trim()),
-            // onClick: () => {
-            //     Ajax.post({
-            //         url: '/post',
-            //         body: {
-            //             text: textarea.textarea.value.trim(),
-            //             pics: [],
-            //         },
-            //         callback: () => {}
-            //     });
-            // },
             disabled: true,
             stateUpdaters: [textarea]
         });
@@ -125,35 +115,30 @@ export default class ModalWindowComponent {
         //         formData.append('pics', file);
         //     }
         // }
-        // Создаем объект FormData для отправки файла
+
         const formData = new FormData();
         formData.append('text', text);
 
         if (this.fileInput.input.files.length > 0) {
-            formData.append('pics', this.fileInput.input.files[0]); // Отправляем 1 файл
+            for (const file of this.fileInput.input.files) {
+                formData.append('pics', file);
+            }
         }
 
-        console.log([...formData.entries()]); // Логируем, что реально отправляется
-
-
-
-    
-
-        // const body = {
-        //     text,
-        //     pics: Array.from(this.fileInput.input.files),
-        // };
-        // console.log(body);
+        // if (this.fileInput.input.files.length > 0) {
+        //     formData.append('pics', this.fileInput.input.files[0]); // Отправляем 1 файл
+        // }
 
         Ajax.post({
             body: formData,
-            isFormData: true, // Обозначаем, что отправляем form-data
+            isFormData: true,
             url: '/post',
-            // body: formData,
-            // isFormData: true,
-            callback: (response) => {
-                console.log(response);
-                this.close();
+            callback: (status) => {
+                if (status === 200) {
+                    this.close();
+                } else if (status === 413) {
+                    alert('File is too large');
+                }
             }
         });
     }
