@@ -118,13 +118,13 @@ export default class ModalWindowComponent {
             return;
         }
 
-        const formData = new FormData();
-        formData.append('text', text);
-        if (this.fileInput.input.files.length > 0) {
-            for (const file of this.fileInput.input.files) {
-                formData.append('pics', file);
-            }
-        }
+        // const formData = new FormData();
+        // formData.append('text', text);
+        // if (this.fileInput.input.files.length > 0) {
+        //     for (const file of this.fileInput.input.files) {
+        //         formData.append('pics', file);
+        //     }
+        // }
 
         const body = {
             text,
@@ -136,7 +136,7 @@ export default class ModalWindowComponent {
             url: '/post',
             // body: formData,
             body,
-            isFormData: true,
+            // isFormData: true,
             callback: (response) => {
                 console.log(response);
                 this.close();
