@@ -126,15 +126,16 @@ export default class ModalWindowComponent {
             }
         }
 
-        console.log(formData);
+        const body = {
+            text,
+            pics: Array.from(this.fileInput.input.files),
+        };
+        console.log(body);
 
         Ajax.post({
             url: '/post',
             // body: formData,
-            body: {
-                text,
-                pics: Array.from(this.fileInput.input.files),
-            },
+            body,
             isFormData: true,
             callback: (response) => {
                 console.log(response);
