@@ -1,4 +1,5 @@
-import { posts, users } from '../mocks.js'
+// import { posts, users } from '../mocks.js'
+import { users } from '../mocks.js'
 
 
 const HTTP_METHOD_GET = 'GET';
@@ -18,9 +19,9 @@ class Ajax {
                 if (url === '/user') {
                     callback(200, users['rvasutenko']);
                     return;
-                } else if (url === '/feed') {
-                    callback(200, posts);
-                    return;
+                // } else if (url === '/feed') {
+                //     callback(200, posts);
+                //     return;
                 } else if (url === '/user-dev-false') {
                     url = '/feed';
                 }

@@ -2,6 +2,7 @@ import ButtonComponent from '../ButtonComponent/ButtonComponent.js';
 import TextareaComponent from '../TextareaComponent/TextareaComponent.js';
 import createElement from '../../../utils/createElement.js';
 import {profileDataLayout} from '../../../Views/ProfileView/ProfileView.js'
+import Ajax from '../../../modules/ajax.js';
 
 
 export default class ModalWindowComponent {
@@ -75,7 +76,28 @@ export default class ModalWindowComponent {
             variant: 'primary',
             size: 'small',
             onClick: () => {
-                // TODO: publish post request
+                Ajax.post({
+                    url: '/post',
+                    body: {
+                        text: textarea.textarea.value.trim(),
+                        pics: [],
+                    },
+                    callback: () => {
+                        // if (status === 200) {
+                        //     this.#menu.goToPage(this.#menu.menuElements.feed);
+                        //     this.#menu.checkAuthPage();
+                        //     this.#menu.updateMenuVisibility(true);
+                        //     this.#header.renderAvatarMenu();
+                        // } else {
+                        //     this.passwordInput.showError('Неверное имя пользователя или пароль');
+                        //     this.passwordInput.addListener(() => {
+                        //         this.passwordInput.hideError();
+                        //         this.updateBtnState();
+                        //     });
+                        //     this.updateBtnState();
+                        // }
+                    }
+                });
             },
             disabled: true,
             stateUpdaters: [textarea]
