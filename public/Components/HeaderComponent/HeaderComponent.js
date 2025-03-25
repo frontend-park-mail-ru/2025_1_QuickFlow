@@ -1,31 +1,47 @@
+import Ajax from '../../modules/ajax.js';
 import InputComponent from '../UI/InputComponent/InputComponent.js';
 import ProfileMenuComponent from '../ProfileMenuComponent/ProfileMenuComponent.js';
+import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
+import createElement from '../../utils/createElement.js';
 
-/**
- * Компонент поиска в шапке сайта.
- */
-export class SearchComponent {
-    /**
-     * @param {HTMLElement} container - Родительский контейнер, в который будет добавлен компонент.
-     */
-    constructor(container) {
-        this.container = container;
+
+export default class HeaderComponent {
+    #parent
+    #menu
+    constructor(parent, menu) {
+        this.#parent = parent;
+        this.#menu = menu;
+
+        this.rightWrapper = null;
     }
 
-    /**
-     * Рендерит компонент поиска и добавляет его в контейнер.
-     */
     render() {
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('header-left');
+        const header = createElement({
+            tag: 'header',
+            parent: this.#parent,
+            classes: ['header']
+        });
 
-        const searchInput = new InputComponent(wrapper, {
+        this.wrapper = createElement({
+            parent: header,
+            classes: ['header-inner-wrapper']
+        });
+        
+        this.renderActions();
+        this.renderAvatarMenu();
+    }
+
+    renderActions() {
+        const leftWrapper = createElement({
+            parent: this.wrapper,
+            classes: ['header-left']
+        });
+
+        const searchInput = new InputComponent(leftWrapper, {
             type: 'search',
             placeholder: 'Поиск',
             showRequired: false
         });
-
-        searchInput.render();
         searchInput.input.classList.add('header-search');
 
         // const notificationsWrapper = document.createElement('a');
@@ -44,43 +60,49 @@ export class SearchComponent {
 
         // wrapper.appendChild(notificationsWrapper);
         // wrapper.appendChild(musicWrapper);
-
-        this.container.appendChild(wrapper);
-    }
-}
-
-/**
- * Компонент аватара в шапке сайта.
- */
-export class AvatarComponent {
-    /**
-     * @param {HTMLElement} container - Родительский контейнер, в который будет добавлен компонент.
-     */
-    constructor(container) {
-        this.container = container;
     }
 
-    /**
-     * Рендерит компонент аватара и добавляет его в контейнер.
-     */
-    render() {
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('header-right');
+    renderAvatarMenu() {
+        if (this.rightWrapper) {
+            this.rightWrapper.innerHTML = '';
+        }
 
-        const avatar = document.createElement('img');
-        avatar.src = '/static/img/avatar.jpg';
-        avatar.classList.add('avatar');
+        this.rightWrapper = createElement({
+            parent: this.wrapper,
+            classes: ['header-right']
+        });
 
-        const dropdownButton = document.createElement('a');
-        dropdownButton.classList.add('dropdown-button');
+        Ajax.get({
+            url: '/user',
+            callback: (status, userData) => {
+                this.renderAvatarCallback(status, userData);
+            }
+        });
+    }
 
-        wrapper.appendChild(avatar);
-        wrapper.appendChild(dropdownButton);
+    renderAvatarCallback(status, userData) {
+        let isAuthorized = status === 200;
 
-        new ProfileMenuComponent(wrapper, {
-            data: {
-                name: 'Роман Васютенко',
-                username: 'rvasutenko',
+        if (!isAuthorized) {
+            this.#menu.goToPage(this.#menu.menuElements.login);
+            this.#menu.updateMenuVisibility(false);
+            return;
+        }
+
+        if (userData) {
+            new AvatarComponent(this.rightWrapper, {
+                size: 'xs',
+                src: userData.avatar,
+            });
+
+            createElement({
+                tag: 'a',
+                parent: this.rightWrapper,
+                classes: ['dropdown-button']
+            });
+
+            new ProfileMenuComponent(this.rightWrapper, {
+                userData,
                 menuItems: {
                     settings: {
                         href: '/settings',
@@ -98,39 +120,7 @@ export class AvatarComponent {
                         icon: 'logout-icon'
                     },
                 },
-            }
-        });
-
-        this.container.appendChild(wrapper);
-    }
-}
-
-/**
- * Компонент шапки сайта, включающий поиск и аватар.
- */
-export default class HeaderComponent {
-    /**
-     * @param {HTMLElement} container - Родительский контейнер, в который будет добавлен компонент.
-     * @param {Object} menu - Объект меню для взаимодействия с шапкой.
-     */
-    constructor(container, menu) {
-        this.container = container;
-        this.wrapper = document.createElement('header');
-        this.wrapper.classList.add('header');
-        this.container.appendChild(this.wrapper);
-        this.menu = menu;
-    }
-
-    /**
-     * Рендерит шапку сайта, добавляя в неё поиск и аватар.
-     */
-    render() {
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('header-inner-wrapper');
-        
-        new SearchComponent(wrapper).render();
-        new AvatarComponent(wrapper).render();
-
-        this.wrapper.appendChild(wrapper);
+            });
+        }
     }
 }

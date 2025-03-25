@@ -1,62 +1,77 @@
+import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
+import createElement from '../../utils/createElement.js';
+
+
+const AVATAR_SIZE = 'xl';
+const USERNAME_PREFIX = '@';
 
 
 export default class ProfileMenuComponent {
-    constructor(container, config) {
-        this.config = config;
-        this.container = container;
-        this.wrapper = document.createElement('div');
-        this.wrapper.classList.add('profile-menu-wrapper');
-        this.container.appendChild(this.wrapper);
+    #parent
+    #config
+    constructor(parent, config) {
+        this.#config = config;
+        this.#parent = parent;
+        
+        this.wrapper = null;
         this.render();
     }
 
     render() {
-        const avatar = document.createElement('img');
-        avatar.classList.add('profile-menu-avatar');
-        avatar.src = '/static/img/avatar.jpg';
+        this.wrapper = createElement({
+            parent: this.#parent,
+            classes: ['profile-menu-wrapper'],
+        });
+        
+        const topWrapper = createElement({
+            parent: this.wrapper,
+            classes: ['profile-menu-top-wrapper'],
+        });
 
-        const topWrapper = document.createElement('div');
-        topWrapper.classList.add('profile-menu-top-wrapper');
-        topWrapper.appendChild(avatar);
+        new AvatarComponent(topWrapper, {
+            size: AVATAR_SIZE,
+            src: this.#config.userData.avatar,
+        });
 
-        const userInfo = document.createElement('div');
-        userInfo.classList.add('profile-menu-user-info');
-        topWrapper.appendChild(userInfo);
+        const userData = createElement({
+            parent: topWrapper,
+            classes: ['profile-menu-user-info'],
+        });
 
-        const name = document.createElement('div');
-        name.classList.add('profile-menu-name');
-        name.textContent = this.config.data.name;
-        userInfo.appendChild(name);
+        createElement({
+            parent: userData,
+            classes: ['profile-menu-name'],
+            text: `${this.#config.userData.lastname} ${this.#config.userData.firstname}`
+        });
 
-        const username = document.createElement('div');
-        username.classList.add('profile-menu-username');
-        username.textContent = `@${this.config.data.username}`;
-        userInfo.appendChild(username);
+        createElement({
+            parent: userData,
+            classes: ['profile-menu-username'],
+            text: `${USERNAME_PREFIX}${this.#config.userData.username}`
+        });
 
-        this.wrapper.appendChild(topWrapper);
+        const menuItems = createElement({
+            parent: this.wrapper,
+            classes: ['profile-menu-items'],
+        });
 
-
-
-
-        const menuItems = document.createElement('div');
-        menuItems.classList.add('profile-menu-items');
-        this.wrapper.appendChild(menuItems);
-
-        Object.entries(this.config.data.menuItems).forEach(([, { href, text, icon }],) => {
-            const menuItem = document.createElement('a');
-            menuItem.href = href;
-            menuItem.classList.add('profile-menu-item');
-            menuItems.appendChild(menuItem);
-
-            const menuItemIcon = document.createElement('img');
-            menuItemIcon.classList.add('profile-menu-icon');
-            menuItemIcon.src = `/static/img/${icon}.svg`;
-            menuItem.appendChild(menuItemIcon);
-
-            const menuItemText = document.createElement('div');
-            menuItemText.classList.add('profile-menu-item-text');
-            menuItemText.textContent = text;
-            menuItem.appendChild(menuItemText);
+        Object.entries(this.#config.menuItems).forEach(([, { href, text, icon }],) => {
+            const menuItem = createElement({
+                tag: 'a',
+                parent: menuItems,
+                classes: ['profile-menu-item'],
+                attrs: {href}
+            });
+            createElement({
+                parent: menuItem,
+                classes: ['profile-menu-icon'],
+                attrs: {src: `/static/img/${icon}.svg`}
+            });
+            createElement({
+                parent: menuItem,
+                classes: ['profile-menu-item-text'],
+                text
+            });
         });
     }
 }

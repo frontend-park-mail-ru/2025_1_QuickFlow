@@ -9,10 +9,10 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 130%;
+
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-m);
     color: var(--text-secondary);
 }
 
@@ -36,12 +36,10 @@ input[type='password'] {
     height: 36px;
     background: var(--background-light-gray);
 
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 130%;
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-m);
     color: var(--text-primary);
-
     transition: var(--trans-input);
 }
 
@@ -77,20 +75,22 @@ input.invalid {
 }
 
 .input-error {
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 130%;
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-m);
     color: var(--text-error);
 }
 
 .inner-wrapper {
     position: relative;
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
 }
 
 .pwd-control {
     position: absolute;
-    align-self: anchor-center;
+    top: 0;
     right: 0;
     width: 16px;
     height: 16px;
@@ -102,4 +102,19 @@ input.invalid {
 
 .pwd-control.show {
     background: url(../../../static/img/hide-icon.svg) 0 0 no-repeat;
+}
+
+input[type='search'] {
+    padding-left: 36px;
+}
+
+.search-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    margin: 10px 10px 10px 12px;
+    background: url(../../../static/img/search-icon.svg) 0 0 no-repeat;
+    background-size: contain;
 }

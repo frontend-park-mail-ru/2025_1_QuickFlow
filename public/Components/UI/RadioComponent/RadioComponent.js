@@ -1,53 +1,90 @@
+import createElement from '../../../utils/createElement.js';
+
+
+const DEFAULT_REQUIRED = false;
+const REQUIRED_MARK_TEXT = ' *';
+
+
 export default class RadioComponent {
-    constructor(container, config) {
-        this.config = config;
-        this.container = container;
+    #parent
+    #config
+    constructor(parent, config) {
+        this.#parent = parent;
+        this.#config = config;
+
         this.wrapper = null;
+        this.render();
     }
 
     render() {
-        this.wrapper = document.createElement('div');
-        this.wrapper.classList.add('radio-wrapper');
+        this.wrapper = createElement({
+            parent: this.#parent,
+            classes: ['radio-wrapper'],
+        });
 
-        // Label (если задан)
-        if (this.config.label) {
-            const label = document.createElement('label');
-            label.textContent = this.config.label;
-            label.classList.add('input-label');
-            if (this.config.showRequired === true) {
-                const requiredMark = document.createElement('span');
-                requiredMark.textContent = ' *';
-                requiredMark.classList.add('required');
-                label.appendChild(requiredMark);
+        if (this.#config.label) {
+            const label = createElement({
+                tag: 'label',
+                text: this.#config.label,
+                parent: this.wrapper,
+                classes: ['input-label'],
+            });
+
+            if (this.#config.showRequired === true) {
+                createElement({
+                    tag: 'span',
+                    text: REQUIRED_MARK_TEXT,
+                    parent: label,
+                    classes: ['required'],
+                });
             }
-            this.wrapper.appendChild(label);
         }
 
-        const choicesWrapper = document.createElement('div');
-        choicesWrapper.classList.add('choices-wrapper');
-        this.wrapper.appendChild(choicesWrapper);
+        const choicesWrapper = createElement({
+            parent: this.wrapper,
+            classes: ['choices-wrapper'],
+        });
 
-        for (const key in this.config.radios) {
-            const radioData = this.config.radios[key];
-            const choice = document.createElement('div');
-            choice.classList.add('choice');
+        for (const key in this.#config.radios) {
+            const radioData = this.#config.radios[key];
 
-            const radio = document.createElement('input');
-            radio.type = 'radio';
-            radio.name = this.config.name;
-            radio.value = radioData.value;
-            radio.id = radioData.id;
-            radio.required = this.config.required || false;
+            const choice = createElement({
+                parent: choicesWrapper,
+                classes: ['choice'],
+            });
 
-            const label = document.createElement('label');
-            label.textContent = radioData.label;
-            label.htmlFor = radioData.id;
+            createElement({
+                tag: 'input',
+                parent: choice,
+                attrs: {
+                    type: 'radio',
+                    name: this.#config.name,
+                    value: radioData.value,
+                    id: radioData.id,
+                    required: this.#config.required || DEFAULT_REQUIRED,
+                },
+            });
 
-            choice.appendChild(radio);
-            choice.appendChild(label);
-            choicesWrapper.appendChild(choice);
+            createElement({
+                tag: 'label',
+                text: radioData.label,
+                parent: choice,
+                attrs: {
+                    htmlFor: radioData.id,
+                },
+            });
         }
-        this.container.appendChild(this.wrapper);
+    }
+
+    addListener(listener) {
+        this.wrapper.addEventListener('change', listener);
+    }
+
+    isValid() {
+        if (!this) {
+            return false;
+        }
+        return this.wrapper.querySelector('input[type="radio"]:checked') !== null;
     }
 
     getChecked() {

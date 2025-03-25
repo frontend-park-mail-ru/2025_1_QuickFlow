@@ -1,54 +1,88 @@
 import formatDateInput from '../../../utils/formatDateInput.js';
+import createElement from '../../../utils/createElement.js';
+
+
+const DEFAULT_MAX_LENGTH = 256;
+const DEFAULT_AUTOCOMPLETE = 'off';
+const DEFAULT_PLACEHOLDER = '';
+const DEFAULT_TYPE = 'text';
+const DEFAULT_REQUIRED = false;
+const DEFAULT_INPUT_VALUE = '';
+const REQUIRED_MARK_TEXT = ' *';
+const MAX_DATE_INPUT_LENGTH = 10;
+const MIN_NAME_INPUT_LENGTH = 2;
+const MIN_PASSWORD_INPUT_LENGTH = 8;
 
 
 export default class InputComponent {
-    constructor(container, config) {
-        this.config = config;
-        this.defaultMaxLength = 256;
-        this.container = container;
+    #parent
+    #config
+    constructor(parent, config) {
+        this.#config = config;
+        this.#parent = parent;
+
         this.input = null;
         this.error = null;
         this.wrapper = null;
+        this.innnerWrapper = null;
+
+        this.render();
     }
 
     render() {
-        this.wrapper = document.createElement('div');
-        this.wrapper.classList.add('input-wrapper');
+        this.wrapper = createElement({
+            parent: this.#parent,
+            classes: [this.#config.classes, 'input-wrapper'],
+        });
 
         // Label (если задан)
-        if (this.config.label) {
-            const label = document.createElement('label');
-            label.textContent = this.config.label;
-            label.classList.add('input-label');
-            if (this.config.showRequired) {
-                const requiredMark = document.createElement('span');
-                requiredMark.textContent = ' *';
-                requiredMark.classList.add('required');
-                label.appendChild(requiredMark);
+        if (this.#config.label) {
+            const label = createElement({
+                tag: 'label',
+                text: this.#config.label,
+                parent: this.wrapper,
+                classes: ['input-label'],
+            });
+            if (this.#config.showRequired) {
+                createElement({ // TODO: протестировать
+                    tag: 'span',
+                    text: REQUIRED_MARK_TEXT,
+                    parent: label,
+                    classes: ['required'],
+                });
             }
-            this.wrapper.appendChild(label);
         }
+        
+        this.innnerWrapper = createElement({
+            parent: this.wrapper,
+            classes: ['inner-wrapper'],
+        });
 
         // Поле ввода
-        this.input = document.createElement('input');
-        this.input.classList.add('input-field');
-        this.input.type = this.config.type || 'text';
-        this.input.autocomplete = this.config.autocomplete || 'off';
-        this.input.placeholder = this.config.placeholder || '';
-        this.input.maxLength = this.config.maxLength || this.defaultMaxLength;
-        this.input.required = this.config.required || false;
+        this.input = createElement({
+            tag: 'input',
+            parent: this.innnerWrapper,
+            classes: ['input-field'],
+            attrs: {
+                type: this.#config.type || DEFAULT_TYPE,
+                autocomplete: this.#config.autocomplete || DEFAULT_AUTOCOMPLETE,
+                placeholder: this.#config.placeholder || DEFAULT_PLACEHOLDER,
+                maxLength: this.#config.maxLength || DEFAULT_MAX_LENGTH,
+                required: this.#config.required || DEFAULT_REQUIRED,
+                value: this.#config.value || DEFAULT_INPUT_VALUE,
+            },
+        });
 
-        const innnerWrapper = document.createElement('div');
-        innnerWrapper.classList.add('inner-wrapper');
-        this.wrapper.appendChild(innnerWrapper);
-        innnerWrapper.appendChild(this.input);
-
-        this.error = document.createElement('div');
-        this.error.classList.add('input-error');
+        this.error = createElement({
+            classes: ['input-error'],
+        });
 
         if (this.input.type === 'password') {
-            const pwdControl = document.createElement('a');
-            pwdControl.classList.add('pwd-control');
+            const pwdControl = createElement({
+                parent: this.innnerWrapper,
+                tag: 'a',
+                classes: ['pwd-control'],
+            });
 
             pwdControl.addEventListener('click', () => {
                 if (this.input.getAttribute('type') === 'password') {
@@ -59,61 +93,79 @@ export default class InputComponent {
                     this.input.setAttribute('type', 'password');
                 }
             });
-
-            innnerWrapper.appendChild(pwdControl);
+        } else if (this.input.type === 'search') {
+            createElement({
+                parent: this.innnerWrapper,
+                classes: ['search-icon'],
+            });
         }
 
         // Добавление обработчиков валидации
-        if (this.config.validation) {
+        if (this.#config.validation) {
             this.input.addEventListener('input', () => this.validate());
         }
 
         // Описание (если задано)
-        if (this.config.description || this.config.maxLength) {
-            const descWrapper = document.createElement('div');
-            descWrapper.classList.add('description-wrapper');
+        if (this.#config.description || this.#config.maxLength) { // TODO: протестировать 
+            const descWrapper = createElement({
+                parent: this.wrapper,
+                classes: ['description-wrapper'],
+            });
 
-            if (this.config.description) {
-                const description = document.createElement('span');
-                description.textContent = this.config.description;
-                description.classList.add('input-description');
-                descWrapper.appendChild(description);
+            if (this.#config.description) {
+                createElement({
+                    tag: 'span',
+                    text: this.#config.description,
+                    parent: descWrapper,
+                    classes: ['input-description'],
+                });
             }
 
-            if (this.config.showCharactersLeft) {
-                const counter = document.createElement('span');
-                counter.textContent = this.config.maxLength;
-                counter.classList.add('input-counter');
-
-                this.input.addEventListener('input', () => {
-                    counter.textContent = this.config.maxLength - this.input.value.length;
+            if (this.#config.showCharactersLeft) {
+                const counter = createElement({
+                    tag: 'span',
+                    text: this.#config.maxLength,
+                    parent: descWrapper,
+                    classes: ['input-counter'],
                 });
 
-                descWrapper.appendChild(counter);
+                this.input.addEventListener('input', () => {
+                    counter.textContent = this.#config.maxLength - this.input.value.length;
+                });
             }
-
-            this.wrapper.appendChild(descWrapper);
         }
+    }
 
-        this.container.appendChild(this.wrapper);
+    addListener(listener) {
+        this.input.addEventListener('input', listener);
+    }
+
+    isValid() {
+        if (!this || !this.input) {
+            return false;
+        }
+        if (this.#config.validation === 'date' && this.input.value.trim().length < MAX_DATE_INPUT_LENGTH) {
+            return false;
+        }
+        return this.input.value.trim() !== '' && !this.input.classList.contains('invalid');
     }
 
     validate() {
         const value = this.input.value;
 
-        if (this.config.validation === 'email') {
+        if (this.#config.validation === 'email') {
             this.validateEmail(value);
-        } else if (this.config.validation === 'password') {
-            this.input.minLength = 8;
+        } else if (this.#config.validation === 'password') {
+            this.input.minLength = MIN_PASSWORD_INPUT_LENGTH;
             this.validatePassword(value);
-        } else if (this.config.validation === 'username') {
+        } else if (this.#config.validation === 'username') {
             this.validateUsername(value);
-        } else if (this.config.validation === 'name') {
+        } else if (this.#config.validation === 'name') {
             this.validateName(value);
-        } else if (this.config.validation === 'date') {
-            this.input.maxLength = 10;
+        } else if (this.#config.validation === 'date') {
+            this.input.maxLength = MAX_DATE_INPUT_LENGTH;
             this.input.addEventListener('input', formatDateInput(this.input));
-            if (value.length === 10) {
+            if (value.length === MAX_DATE_INPUT_LENGTH) {
                 this.validateDate(value);
             } else {
                 this.hideError();
@@ -126,11 +178,11 @@ export default class InputComponent {
         const hasValidCharacters = chars.every((char) => /^[\p{L}-]+$/u.test(char));
 
         if (!name) {
-            this.showError('Введите ' + (this.config.placeholder === 'Имя' ? 'имя' : 'фамилию'));
+            this.showError('Введите ' + (this.#config.placeholder === 'Имя' ? 'имя' : 'фамилию'));
         } else if (!hasValidCharacters) {
-            this.showError(this.config.placeholder + ' может содержать только буквы и "-"');
-        } else if (name.length < 2) {
-            this.showError('Слишком ' + (this.config.placeholder === 'Имя' ? 'короткое имя' : 'короткая фамилия'));
+            this.showError(this.#config.placeholder + ' может содержать только буквы и "-"');
+        } else if (name.length < MIN_NAME_INPUT_LENGTH) {
+            this.showError('Слишком ' + (this.#config.placeholder === 'Имя' ? 'короткое имя' : 'короткая фамилия'));
         } else {
             this.hideError();
         }
@@ -173,7 +225,7 @@ export default class InputComponent {
             this.showError('Введите пароль');
         } else if (!hasValidCharacters) {
             this.showError('Пароль содержит некорректные символы');
-        } else if (password.length < 8) {
+        } else if (password.length < MIN_PASSWORD_INPUT_LENGTH) {
             this.showError('Пароль должен содержать минимум 8 символов');
         } else if (!hasLowercase || !hasUppercase) {
             this.showError('Пароль должен содержать символы в верхнем и нижнем регистрах');
@@ -218,7 +270,7 @@ export default class InputComponent {
     }
 
     showError(message) {
-        this.wrapper.appendChild(this.error);
+        this.innnerWrapper.appendChild(this.error);
         this.error.textContent = message;
         this.error.style.display = 'block';
         this.input.classList.add('invalid');
@@ -226,7 +278,7 @@ export default class InputComponent {
 
     hideError() {
         if (this.input.classList.contains('invalid')) {
-            this.wrapper.removeChild(this.error);
+            this.innnerWrapper.removeChild(this.error);
             this.input.classList.remove('invalid');
         }
     }

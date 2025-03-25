@@ -1,0 +1,42 @@
+.container {
+    max-width: 932px;
+    width: 100%;
+    display: flex;
+}
+
+.container.feed {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.container.profile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 40px;
+}
+
+.container-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+    gap: 16px;
+}
+
+.container-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    max-width: 553px;
+    min-width: 553px;
+    width: 100%;
+}
+
+.container-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}

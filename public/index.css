@@ -1,16 +1,29 @@
 @import url(./Components/constants.css);
+
 @import url(./Components/UI/ButtonComponent/ButtonComponent.css);
 @import url(./Components/UI/RadioComponent/RadioComponent.css);
+@import url(./Components/UI/ModalWindowComponent/ModalWindowComponent.css);
+@import url(./Components/UI/TextareaComponent/TextareaComponent.css);
+
+@import url(./Components/RadioMenuComponent/RadioMenuComponent.css);
 @import url(./Components/LoginFormComponent/LoginFormComponent.css);
 @import url(./Components/SignupFormComponent/SignupFormComponent.css);
 @import url(./Components/PostComponent/PostComponent.css);
 @import url(./Components/AvatarComponent/AvatarComponent.css);
 @import url(./Components/ContextMenuComponent/ContextMenuComponent.css);
 @import url(./Components/ProfileMenuComponent/ProfileMenuComponent.css);
+@import url(./Components/MainLayoutComponent/MainLayoutComponent.css);
 
 @import url(./Views/FeedView/FeedView.css);
+@import url(./Views/ProfileView/ProfileView.css);
+@import url(./Views/EditProfileView/EditProfileView.css);
+
+html {
+    font-size: 20px;
+}
 
 * {
+    font-family: var(--font-family);
     box-sizing: border-box;
 }
 
@@ -32,7 +45,6 @@
 
 body {
     background-color: #fff;
-    font-family: 'vk-sans';
 }
 
 .side-menu {
@@ -81,58 +93,48 @@ a {
     text-decoration: none;
 }
 
-.active {
-    font-weight: bold;
-}
-
 h1 {
-    font-family: var(--font-family);
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 130%;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-m);
     color: var(--text-primary);
     margin: 0;
 }
 
 .h1 {
-    font-family: var(--font-family);
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 130%;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-m);
     margin: 0;
 }
 
 h2 {
-    font-family: var(--font-family);
-    font-weight: 500;
-    font-size: 15px;
-    line-height: 130%;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-l);
+    line-height: var(--line-height-m);
     color: var(--text-primary);
     margin: 0;
 }
 
 .h2 {
-    font-family: var(--font-family);
-    font-weight: 500;
-    font-size: 15px;
-    line-height: 130%;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-l);
+    line-height: var(--line-height-m);
     margin: 0;
 }
 
 h3 {
-    font-family: var(--font-family);
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 130%;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-m);
     color: var(--text-primary);
     margin: 0;
 }
 
 .h3 {
-    font-family: var(--font-family);
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 130%;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-m);
     margin: 0;
 }
 
@@ -141,10 +143,9 @@ p {
 }
 
 .p1 {
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 130%;
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-l);
+    line-height: var(--line-height-m);
     text-align: center;
     color: var(--text-secondary);
 }

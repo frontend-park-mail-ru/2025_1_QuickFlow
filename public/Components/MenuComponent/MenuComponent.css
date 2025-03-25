@@ -30,9 +30,8 @@ aside {
     flex-direction: row;
     border-radius: 8px;
 
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 15px;
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-l);
     line-height: 100%;
     color: var(--text-primary);
 
@@ -56,8 +55,8 @@ aside {
     height: 16px;
 }
 
-.active {
-    font-weight: 500;
+.menu-item.active {
+    font-weight: var(--font-weight-bold);
     color: var(--text-accent);
 }
 

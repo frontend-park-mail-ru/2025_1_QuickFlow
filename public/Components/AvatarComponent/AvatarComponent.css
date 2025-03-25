@@ -1,13 +1,127 @@
+.avatar-wrapper {
+    display: flex;
+    box-sizing: content-box;
+}
+
 .avatar {
-    width: 32px;
-    height: 32px;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     cursor: pointer;
 }
 
-.avatar.s {
+.avatar-wrapper.xxs {
+    width: 28px;
+    height: 28px;
+}
+
+.avatar-wrapper.xs {
+    width: 32px;
+    height: 32px;
+}
+
+.avatar-wrapper.s {
     width: 40px;
     height: 40px;
+}
+
+.avatar-wrapper.m {
+    width: 48px;
+    height: 48px;
+}
+
+.avatar-wrapper.l {
+    width: 56px;
+    height: 56px;
+}
+
+.avatar-wrapper.xl {
+    width: 64px;
+    height: 64px;
+}
+
+.avatar-wrapper.xxl {
+    width: 80px;
+    height: 80px;
+}
+
+.avatar-wrapper.xxxl {
+    width: 150px;
+    height: 150px;
+}
+
+.profile-avatar {
+    border-radius: 50%;
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    border: 4px solid var(--stroke-white);
+}
+
+.profile-avatar.edit {
+    align-items: center;
+    justify-content: center;
+    bottom: -44px;
+    overflow: hidden;
+}
+
+.darken {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    cursor: pointer;
+    background: none;
+    transition: var(--trans-menu);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.darken:hover {
+    background: var(--background-black-transparent);
+}
+
+.darken:active {
+    opacity: 0.8;
+}
+
+.avatar-edit-icon {
+    margin-bottom: 4px;
+    opacity: 0.9;
+    box-shadow: 0 2px 8px 0 var(--button-transparent-active);
+}
+
+.darken:hover .avatar-edit-icon {
+    opacity: 1;
+}
+
+.avatar-status-online {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: var(--icon-green);
+    border: 4px solid var(--stroke-white);
+    box-sizing: content-box;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+}
+
+.avatar-status-offline {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+
+    box-sizing: content-box;
+    background: var(--background-gray);
+    border: 4px solid var(--stroke-white);
+    border-radius: 1000px;
+    padding: 2px 8px;
+
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-m);
+    color: var(--text-secondary);
 }

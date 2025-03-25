@@ -16,10 +16,9 @@
 }
 
 .post-text-content {
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 130%;
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-l);
+    line-height: var(--line-height-m);
     color: var(--text-primary);
     margin: 0;
 
@@ -39,10 +38,10 @@
 
 .post-read-more {
     cursor: pointer;
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 130%;
+
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-l);
+    line-height: var(--line-height-m);
     color: var(--text-secondary);
 }
 
@@ -85,9 +84,12 @@
     gap: 8px;
 }
 
+.a-btn {
+    transition: var(--trans-menu);
+}
+
 .a-btn:hover {
     color: var(--text-accent-hover);
-    transition: var(--trans-menu);
 }
 
 .post-options-wrapper {
@@ -180,8 +182,7 @@
 }
 
 .post-action-counter {
-    font-family: var(--font-family);
-    font-weight: 500;
+    font-weight: var(--font-weight-bold);
     font-size: 16px;
     line-height: 100%;
     color: var(--text-secondary);
@@ -190,7 +191,7 @@
 .post-nav-btn {
     position: absolute;
     background: var(--background-white);
-    align-self: anchor-center;
+    align-self: center;
     width: 28px;
     height: 28px;
     border-radius: 50%;
@@ -244,8 +245,8 @@
     border-radius: 100px;
     padding: 4px 8px;
     background: var(--background-black-transparent);
-    font-family: var(--font-family);
-    font-weight: 500;
+
+    font-weight: var(--font-weight-bold);
     font-size: 12px;
     color: var(--text-white);
 }
