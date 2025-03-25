@@ -125,17 +125,31 @@ export default class ModalWindowComponent {
         //         formData.append('pics', file);
         //     }
         // }
+        // Создаем объект FormData для отправки файла
+        const formData = new FormData();
+        formData.append('text', text);
 
-        const body = {
-            text,
-            pics: Array.from(this.fileInput.input.files),
-        };
-        console.log(body);
+        if (this.fileInput.input.files.length > 0) {
+            formData.append('pics', this.fileInput.input.files[0]); // Отправляем 1 файл
+        }
+
+        console.log([...formData.entries()]); // Логируем, что реально отправляется
+
+
+
+    
+
+        // const body = {
+        //     text,
+        //     pics: Array.from(this.fileInput.input.files),
+        // };
+        // console.log(body);
 
         Ajax.post({
+            body: formData,
+            isFormData: true, // Обозначаем, что отправляем form-data
             url: '/post',
             // body: formData,
-            body,
             // isFormData: true,
             callback: (response) => {
                 console.log(response);

@@ -47,17 +47,27 @@ class Ajax {
         }
     }
 
-    async post({ url, body = {}, callback = () => {} }) {
+    async post({ url, body = {}, isFormData = false, callback = () => {} }) {
         try {
-            const response = await fetch(`${this.baseUrl}${url}`, {
+            const options = {
                 method: HTTP_METHOD_POST,
                 credentials: 'include',
-                headers: { 'Content-Type': 'application/json; charset=utf-8' },
-                body: JSON.stringify(body)
-            });
+                // headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                body: isFormData ? body : JSON.stringify(body)
+            };
+
+            // Если не FormData, добавляем заголовки
+            if (!isFormData) {
+                options.headers = { 'Content-Type': 'application/json; charset=utf-8' };
+            }
+
+            const response = await fetch(`${this.baseUrl}${url}`, options);
     
             let data = null;
-            if (response.headers.get('content-length') !== '0' && response.headers.get('content-type')?.includes('application/json')) {
+            if (
+                response.headers.get('content-length') !== '0' &&
+                response.headers.get('content-type')?.includes('application/json')
+            ) {
                 data = await response.json();
             }
     
