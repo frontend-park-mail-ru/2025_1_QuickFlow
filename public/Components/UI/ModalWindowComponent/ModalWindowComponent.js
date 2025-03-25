@@ -3,6 +3,7 @@ import TextareaComponent from '../TextareaComponent/TextareaComponent.js';
 import createElement from '../../../utils/createElement.js';
 import {profileDataLayout} from '../../../Views/ProfileView/ProfileView.js'
 import Ajax from '../../../modules/ajax.js';
+import FileInputComponent from '../FileInputComponent/FileInputComponent.js';
 
 
 export default class ModalWindowComponent {
@@ -15,6 +16,7 @@ export default class ModalWindowComponent {
         this.wrapper = null;
         this.modalWindow = null;
         this.title = null;
+        this.fileInput = null;
         this.render();
     }
 
@@ -71,36 +73,69 @@ export default class ModalWindowComponent {
             classes: ['modal-window-textarea']
         });
 
+        const picsWrapper = createElement({
+            parent: this.modalWindow,
+            classes: ['modal-window-pics-wrapper'],
+        });
+        const picWrapper = createElement({
+            parent: picsWrapper,
+            classes: ['modal-window-pic-wrapper'],
+        });
+        const pic = createElement({
+            tag: 'img',
+            parent: picWrapper,
+            classes: ['modal-window-pic'],
+        });
+
+        this.fileInput = new FileInputComponent(this.modalWindow, {
+            imitator: picWrapper,
+            preview: pic,
+            id: 'post-pic-upload'
+        });
+
         new ButtonComponent(this.modalWindow, {
             text: 'Опубликовать',
             variant: 'primary',
             size: 'small',
-            onClick: () => {
-                Ajax.post({
-                    url: '/post',
-                    body: {
-                        text: textarea.textarea.value.trim(),
-                        pics: [],
-                    },
-                    callback: () => {
-                        // if (status === 200) {
-                        //     this.#menu.goToPage(this.#menu.menuElements.feed);
-                        //     this.#menu.checkAuthPage();
-                        //     this.#menu.updateMenuVisibility(true);
-                        //     this.#header.renderAvatarMenu();
-                        // } else {
-                        //     this.passwordInput.showError('Неверное имя пользователя или пароль');
-                        //     this.passwordInput.addListener(() => {
-                        //         this.passwordInput.hideError();
-                        //         this.updateBtnState();
-                        //     });
-                        //     this.updateBtnState();
-                        // }
-                    }
-                });
-            },
+            onClick: () => this.handlePostSubmit(textarea.textarea.value.trim()),
+            // onClick: () => {
+            //     Ajax.post({
+            //         url: '/post',
+            //         body: {
+            //             text: textarea.textarea.value.trim(),
+            //             pics: [],
+            //         },
+            //         callback: () => {}
+            //     });
+            // },
             disabled: true,
             stateUpdaters: [textarea]
+        });
+    }
+
+    async handlePostSubmit(text) {
+        if (!text && !this.fileInput.input.files.length) {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('text', text);
+        if (this.fileInput.input.files.length > 0) {
+            for (const file of this.fileInput.input.files) {
+                formData.append('pics', file);
+            }
+        }
+
+        console.log(formData);
+
+        Ajax.post({
+            url: '/post',
+            body: formData,
+            isFormData: true,
+            callback: (response) => {
+                console.log(response);
+                this.close();
+            }
         });
     }
 
