@@ -9,6 +9,7 @@ const DEFAULT_ACCEPT_IMAGE = 'image/*';
 export default class FileInputComponent {
     #parent
     #config
+    #files = []
     constructor(parent, config) {
         this.#config = config;
         this.#parent = parent;
@@ -30,6 +31,10 @@ export default class FileInputComponent {
             classes: this.#config.classes,
         });
 
+        if (this.#config.multiple) {
+            this.input.setAttribute('multiple', '');
+        }
+
         if (this.#config.imitator) {
             this.input.classList.add('hidden');
             this.#config.imitator.addEventListener('click', () => {
@@ -38,15 +43,34 @@ export default class FileInputComponent {
         }
         
         if (this.#config.preview) {
-            this.input.onchange = async event => {
+            this.input.onchange = async (event) => {
                 try {
-                    const imageDataUrl = await this.readImageFile(event.target.files[0]);
-                    this.#config.preview.src = imageDataUrl;
+                    await this.#config.multiple ? this.multipleOnchange(event) : this.singleOnchange();
+                    this.#config.onUpload ? this.#config.onUpload() : null;
                 } catch (error) {
                     console.error("Ошибка при чтении файла", error);
                 }
             };
         }
+    }
+    
+    async multipleOnchange(event) {
+        const newFiles = Array.from(event.target.files);
+        this.#files.push(...newFiles);
+
+        const imageDataUrls = await Promise.all(newFiles.map(this.readImageFile));
+        for (const imageDataUrl of imageDataUrls) {
+            const picWrapper = this.#config.preview.cloneNode(true);
+            picWrapper.querySelector('img').src = imageDataUrl;
+            this.#parent.insertBefore(picWrapper, this.#config.imitator);
+        }
+        
+        this.updateInputFiles();
+    }
+
+    async singleOnchange() {
+        const imageDataUrl = await this.readImageFile(event.target.files[0]);
+        this.#config.preview.src = imageDataUrl;
     }
 
     async readImageFile(file) {
@@ -57,5 +81,19 @@ export default class FileInputComponent {
             reader.onerror = reject;
             reader.readAsDataURL(file);
         });
+    }
+
+    updateInputFiles() {
+        const dataTransfer = new DataTransfer();
+
+        for (const file of this.#files) {
+            dataTransfer.items.add(file);
+        }
+
+        this.input.files = dataTransfer.files;
+    }
+
+    getFiles() {
+        return this.#files;
     }
 }

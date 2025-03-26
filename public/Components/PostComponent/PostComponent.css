@@ -125,11 +125,17 @@
     border-radius: 8px;
 }
 
+.post-slide {
+    width: 553px;
+    aspect-ratio: 4 / 5;
+}
+
 .post-pic {
     border: 1px solid var(--stroke-primary);
     border-radius: 8px;
     width: 553px;
-    aspect-ratio: 4 / 5;
+    height: 100%;
+    object-fit: cover;
 }
 
 .post-actions-wrapper {

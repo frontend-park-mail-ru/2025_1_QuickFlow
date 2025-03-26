@@ -16,7 +16,7 @@ export default class ModalWindowComponent {
         this.wrapper = null;
         this.modalWindow = null;
         this.title = null;
-        this.fileInput = null;
+        this.fileInput = [];
         this.render();
     }
 
@@ -68,29 +68,36 @@ export default class ModalWindowComponent {
         this.modalWindow.classList.add('modal-window-post');
         this.title.textContent = 'Новый пост';
 
+        const picsWrapper = createElement({
+            parent: this.modalWindow,
+            classes: ['modal-window-pics-wrapper', 'blank'],
+        });
+        const addPicWrapper = createElement({
+            parent: picsWrapper,
+            classes: ['modal-window-add-pic-wrapper'],
+        });
+        createElement({
+            parent: addPicWrapper,
+            classes: ['modal-window-add-pic'],
+            attrs: {src: 'static/img/camera-dark-icon.svg'},
+        });
+        createElement({
+            tag: 'h4',
+            parent: addPicWrapper,
+            text: 'Добавьте фото',
+        });
+
+        this.fileInput = new FileInputComponent(picsWrapper, {
+            imitator: addPicWrapper,
+            preview: this.createPicWrapperTemplate(),
+            id: 'post-pic-upload',
+            onUpload: () => this.handlePicUpload(picsWrapper),
+            multiple: true,
+        });
+
         const textarea = new TextareaComponent(this.modalWindow, {
             placeholder: 'Поделитесь своими мыслями',
             classes: ['modal-window-textarea']
-        });
-
-        const picsWrapper = createElement({
-            parent: this.modalWindow,
-            classes: ['modal-window-pics-wrapper'],
-        });
-        const picWrapper = createElement({
-            parent: picsWrapper,
-            classes: ['modal-window-pic-wrapper'],
-        });
-        const pic = createElement({
-            tag: 'img',
-            parent: picWrapper,
-            classes: ['modal-window-pic'],
-        });
-
-        this.fileInput = new FileInputComponent(this.modalWindow, {
-            imitator: picWrapper,
-            preview: pic,
-            id: 'post-pic-upload'
         });
 
         new ButtonComponent(this.modalWindow, {
@@ -103,18 +110,26 @@ export default class ModalWindowComponent {
         });
     }
 
+    createPicWrapperTemplate() {
+        const picWrapperTemplate = createElement({
+            classes: ['modal-window-pic-wrapper'],
+        });
+        createElement({
+            tag: 'img',
+            parent: picWrapperTemplate,
+            classes: ['modal-window-pic'],
+        });
+        return picWrapperTemplate;
+    }
+
+    handlePicUpload(picsWrapper) {
+        picsWrapper.classList.remove('blank');
+    }
+
     async handlePostSubmit(text) {
         if (!text && !this.fileInput.input.files.length) {
             return;
         }
-
-        // const formData = new FormData();
-        // formData.append('text', text);
-        // if (this.fileInput.input.files.length > 0) {
-        //     for (const file of this.fileInput.input.files) {
-        //         formData.append('pics', file);
-        //     }
-        // }
 
         const formData = new FormData();
         formData.append('text', text);
@@ -124,10 +139,6 @@ export default class ModalWindowComponent {
                 formData.append('pics', file);
             }
         }
-
-        // if (this.fileInput.input.files.length > 0) {
-        //     formData.append('pics', this.fileInput.input.files[0]); // Отправляем 1 файл
-        // }
 
         Ajax.post({
             body: formData,

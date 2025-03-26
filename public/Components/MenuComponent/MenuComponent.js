@@ -6,8 +6,6 @@ export class LogoComponent {
     constructor(parent, menu) {
         this.#parent = parent;
         this.#menu = menu;
-
-        console.log(this.#menu); // for linter
     }
 
     render() {
@@ -21,6 +19,8 @@ export class LogoComponent {
             classes: ['header-logo'],
             attrs: {src: '/static/img/annotated-logo.svg'}
         });
+
+        wrapper.addEventListener('click', () => this.#menu.goToPage(this.#menu.menuElements.feed));
     }
 }
 

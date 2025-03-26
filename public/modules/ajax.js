@@ -53,11 +53,9 @@ class Ajax {
             const options = {
                 method: HTTP_METHOD_POST,
                 credentials: 'include',
-                // headers: { 'Content-Type': 'application/json; charset=utf-8' },
                 body: isFormData ? body : JSON.stringify(body)
             };
 
-            // Если не FormData, добавляем заголовки
             if (!isFormData) {
                 options.headers = { 'Content-Type': 'application/json; charset=utf-8' };
             }

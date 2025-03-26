@@ -18,6 +18,7 @@ aside {
     height: fit-content;
     width: fit-content;
     align-self: start;
+    cursor: pointer;
 }
 
 .menu-item {
