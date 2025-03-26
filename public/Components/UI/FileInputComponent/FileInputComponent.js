@@ -43,30 +43,34 @@ export default class FileInputComponent {
         }
         
         if (this.#config.preview) {
-            this.input.onchange = async event => {
+            this.input.onchange = async () => {
                 try {
-                    const newFiles = Array.from(event.target.files);
-                    this.#files.push(...newFiles); // <--- Добавляем новые файлы в массив
-
-                    const imageDataUrls = await Promise.all(newFiles.map(this.readImageFile));
-
-                    for (let i = 0; i < newFiles.length; i++) {
-                        const newPicWrapper = this.#config.preview.cloneNode(true);
-                        newPicWrapper.querySelector('.modal-window-pic').src = imageDataUrls[i];
-                        this.#parent.insertBefore(newPicWrapper, this.#config.imitator);
-                    }
-
-                    this.updateInputFiles(); // <--- Перезаписываем input.files
-
-                    if (this.#config.onUpload) {
-                        this.#config.onUpload();
-                    }
-                    // const imageDataUrl = await this.readImageFile(event.target.files[0]);
+                    await this.#config.multiple ? this.multipleOnchange() : this.singleOnchange();
+                    this.#config.onUpload ? this.#config.onUpload() : null;
                 } catch (error) {
                     console.error("Ошибка при чтении файла", error);
                 }
             };
         }
+    }
+    
+    async multipleOnchange() {
+        const newFiles = Array.from(event.target.files);
+        this.#files.push(...newFiles);
+
+        const imageDataUrls = await Promise.all(newFiles.map(this.readImageFile));
+        for (const imageDataUrl of imageDataUrls) {
+            const picWrapper = this.#config.preview.cloneNode(true);
+            picWrapper.querySelector('img').src = imageDataUrl;
+            this.#parent.insertBefore(picWrapper, this.#config.imitator);
+        }
+        
+        this.updateInputFiles();
+    }
+
+    async singleOnchange() {
+        const imageDataUrl = await this.readImageFile(event.target.files[0]);
+        this.#config.preview.src = imageDataUrl;
     }
 
     async readImageFile(file) {
