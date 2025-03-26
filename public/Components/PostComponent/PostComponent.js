@@ -54,8 +54,12 @@ export default class PostComponent {
 
         if (this.#config.pics && this.#config.pics.length > 0) {
             this.#config.pics.forEach((pic) => {
-                createElement({
+                const slide = createElement({
                     parent: slider,
+                    classes: ['post-slide'],
+                });
+                createElement({
+                    parent: slide,
                     classes: ['post-pic'],
                     attrs: {src: pic, alt: DEAFULT_IMG_ALT}
                 });
