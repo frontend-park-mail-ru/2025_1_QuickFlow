@@ -102,11 +102,55 @@
 
 .modal-window-pics-wrapper {
     width: 100%;
-    height: 96px;
+    height: 128px;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 8px;
+    overflow: scroll;
+}
+
+/* .modal-window-pics-wrapper.blank {
+    border: 1px dashed var(--stroke-primary-focus);
+    border-radius: 8px;
+    background: var(--background-white);
+    transition: var(--trans-menu);
+} */
+
+/* .modal-window-pics-wrapper.blank:hover {
+    background: var(--background-light-gray);
+}
+
+.modal-window-pics-wrapper.blank:active {
+    background: var(--background-gray);
+} */
+
+.modal-window-pics-wrapper.blank .modal-window-add-pic-wrapper {
+    width: 100%;
+}
+
+.modal-window-add-pic-wrapper {
+    aspect-ratio: 1 / 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+
+    border: 1px dashed var(--stroke-primary-focus);
+    border-radius: 8px;
+    background: var(--background-white);
+    transition: var(--trans-menu);
+    cursor: pointer;
+}
+
+.modal-window-add-pic-wrapper:hover {
+    background: var(--background-light-gray);
+}
+
+.modal-window-add-pic-wrapper:active {
+    background: var(--background-gray);
 }
 
 .modal-window-pic-wrapper {
@@ -120,4 +164,14 @@
     width: 100%;
     border-radius: 8px;
     border: 1px solid var(--stroke-primary);
+}
+
+.modal-window-pics-wrapper.blank .modal-window-add-pic {
+    width: 32px;
+    height: 32px;
+}
+
+.modal-window-add-pic {
+    width: 28px;
+    height: 28px;
 }

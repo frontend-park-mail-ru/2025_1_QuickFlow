@@ -138,6 +138,21 @@ h3 {
     margin: 0;
 }
 
+h4 {
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-m);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.h4 {
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-m);
+    margin: 0;
+}
+
 p {
     margin: 0;
 }
