@@ -221,7 +221,6 @@ export default class LoginFormComponent {
             username: this.usernameInput.input.value.trim(),
             password
         };
-        console.log(body);
         Ajax.post({
             url: '/login',
             body,

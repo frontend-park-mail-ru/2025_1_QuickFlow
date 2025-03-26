@@ -64,7 +64,6 @@ app.post('/signup', (req, res) => {
 app.post('/login', (req, res) => {
     const password = req.body.password;
     const username = req.body.username;
-    console.log(username, password);
     if (!password || !username) {
         return res.status(400).json({ error: 'Не указано имя пользователя или пароль' });
     }

@@ -134,8 +134,6 @@ export default class ModalWindowComponent {
         const formData = new FormData();
         formData.append('text', text);
 
-        console.log(this.fileInput.input.files);
-
         if (this.fileInput.input.files.length > 0) {
             for (const file of this.fileInput.input.files) {
                 formData.append('pics', file);

@@ -93,6 +93,6 @@ Ajax.get({
             return;
         }
 
-        menu.goToPage(menu.menuElements.profile);
+        menu.goToPage(menu.menuElements.feed);
     }
 });

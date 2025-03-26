@@ -317,7 +317,6 @@ export default class SignupFormComponent {
             sex: this.sexInput.getChecked().value === 'male' ? 1 : 2, 
             birth_date: this.convertDate(this.birthDateInput.input.value.trim()),
         }
-        console.log(body);
         Ajax.post({
             url: '/signup',
             body: body,

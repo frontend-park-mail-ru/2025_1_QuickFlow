@@ -43,9 +43,9 @@ export default class FileInputComponent {
         }
         
         if (this.#config.preview) {
-            this.input.onchange = async () => {
+            this.input.onchange = async (event) => {
                 try {
-                    await this.#config.multiple ? this.multipleOnchange() : this.singleOnchange();
+                    await this.#config.multiple ? this.multipleOnchange(event) : this.singleOnchange();
                     this.#config.onUpload ? this.#config.onUpload() : null;
                 } catch (error) {
                     console.error("Ошибка при чтении файла", error);
@@ -54,7 +54,7 @@ export default class FileInputComponent {
         }
     }
     
-    async multipleOnchange() {
+    async multipleOnchange(event) {
         const newFiles = Array.from(event.target.files);
         this.#files.push(...newFiles);
 
