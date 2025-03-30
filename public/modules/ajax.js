@@ -25,9 +25,6 @@ class Ajax {
                 return true;
             }
         }
-        if (url === '/user-dev-false') {
-            url = '/feed';
-        }
         return false;
     }
 
@@ -43,6 +40,9 @@ class Ajax {
             //     url = '/feed';
             // }
             if (this.fakeRequest(url, params, callback)) return;
+            if (url === '/user-dev-false') {
+                url = '/feed';
+            }
 
             const queryString = new URLSearchParams(params).toString();
             const fullUrl = `${this.baseUrl}${url}${queryString ? `?${queryString}` : ''}`;
