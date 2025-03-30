@@ -16,6 +16,10 @@
     gap: 40px;
 }
 
+.container.messenger {
+    height: calc(100vh - 48px - 56px);
+}
+
 .container-row {
     display: flex;
     flex-direction: row;

@@ -1,11 +1,10 @@
-// import { posts, users } from '../mocks.js'
-import { users } from '../mocks.js'
+import { users, chats, messages } from '../mocks.js'
 
 
 const HTTP_METHOD_GET = 'GET';
 const HTTP_METHOD_POST = 'POST';
 const API_BASE_URL = 'https://quickflowapp.ru/api';
-const DEVELOP = false;
+const DEVELOP = true;
 
 
 class Ajax {
@@ -13,20 +12,37 @@ class Ajax {
         this.baseUrl = DEVELOP ? '' : API_BASE_URL;
     }
 
+    fakeRequest(url, params, callback) {
+        if (!DEVELOP) {
+            if (url === '/user') {
+                callback(200, users['rvasutenko']);
+                return true;
+            } else if (url === '/chats') {
+                callback(200, chats['rvasutenko']);
+                return true;
+            } else if (url === '/chat') {
+                callback(200, messages['rvasutenko'][params.username]);
+                return true;
+            }
+        }
+        if (url === '/user-dev-false') {
+            url = '/feed';
+        }
+        return false;
+    }
+
     async get({ url, params = {}, callback = () => {} }) {
         try {
-            if (!DEVELOP) {
-                if (url === '/user') {
-                    callback(200, users['rvasutenko']);
-                    return;
-                // } else if (url === '/feed') {
-                //     callback(200, posts);
-                //     return;
-                }
-            }
-            if (url === '/user-dev-false') {
-                url = '/feed';
-            }
+            // if (!DEVELOP) {
+            //     if (url === '/user') {
+            //         callback(200, users['rvasutenko']);
+            //         return;
+            //     }
+            // }
+            // if (url === '/user-dev-false') {
+            //     url = '/feed';
+            // }
+            if (this.fakeRequest(url, params, callback)) return;
 
             const queryString = new URLSearchParams(params).toString();
             const fullUrl = `${this.baseUrl}${url}${queryString ? `?${queryString}` : ''}`;

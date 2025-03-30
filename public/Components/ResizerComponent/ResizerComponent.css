@@ -1,0 +1,18 @@
+.messenger-resizer {
+    width: 5px;
+    cursor: col-resize;
+    background-color: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+}
+
+body.resize {
+    cursor: col-resize;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}

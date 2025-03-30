@@ -1,0 +1,118 @@
+.messenger-chat-wrapper {
+    width: 100%;
+    height: calc(100% - 50px);
+    overflow: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.messenger-date-title {
+    font-size: var(--font-size-xs);
+    line-height: 130%;
+    color: var(--text-secondary);
+    font-weight: var(--font-weight-bold);
+    text-align: center;
+    padding: 8px 40px;
+}
+
+.messenger-chat-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.messenger-chat {
+    width: 100%;
+    height: auto;
+    padding-top: 16px;
+    padding-bottom: 78px;
+    display: flex;
+    flex-direction: column;
+}
+
+.messenger-msg {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    font-size: 13px;
+    line-height: 130%;
+    padding: 8px 40px;
+    gap: 8px;
+}
+
+.messenger-msg.no-from {
+    padding-left: 80px;
+    padding-top: 4px;
+}
+
+.msg-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+.msg-from {
+    font-weight: 500;
+    color: var(--text-accent);
+}
+
+.no-from .msg-from {
+    display: none;
+}
+
+.no-from .avatar-wrapper {
+    display: none;
+}
+
+.msg-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+}
+
+.msg-sent-time {
+    flex-shrink: 0;
+    color: var(--text-secondary);
+}
+
+.msg-status {
+    background: url(../../static/img/check-icon.svg) no-repeat;
+    height: 16px;
+    width: 16px;
+    min-height: 16px;
+    min-width: 16px;
+}
+
+.msg-status.read {
+    background: url(../../static/img/double-check-icon.svg) no-repeat;
+}
+
+.messenger-chat.empty {
+    font-size: 15px;
+    text-align: center;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+}
+
+.info-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-direction: column;
+}
+
+.btns-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}

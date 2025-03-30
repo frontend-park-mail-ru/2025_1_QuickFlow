@@ -3,6 +3,7 @@ import InputComponent from '../UI/InputComponent/InputComponent.js';
 import RadioComponent from '../UI/RadioComponent/RadioComponent.js';
 import ButtonComponent from '../UI/ButtonComponent/ButtonComponent.js';
 import createElement from '../../utils/createElement.js';
+import focusInput from '../../utils/focusInput.js';
 
 
 const LOGO_SRC = '/static/img/logo-icon.svg';
@@ -20,11 +21,13 @@ export default class SignupFormComponent {
     #step
     #menu
     #header
+    #focusTimer
     constructor(parent, menu, header) {
         this.#parent = parent;
         this.#menu = menu;
         this.#header = header;
 
+        this.#focusTimer = null;
         this.usernameInput = null;
         this.firstnameInput = null;
         this.lastnameInput = null;
@@ -154,6 +157,7 @@ export default class SignupFormComponent {
             showRequired: false,
             value: localStorage.getItem("username") || DEFAULT_INPUT_VALUE
         });
+        focusInput(this.usernameInput.input, this.#focusTimer);
 
         const nameInputWrapper = createElement({
             parent: fieldsetPersonalInfo,
@@ -227,6 +231,7 @@ export default class SignupFormComponent {
             required: true,
             showRequired: false
         });
+        focusInput(this.passwordInput.input, this.#focusTimer);
 
         this.passwordConfirmationInput = new InputComponent(form, {
             type: 'password',

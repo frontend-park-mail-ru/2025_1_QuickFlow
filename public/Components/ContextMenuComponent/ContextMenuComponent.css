@@ -17,6 +17,7 @@
     padding: 8px;
     transform: scale(0.97) translateY(-12px);
     pointer-events: none;
+    user-select: none;
 
     transition:
         opacity 0.2s ease,
@@ -25,10 +26,13 @@
         padding 0.2s ease;
 }
 
+.context-menu.mini {
+    width: 128px;
+}
+
 .dropdown:hover .context-menu {
     position: relative;
     opacity: 1;
-    width: 228px;
     transform: scale(1) translateY(0);
     height: auto;
     padding: 8px;

@@ -6,7 +6,7 @@ import cookie from 'cookie-parser';
 import morgan from 'morgan';
 import path from 'path';
 import crypto from 'crypto';
-import { users, posts } from '../public/mocks.js';
+import { users, posts, chats, messages } from '../public/mocks.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -123,15 +123,44 @@ app.get('/user', (req, res) => {
         return res.status(401).end();
     }
 
-    if (req.query && req.query.username ) {
+    if (req.query && req.query.username) {
         const queryUsername = req.query.username;
         if (!queryUsername || !users[queryUsername]) {
-            return res.status(401).end();
+            return res.status(400).end();
         }
         return res.status(200).json(users[queryUsername]);
     }
     
     res.status(200).json(users[username]);
+});
+
+app.get('/chats', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const username = ids[id];
+    if (!username || !users[username]) {
+        return res.status(401).end();
+    }
+    
+    res.status(200).json(chats[username]);
+});
+
+app.get('/chat', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const username = ids[id];
+    if (!username || !users[username]) {
+        return res.status(401).end();
+    }
+
+    if (!req.query || !req.query.username) {
+        return res.status(400).end();
+    }
+
+    const queryUsername = req.query.username;
+    if (!queryUsername || !messages[username][queryUsername]) {
+        return res.status(404).end();
+    }
+
+    return res.status(200).json(messages[username][queryUsername]);
 });
 
 // app.post('/like', (req, res) => {
