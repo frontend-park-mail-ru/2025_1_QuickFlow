@@ -1,4 +1,4 @@
-import { users, chats, messages } from '../mocks.js'
+// import { users, chats, messages } from '../mocks.js'
 
 
 const HTTP_METHOD_GET = 'GET';
@@ -12,20 +12,13 @@ class Ajax {
         this.baseUrl = DEVELOP ? '' : API_BASE_URL;
     }
 
-    fakeRequest(url, params, callback) {
+    redirectRequest(url, queryString) {
         if (!DEVELOP) {
-            if (url === '/user') {
-                callback(200, users['rvasutenko']);
-                return true;
-            } else if (url === '/chats') {
-                callback(200, chats['rvasutenko']);
-                return true;
-            } else if (url === '/chat') {
-                callback(200, messages['rvasutenko'][params.username]);
-                return true;
+            if (url === '/user' || url === '/chats' || url === '/chat') {
+                return `${url}${queryString ? `?${queryString}` : ''}`;
             }
         }
-        return false;
+        return null;
     }
 
     async get({ url, params = {}, callback = () => {} }) {
@@ -39,13 +32,18 @@ class Ajax {
             // if (url === '/user-dev-false') {
             //     url = '/feed';
             // }
-            if (this.fakeRequest(url, params, callback)) return;
+            
             if (url === '/user-dev-false') {
                 url = '/feed';
             }
 
             const queryString = new URLSearchParams(params).toString();
-            const fullUrl = `${this.baseUrl}${url}${queryString ? `?${queryString}` : ''}`;
+            
+            let fullUrl = null;
+            fullUrl = this.redirectRequest(url, queryString);
+            if (!fullUrl) {
+                fullUrl = `${this.baseUrl}${url}${queryString ? `?${queryString}` : ''}`;
+            }
     
             const response = await fetch(fullUrl, {
                 method: HTTP_METHOD_GET,
