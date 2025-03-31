@@ -42,6 +42,10 @@ export default class TextareaComponent {
                 placeholder: this.#config.placeholder || DEFAULT_PLACEHOLDER,
             },
         });
+
+        for (const attr in this.#config.attrs) {
+            this.textarea.setAttribute(attr, this.#config.attrs[attr]);
+        }
     }
 
     addListener(listener) {

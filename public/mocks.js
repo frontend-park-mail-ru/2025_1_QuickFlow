@@ -180,3 +180,187 @@ export const profileFriends = [
         avatar: '/avatars/avatar.jpg'
     },
 ];
+
+export const chats = {
+    rvasutenko: [
+        {
+            username: 'pavlov',
+            name: 'Александр Павловский',
+            avatar: '/avatars/avatar4.jpg',
+            lastMsg: 'Привет, как дела?',
+            lastMsgTime: '1ч', // TODO: убрать хардкод и поменть на timestamp
+        },
+        {
+            username: 'andrew',
+            name: 'Андрей Контемиров',
+            avatar: '/avatars/avatar5.jpg',
+            lastMsg: 'Привет, как дела?',
+            lastMsgTime: '1ч',
+        },
+        {
+            username: 'maxutka',
+            name: 'Максим Поздняков',
+            avatar: '/avatars/avatar6.jpg',
+            lastMsg: 'Привет, как дела?',
+            lastMsgTime: '1ч',
+        },
+        {
+            username: 'matthew',
+            name: 'Матвей Хаметов',
+            avatar: '/avatars/avatar7.jpg',
+            lastMsg: 'Привет, как дела?',
+            lastMsgTime: '1ч',
+        },
+        {
+            username: 'nik_vor',
+            name: 'Никита Воробьев',
+            avatar: '/avatars/avatar8.jpg',
+            lastMsg: 'Привет, как дела?',
+            lastMsgTime: '1ч',
+        },
+        {
+            username: 'baran2003',
+            name: 'Анастасия Баранникова',
+            avatar: '/avatars/avatar9.jpg',
+            lastMsg: 'Привет, как дела?',
+            lastMsgTime: '1ч',
+        },
+        {
+            username: 'olchik',
+            name: 'Ольга Склярова',
+            avatar: '/avatars/avatar10.jpg',
+            lastMsg: 'Привет, как дела?',
+            lastMsgTime: '1ч',
+        },
+        {
+            username: 'vlli',
+            name: 'Влад Ли',
+            avatar: '/avatars/avatar11.jpg',
+            lastMsg: 'Привет, как дела?',
+            lastMsgTime: '1ч',
+        },
+        {
+            username: 'tolly_molly',
+            name: 'Ксения Сивашова',
+            avatar: '/avatars/avatar4.jpg',
+            lastMsg: 'Привет, как дела?',
+            lastMsgTime: '1ч',
+        },
+        {
+            username: 'braznetz',
+            name: 'Eugenii Braznetz',
+            avatar: '/avatars/avatar5.jpg',
+            lastMsg: 'Привет, как дела?',
+            lastMsgTime: '1ч',
+        },
+        {
+            username: 'xusha',
+            name: 'Ксюша Логинова',
+            avatar: '/avatars/avatar6.jpg',
+            lastMsg: 'Привет, как дела?',
+            lastMsgTime: '1ч',
+        },
+        {
+            username: 'kate_b',
+            name: 'Катя Беседовская',
+            avatar: '/avatars/avatar7.jpg',
+            lastMsg: 'Привет, как дела?',
+            lastMsgTime: '1ч',
+        },
+    ]
+};
+
+export const messages = {
+    rvasutenko: {
+        pavlov: [
+            {
+                id: 1,
+                from: 'pavlov',
+                text: 'Привет, как дела?',
+                timestamp: '2025-03-28 22:00:00',
+                isRead: true
+            },
+            {
+                id: 2,
+                from: 'pavlov',
+                text: 'Что нового произошло за неделю?',
+                timestamp: '2025-03-28 22:00:00',
+                isRead: true
+            },
+            {
+                id: 3,
+                from: 'rvasutenko',
+                text: 'Привет, все отлично',
+                timestamp: '2025-03-28 22:00:00',
+                isRead: true
+            },
+            {
+                id: 4,
+                from: 'rvasutenko',
+                text: 'На днях ходил на новую выставку в винзаводе',
+                timestamp: '2025-03-28 22:00:00',
+                isRead: true
+            },
+            {
+                id: 5,
+                from: 'rvasutenko',
+                text: 'Очень классная, так что советую',
+                timestamp: '2025-03-28 22:00:00',
+                isRead: true
+            },
+            {
+                id: 6,
+                from: 'rvasutenko',
+                text: 'Сам то ты как?',
+                timestamp: '2025-03-28 22:00:00',
+                isRead: true
+            },
+            {
+                id: 7,
+                from: 'pavlov',
+                text: 'Да у меня тоже все хорошо. Завтра поеду в Казань с одногруппниками. Давно собирались сгонять своей компанией, но все никак не могли спланировать нормально. Вот, наконец-то руки добрались, хахах',
+                timestamp: '2025-03-28 22:00:00',
+                isRead: true
+            },
+            {
+                id: 8,
+                from: 'rvasutenko',
+                text: 'О, Казань - это классно, нереально красивый город',
+                timestamp: '2025-03-28 22:00:00',
+                isRead: true
+            },
+            {
+                id: 9,
+                from: 'rvasutenko',
+                text: 'Расскажешь потом, как съездили',
+                timestamp: '2025-03-28 22:00:00',
+                isRead: true
+            },
+            {
+                id: 10,
+                from: 'pavlov',
+                text: 'Да, окей',
+                timestamp: '2025-03-28 22:00:00',
+                isRead: true
+            },
+            {
+                id: 11,
+                from: 'pavlov',
+                text: 'Слушай, я давно хотел у тебя спросить что-то очень важное, но вот, к сожалению, сейчас никак не могу припомнить, что именно. Знаешь, я, наверное, тебе напишу чуть позже, как вспомню) Привет! Давно хотел у тебя спросить что-то очень важное, но вот, к сожалению, сейчас никак не могу припомнить, что именно. Знаешь, я, наверное, тебе напишу чуть позже, как вспомню)',
+                timestamp: '2025-03-29 22:00:00',
+                isRead: true
+            },
+        ],
+        andrew: [],
+        maxutka: [],
+        matthew: [],
+        nik_vor: [],
+        baran2003: [],
+        olchik: [],
+        vlli: [],
+        tolly_molly: [],
+        braznetz: [],
+        xusha: [],
+        kate_b: [],
+    }
+};

@@ -14,7 +14,7 @@ export default class ContextMenuComponent {
     render() {
         this.wrapper = createElement({
             parent: this.#parent,
-            classes: ['context-menu']
+            classes: ['context-menu', this.#config.classes]
         });
 
         Object.entries(this.#config.data).forEach(([, { href, text, icon, isCritical }],) => {

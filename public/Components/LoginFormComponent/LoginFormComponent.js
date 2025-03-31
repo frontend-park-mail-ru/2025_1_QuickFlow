@@ -2,11 +2,13 @@ import Ajax from '../../modules/ajax.js';
 import InputComponent from '../UI/InputComponent/InputComponent.js';
 import ButtonComponent from '../UI/ButtonComponent/ButtonComponent.js';
 import createElement from '../../utils/createElement.js';
+import focusInput from '../../utils/focusInput.js';
 
 export default class LoginFormComponent {
     #parent
     #menu
     #header
+    #focusTimer
     constructor(parent, menu, header) {
         this.#parent = parent;
         this.#menu = menu;
@@ -16,7 +18,7 @@ export default class LoginFormComponent {
         this.passwordInput = null;
         this.usernameInput = null;
         this.continueBtn = null;
-        this.focusTimer = null;
+        this.#focusTimer = null;
 
         this.config = {
             usernameTitle: 'Вход QuickFlow',
@@ -151,9 +153,7 @@ export default class LoginFormComponent {
             showRequired: false,
             value: localStorage.getItem("username") || ''
         });
-        
-        this.clearFocusTimer();
-        this.focusTimer = setTimeout(() => this.usernameInput.input.focus(), 0);
+        focusInput(this.usernameInput.input, this.#focusTimer);
 
         const checkboxWrapper = createElement({
             parent: form,
@@ -197,9 +197,7 @@ export default class LoginFormComponent {
             required: true,
             showRequired: false
         });
-
-        this.clearFocusTimer();
-        this.focusTimer = setTimeout(() => this.passwordInput.input.focus(), 0);
+        focusInput(this.passwordInput.input, this.#focusTimer);
 
         this.renderBottomWrapper(form);
     }
@@ -240,12 +238,5 @@ export default class LoginFormComponent {
                 }
             }
         });
-    }
-
-    clearFocusTimer() {
-        if (this.focusTimer) {
-            clearTimeout(this.focusTimer);
-            this.focusTimer = null;
-        }
     }
 }

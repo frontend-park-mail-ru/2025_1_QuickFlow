@@ -1,6 +1,7 @@
 import LoginView from './Views/LoginView/LoginView.js';
 import SignupView from './Views/SignupView/SignupView.js';
 import FeedView from './Views/FeedView/FeedView.js';
+import MessengerView from './Views/MessengerView/MessengerView.js';
 import LogoutView from './Views/LogoutView/LogoutView.js';
 import ProfileView from './Views/ProfileView/ProfileView.js';
 import HeaderComponent from './Components/HeaderComponent/HeaderComponent.js';
@@ -62,12 +63,18 @@ const config = {
             icon: 'signup-icon',
             render: () => new SignupView(menu, header).render(),
         },
+        messenger: {
+            href: '/messenger',
+            text: 'Мессенджер',
+            icon: 'messenger-icon',
+            render: () => new MessengerView(menu).render(),
+        },
         logout: {
             href: '/logout',
             text: 'Выйти',
             icon: 'logout-icon',
             render: () => new LogoutView(menu).render(),
-        }
+        },
     },
     isAuthorized: true,
 };
@@ -93,6 +100,6 @@ Ajax.get({
             return;
         }
 
-        menu.goToPage(menu.menuElements.feed);
+        menu.goToPage(menu.menuElements.messenger);
     }
 });

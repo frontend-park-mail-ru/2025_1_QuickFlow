@@ -1,5 +1,4 @@
-// import { posts, users } from '../mocks.js'
-import { users } from '../mocks.js'
+import { users, chats, messages } from '../mocks.js'
 
 
 const HTTP_METHOD_GET = 'GET';
@@ -13,17 +12,37 @@ class Ajax {
         this.baseUrl = DEVELOP ? '' : API_BASE_URL;
     }
 
+    async fakeRequest(url, params, callback) {
+        await new Promise(resolve => setTimeout(resolve, 30)); // Симуляция сетевой задержки
+        if (!DEVELOP) {
+            if (url === '/user') {
+                callback(200, users['rvasutenko']);
+                return true;
+            } else if (url === '/chats') {
+                callback(200, chats['rvasutenko']);
+                return true;
+            } else if (url === '/chat') {
+                callback(200, messages['rvasutenko'][params.username]);
+                return true;
+            }
+        }
+        return false;
+    }
+
     async get({ url, params = {}, callback = () => {} }) {
         try {
-            if (!DEVELOP) {
-                if (url === '/user') {
-                    callback(200, users['rvasutenko']);
-                    return;
-                // } else if (url === '/feed') {
-                //     callback(200, posts);
-                //     return;
-                }
-            }
+            // if (!DEVELOP) {
+            //     if (url === '/user') {
+            //         callback(200, users['rvasutenko']);
+            //         return;
+            //     }
+            // }
+            // if (url === '/user-dev-false') {
+            //     url = '/feed';
+            // }
+            
+            if (await this.fakeRequest(url, params, callback)) return;
+            
             if (url === '/user-dev-false') {
                 url = '/feed';
             }

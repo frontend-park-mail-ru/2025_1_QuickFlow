@@ -26,6 +26,8 @@ export default class MainLayoutComponent {
         } else if (this.#config.type === 'profile') {
             this.renderProfile();
         }
+
+        this.setParentPosition();
     }
 
     clear() {
@@ -65,5 +67,13 @@ export default class MainLayoutComponent {
             parent: this.container,
             classes: ['container-right'],
         });
+    }
+
+    setParentPosition() {
+        if (this.#config.type === 'messenger') {
+            this.container.parentNode.style.position = 'fixed';
+            return;
+        }
+        this.container.parentNode.style.position = 'absolute';
     }
 }

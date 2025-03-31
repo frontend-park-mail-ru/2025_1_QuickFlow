@@ -65,10 +65,6 @@ input[type='password']:focus {
     outline: none;
 }
 
-input:focus::placeholder {
-    color: transparent;
-}
-
 input.invalid {
     border: 1px solid var(--stroke-error) !important;
     background: var(--background-error) !important;

@@ -11,10 +11,11 @@
 }
 
 textarea {
-    font-weight: var(--font-weight-regular);
-    font-size: var(--font-size-s);
-    line-height: var(--line-height-m);
     color: var(--text-primary);
+    font-size: var(--font-size-s);
+}
+
+.modal-window-textarea textarea {
     margin-bottom: 8px;
     border: 1px solid var(--stroke-primary);
     border-radius: 8px;
