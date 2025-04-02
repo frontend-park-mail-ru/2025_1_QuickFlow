@@ -33,6 +33,7 @@ export default class MenuComponent {
 
         this.activePageLink = null;
         this.menuElements = {};
+        this.username = '';
     }
 
     render() {

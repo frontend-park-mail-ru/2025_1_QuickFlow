@@ -73,7 +73,10 @@ export default class HeaderComponent {
         });
 
         Ajax.get({
-            url: '/user',
+            url: '/profile',
+            params: {
+                useranme: this.#menu.username,
+            },
             callback: (status, userData) => {
                 this.renderAvatarCallback(status, userData);
             }

@@ -144,7 +144,7 @@ export default class MessageComponent {
         createElement({
             parent: msgInfo,
             classes: ['msg-sent-time'],
-            text: '17:20',
+            text: '17:20', // TODO: подтягивать
         });
     }
 

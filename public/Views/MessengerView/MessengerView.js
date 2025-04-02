@@ -17,7 +17,10 @@ export default class MessengerView {
         });
 
         Ajax.get({
-            url: '/user',
+            url: '/profile',
+            params: {
+                useranme: this.#menu.username,
+            },
             callback: (status, userData) => {
                 let isAuthorized = status === 200;
         

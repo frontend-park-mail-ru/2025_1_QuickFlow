@@ -228,6 +228,7 @@ export default class LoginFormComponent {
                     this.#menu.checkAuthPage();
                     this.#menu.updateMenuVisibility(true);
                     this.#header.renderAvatarMenu();
+                    this.#menu.username = body.username; // ???
                 } else {
                     this.passwordInput.showError('Неверное имя пользователя или пароль');
                     this.passwordInput.addListener(() => {

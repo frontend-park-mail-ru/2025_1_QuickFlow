@@ -116,7 +116,7 @@ app.get('/feed', (req, res) => {
     res.status(200).json(posts);
 });
 
-app.get('/user', (req, res) => {
+app.get('/profile', (req, res) => {
     const id = req.cookies['podvorot'];
     const username = ids[id];
     if (!username || !users[username]) {
