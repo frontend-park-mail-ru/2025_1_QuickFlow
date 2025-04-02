@@ -1,6 +1,7 @@
 import Ajax from '../../modules/ajax.js';
 import MessengerComponent from '../../Components/MessengerComponent/MessengerComponent.js';
 import MainLayoutComponent from '../../Components/MainLayoutComponent/MainLayoutComponent.js';
+import { getLsItem } from '../../utils/localStorage.js';
 
 
 export default class MessengerView {
@@ -17,7 +18,7 @@ export default class MessengerView {
         });
 
         Ajax.get({
-            url: `/profiles/${this.#menu.username}`,
+            url: `/profiles/${getLsItem('username', '')}`,
             callback: (status, userData) => {
                 let isAuthorized = status === 200;
         

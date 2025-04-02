@@ -7,6 +7,7 @@ import ModalWindowComponent from '../../Components/UI/ModalWindowComponent/Modal
 import ButtonComponent from '../../Components/UI/ButtonComponent/ButtonComponent.js';
 import createElement from '../../utils/createElement.js';
 import {profileFriends} from '../../mocks.js';
+import { getLsItem } from '../../utils/localStorage.js';
 
 
 export const profileDataLayout = {
@@ -43,7 +44,7 @@ export default class ProfileView {
         });
 
         Ajax.get({
-            url: `/profiles/${this.#menu.username}`,
+            url: `/profiles/${getLsItem('username', '')}`,
             callback: (status, userData) => {
                 let isAuthorized = status === 200;
     

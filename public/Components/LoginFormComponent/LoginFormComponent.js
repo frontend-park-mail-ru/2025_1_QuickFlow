@@ -224,7 +224,6 @@ export default class LoginFormComponent {
             body,
             callback: (status) => {
                 if (status === 200) {
-                    this.#menu.username = body.username; // ???
                     this.#menu.goToPage(this.#menu.menuElements.feed);
                     this.#menu.checkAuthPage();
                     this.#menu.updateMenuVisibility(true);

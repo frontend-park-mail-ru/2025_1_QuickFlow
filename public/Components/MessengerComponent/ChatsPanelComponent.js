@@ -62,7 +62,6 @@ export default class ChatsPanelComponent {
 
     set chatWindow(chatWindow) {
         this.#chatWindow = chatWindow;
-        console.log(this.#chatWindow);
     }
 
     renderChatList() {
@@ -73,7 +72,6 @@ export default class ChatsPanelComponent {
 
         this.#config.messenger.ajaxGetChats((chatsData) => {
             const activeChatId = getLsItem('active-chat', null);
-            console.log('ajax');
                 
             for (const chatData of chatsData) {
                 const chatItem = this.renderChatItem(chatData);

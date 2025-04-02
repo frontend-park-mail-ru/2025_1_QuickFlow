@@ -3,6 +3,7 @@ import InputComponent from '../UI/InputComponent/InputComponent.js';
 import ProfileMenuComponent from '../ProfileMenuComponent/ProfileMenuComponent.js';
 import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
 import createElement from '../../utils/createElement.js';
+import { getLsItem } from '../../utils/localStorage.js';
 
 
 export default class HeaderComponent {
@@ -73,7 +74,7 @@ export default class HeaderComponent {
         });
 
         Ajax.get({
-            url: `/profiles/${this.#menu.username}`,
+            url: `/profiles/${getLsItem('username', '')}`,
             callback: (status, userData) => {
                 this.renderAvatarCallback(status, userData);
             }

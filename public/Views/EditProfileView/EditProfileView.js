@@ -9,6 +9,7 @@ import FileInputComponent from '../../Components/UI/FileInputComponent/FileInput
 
 import createElement from '../../utils/createElement.js';
 import TextareaComponent from '../../Components/UI/TextareaComponent/TextareaComponent.js';
+import { getLsItem } from '../../utils/localStorage.js';
 
 
 const forms = {
@@ -170,7 +171,7 @@ export default class EditProfileView {
         this.#containerObj.left.innerHTML = '';
 
         Ajax.get({
-            url: `/profiles/${this.#menu.username}`,
+            url: `/profiles/${getLsItem('username', '')}`,
             callback: (status, userData) => {
                 let isAuthorized = status === 200;
     
