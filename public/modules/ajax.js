@@ -4,17 +4,25 @@ import { users, chats, messages } from '../mocks.js'
 const HTTP_METHOD_GET = 'GET';
 const HTTP_METHOD_POST = 'POST';
 const API_BASE_URL = 'https://quickflowapp.ru/api';
-const DEVELOP = true;
 
 
 class Ajax {
     constructor() {
-        this.baseUrl = DEVELOP ? '' : API_BASE_URL;
+        this.baseUrl = this.detectEnvironment();
+        this.develop = true;
+    }
+
+    detectEnvironment() {
+        if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+            return '';
+        }
+        this.develop = false;
+        return API_BASE_URL;
     }
 
     async fakeRequest(url, params, callback) {
         await new Promise(resolve => setTimeout(resolve, 30)); // Симуляция сетевой задержки
-        if (!DEVELOP) {
+        if (!this.develop) {
             if (url === '/user') {
                 callback(200, users['rvasutenko']);
                 return true;
