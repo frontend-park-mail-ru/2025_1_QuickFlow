@@ -43,7 +43,7 @@ export default class ProfileView {
         });
 
         Ajax.get({
-            url: `/profile/${this.#menu.username}`,
+            url: `/profiles/${this.#menu.username}`,
             callback: (status, userData) => {
                 let isAuthorized = status === 200;
     

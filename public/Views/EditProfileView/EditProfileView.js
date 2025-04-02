@@ -170,7 +170,7 @@ export default class EditProfileView {
         this.#containerObj.left.innerHTML = '';
 
         Ajax.get({
-            url: `/profile/${this.#menu.username}`,
+            url: `/profiles/${this.#menu.username}`,
             callback: (status, userData) => {
                 let isAuthorized = status === 200;
     
