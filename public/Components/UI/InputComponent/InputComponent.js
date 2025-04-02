@@ -8,6 +8,7 @@ const DEFAULT_PLACEHOLDER = '';
 const DEFAULT_TYPE = 'text';
 const DEFAULT_REQUIRED = false;
 const DEFAULT_INPUT_VALUE = '';
+const DEFAULT_VALIDATION = 'none';
 const REQUIRED_MARK_TEXT = ' *';
 const MAX_DATE_INPUT_LENGTH = 10;
 const MIN_NAME_INPUT_LENGTH = 2;
@@ -103,6 +104,8 @@ export default class InputComponent {
         // Добавление обработчиков валидации
         if (this.#config.validation) {
             this.input.addEventListener('input', () => this.validate());
+        } else {
+            this.#config.validation = DEFAULT_VALIDATION;
         }
 
         // Описание (если задано)
