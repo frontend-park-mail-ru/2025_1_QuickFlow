@@ -6,7 +6,7 @@ import AvatarComponent from '../../Components/AvatarComponent/AvatarComponent.js
 import ModalWindowComponent from '../../Components/UI/ModalWindowComponent/ModalWindowComponent.js';
 import ButtonComponent from '../../Components/UI/ButtonComponent/ButtonComponent.js';
 import createElement from '../../utils/createElement.js';
-import {profileFriends} from '../../mocks.js';
+import { profileFriends } from '../../mocks.js';
 import { getLsItem } from '../../utils/localStorage.js';
 
 
@@ -182,14 +182,14 @@ export default class ProfileView {
         createElement({
             parent: coverWrapper,
             classes: ['profile-cover'],
-            attrs: {src: data.cover}
+            attrs: {src: data.cover_url}
         });
 
         new AvatarComponent(profileHeader, {
             size: 'xxxl',
             class: 'profile-avatar',
             type: 'status',
-            src: data.avatar,
+            src: data.avatar_url,
         });
 
         const profileBottom = createElement({

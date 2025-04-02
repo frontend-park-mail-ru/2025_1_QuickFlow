@@ -101,49 +101,31 @@ export const posts = [
 
 export const users = {
     rvasutenko: {
-        username: 'rvasutenko',
-        password: 'Qwerty1!',
-        firstname: 'Роман',
-        lastname: 'Васютенко',
-        sex: 1,
-        birth_date: '2005-05-02', // TODO: change to camelCase: birthDate
-        avatar: '/avatars/avatar.jpg',
-        cover: '/covers/profile-header.jpg',
-        additionalData: {
-            birthDate: '02.05.2005',
-            location: 'Москва',
-            education: 'МГТУ им. Н.Э. Баумана',
-            phoneNumber: '+7 (964) 882 64-55',
-            email: 'vasyutenko20050205@mail.ru',
+        username: "rvasutenko",
+        password: 'Qwerty1!', // Нужен на тестовом серваке для авторизации
+        firstname: "Роман",
+        lastname: "Васютенко",
+        sex: 0,
+        birth_date: "2005-05-02",
+        bio: "Тут пара слов обо мне, моих увлечениях, занятиях и предпочтениях",
+        avatar_url: "/avatars/avatar.jpg",
+        cover_url: "/covers/profile-header.jpg",
+        contact_info: {
+            city: "Moscow",
+            email: "vasyutenko20050205@mail.ru",
+            phone: "89648826455"
         },
-        countedData: {
-            friends: 165,
-            subscribers: 187,
-            subscribes: 68,
+        school_education: {
+            school_city: "Ахтубинск",
+            school_name: "МБОУ СОШ №4"
         },
-    },
-    andrew: {
-        username: 'andrew',
-        password: 'Qwerty1!',
-        firstname: 'Андрей',
-        lastname: 'Самарский',
-        sex: 1,
-        birth_date: '2000-01-28', // TODO: change to camelCase: birthDate
-        avatar: '/avatars/avatar.jpg',
-        cover: '/covers/profile-header.jpg',
-        additionalData: {
-            birthDate: '28.01.2000',
-            location: 'Москва',
-            education: 'МГТУ им. Н.Э. Баумана',
-            phoneNumber: '8 800 555 35 35',
-            email: 'andrew@mail.ru',
-        },
-        countedData: {
-            friends: 165,
-            subscribers: 187,
-            subscribes: 68,
-        },
-    },
+        university_education: {
+            univ_city: "Москва",
+            univ_name: "МГТУ им. Н.Э. Баумана",
+            faculty: "Социальные и гуманитарные науки",
+            grad_year: 2027
+        }
+    }    
 };
 
 export const profileFriends = [
