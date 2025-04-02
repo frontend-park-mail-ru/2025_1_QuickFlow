@@ -116,22 +116,30 @@ app.get('/feed', (req, res) => {
     res.status(200).json(posts);
 });
 
-app.get('/profile', (req, res) => {
+app.get('/profile/:username', (req, res) => {
     const id = req.cookies['podvorot'];
     const username = ids[id];
     if (!username || !users[username]) {
         return res.status(401).end();
     }
 
-    if (req.query && req.query.username) {
-        const queryUsername = req.query.username;
-        if (!queryUsername || !users[queryUsername]) {
-            return res.status(400).end();
-        }
-        return res.status(200).json(users[queryUsername]);
+    const queryUsername = req.params.username;
+    if (!queryUsername || !users[queryUsername]) {
+        return res.status(400).end();
     }
+
+    res.status(200).json(users[queryUsername]);
+
+
+    // if (req.query && req.query.username) {
+    //     const queryUsername = req.query.username;
+    //     if (!queryUsername || !users[queryUsername]) {
+    //         return res.status(400).end();
+    //     }
+    //     return res.status(200).json(users[queryUsername]);
+    // }
     
-    res.status(200).json(users[username]);
+    // res.status(200).json(users[username]);
 });
 
 app.get('/chats', (req, res) => {
