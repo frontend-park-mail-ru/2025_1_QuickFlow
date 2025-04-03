@@ -23,6 +23,7 @@ class Ajax {
     async fakeRequest(url, params, callback) {
         await new Promise(resolve => setTimeout(resolve, 30)); // Симуляция сетевой задержки
         if (!this.develop) {
+            console.log(url, 'fake');
             if (url === '/user') {
                 callback(200, users['rvasutenko']);
                 return true;
@@ -40,6 +41,7 @@ class Ajax {
     async get({ url, params = {}, callback = () => {} }) {
         try {
             if (await this.fakeRequest(url, params, callback)) return;
+            console.log(url, 'not fake');
             if (url === '/user-dev-false') url = '/feed';
 
             const queryString = new URLSearchParams(params).toString();
