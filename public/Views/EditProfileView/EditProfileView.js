@@ -318,7 +318,7 @@ export default class EditProfileView {
             "password": "Qwerty1!",
             "firstname": "Роман",
             "lastname": "Васютенко",
-            "sex": 0,
+            "sex": "0",
             "birth_date": "2005-05-02",
             "bio": "Тут пара слов обо мне, моих увлечениях, занятиях и предпочтениях",
             "avatar_url": "/avatars/avatar.jpg",
