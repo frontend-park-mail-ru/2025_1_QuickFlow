@@ -137,11 +137,13 @@ export default class EditProfileView {
     #menu
     #section
     #userData
+    #stateUpdaters
     constructor(containerObj, menu) {
         this.#containerObj = containerObj;
         this.#menu = menu;
         
         this.#userData = null;
+        this.#stateUpdaters = [];
         this.#section = null;
     }
 
@@ -220,8 +222,6 @@ export default class EditProfileView {
             classes: ['profile-edit-form-fields']
         });
 
-        const stateUpdaters = [];
-
         for (let i = 0; i < fields.length; i++) {
             const fieldset = fields[i];
 
@@ -247,7 +247,7 @@ export default class EditProfileView {
                     field.config.value = convertDate(field.config.value);
                 }
 
-                stateUpdaters.push(
+                this.#stateUpdaters.push(
                     field.type === 'textarea' ?
                     new TextareaComponent(fieldsetElement, field.config) :
                     new InputComponent(fieldsetElement, field.config)
@@ -261,22 +261,22 @@ export default class EditProfileView {
                 });
             }
         }
-
+        
         new ButtonComponent(form, {
             text: 'Сохранить',
             variant: 'primary',
             size: 'large',
             classes: ['profile-edit-btn'],
-            onClick: () => this.handleFormSubmit(stateUpdaters),
+            onClick: () => this.handleFormSubmit(),
             disabled: true,
-            stateUpdaters,
+            stateUpdaters: this.#stateUpdaters,
         });
     }
 
-    handleFormSubmit(stateUpdaters) {
+    handleFormSubmit() {
         const body = {};
 
-        stateUpdaters.forEach(({ name, value }) => {
+        this.#stateUpdaters.forEach(({ name, value }) => {
             if (name === 'birth_date') value = convertDate(value, 'ts');
             const sections = {
                 profile: () => {
@@ -301,6 +301,7 @@ export default class EditProfileView {
             }
         }
 
+        console.log(this.#stateUpdaters);
         console.log(body);
 
         Ajax.post({
@@ -345,11 +346,14 @@ export default class EditProfileView {
             classes: ['cover-edit-btn'],
         });
 
-        new FileInputComponent(this.#containerObj.left, {
-            imitator: coverUploadBtn.buttonElement,
-            preview: cover,
-            id: 'profile-cover-upload'
-        });
+        this.#stateUpdaters.push(
+            new FileInputComponent(this.#containerObj.left, {
+                imitator: coverUploadBtn.buttonElement,
+                preview: cover,
+                id: 'profile-cover-upload',
+                name: 'cover_url',
+            })
+        );
 
         const avatar = new AvatarComponent(profileHeader, {
             size: 'xxl',
@@ -358,10 +362,13 @@ export default class EditProfileView {
             type: 'edit'
         });
 
-        new FileInputComponent(this.#containerObj.left, {
-            imitator: avatar.wrapper,
-            preview: avatar.avatar,
-            id: 'profile-avatar-upload'
-        });
+        this.#stateUpdaters.push(
+            new FileInputComponent(this.#containerObj.left, {
+                imitator: avatar.wrapper,
+                preview: avatar.avatar,
+                id: 'profile-avatar-upload',
+                name: 'avatar_url',
+            })
+        );
     }
 }
