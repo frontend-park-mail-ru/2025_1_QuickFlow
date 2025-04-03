@@ -296,11 +296,18 @@ export default class EditProfileView {
             sections[this.#section]?.();
         })
 
+        body.contact_info = JSON.stringify(body.contact_info);
+        body.school_education = JSON.stringify(body.school_education);
+        body.university_education = JSON.stringify(body.university_education);
+
         for (const key in this.#userData) {
             if (!body[key] || body[key].length === 0) {
                 body[key] = JSON.stringify(this.#userData[key]);
             }
         }
+
+        if (!body['cover_url']) body['cover_url'] = '';
+        if (!body['avatar_url']) body['avatar_url'] = '';
 
 
         console.log(body);
