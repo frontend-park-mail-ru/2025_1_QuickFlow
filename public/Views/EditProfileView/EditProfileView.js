@@ -307,7 +307,24 @@ export default class EditProfileView {
 
         Ajax.post({
             url: '/profile',
-            body: convertToFormData(body),
+            body: convertToFormData({
+                "school_education": {
+                    "school_city": "вапвап",
+                    "school_name": "впва"
+                },
+                "university_education": {
+                    "univ_city": "пвапва",
+                    "univ_name": "пва",
+                    "faculty": "пвап",
+                    "grad_year": "ап"
+                },
+                "username": "rvasutenko",
+                "firstname": "Roman",
+                "lastname": "Vasutenko",
+                "sex": 1,
+                "birth_date": "2005-05-02",
+                "bio": "fdfjkvfgkjdfgрр"
+            }),
             isFormData: true,
             callback: (status) => {
                 let isAuthorized = status === 200;
