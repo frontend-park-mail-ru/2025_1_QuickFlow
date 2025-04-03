@@ -296,9 +296,9 @@ export default class EditProfileView {
             sections[this.#section]?.();
         })
 
-        body.contact_info = JSON.stringify(body.contact_info);
-        body.school_education = JSON.stringify(body.school_education);
-        body.university_education = JSON.stringify(body.university_education);
+        if (body.contact_info) body.contact_info = JSON.stringify(body.contact_info);
+        if (body.school_education) body.school_education = JSON.stringify(body.school_education);
+        if (body.university_education) body.university_education = JSON.stringify(body.university_education);
 
         for (const key in this.#userData) {
             if (!body[key] || body[key].length === 0) {
