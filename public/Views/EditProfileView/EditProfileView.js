@@ -302,32 +302,35 @@ export default class EditProfileView {
 
         for (const key in this.#userData) {
             if (!body[key] || body[key].length === 0) {
-                body[key] = JSON.stringify(this.#userData[key]);
+                if (typeof this.#userData[key] === 'object') {
+                    body[key] = JSON.stringify(this.#userData[key]);
+                } else {
+                    body[key] = this.#userData[key];
+                }
             }
         }
 
         if (!body['cover_url']) body['cover_url'] = '';
         if (!body['avatar_url']) body['avatar_url'] = '';
 
-
         console.log(body);
 
-        const fakebody = {
-            "contact_info": "{\"city\":\"Moscow\",\"phone\":\"8964882645\",\"email\":\"vasyutenko20050205@mail.ru\"}",
-            "username": "rvasutenko",
-            "password": "Qwerty1!",
-            "firstname": "Роман",
-            "lastname": "Васютенко",
-            "sex": "0",
-            "birth_date": "2005-05-02",
-            "bio": "Тут пара слов обо мне, моих увлечениях, занятиях и предпочтениях",
-            "avatar_url": "/avatars/avatar.jpg",
-            "cover_url": "/covers/profile-header.jpg",
-            // "school_education": "{\"school_city\":\"Ахтубинск\",\"school_name\":\"МБОУ СОШ №4\"}",
-            // "university_education": "{\"univ_city\":\"Москва\",\"univ_name\":\"МГТУ им. Н.Э. Баумана\",\"faculty\":\"Социальные и гуманитарные науки\",\"grad_year\":2027}"
-        };
+        // const fakebody = {
+        //     "contact_info": "{\"city\":\"Moscow\",\"phone\":\"8964882645\",\"email\":\"vasyutenko20050205@mail.ru\"}",
+        //     "username": "rvasutenko",
+        //     "password": "Qwerty1!",
+        //     "firstname": "Роман",
+        //     "lastname": "Васютенко",
+        //     "sex": "0",
+        //     "birth_date": "2005-05-02",
+        //     "bio": "Тут пара слов обо мне, моих увлечениях, занятиях и предпочтениях",
+        //     "avatar_url": "/avatars/avatar.jpg",
+        //     "cover_url": "/covers/profile-header.jpg",
+        //     "school_education": "{\"school_city\":\"Ахтубинск\",\"school_name\":\"МБОУ СОШ №4\"}",
+        //     "university_education": "{\"univ_city\":\"Москва\",\"univ_name\":\"МГТУ им. Н.Э. Баумана\",\"faculty\":\"Социальные и гуманитарные науки\",\"grad_year\":2027}"
+        // };
 
-        const fd = convertToFormData(fakebody);
+        const fd = convertToFormData(body);
         console.log(fd);
         for (var pair of fd.entries()) {
             console.log(pair);
