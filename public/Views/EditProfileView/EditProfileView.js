@@ -296,11 +296,11 @@ export default class EditProfileView {
             sections[this.#section]?.();
         })
 
-        for (const key in this.#userData) {
-            if (!body[key] || body[key].length === 0) {
-                body[key] = this.#userData[key];
-            }
-        }
+        // for (const key in this.#userData) {
+        //     if (!body[key] || body[key].length === 0) {
+        //         body[key] = this.#userData[key];
+        //     }
+        // }
 
         console.log(this.#stateUpdaters);
         console.log(body);
