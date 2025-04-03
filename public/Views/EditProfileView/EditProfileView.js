@@ -298,7 +298,11 @@ export default class EditProfileView {
 
         for (const key in this.#userData) {
             if (!body[key] || body[key].length === 0) {
-                body[key] = this.#userData[key];
+                if (typeof this.#userData[key] === 'string') {
+                    body[key] = this.#userData[key];
+                } else {
+                    body[key] = JSON.stringify(this.#userData[key]);
+                }
             }
         }
 
