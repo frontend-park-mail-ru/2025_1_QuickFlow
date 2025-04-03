@@ -236,7 +236,12 @@ export default class EditProfileView {
 
                 field.config.name = field.key;
                 field.config.placeholder = field.config.placeholder || field.config.label;
-                field.config.value = userData[field.key] || userData['contact_info'][field.key] || userData['school_education'][field.key] || userData['university_education'][field.key];
+                field.config.value = 
+                    userData[field.key] ?? 
+                    userData?.contact_info?.[field.key] ?? 
+                    userData?.school_education?.[field.key] ?? 
+                    userData?.university_education?.[field.key];
+
                 if (field.config.name === 'birth_date') {
                     field.config.value = convertDate(field.config.value);
                 }
