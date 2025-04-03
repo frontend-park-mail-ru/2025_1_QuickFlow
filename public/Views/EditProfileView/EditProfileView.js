@@ -297,7 +297,7 @@ export default class EditProfileView {
         Ajax.post({
             url: '/profile',
             body,
-            isFormData: true,
+            // isFormData: true,
             callback: (status) => {
                 let isAuthorized = status === 200;
 
