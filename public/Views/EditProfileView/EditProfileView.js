@@ -136,10 +136,12 @@ export default class EditProfileView {
     #containerObj
     #menu
     #section
+    #userData
     constructor(containerObj, menu) {
         this.#containerObj = containerObj;
         this.#menu = menu;
         
+        this.#userData = null;
         this.#section = null;
     }
 
@@ -191,27 +193,25 @@ export default class EditProfileView {
                     return;
                 }
 
-                if (data.header) {
-                    this.renderEditHeader(userData);
-                }
-                
-                this.renderForm(data.fields, userData);
+                this.#userData = userData;
+                if (data.header) this.renderEditHeader();
+                this.renderForm(data.fields);
             }
         });
     }
 
-    renderForm(fields, userData) {
+    renderForm(fields) {
         const form = createElement({
             parent: this.#containerObj.left,
             tag: 'form',
             classes: ['profile-edit-form']
         });
 
-        if (userData.title) {
+        if (this.#userData.title) {
             createElement({
                 parent: form,
                 tag: 'h1',
-                text: userData.title
+                text: this.#userData.title
             });
         }
 
@@ -238,10 +238,10 @@ export default class EditProfileView {
                 field.config.name = field.key;
                 field.config.placeholder = field.config.placeholder || field.config.label;
                 field.config.value = 
-                    userData[field.key] ?? 
-                    userData?.contact_info?.[field.key] ?? 
-                    userData?.school_education?.[field.key] ?? 
-                    userData?.university_education?.[field.key];
+                    this.#userData[field.key] ?? 
+                    this.#userData?.contact_info?.[field.key] ?? 
+                    this.#userData?.school_education?.[field.key] ?? 
+                    this.#userData?.university_education?.[field.key];
 
                 if (field.config.name === 'birth_date') {
                     field.config.value = convertDate(field.config.value);
@@ -279,10 +279,12 @@ export default class EditProfileView {
         stateUpdaters.forEach(({ name, value }) => {
             if (name === 'birth_date') value = convertDate(value, 'ts');
             const sections = {
-                profile: () => (body[name] = value),
+                profile: () => {
+                    body[name] = value;
+                },
                 contacts: () => {
                     body.contact_info ??= {};
-                    body.contact_info[name] = value
+                    body.contact_info[name] = value;
                 },
                 education: () => {
                     const key = name.startsWith('school') ? 'school_education' : 'university_education';
@@ -292,6 +294,14 @@ export default class EditProfileView {
             };
             sections[this.#section]?.();
         })
+
+        for (const key in this.#userData) {
+            if (!body[key] || body[key].length === 0) {
+                body[key] = this.#userData[key];
+            }
+        }
+
+        console.log(body);
 
         Ajax.post({
             url: '/profile',
@@ -307,17 +317,11 @@ export default class EditProfileView {
                 }
 
                 this.render();
-
-                // if (data.header) {
-                //     this.renderEditHeader(userData);
-                // }
-                
-                // this.renderForm(data.fields, userData);
             }
         });
     }
 
-    renderEditHeader(userData) {
+    renderEditHeader() {
         const profileHeader = createElement({
             parent: this.#containerObj.left,
             classes: ['profile-header', 'edit']
@@ -331,7 +335,7 @@ export default class EditProfileView {
         const cover = createElement({
             parent: coverWrapper,
             classes: ['profile-cover', 'edit'],
-            attrs: {src: userData.cover_url}
+            attrs: {src: this.#userData.cover_url}
         });
 
         const coverUploadBtn = new ButtonComponent(coverWrapper, {
@@ -350,7 +354,7 @@ export default class EditProfileView {
         const avatar = new AvatarComponent(profileHeader, {
             size: 'xxl',
             class: 'profile-avatar',
-            src: userData.avatar_url,
+            src: this.#userData.avatar_url,
             type: 'edit'
         });
 
