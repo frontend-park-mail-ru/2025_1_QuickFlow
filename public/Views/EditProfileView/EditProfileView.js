@@ -181,6 +181,7 @@ export default class EditProfileView {
 
     renderSection(sectionName) {
         this.#section = sectionName;
+        this.#stateUpdaters = [];
         const data = forms[this.#section];
         this.#containerObj.left.innerHTML = '';
 
