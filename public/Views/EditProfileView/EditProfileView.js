@@ -290,7 +290,7 @@ export default class EditProfileView {
                 education: () => {
                     const key = name.startsWith('school') ? 'school_education' : 'university_education';
                     body[key] ??= {};
-                    body[key][name] = value;
+                    body[key][name] = typeof value === 'number' ? `${value}` : value;
                 }
             };
             sections[this.#section]?.();
