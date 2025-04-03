@@ -11,6 +11,7 @@ import createElement from '../../utils/createElement.js';
 import TextareaComponent from '../../Components/UI/TextareaComponent/TextareaComponent.js';
 import { getLsItem } from '../../utils/localStorage.js';
 import convertDate from '../../utils/convertDate.js';
+import convertToFormData from '../../utils/convertToFormData.js';
 
 
 const forms = {
@@ -292,12 +293,10 @@ export default class EditProfileView {
             sections[this.#section]?.();
         })
 
-        console.log(body);
-
         Ajax.post({
             url: '/profile',
-            body,
-            // isFormData: true,
+            body: convertToFormData(body),
+            isFormData: true,
             callback: (status) => {
                 let isAuthorized = status === 200;
 
