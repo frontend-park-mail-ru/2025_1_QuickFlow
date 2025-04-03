@@ -12,6 +12,7 @@ const REQUIRED_MARK_TEXT = ' *';
 const MAX_DATE_INPUT_LENGTH = 10;
 const MIN_NAME_INPUT_LENGTH = 2;
 const MIN_PASSWORD_INPUT_LENGTH = 8;
+const DEFAULT_NAME = '';
 
 
 export default class InputComponent {
@@ -31,6 +32,14 @@ export default class InputComponent {
 
     get config() {
         return this.#config;
+    }
+
+    get value() {
+        return this.input.value.trim();
+    }
+
+    get name() {
+        return this.input.name.trim();
     }
 
     render() {
@@ -74,6 +83,7 @@ export default class InputComponent {
                 maxLength: this.#config.maxLength || DEFAULT_MAX_LENGTH,
                 required: this.#config.required || DEFAULT_REQUIRED,
                 value: this.#config.value || DEFAULT_INPUT_VALUE,
+                name: this.#config.name || DEFAULT_NAME,
             },
         });
 
@@ -145,12 +155,11 @@ export default class InputComponent {
     }
 
     isValid() {
-        if (!this || !this.input) {
-            return false;
-        }
+        if (!this || !this.input) return false;
         if (this.#config.validation === 'date' && this.input.value.trim().length < MAX_DATE_INPUT_LENGTH) {
             return false;
         }
+        if (!this.#config.required && !this.input.classList.contains('invalid')) return true;
         return this.input.value.trim() !== '' && !this.input.classList.contains('invalid');
     }
 

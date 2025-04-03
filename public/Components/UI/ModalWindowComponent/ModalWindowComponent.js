@@ -1,7 +1,7 @@
 import ButtonComponent from '../ButtonComponent/ButtonComponent.js';
 import TextareaComponent from '../TextareaComponent/TextareaComponent.js';
 import createElement from '../../../utils/createElement.js';
-import {profileDataLayout} from '../../../Views/ProfileView/ProfileView.js'
+import { profileDataLayout } from '../../../Views/ProfileView/ProfileView.js'
 import Ajax from '../../../modules/ajax.js';
 import FileInputComponent from '../FileInputComponent/FileInputComponent.js';
 
@@ -169,24 +169,46 @@ export default class ModalWindowComponent {
         });
 
         this.#config.createInfoItem(items, profileDataLayout['username'].icon, this.#config.data.username);
-        for (const key in this.#config.data.additionalData) {
-            const value = this.#config.data.additionalData[key];
+        this.#config.createInfoItem(items, profileDataLayout['birth_date'].icon, this.#config.data.birth_date);
+
+        for (const key in this.#config.data.contact_info) {
+            const value = this.#config.data.contact_info[key];
             this.#config.createInfoItem(items, profileDataLayout[key].icon, value);
         }
 
         createElement({
-            parent: contentWrapper,
+            parent: items,
             classes: ['divider'],
         });
 
-        const countedItems = createElement({
-            parent: contentWrapper,
-            classes: ['modal-window-items-counted'],
+        for (const key in this.#config.data.school_education) {
+            const value = this.#config.data.school_education[key];
+            this.#config.createInfoItem(items, profileDataLayout[key].icon, value);
+        }
+
+        createElement({
+            parent: items,
+            classes: ['divider'],
         });
 
-        for (const key in this.#config.data.countedData) {
-            const value = this.#config.data.countedData[key];
-            this.#config.createCountedItem(countedItems, profileDataLayout[key].text, value);
+        for (const key in this.#config.data.university_education) {
+            const value = this.#config.data.university_education[key];
+            this.#config.createInfoItem(items, profileDataLayout[key].icon, value);
         }
+
+        // createElement({
+        //     parent: contentWrapper,
+        //     classes: ['divider'],
+        // });
+
+        // const countedItems = createElement({
+        //     parent: contentWrapper,
+        //     classes: ['modal-window-items-counted'],
+        // });
+
+        // for (const key in this.#config.data.countedData) {
+        //     const value = this.#config.data.countedData[key];
+        //     this.#config.createCountedItem(countedItems, profileDataLayout[key].text, value);
+        // }
     }
 }

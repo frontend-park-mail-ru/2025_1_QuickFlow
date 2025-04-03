@@ -2,6 +2,8 @@ import createElement from "../../../utils/createElement.js";
 
 
 const DEFAULT_PLACEHOLDER = '';
+const DEFAULT_TEXT = '';
+const DEFAULT_NAME = '';
 
 
 export default class TextareaComponent {
@@ -40,7 +42,9 @@ export default class TextareaComponent {
             parent: this.wrapper,
             attrs: {
                 placeholder: this.#config.placeholder || DEFAULT_PLACEHOLDER,
+                name: this.#config.name || DEFAULT_NAME,
             },
+            text: this.#config.value || DEFAULT_TEXT,
         });
 
         for (const attr in this.#config.attrs) {
@@ -52,7 +56,16 @@ export default class TextareaComponent {
         this.textarea.addEventListener('input', listener);
     }
 
+    get value() {
+        return this.textarea.value.trim();
+    }
+
+    get name() {
+        return this.textarea.name.trim();
+    }
+
     isValid() {
+        if (!this.#config.required) return true;
         return this.textarea.value.trim() !== '';
     }
 }

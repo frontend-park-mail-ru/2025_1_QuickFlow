@@ -10,6 +10,7 @@ import FileInputComponent from '../../Components/UI/FileInputComponent/FileInput
 import createElement from '../../utils/createElement.js';
 import TextareaComponent from '../../Components/UI/TextareaComponent/TextareaComponent.js';
 import { getLsItem } from '../../utils/localStorage.js';
+import convertDate from '../../utils/convertDate.js';
 
 
 const forms = {
@@ -41,7 +42,7 @@ const forms = {
                 }
             },
             {
-                key: 'birthDate',
+                key: 'birth_date',
                 config: {
                     label: 'Дата рождения',
                     validation: 'date',
@@ -70,15 +71,17 @@ const forms = {
                 }
             }],
             [{
-                key: 'phoneNumber',
+                key: 'phone',
                 config: {
                     label: 'Телефон',
+                    maxLength: 11,
                 }
             },
             {
                 key: 'email',
                 config: {
                     label: 'Почта',
+                    validation: 'email',
                 }
             }]
         ]
@@ -87,39 +90,40 @@ const forms = {
         title: 'Образование',
         fields: [
             [{
-                key: 'schoolCity',
+                key: 'school_city',
                 config: {
                     label: 'Город',
                 }
             },
             {
-                key: 'school',
+                key: 'school_name',
                 config: {
                     label: 'Школа',
                 }
             }],
             [{
-                key: 'universityCity',
+                key: 'univ_city',
                 config: {
                     label: 'Город',
                 }
             },
             {
-                key: 'university',
+                key: 'univ_name',
                 config: {
                     label: 'Высшее учебное заведение',
                 }
             },
             {
-                key: 'department',
+                key: 'faculty',
                 config: {
                     label: 'Факультет',
                 }
             },
             {
-                key: 'finishYear',
+                key: 'grad_year',
                 config: {
                     label: 'Год выпуска',
+                    maxLength: 4,
                 }
             }]
         ]
@@ -130,9 +134,12 @@ const forms = {
 export default class EditProfileView {
     #containerObj
     #menu
+    #section
     constructor(containerObj, menu) {
         this.#containerObj = containerObj;
         this.#menu = menu;
+        
+        this.#section = null;
     }
 
     render() {
@@ -146,28 +153,30 @@ export default class EditProfileView {
                 profile: {
                     title: 'Профиль',
                     onClick: () => {
-                        this.renderSection(forms.profile);
+                        this.renderSection('profile');
                     }
                 },
                 contacts: {
                     title: 'Контакты',
                     onClick: () => {
-                        this.renderSection(forms.contacts);
+                        this.renderSection('contacts');
                     }
                 },
                 education: {
                     title: 'Образование',
                     onClick: () => {
-                        this.renderSection(forms.education);
+                        this.renderSection('education');
                     }
                 },
             }
         });
 
-        this.renderSection(forms.profile);
+        this.renderSection('profile');
     }
 
-    renderSection(data) {
+    renderSection(sectionName) {
+        this.#section = sectionName;
+        const data = forms[this.#section];
         this.#containerObj.left.innerHTML = '';
 
         Ajax.get({
@@ -210,6 +219,8 @@ export default class EditProfileView {
             classes: ['profile-edit-form-fields']
         });
 
+        const stateUpdaters = [];
+
         for (let i = 0; i < fields.length; i++) {
             const fieldset = fields[i];
 
@@ -220,16 +231,21 @@ export default class EditProfileView {
             });
         
             for (const field of fieldset) {
-                if (field.type === 'textarea') {
-                    field.config.classes = ['profile-edit-input', 'modal-window-textarea'];
-                    field.config.value = userData[field.key] || userData.additionalData[field.key];
-                    new TextareaComponent(fieldsetElement, field.config);
-                } else {
-                    field.config.classes = ['profile-edit-input']
-                    field.config.value = userData[field.key] || userData.additionalData[field.key];
-                    field.config.placeholder ? null : field.config.placeholder = field.config.label;
-                    new InputComponent(fieldsetElement, field.config);
+                field.config.classes = ['profile-edit-input'];
+                field.type === 'textarea' ? field.config.classes.push('modal-window-textarea') : null;
+
+                field.config.name = field.key;
+                field.config.placeholder = field.config.placeholder || field.config.label;
+                field.config.value = userData[field.key] || userData.contact_info[field.key] || userData.school_education[field.key] || userData.university_education[field.key];
+                if (field.config.name === 'birth_date') {
+                    field.config.value = convertDate(field.config.value);
                 }
+
+                stateUpdaters.push(
+                    field.type === 'textarea' ?
+                    new TextareaComponent(fieldsetElement, field.config) :
+                    new InputComponent(fieldsetElement, field.config)
+                );
             }
         
             if (i < fields.length - 1) {
@@ -245,9 +261,55 @@ export default class EditProfileView {
             variant: 'primary',
             size: 'large',
             classes: ['profile-edit-btn'],
-            onClick: () => {
-                // TODO: сохранить изменения
-            },
+            onClick: () => this.handleFormSubmit(stateUpdaters),
+            disabled: true,
+            stateUpdaters,
+        });
+    }
+
+    handleFormSubmit(stateUpdaters) {
+        const body = {};
+
+        stateUpdaters.forEach(({ name, value }) => {
+            if (name === 'birth_date') value = convertDate(value, 'ts');
+            const sections = {
+                profile: () => (body[name] = value),
+                contacts: () => {
+                    body.contact_info ??= {};
+                    body.contact_info[name] = value
+                },
+                education: () => {
+                    const key = name.startsWith('school') ? 'school_education' : 'university_education';
+                    body[key] ??= {};
+                    body[key][name] = value;
+                }
+            };
+            sections[this.#section]?.();
+        })
+
+        console.log(body);
+
+        Ajax.post({
+            url: '/profiles',
+            body,
+            isFormData: true,
+            callback: (status) => {
+                let isAuthorized = status === 200;
+
+                if (!isAuthorized) {
+                    this.#menu.goToPage(this.#menu.menuElements.login);
+                    this.#menu.updateMenuVisibility(false);
+                    return;
+                }
+
+                this.render();
+
+                // if (data.header) {
+                //     this.renderEditHeader(userData);
+                // }
+                
+                // this.renderForm(data.fields, userData);
+            }
         });
     }
 
@@ -265,7 +327,7 @@ export default class EditProfileView {
         const cover = createElement({
             parent: coverWrapper,
             classes: ['profile-cover', 'edit'],
-            attrs: {src: userData.cover}
+            attrs: {src: userData.cover_url}
         });
 
         const coverUploadBtn = new ButtonComponent(coverWrapper, {
@@ -284,7 +346,7 @@ export default class EditProfileView {
         const avatar = new AvatarComponent(profileHeader, {
             size: 'xxl',
             class: 'profile-avatar',
-            src: userData.avatar,
+            src: userData.avatar_url,
             type: 'edit'
         });
 

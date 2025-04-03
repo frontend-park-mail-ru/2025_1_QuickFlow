@@ -129,17 +129,16 @@ app.get('/profiles/:username', (req, res) => {
     }
 
     res.status(200).json(users[queryUsername]);
+});
 
-
-    // if (req.query && req.query.username) {
-    //     const queryUsername = req.query.username;
-    //     if (!queryUsername || !users[queryUsername]) {
-    //         return res.status(400).end();
-    //     }
-    //     return res.status(200).json(users[queryUsername]);
-    // }
-    
-    // res.status(200).json(users[username]);
+app.post('/profiles', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const username = ids[id];
+    if (!username || !users[username]) {
+        return res.status(401).end();
+    }
+    // TODO: добавить логику обновления данных
+    res.status(200).end();
 });
 
 app.get('/chats', (req, res) => {

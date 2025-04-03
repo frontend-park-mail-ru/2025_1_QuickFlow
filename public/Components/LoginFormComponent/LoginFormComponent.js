@@ -228,14 +228,14 @@ export default class LoginFormComponent {
                     this.#menu.checkAuthPage();
                     this.#menu.updateMenuVisibility(true);
                     this.#header.renderAvatarMenu();
-                } else {
-                    this.passwordInput.showError('Неверное имя пользователя или пароль');
-                    this.passwordInput.addListener(() => {
-                        this.passwordInput.hideError();
-                        this.updateBtnState();
-                    });
-                    this.updateBtnState();
+                    return;
                 }
+                this.passwordInput.showError('Неверное имя пользователя или пароль');
+                this.passwordInput.addListener(() => {
+                    this.passwordInput.hideError();
+                    this.updateBtnState();
+                });
+                this.updateBtnState();
             }
         });
     }

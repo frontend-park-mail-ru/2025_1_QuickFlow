@@ -12,12 +12,19 @@ import { getLsItem } from '../../utils/localStorage.js';
 
 export const profileDataLayout = {
     username: {icon: 'at'},
+    birth_date: {icon: 'gift'},
 
-    birthDate: {icon: 'gift'},
-    location: {icon: 'location'},
-    education: {icon: 'diploma'},
-    phoneNumber: {icon: 'phone'},
+    city: {icon: 'location'},
     email: {icon: 'envelope'},
+    phone: {icon: 'phone'},
+
+    school_city: {icon: "location"},
+    school_name: {icon: "diploma"},
+
+    univ_city: {icon: "location"},
+    univ_name: {icon: "diploma"},
+    faculty: {icon: "diploma"},
+    grad_year: {icon: "diploma"},
 
     friends: {text: 'друзей'},
     subscribers: {text: 'подписчиков'},
@@ -215,7 +222,7 @@ export default class ProfileView {
 
         this.createInfoItem(fullInfo, profileDataLayout['username'].icon, data.username);
 
-        if (data.additionalData) {
+        // if (data.additionalData) {
             const moreInfo = this.createInfoItem(fullInfo, profileDataLayout['more'].icon, profileDataLayout['more'].text);
             moreInfo.classList.add('profile-more-info');
 
@@ -227,7 +234,7 @@ export default class ProfileView {
                     createCountedItem: this.createCountedItem
                 })
             });
-        }
+        // }
 
         const profileActions = createElement({
             parent: profileBottom,
