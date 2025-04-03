@@ -311,7 +311,6 @@ export default class EditProfileView {
 
 
         console.log(body);
-        console.log(JSON.parse(body));
 
         const fakebody = {
             "contact_info": "{\"city\":\"Moscow\",\"phone\":\"8964882645\",\"email\":\"vasyutenko20050205@mail.ru\"}",
