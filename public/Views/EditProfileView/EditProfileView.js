@@ -295,7 +295,7 @@ export default class EditProfileView {
         console.log(body);
 
         Ajax.post({
-            url: '/profiles',
+            url: '/profile',
             body,
             isFormData: true,
             callback: (status) => {
