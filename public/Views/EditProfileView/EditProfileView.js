@@ -326,7 +326,7 @@ export default class EditProfileView {
             "avatar_url": "/avatars/avatar.jpg",
             "cover_url": "/covers/profile-header.jpg",
             "school_education": "{\"school_city\":\"Ахтубинск\",\"school_name\":\"МБОУ СОШ №4\"}",
-            "university_education": "{\"univ_city\":\"Москва\",\"univ_name\":\"МГТУ им. Н.Э. Баумана\",\"faculty\":\"Социальные и гуманитарные науки\",\"grad_year\":\"2027\"}"
+            "university_education": "{\"univ_city\":\"Москва\",\"univ_name\":\"МГТУ им. Н.Э. Баумана\",\"faculty\":\"Социальные и гуманитарные науки\",\"grad_year\":2027}"
         };
 
         console.log(fakebody);
