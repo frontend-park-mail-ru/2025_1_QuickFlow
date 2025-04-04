@@ -290,7 +290,7 @@ export default class EditProfileView {
                 education: () => {
                     const key = name.startsWith('school') ? 'school_education' : 'university_education';
                     body[key] ??= {};
-                    body[key][name] = value;
+                    body[key][name] = name === 'grad_year' ? Number(value) : value;
                 }
             };
             sections[this.#section]?.();
@@ -330,10 +330,10 @@ export default class EditProfileView {
         // };
 
         const fd = convertToFormData(body);
-        console.log(fd);
-        for (var pair of fd.entries()) {
-            console.log(pair);
-        }
+        // console.log(fd);
+        // for (var pair of fd.entries()) {
+        //     console.log(pair);
+        // }
 
         Ajax.post({
             url: '/profile',
