@@ -47,10 +47,6 @@
     background: var(--button-secondary-active);
 }
 
-.menu__item.hidden {
-    display: none;
-}
-
 .menu__icon {
     width: 16px;
     height: 16px;
@@ -61,12 +57,8 @@
     color: var(--text-accent);
 }
 
-.hide-interface header,
-.hide-interface aside {
-    display: none;
-}
-
-.hide-interface main {
+.container_auth {
+    max-width: 100%;
     padding: 24px 64px;
     display: flex;
     flex-direction: column;
@@ -81,9 +73,12 @@
     background: radial-gradient(331.49% 141.42% at 0% 0%, #ced8ff 0%, #4369fc 100%);
 }
 
-.auth-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+.container_auth .header,
+.container_auth .menu {
+    display: none;
+}
+
+.container_auth .main {
+    top: unset;
+    left: unset;
 }

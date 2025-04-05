@@ -17,7 +17,7 @@ export default class ResizerComponent {
     render() {
         this.container = createElement({
             parent: this.#parent,
-            classes: ['messenger-resizer'],
+            classes: ['resizer'],
         });
 
         this.addFunctionality();
@@ -39,10 +39,10 @@ export default class ResizerComponent {
 
             if (this.#config.toDefaultWidth && this.#config.toMiniWidth) {
                 if (newWidth < this.#config.toMiniWidth) {
-                    this.#parent.classList.add('mini');
+                    this.#parent.classList.add(this.#config.classMini);
                     this.#isMini = true;
                 } else if (newWidth > this.#config.toDefaultWidth) {
-                    this.#parent.classList.remove('mini');
+                    this.#parent.classList.remove(this.#config.classMini);
                     this.#isMini = false;
                 }
             }
@@ -53,7 +53,7 @@ export default class ResizerComponent {
                 isResizing = false;
                 document.body.classList.remove('resize');
                 if (this.#isMini) {
-                    this.#config.onResized('mini');
+                    this.#config.onResized(this.#config.classMini);
                     return;
                 }
                 this.#config.onResized(this.#parent.style.width);

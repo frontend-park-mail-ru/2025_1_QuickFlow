@@ -1,6 +1,8 @@
 import createElement from '../../utils/createElement.js';
 
 const DEFAULT_IS_CRITICAL = false;
+const DEFAULT_POSITION = 'below-end';
+const DEFAULT_SIZE = 'default';
 
 export default class ContextMenuComponent {
     #parent
@@ -16,8 +18,9 @@ export default class ContextMenuComponent {
             parent: this.#parent,
             classes: [
                 'context-menu',
-                this.#config.size ? `context-menu_${this.#config.size}` : 'context-menu',
-                this.#config.classes
+                `context-menu_${this.#config.size || DEFAULT_SIZE}`,
+                this.#config.classes,
+                `context-menu_${this.#config.position || DEFAULT_POSITION}`
             ]
         });
 

@@ -1,15 +1,18 @@
-.messenger-chat-wrapper {
+.chat {
     width: 100%;
     height: calc(100% - 50px);
     overflow: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
-
     display: flex;
     flex-direction: column;
 }
 
-.messenger-date-title {
+.chat::-webkit-scrollbar {
+    display: none;
+}
+
+.chat__date {
     font-size: var(--font-size-xs);
     line-height: 130%;
     color: var(--text-secondary);
@@ -18,11 +21,7 @@
     padding: 8px 40px;
 }
 
-.messenger-chat-wrapper::-webkit-scrollbar {
-    display: none;
-}
-
-.messenger-chat {
+.chat__scroll {
     width: 100%;
     height: auto;
     padding-top: 16px;
@@ -31,7 +30,7 @@
     flex-direction: column;
 }
 
-.messenger-msg {
+.chat__msg {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -41,32 +40,32 @@
     gap: 8px;
 }
 
-.messenger-msg.no-from {
+.chat__msg_nameless {
     padding-left: 80px;
     padding-top: 4px;
 }
 
-.msg-content {
+.chat__msg-content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 2px;
 }
 
-.msg-from {
+.chat__sender {
     font-weight: 500;
     color: var(--text-accent);
 }
 
-.no-from .msg-from {
+.chat__msg_nameless .chat__sender {
     display: none;
 }
 
-.no-from .avatar-wrapper {
+.chat__msg_nameless .avatar {
     display: none;
 }
 
-.msg-info {
+.chat__msg-info {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -74,12 +73,12 @@
     margin-left: auto;
 }
 
-.msg-sent-time {
+.chat__msg-ts {
     flex-shrink: 0;
     color: var(--text-secondary);
 }
 
-.msg-status {
+.chat__msg-status {
     background: url(../../static/img/check-icon.svg) no-repeat;
     height: 16px;
     width: 16px;
@@ -87,11 +86,11 @@
     min-width: 16px;
 }
 
-.msg-status.read {
+.chat__msg-status_read {
     background: url(../../static/img/double-check-icon.svg) no-repeat;
 }
 
-.messenger-chat.empty {
+.chat__scroll_empty {
     font-size: 15px;
     text-align: center;
     color: var(--text-secondary);
@@ -103,14 +102,14 @@
     justify-content: center;
 }
 
-.info-wrapper {
+.chat__profile {
     display: flex;
     align-items: center;
     gap: 8px;
     flex-direction: column;
 }
 
-.btns-wrapper {
+.chat__buttons {
     display: flex;
     flex-direction: row;
     align-items: center;

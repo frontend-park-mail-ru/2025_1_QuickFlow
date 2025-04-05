@@ -1,27 +1,5 @@
 import createElement from '../../utils/createElement.js';
 
-export class LogoComponent {
-    #parent
-    #menu
-    constructor(parent, menu) {
-        this.#parent = parent;
-        this.#menu = menu;
-    }
-
-    render() {
-        const wrapper = createElement({
-            parent: this.#parent,
-            classes: ['menu__logo'],
-        });
-
-        createElement({
-            parent: wrapper,
-            attrs: {src: '/static/img/annotated-logo.svg'}
-        });
-
-        wrapper.addEventListener('click', () => this.#menu.goToPage(this.#menu.menuElements.feed));
-    }
-}
 
 export default class MenuComponent {
     #config
@@ -74,7 +52,7 @@ export default class MenuComponent {
             this.menuElements[key] = menuElement;
         });
 
-        this.updateMenuVisibility(this.#config.isAuthorized);
+        this.updateMenuVisibility();
 
         this.#container.addEventListener('click', (event) => {
             if (event.target.closest('a')) {
@@ -85,33 +63,31 @@ export default class MenuComponent {
         });
     }
 
-    updateMenuVisibility(isAuthorized) {
-        if (this.menuElements.login) {
-            this.menuElements.login.style.display = isAuthorized ? 'none' : 'flex';
+    updateMenuVisibility() {
+        if (this.#config.isAuthorized) {
+            this.menuElements.login.classList.add('hidden');
+            this.menuElements.signup.classList.add('hidden');
+            this.menuElements.logout.classList.remove('hidden');
+            return;
         }
-        if (this.menuElements.signup) {
-            this.menuElements.signup.style.display = isAuthorized ? 'none' : 'flex';
-        }
-        if (this.menuElements.logout) {
-            this.menuElements.logout.style.display = isAuthorized ? 'flex' : 'none';
-        }
+        this.menuElements.login.classList.remove('hidden');
+        this.menuElements.signup.classList.remove('hidden');
+        this.menuElements.logout.classList.add('hidden');
     }
 
     checkAuthPage() {
         const path = this.activePageLink.href;
         const href = path.substr(path.lastIndexOf('/') + 1);
         if (href === 'login' || href === 'signup') {
-            document.body.classList.add("hide-interface");
-        } else {
-            document.body.classList.remove("hide-interface");
+            this.#parent.classList.add("container_auth");
+            return;
         }
+        this.#parent.classList.remove("container_auth");
     }
 
     goToPage(menuElement) {
-        document.querySelector('main').innerHTML = '';
-        if (this.activePageLink) {
-            this.activePageLink.classList.remove('menu__item_active');
-        }
+        this.#parent.querySelector('main').innerHTML = '';
+        if (this.activePageLink) this.activePageLink.classList.remove('menu__item_active');
 
         menuElement.classList.add('menu__item_active');
         this.activePageLink = menuElement;
@@ -119,9 +95,33 @@ export default class MenuComponent {
         const section = menuElement.dataset.section;
         if (this.#config.menu[section].render) {
             const element = this.#config.menu[section].render();
-            document.querySelector('main').appendChild(element);
+            this.#parent.querySelector('main').appendChild(element);
         }
 
         this.checkAuthPage();
+    }
+}
+
+
+export class LogoComponent {
+    #parent
+    #menu
+    constructor(parent, menu) {
+        this.#parent = parent;
+        this.#menu = menu;
+    }
+
+    render() {
+        const wrapper = createElement({
+            parent: this.#parent,
+            classes: ['menu__logo'],
+        });
+
+        createElement({
+            parent: wrapper,
+            attrs: {src: '/static/img/annotated-logo.svg'}
+        });
+
+        wrapper.addEventListener('click', () => this.#menu.goToPage(this.#menu.menuElements.feed));
     }
 }

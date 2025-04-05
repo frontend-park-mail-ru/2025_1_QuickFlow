@@ -16,6 +16,7 @@ const DRAFT_PREFIX_TEXT = 'Черновик:';
 const CHAT_INFO_PREFIX = 'chat-info-';
 const CHAT_MSG_PREFIX = 'chat-msg-';
 const CHAT_PREFIX = 'chat-';
+const CLASS_SIZE_MINI = 'chats-panel_mini';
 
 
 export default class ChatsPanelComponent {
@@ -38,10 +39,11 @@ export default class ChatsPanelComponent {
     render() {
         this.container = createElement({
             parent: this.#parent,
-            classes: ['messenger-left'],
+            classes: ['chats-panel'],
         });
 
         new ResizerComponent(this.container, {
+            classMini: CLASS_SIZE_MINI,
             toDefaultWidth: RESIZER_TO_DEFAULT_WIDTH,
             toMiniWidth: RESIZER_TO_MINI_WIDTH,
             onResized: (width) => {
@@ -50,7 +52,7 @@ export default class ChatsPanelComponent {
         });
 
         const chatsPanelSize = getLsItem('chats-panel-size', `${DEFAULT_WIDTH}px`);
-        if (chatsPanelSize === 'mini') {
+        if (chatsPanelSize === CLASS_SIZE_MINI) {
             this.container.classList.add(chatsPanelSize);
         } else {
             this.container.style.width = chatsPanelSize;
@@ -67,7 +69,7 @@ export default class ChatsPanelComponent {
     renderChatList() {
         this.#chats = createElement({
             parent: this.container,
-            classes: ['messenger-chat-list'],
+            classes: ['chats-panel__chats'],
         });
 
         this.#config.messenger.ajaxGetChats((chatsData) => {
@@ -78,7 +80,7 @@ export default class ChatsPanelComponent {
                 this.chatItems.push(chatItem);
                 if (chatItem.id === activeChatId) {
                     this.activeChatItem = chatItem;
-                    this.activeChatItem.classList.add('active');
+                    this.activeChatItem.classList.add('chats-panel__chat_active');
                     this.#chatWindow.renderActiveChat(chatData);
                 }
             }
@@ -88,7 +90,7 @@ export default class ChatsPanelComponent {
     close() {
         if (!this.activeChatItem) return;
 
-        this.activeChatItem.classList.remove('active');
+        this.activeChatItem.classList.remove('chats-panel__chat_active');
         this.activeChatItem = null;
         this.renderLastMsg(this.#chatWindow.chatData);
         removeLsItem('active-chat');
@@ -97,7 +99,7 @@ export default class ChatsPanelComponent {
     renderChatItem(chatData) {
         const chat = createElement({
             parent: this.#chats,
-            classes: ['messenger-chat-item'],
+            classes: ['chats-panel__chat'],
             attrs: {id: CHAT_PREFIX + chatData.username},
         });
 
@@ -105,7 +107,7 @@ export default class ChatsPanelComponent {
             if (chat === this.activeChatItem) return;
             this.close();
 
-            chat.classList.add('active');
+            chat.classList.add('chats-panel__chat_active');
             setLsItem('active-chat', CHAT_PREFIX + chatData.username);
             this.activeChatItem = chat;
             this.#chatWindow.renderActiveChat(chatData);
@@ -118,18 +120,18 @@ export default class ChatsPanelComponent {
 
         const chatInfo = createElement({
             parent: chat,
-            classes: ['messenger-chat-info'],
+            classes: ['chats-panel__chat-info'],
         });
 
         createElement({
             parent: chatInfo,
-            classes: ['messenger-chat-title'],
+            classes: ['chats-panel__chat-title'],
             text: chatData.name,
         });
 
         createElement({
             parent: chatInfo,
-            classes: ['messenger-last-msg-wrapper'],
+            classes: ['chats-panel__msg-info'],
             attrs: {id: CHAT_INFO_PREFIX + chatData.username},
         });
 
@@ -150,25 +152,24 @@ export default class ChatsPanelComponent {
         if (value) {
             createElement({
                 parent: lastMsgWrapper,
-                classes: ['draft'],
+                classes: ['chats-panel__draft'],
                 text: DRAFT_PREFIX_TEXT,
             });
         }
         createElement({
             parent: lastMsgWrapper,
-            classes: ['messenger-last-msg'],
+            classes: ['chats-panel__msg'],
             text: value ? value : chatData.lastMsg,
         });
 
         createElement({
             parent: lastMsgWrapper,
-            classes: ['messenger-msg-time-divider'],
+            classes: ['chats-panel__msg-divider'],
             text: LAST_MSG_TIME_DIVIDER,
         });
 
         createElement({
             parent: lastMsgWrapper,
-            classes: ['messenger-last-msg-time'],
             text: chatData.lastMsgTime,
         });
     }
@@ -176,30 +177,30 @@ export default class ChatsPanelComponent {
     renderSearchBar() {
         const searchBar = createElement({
             parent: this.container,
-            classes: ['messenger-search-bar'],
+            classes: ['chats-panel__header'],
         });
 
         const searchBarTop = createElement({
             parent: searchBar,
-            classes: ['messenger-search-bar-top'],
+            classes: ['chats-panel__section'],
         });
 
         createElement({
             parent: searchBarTop,
-            classes: ['messenger-search-bar-title'],
+            classes: ['chats-panel__title'],
             text: CHATS_TITLE,
         });
 
         createElement({
             parent: searchBarTop,
-            classes: ['messenger-filter'],
+            classes: ['chats-panel__filter'],
         });
 
         new InputComponent(searchBar, {
             type: 'search',
             placeholder: SEARCH_PLACEHOLDER,
             showRequired: false,
-            classes: ['messenger-search']
+            classes: ['chats-panel__search']
         });
     }
 }

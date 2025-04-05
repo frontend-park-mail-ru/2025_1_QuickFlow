@@ -25,24 +25,33 @@
     gap: 2px;
     flex-direction: column;
     z-index: 1;
-
     position: absolute;
-    top: calc(100% + 4px);
-    right: 0;
-    width: 228px;
     height: auto;
     overflow: hidden;
     opacity: 0;
     padding: 8px;
-    transform: scale(0.97) translateY(-12px);
     pointer-events: none;
     user-select: none;
-
     transition:
         opacity 0.2s ease,
         transform 0.2s ease,
         height 0.2s ease,
         padding 0.2s ease;
+}
+
+.context-menu_below-end {
+    right: 0;
+    top: calc(100% + 4px);
+    transform: scale(0.97) translateY(-12px);
+}
+
+.context-menu_above-start {
+    bottom: calc(100% + 4px);
+    transform: scale(0.97) translateY(12px);
+}
+
+.context-menu_default {
+    width: 228px;
 }
 
 .context-menu_mini {
