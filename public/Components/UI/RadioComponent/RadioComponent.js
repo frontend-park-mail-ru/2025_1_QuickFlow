@@ -1,7 +1,6 @@
 import createElement from '../../../utils/createElement.js';
 
 
-const DEFAULT_REQUIRED = false;
 const REQUIRED_MARK_TEXT = ' *';
 
 
@@ -19,7 +18,7 @@ export default class RadioComponent {
     render() {
         this.wrapper = createElement({
             parent: this.#parent,
-            classes: ['radio-wrapper'],
+            classes: ['radio'],
         });
 
         if (this.#config.label) {
@@ -27,7 +26,7 @@ export default class RadioComponent {
                 tag: 'label',
                 text: this.#config.label,
                 parent: this.wrapper,
-                classes: ['input-label'],
+                classes: ['input__label'],
             });
 
             if (this.#config.showRequired === true) {
@@ -35,14 +34,14 @@ export default class RadioComponent {
                     tag: 'span',
                     text: REQUIRED_MARK_TEXT,
                     parent: label,
-                    classes: ['required'],
+                    classes: ['input__required'],
                 });
             }
         }
 
         const choicesWrapper = createElement({
             parent: this.wrapper,
-            classes: ['choices-wrapper'],
+            classes: ['radio__choices'],
         });
 
         for (const key in this.#config.radios) {
@@ -50,10 +49,10 @@ export default class RadioComponent {
 
             const choice = createElement({
                 parent: choicesWrapper,
-                classes: ['choice'],
+                classes: ['radio__choice'],
             });
 
-            createElement({
+            const input = createElement({
                 tag: 'input',
                 parent: choice,
                 attrs: {
@@ -61,16 +60,22 @@ export default class RadioComponent {
                     name: this.#config.name,
                     value: radioData.value,
                     id: radioData.id,
-                    required: this.#config.required || DEFAULT_REQUIRED,
                 },
+                classes: ['radio__input'],
             });
+
+            choice.addEventListener('click', () => input.checked = true);
+
+            if (this.#config.required) {
+                input.setAttribute('required', '');
+            }
 
             createElement({
                 tag: 'label',
                 text: radioData.label,
                 parent: choice,
                 attrs: {
-                    htmlFor: radioData.id,
+                    for: radioData.id,
                 },
             });
         }
@@ -81,20 +86,28 @@ export default class RadioComponent {
     }
 
     isValid() {
-        if (!this) {
-            return false;
-        }
-        return this.wrapper.querySelector('input[type="radio"]:checked') !== null;
+        if (!this) return false;
+        return this.getChecked() !== null;
+    }
+
+    get required() {
+        return this.#config.required;
+    }
+
+    get value() {
+        return this.getChecked().value.trim();
+    }
+
+    get name() {
+        return this.#config.name?.trim();
     }
 
     getChecked() {
-        return this.wrapper.querySelector('input[type="radio"]:checked');
+        return this.wrapper.querySelector('.radio__input:checked');
     }
 
     setChecked(value) {
-        const radio = this.wrapper.querySelector(`input[type="radio"][value="${value}"]`);
-        if (radio) {
-            radio.checked = true;
-        }
+        const radio = this.wrapper.querySelector(`.radio__input[value="${value}"]`);
+        if (radio) radio.checked = true;
     }
 }

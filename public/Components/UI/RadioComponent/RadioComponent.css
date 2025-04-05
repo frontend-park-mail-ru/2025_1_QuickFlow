@@ -1,30 +1,22 @@
-@import url(../../constants.css);
-
-.signup-sex-radio-wrapper {
+.radio {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.radio-wrapper {
-    display: flex;
+    flex-direction: column;
     gap: 8px;
 
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-s);
     line-height: var(--line-height-m);
     color: var(--text-secondary);
-    flex-direction: column;
 }
 
-.choices-wrapper {
+.radio__choices {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 40px;
 }
 
-.choice {
+.radio__choice {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -32,7 +24,7 @@
     color: var(--text-primary);
 }
 
-input[type='radio'] {
+.radio__input {
     transition: var(--trans-input);
     width: 16px;
     height: 16px;

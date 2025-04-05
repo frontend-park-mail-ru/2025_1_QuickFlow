@@ -6,13 +6,12 @@ const DEFAULT_MAX_LENGTH = 256;
 const DEFAULT_AUTOCOMPLETE = 'off';
 const DEFAULT_PLACEHOLDER = '';
 const DEFAULT_TYPE = 'text';
-const DEFAULT_REQUIRED = false;
 const DEFAULT_INPUT_VALUE = '';
 const REQUIRED_MARK_TEXT = ' *';
 const MAX_DATE_INPUT_LENGTH = 10;
 const MIN_NAME_INPUT_LENGTH = 2;
 const MIN_PASSWORD_INPUT_LENGTH = 8;
-const DEFAULT_NAME = '';
+const DEFAULT_NAME = 'undefined';
 
 
 export default class InputComponent {
@@ -39,13 +38,21 @@ export default class InputComponent {
     }
 
     get name() {
-        return this.input.name.trim();
+        return this.#config.name?.trim();
+    }
+
+    get required() {
+        return this.#config.required;
+    }
+
+    isEmpty() {
+        return this.input.value.trim() === '';
     }
 
     render() {
         this.wrapper = createElement({
             parent: this.#parent,
-            classes: [this.#config.classes, 'input-wrapper'],
+            classes: [this.#config.classes, 'input'],
         });
 
         // Label (если задан)
@@ -54,63 +61,66 @@ export default class InputComponent {
                 tag: 'label',
                 text: this.#config.label,
                 parent: this.wrapper,
-                classes: ['input-label'],
+                classes: ['input__label'],
             });
             if (this.#config.showRequired) {
                 createElement({ // TODO: протестировать
                     tag: 'span',
                     text: REQUIRED_MARK_TEXT,
                     parent: label,
-                    classes: ['required'],
+                    classes: ['input__required'],
                 });
             }
         }
         
         this.innnerWrapper = createElement({
             parent: this.wrapper,
-            classes: ['inner-wrapper'],
+            classes: ['input__inner'],
         });
 
         // Поле ввода
         this.input = createElement({
             tag: 'input',
             parent: this.innnerWrapper,
-            classes: ['input-field'],
+            classes: ['input__field'],
             attrs: {
                 type: this.#config.type || DEFAULT_TYPE,
                 autocomplete: this.#config.autocomplete || DEFAULT_AUTOCOMPLETE,
                 placeholder: this.#config.placeholder || DEFAULT_PLACEHOLDER,
                 maxLength: this.#config.maxLength || DEFAULT_MAX_LENGTH,
-                required: this.#config.required || DEFAULT_REQUIRED,
                 value: this.#config.value || DEFAULT_INPUT_VALUE,
-                name: this.#config.name || DEFAULT_NAME,
+                name: this.name || DEFAULT_NAME,
             },
         });
 
+        if (this.required) {
+            this.input.setAttribute('required', '');
+        }
+
         this.error = createElement({
-            classes: ['input-error'],
+            classes: ['input__error'],
         });
 
         if (this.input.type === 'password') {
             const pwdControl = createElement({
                 parent: this.innnerWrapper,
                 tag: 'a',
-                classes: ['pwd-control'],
+                classes: ['input__password-toggle'],
             });
 
             pwdControl.addEventListener('click', () => {
                 if (this.input.getAttribute('type') === 'password') {
-                    pwdControl.classList.add('show');
+                    pwdControl.classList.add('input__password-toggle_show');
                     this.input.setAttribute('type', 'text');
                 } else {
-                    pwdControl.classList.remove('show');
+                    pwdControl.classList.remove('input__password-toggle_show');
                     this.input.setAttribute('type', 'password');
                 }
             });
         } else if (this.input.type === 'search') {
             createElement({
                 parent: this.innnerWrapper,
-                classes: ['search-icon'],
+                classes: ['input__search-icon'],
             });
         }
 
@@ -123,7 +133,7 @@ export default class InputComponent {
         if (this.#config.description || this.#config.maxLength) { // TODO: протестировать 
             const descWrapper = createElement({
                 parent: this.wrapper,
-                classes: ['description-wrapper'],
+                classes: ['input__description-wrapper'],
             });
 
             if (this.#config.description) {
@@ -131,7 +141,7 @@ export default class InputComponent {
                     tag: 'span',
                     text: this.#config.description,
                     parent: descWrapper,
-                    classes: ['input-description'],
+                    classes: ['input__description'],
                 });
             }
 
@@ -140,7 +150,7 @@ export default class InputComponent {
                     tag: 'span',
                     text: this.#config.maxLength,
                     parent: descWrapper,
-                    classes: ['input-counter'],
+                    classes: ['input__counter'],
                 });
 
                 this.input.addEventListener('input', () => {
@@ -159,8 +169,8 @@ export default class InputComponent {
         if (this.#config.validation === 'date' && this.input.value.trim().length < MAX_DATE_INPUT_LENGTH) {
             return false;
         }
-        if (!this.#config.required && !this.input.classList.contains('invalid')) return true;
-        return this.input.value.trim() !== '' && !this.input.classList.contains('invalid');
+        if (!this.required && !this.input.classList.contains('input__field_invalid')) return true;
+        return this.input.value.trim() !== '' && !this.input.classList.contains('input__field_invalid');
     }
 
     validate() {
@@ -286,13 +296,13 @@ export default class InputComponent {
         this.innnerWrapper.appendChild(this.error);
         this.error.textContent = message;
         this.error.style.display = 'block';
-        this.input.classList.add('invalid');
+        this.input.classList.add('input__field_invalid');
     }
 
     hideError() {
-        if (this.input.classList.contains('invalid')) {
+        if (this.input.classList.contains('input__field_invalid')) {
             this.innnerWrapper.removeChild(this.error);
-            this.input.classList.remove('invalid');
+            this.input.classList.remove('input__field_invalid');
         }
     }
 }

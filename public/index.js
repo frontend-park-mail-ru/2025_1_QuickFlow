@@ -17,15 +17,10 @@ const container = createElement({
     classes: ['container'],
 });
 
-const menuContainer = createElement({
-    tag: 'aside',
-    parent: container,
-    classes: ['menu'],
-});
-
 createElement({
     tag: 'main',
     parent: container,
+    classes: ['main']
 });
 
 createElement({
@@ -79,11 +74,8 @@ const config = {
     isAuthorized: true,
 };
 
-const menu = new MenuComponent(menuContainer, config);
-menu.render();
-
+const menu = new MenuComponent(container, config);
 const header = new HeaderComponent(container, menu);
-header.render();
 
 Ajax.get({
     url: '/user-dev-false',

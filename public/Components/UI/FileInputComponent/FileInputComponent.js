@@ -2,7 +2,6 @@ import createElement from '../../../utils/createElement.js';
 
 
 const DEFAULT_TYPE = 'file';
-// const DEFAULT_REQUIRED = false;
 const DEFAULT_NAME = '';
 const DEFAULT_ACCEPT_IMAGE = 'image/*';
 
@@ -20,12 +19,20 @@ export default class FileInputComponent {
     }
 
     get name() {
-        return this.input.name.trim();
+        return this.#config.name?.trim();
     }
 
     get value() {
         if (this.input.files.length === 1) return this.input.files[0];
         return this.input.files;
+    }
+
+    get required() {
+        return this.#config.required;
+    }
+
+    isEmpty() {
+        return !this.input.files || this.input.files.length === 0;
     }
 
     render() {
@@ -35,13 +42,13 @@ export default class FileInputComponent {
             attrs: {
                 type: DEFAULT_TYPE,
                 accept: this.#config.accept || DEFAULT_ACCEPT_IMAGE,
-                name: this.#config.name || DEFAULT_NAME,
+                name: this.name || DEFAULT_NAME,
                 id: this.#config.id || ''
             },
             classes: this.#config.classes,
         });
 
-        if (this.#config.required) {
+        if (this.required) {
             this.input.setAttribute('required', '');
         }
 
@@ -116,7 +123,7 @@ export default class FileInputComponent {
     }
 
     isValid() {
-        if (!this.#config.required) return true;
+        if (!this.required) return true;
         return this.#files.length > 0;
     }
 }

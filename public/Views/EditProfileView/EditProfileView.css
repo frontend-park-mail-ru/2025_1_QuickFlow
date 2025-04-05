@@ -4,18 +4,18 @@
     right: 8px;
 }
 
-.profile-edit-input.input-wrapper {
+.profile-edit-input.input {
     gap: 0;
     flex-direction: row;
     align-items: start;
     width: 100%;
 }
 
-.profile-edit-input .inner-wrapper {
+.profile-edit-input .input__inner {
     width: 67%;
 }
 
-.profile-edit-input .input-label {
+.profile-edit-input .input__label {
     width: 33%;
     height: 36px;
     align-content: center;
@@ -45,13 +45,13 @@
     margin-left: 33%;
 }
 
-.profile-edit-input.textarea-wrapper {
+.profile-edit-input.textarea {
     gap: 0;
     flex-direction: row;
     align-items: start;
     width: 100%;
 }
 
-.profile-edit-input textarea {
+.profile-edit-input .textarea__field {
     width: 67%;
 }

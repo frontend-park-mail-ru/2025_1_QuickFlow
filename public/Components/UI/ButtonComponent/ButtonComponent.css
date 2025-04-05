@@ -3,24 +3,29 @@
 button {
     cursor: pointer;
     transition: var(--trans-btn);
+}
+
+.button {
+    cursor: pointer;
+    transition: var(--trans-btn);
     padding: 0 12px;
 }
 
-button:disabled {
+.button:disabled {
     cursor: not-allowed;
 }
 
-button.large {
+.button_large {
     height: 36px;
     font-size: var(--font-size-l);
 }
 
-button.small {
+.button_small {
     height: 32px;
     font-size: var(--font-size-s);
 }
 
-.button-primary {
+.button_primary {
     border-radius: 8px;
     width: auto;
     background: var(--button-primary);
@@ -31,19 +36,19 @@ button.small {
     color: var(--text-white);
 }
 
-.button-primary:hover {
+.button_primary:hover {
     background: var(--button-primary-hover);
 }
 
-.button-primary:active {
+.button_primary:active {
     background: var(--button-primary-active);
 }
 
-.button-primary:disabled {
+.button_primary:disabled {
     background: var(--button-primary-disabled);
 }
 
-.button-secondary {
+.button_secondary {
     width: auto;
     border-radius: 8px;
     background: var(--button-secondary);
@@ -54,15 +59,15 @@ button.small {
     color: var(--text-primary);
 }
 
-.button-secondary:hover {
+.button_secondary:hover {
     background: var(--button-secondary-hover);
 }
 
-.button-secondary:active {
+.button_secondary:active {
     background: var(--button-secondary-active);
 }
 
-.button-overlay {
+.button_overlay {
     width: auto;
     border-radius: 8px;
     backdrop-filter: blur(20px);
@@ -74,16 +79,16 @@ button.small {
     color: var(--text-white);
 }
 
-.button-overlay.small {
+.button_overlay.button_small {
     font-size: var(--font-size-xs);
 }
 
-.button-overlay:hover {
+.button_overlay:hover {
     background: var(--button-overlay-hover);
     border: 1px solid var(--stroke-white-transp-hover);
 }
 
-.button-overlay:active {
+.button_overlay:active {
     background: var(--button-overlay-active);
     border: 1px solid var(--stroke-white-transp-active);
 }

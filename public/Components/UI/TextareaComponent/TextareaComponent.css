@@ -1,4 +1,4 @@
-.textarea-wrapper {
+.textarea {
     width: 100%;
     position: relative;
     display: flex;
@@ -10,12 +10,16 @@
     color: var(--text-secondary);
 }
 
-textarea {
-    color: var(--text-primary);
-    font-size: var(--font-size-s);
+.textarea__label {
+    width: 33%;
+    height: 36px;
+    align-content: center;
 }
 
-.modal-window-textarea textarea {
+.textarea__field {
+    color: var(--text-primary);
+    font-size: var(--font-size-s);
+
     margin-bottom: 8px;
     border: 1px solid var(--stroke-primary);
     border-radius: 8px;
@@ -29,15 +33,15 @@ textarea {
     resize: none;
 }
 
-textarea:hover {
+.textarea__field:hover {
     border: 1px solid var(--stroke-primary-hover);
 }
 
-textarea:focus {
+.textarea__field:focus {
     border: 1px solid var(--stroke-primary-focus);
     outline: none;
 }
 
-textarea::placeholder {
+.textarea__field::placeholder {
     color: var(--text-secondary);
 }

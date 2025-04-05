@@ -11,12 +11,11 @@ export class LogoComponent {
     render() {
         const wrapper = createElement({
             parent: this.#parent,
-            classes: ['header-logo-wrapper'],
+            classes: ['menu__logo'],
         });
 
         createElement({
             parent: wrapper,
-            classes: ['header-logo'],
             attrs: {src: '/static/img/annotated-logo.svg'}
         });
 
@@ -27,28 +26,38 @@ export class LogoComponent {
 export default class MenuComponent {
     #config
     #parent
-    constructor(container, config) {
-        this.#parent = container;
+    #container
+    constructor(parent, config) {
+        this.#parent = parent;
         this.#config = config;
 
+        this.#container = null;
         this.activePageLink = null;
         this.menuElements = {};
+
+        this.render();
     }
 
     render() {
-        new LogoComponent(this.#parent, this).render();
+        this.#container = createElement({
+            tag: 'aside',
+            parent: this.#parent,
+            classes: ['menu'],
+        });
+
+        new LogoComponent(this.#container, this).render();
 
         Object.entries(this.#config.menu).forEach(([key, { href, text, icon }], index) => {
             const menuElement = createElement({
                 tag: 'a',
-                parent: this.#parent,
-                classes: ['menu-item'],
+                parent: this.#container,
+                classes: ['menu__item'],
                 attrs: {href, 'data-section': key}
             });
 
             createElement({
                 parent: menuElement,
-                classes: ['menu-icon'],
+                classes: ['menu__icon'],
                 attrs: {src: `/static/img/${icon}.svg`}
             });
 
@@ -58,22 +67,16 @@ export default class MenuComponent {
             });
 
             if (index === 0) {
-                menuElement.classList.add('active');
+                menuElement.classList.add('menu__item_active');
                 this.activePageLink = menuElement;
             }
-
-            // if (this.isUserLoggedIn() && (key === 'login' || key === 'signup')) {
-            //     iconElement.classList.add('hidden');
-            // } else if (!this.isUserLoggedIn() && (key === 'logout')) {
-            //     iconElement.classList.add('hidden');
-            // }
 
             this.menuElements[key] = menuElement;
         });
 
         this.updateMenuVisibility(this.#config.isAuthorized);
 
-        this.#parent.addEventListener('click', (event) => {
+        this.#container.addEventListener('click', (event) => {
             if (event.target.closest('a')) {
                 event.preventDefault();
                 this.goToPage(event.target.closest('a'));
@@ -107,10 +110,10 @@ export default class MenuComponent {
     goToPage(menuElement) {
         document.querySelector('main').innerHTML = '';
         if (this.activePageLink) {
-            this.activePageLink.classList.remove('active');
+            this.activePageLink.classList.remove('menu__item_active');
         }
 
-        menuElement.classList.add('active');
+        menuElement.classList.add('menu__item_active');
         this.activePageLink = menuElement;
 
         const section = menuElement.dataset.section;

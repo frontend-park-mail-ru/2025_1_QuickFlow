@@ -4,6 +4,7 @@ import createElement from '../../../utils/createElement.js';
 const DEFAULT_TYPE = 'button';
 const DEFAULT_TEXT_CONTENT = '';
 const DEFAULT_SIZE_CLASS = 'large';
+const DEFAULT_CLASSES = ['button'];
 
 
 export default class ButtonComponent {
@@ -21,15 +22,12 @@ export default class ButtonComponent {
         this.buttonElement = createElement({
             tag: 'button',
             parent: this.#parent,
-            attrs: {
-                type: this.#config.type || DEFAULT_TYPE,
-
-            },
+            attrs: { type: this.#config.type || DEFAULT_TYPE },
             classes: [
                 'button',
-                `button-${this.#config.variant}`,
-                this.#config.size || DEFAULT_SIZE_CLASS,
-                this.#config.classes ? [...this.#config.classes] : null, // TODO: протестировать
+                `button_${this.#config.variant}`,
+                `button_${this.#config.size || DEFAULT_SIZE_CLASS}`,
+                ...this.#config.classes || DEFAULT_CLASSES,
             ],
             text: this.#config.text || DEFAULT_TEXT_CONTENT,
         });
@@ -54,7 +52,14 @@ export default class ButtonComponent {
     }
 
     updateBtnState() {
-        const isAllValid = this.#config.stateUpdaters.every(stateUpdater => stateUpdater.isValid());
-        this.buttonElement.disabled = !isAllValid;
+        const isRequiredValid = this.#config.stateUpdaters.every(stateUpdater => {
+            if (stateUpdater.required) return stateUpdater.isValid();
+            return true;
+        });
+        const isOptionalFilled = this.#config.stateUpdaters.some(stateUpdater => {
+            if (!stateUpdater.required) return !stateUpdater.isEmpty();
+            return true;
+        });
+        this.buttonElement.disabled = !(isRequiredValid && isOptionalFilled);
     }
 }

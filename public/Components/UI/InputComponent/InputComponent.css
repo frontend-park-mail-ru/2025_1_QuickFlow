@@ -1,10 +1,6 @@
 @import url(../../constants.css);
 
-.required {
-    color: var(--text-error);
-}
-
-.input-wrapper {
+.input {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -16,19 +12,20 @@
     color: var(--text-secondary);
 }
 
-.input-wrapper:only-child {
+.input__required {
+    color: var(--text-error);
+}
+
+.input:only-child {
     gap: 0;
 }
 
-.description-wrapper {
+.input__description-wrapper {
     display: flex;
     justify-content: space-between;
 }
 
-input[type='text'],
-input[type='email'],
-input[type='search'],
-input[type='password'] {
+.input__field {
     border: 1px solid var(--stroke-primary);
     border-radius: 8px;
     padding: 0 12px;
@@ -43,48 +40,39 @@ input[type='password'] {
     transition: var(--trans-input);
 }
 
-input[type='text']::placeholder,
-input[type='email']::placeholder,
-input[type='search']::placeholder,
-input[type='password']::placeholder {
+.input__field::placeholder {
     color: var(--text-secondary);
 }
 
-input[type='text']:hover,
-input[type='email']:hover,
-input[type='search']:hover,
-input[type='password']:hover {
+.input__field:hover {
     border: 1px solid var(--stroke-primary-hover);
 }
 
-input[type='text']:focus,
-input[type='email']:focus,
-input[type='search']:focus,
-input[type='password']:focus {
+.input__field:focus {
     border: 1px solid var(--stroke-primary-focus);
     outline: none;
 }
 
-input.invalid {
+.input__field_invalid {
     border: 1px solid var(--stroke-error) !important;
     background: var(--background-error) !important;
 }
 
-.input-error {
+.input__error {
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-s);
     line-height: var(--line-height-m);
     color: var(--text-error);
 }
 
-.inner-wrapper {
+.input__inner {
     position: relative;
     display: flex;
     gap: 4px;
     flex-direction: column;
 }
 
-.pwd-control {
+.input__password-toggle {
     position: absolute;
     top: 0;
     right: 0;
@@ -96,15 +84,15 @@ input.invalid {
     cursor: pointer;
 }
 
-.pwd-control.show {
+.input__password-toggle_show {
     background: url(../../../static/img/hide-icon.svg) 0 0 no-repeat;
 }
 
-input[type='search'] {
+.input__field[type='search'] {
     padding-left: 36px;
 }
 
-.search-icon {
+.input__search-icon {
     position: absolute;
     top: 0;
     left: 0;

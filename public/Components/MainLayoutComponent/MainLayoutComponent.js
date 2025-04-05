@@ -18,62 +18,66 @@ export default class MainLayoutComponent {
     render() {
         this.container = createElement({
             parent: this.#parent,
-            classes: ['container', this.#config.type],
+            classes: ['container', `container_${this.#config.type}`],
         });
 
-        if (this.#config.type === 'feed') {
-            this.renderFeed();
-        } else if (this.#config.type === 'profile') {
-            this.renderProfile();
+        switch (this.#config.type) {
+            case 'feed':
+                this.renderFeed();
+                break;
+            case 'profile': 
+                this.renderProfile();
+                break;
+            case 'messenger': 
+                this.renderMessenger();
+                break;
         }
-
-        this.setParentPosition();
     }
 
     clear() {
         this.container.innerHTML = '';
-        document.querySelector('main').removeChild(this.container);
+        this.#parent.removeChild(this.container);
+    }
+
+    renderMessenger() {
+        this.#parent.style.position = 'fixed';
     }
 
     renderProfile() {
+        this.#parent.style.position = 'absolute';
+
         this.top = createElement({
             parent: this.container,
-            classes: ['container-row'],
+            classes: ['container__row'],
         });
 
-        const bottom = createElement({
+        const bottomRow = createElement({
             parent: this.container,
-            classes: ['container-row'],
+            classes: ['container__row'],
         });
 
         this.left = createElement({
-            parent: bottom,
-            classes: ['container-left'],
+            parent: bottomRow,
+            classes: ['container__column', 'container__column_left'],
         });
 
         this.right = createElement({
-            parent: bottom,
-            classes: ['container-right'],
+            parent: bottomRow,
+            classes: ['container__column', 'container__column_right'],
         });
     }
 
     renderFeed() {
+        this.#parent.style.position = 'absolute';
+        
         this.left = createElement({
             parent: this.container,
-            classes: ['container-left'],
+            classes: ['container__column', 'container__column_left'],
         });
 
         this.right = createElement({
             parent: this.container,
-            classes: ['container-right'],
+            classes: ['container__column', 'container__column_right'],
         });
-    }
-
-    setParentPosition() {
-        if (this.#config.type === 'messenger') {
-            this.container.parentNode.style.position = 'fixed';
-            return;
-        }
-        this.container.parentNode.style.position = 'absolute';
     }
 }

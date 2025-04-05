@@ -14,25 +14,33 @@ export default class ContextMenuComponent {
     render() {
         this.wrapper = createElement({
             parent: this.#parent,
-            classes: ['context-menu', this.#config.classes]
+            classes: [
+                'context-menu',
+                this.#config.size ? `context-menu_${this.#config.size}` : 'context-menu',
+                this.#config.classes
+            ]
         });
 
         Object.entries(this.#config.data).forEach(([, { href, text, icon, isCritical }],) => {
             const menuOption = createElement({
                 parent: this.wrapper,
-                classes: ['menu-option'],
+                classes: ['context-menu__option'],
                 attrs: {'data-href': href}
             });
 
             createElement({
                 parent: menuOption,
-                classes: ['context-menu-icon'],
+                classes: ['context-menu__icon'],
                 attrs: {src: `/static/img/${icon}.svg`}
             });
 
             createElement({
                 parent: menuOption,
-                classes: ['context-menu-text', (isCritical || DEFAULT_IS_CRITICAL) ? 'critical' : null],
+                classes: [
+                    (isCritical || DEFAULT_IS_CRITICAL) ?
+                    'context-menu__text_critical' :
+                    'context-menu__text'
+                ],
                 text
             });
         });

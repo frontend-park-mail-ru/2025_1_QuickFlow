@@ -65,14 +65,14 @@ export default class LoginFormComponent {
     renderTopWrapper(form) {
         const topWrapper = createElement({
             parent: form,
-            classes: ['auth-form-top']
+            classes: ['auth-form__top']
         });
 
         if (this.step === 2) {
             createElement({
                 tag: 'a',
                 parent: topWrapper,
-                classes: ['auth-form-back-btn']
+                classes: ['auth-form__back-btn']
             })
             .addEventListener('click', () => {
                 if (this.step === 1) {
@@ -87,7 +87,7 @@ export default class LoginFormComponent {
 
         createElement({
             parent: topWrapper,
-            classes: ['auth-form-logo'],
+            classes: ['auth-form__logo'],
             attrs: {src: '/static/img/logo-icon.svg'}
         })
 
@@ -108,7 +108,7 @@ export default class LoginFormComponent {
     renderBottomWrapper(form) {
         const bottomWrapper = createElement({
             parent: form,
-            classes: ['auth-form-bottom'],
+            classes: ['auth-form__bottom'],
         })
 
         this.continueBtn = new ButtonComponent(bottomWrapper, {
@@ -142,7 +142,7 @@ export default class LoginFormComponent {
         const fieldsetUsername = createElement({
             tag: 'fieldset',
             parent: form,
-            classes: ['login-username'],
+            classes: ['auth-form__username'],
         })
 
         this.usernameInput = new InputComponent(fieldsetUsername, {
@@ -157,13 +157,13 @@ export default class LoginFormComponent {
 
         const checkboxWrapper = createElement({
             parent: form,
-            classes: ['checkbox-wrapper'],
+            classes: ['auth-form__checkboxes'],
         })
 
         createElement({
             tag: 'input',
             parent: checkboxWrapper,
-            classes: ['checkbox-wrapper'],
+            classes: ['auth-form__checkbox'],
             attrs: {type: 'checkbox', id:'rememberMe'}
         })
 

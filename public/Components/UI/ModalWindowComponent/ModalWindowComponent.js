@@ -25,7 +25,7 @@ export default class ModalWindowComponent {
 
         this.wrapper = createElement({
             parent: this.#parent,
-            classes: ['modal-window-bg'],
+            classes: ['modal-window__bg'],
         });
 
         this.modalWindow = createElement({
@@ -35,18 +35,18 @@ export default class ModalWindowComponent {
 
         const modalTop = createElement({
             parent: this.modalWindow,
-            classes: ['modal-window-top'],
+            classes: ['modal-window__top'],
         });
 
         this.title = createElement({
             parent: modalTop,
-            classes: ['modal-window-title']
+            classes: ['modal-window__title']
         });
 
         createElement({
             tag: 'button',
             parent: modalTop,
-            classes: ['modal-window-close-btn']
+            classes: ['modal-window__close-btn']
         })
         .addEventListener('click', () => {
             this.close();
@@ -65,20 +65,20 @@ export default class ModalWindowComponent {
     }
 
     renderPostInner() {
-        this.modalWindow.classList.add('modal-window-post');
+        this.modalWindow.classList.add('modal-window_post');
         this.title.textContent = 'Новый пост';
 
         const picsWrapper = createElement({
             parent: this.modalWindow,
-            classes: ['modal-window-pics-wrapper', 'blank'],
+            classes: ['modal-window__pics', 'blank'],
         });
         const addPicWrapper = createElement({
             parent: picsWrapper,
-            classes: ['modal-window-add-pic-wrapper'],
+            classes: ['modal-window__add-pic-wrapper'],
         });
         createElement({
             parent: addPicWrapper,
-            classes: ['modal-window-add-pic'],
+            classes: ['modal-window__add-pic'],
             attrs: {src: 'static/img/camera-dark-icon.svg'},
         });
         createElement({
@@ -97,7 +97,6 @@ export default class ModalWindowComponent {
 
         const textarea = new TextareaComponent(this.modalWindow, {
             placeholder: 'Поделитесь своими мыслями',
-            classes: ['modal-window-textarea']
         });
 
         new ButtonComponent(this.modalWindow, {
@@ -106,18 +105,18 @@ export default class ModalWindowComponent {
             size: 'small',
             onClick: () => this.handlePostSubmit(textarea.textarea.value.trim()),
             disabled: true,
-            stateUpdaters: [textarea]
+            stateUpdaters: [textarea, this.fileInput]
         });
     }
 
     createPicWrapperTemplate() {
         const picWrapperTemplate = createElement({
-            classes: ['modal-window-pic-wrapper'],
+            classes: ['modal-window__pic-wrapper'],
         });
         createElement({
             tag: 'img',
             parent: picWrapperTemplate,
-            classes: ['modal-window-pic'],
+            classes: ['modal-window__pic'],
         });
         return picWrapperTemplate;
     }
@@ -155,17 +154,17 @@ export default class ModalWindowComponent {
     }
 
     renderProfileInfoInner() {
-        this.modalWindow.classList.add('modal-window-profile');
+        this.modalWindow.classList.add('modal-window_profile');
         this.title.textContent = 'Подробная информация';
 
         const contentWrapper = createElement({
             parent: this.modalWindow,
-            classes: ['modal-window-content'],
+            classes: ['modal-window__content'],
         });
 
         const items = createElement({
             parent: contentWrapper,
-            classes: ['modal-window-items-default'],
+            classes: ['modal-window__items'],
         });
 
         this.#config.createInfoItem(items, profileDataLayout['username'].icon, this.#config.data.username);
@@ -178,7 +177,7 @@ export default class ModalWindowComponent {
 
         createElement({
             parent: items,
-            classes: ['divider'],
+            classes: ['modal-window__divider'],
         });
 
         for (const key in this.#config.data.school_education) {
@@ -188,7 +187,7 @@ export default class ModalWindowComponent {
 
         createElement({
             parent: items,
-            classes: ['divider'],
+            classes: ['modal-window__divider'],
         });
 
         for (const key in this.#config.data.university_education) {

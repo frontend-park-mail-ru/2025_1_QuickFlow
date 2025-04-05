@@ -14,6 +14,8 @@ export default class HeaderComponent {
         this.#menu = menu;
 
         this.rightWrapper = null;
+        
+        this.render();
     }
 
     render() {
@@ -25,7 +27,7 @@ export default class HeaderComponent {
 
         this.wrapper = createElement({
             parent: header,
-            classes: ['header-inner-wrapper']
+            classes: ['header__inner']
         });
         
         this.renderActions();
@@ -35,15 +37,15 @@ export default class HeaderComponent {
     renderActions() {
         const leftWrapper = createElement({
             parent: this.wrapper,
-            classes: ['header-left']
+            classes: ['header__left']
         });
 
-        const searchInput = new InputComponent(leftWrapper, {
+        new InputComponent(leftWrapper, {
             type: 'search',
             placeholder: 'Поиск',
-            showRequired: false
+            showRequired: false,
+            classes: ['header__search']
         });
-        searchInput.input.classList.add('header-search');
 
         // const notificationsWrapper = document.createElement('a');
         // notificationsWrapper.classList.add('icon-wrapper');
@@ -64,13 +66,11 @@ export default class HeaderComponent {
     }
 
     renderAvatarMenu() {
-        if (this.rightWrapper) {
-            this.rightWrapper.innerHTML = '';
-        }
+        if (this.rightWrapper) this.rightWrapper.innerHTML = '';
 
         this.rightWrapper = createElement({
             parent: this.wrapper,
-            classes: ['header-right']
+            classes: ['header__right']
         });
 
         Ajax.get({
@@ -93,13 +93,13 @@ export default class HeaderComponent {
         if (userData) {
             new AvatarComponent(this.rightWrapper, {
                 size: 'xs',
-                src: userData.avatar,
+                src: userData.avatar_url,
             });
 
             createElement({
                 tag: 'a',
                 parent: this.rightWrapper,
-                classes: ['dropdown-button']
+                classes: ['header__dropdown-icon']
             });
 
             new ProfileMenuComponent(this.rightWrapper, {

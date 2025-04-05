@@ -207,7 +207,7 @@ export default class ChatWindowComponent {
 
         new ContextMenuComponent(dropdown, {
             data: MEDIA_CONTEXT_MENU_DATA,
-            classes: ['mini'],
+            size: 'mini',
         });
 
         createElement({

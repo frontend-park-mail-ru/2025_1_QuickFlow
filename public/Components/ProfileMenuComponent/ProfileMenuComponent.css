@@ -26,7 +26,7 @@
     cursor: default;
 }
 
-.header-right:hover .profile-menu-wrapper {
+.header__right:hover .profile-menu-wrapper {
     opacity: 1;
     transform: scale(1) translateY(0);
     z-index: 0;

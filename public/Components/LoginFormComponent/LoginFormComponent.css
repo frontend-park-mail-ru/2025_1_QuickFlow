@@ -1,6 +1,6 @@
 @import url(../constants.css);
 
-.auth-form-top {
+.auth-form__top {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,7 +8,7 @@
     position: relative;
 }
 
-.auth-form-logo {
+.auth-form__logo {
     width: 48px;
 }
 
@@ -18,7 +18,7 @@ fieldset {
     margin: 0;
 }
 
-.login-username {
+.auth-form__username {
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -37,13 +37,13 @@ fieldset {
     box-sizing: border-box;
 }
 
-input[type='checkbox'] {
+.auth-form__checkbox {
     margin: 0;
     width: 16px;
     height: 16px;
 }
 
-.checkbox-wrapper {
+.auth-form__checkboxes {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -54,7 +54,7 @@ input[type='checkbox'] {
     color: var(--text-primary);
 }
 
-.auth-form-bottom {
+.auth-form__bottom {
     display: flex;
     flex-direction: column;
     gap: 12px;

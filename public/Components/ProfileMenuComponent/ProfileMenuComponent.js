@@ -30,7 +30,7 @@ export default class ProfileMenuComponent {
 
         new AvatarComponent(topWrapper, {
             size: AVATAR_SIZE,
-            src: this.#config.userData.avatar,
+            src: this.#config.userData.avatar_url,
         });
 
         const userData = createElement({
@@ -41,7 +41,7 @@ export default class ProfileMenuComponent {
         createElement({
             parent: userData,
             classes: ['profile-menu-name'],
-            text: `${this.#config.userData.lastname} ${this.#config.userData.firstname}`
+            text: `${this.#config.userData.firstname} ${this.#config.userData.lastname}`
         });
 
         createElement({

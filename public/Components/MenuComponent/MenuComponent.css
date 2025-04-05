@@ -1,4 +1,4 @@
-aside {
+.menu {
     width: 220px;
     height: 100vh;
     display: flex;
@@ -14,14 +14,14 @@ aside {
     z-index: 1;
 }
 
-.header-logo-wrapper {
+.menu__logo {
     height: fit-content;
     width: fit-content;
     align-self: start;
     cursor: pointer;
 }
 
-.menu-item {
+.menu__item {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -39,24 +39,24 @@ aside {
     transition: var(--trans-menu);
 }
 
-.menu-item:hover {
+.menu__item:hover {
     background: var(--button-secondary-hover);
 }
 
-.menu-item:active {
+.menu__item:active {
     background: var(--button-secondary-active);
 }
 
-.menu-item.hidden {
+.menu__item.hidden {
     display: none;
 }
 
-.menu-icon {
+.menu__icon {
     width: 16px;
     height: 16px;
 }
 
-.menu-item.active {
+.menu__item_active {
     font-weight: var(--font-weight-bold);
     color: var(--text-accent);
 }

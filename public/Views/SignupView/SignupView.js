@@ -11,8 +11,8 @@ export default class SignupView {
     }
 
     render() {
-        new SignupFormComponent(this.formWrapper, this.menu, this.header);
         this.formWrapper = createElement({});
+        new SignupFormComponent(this.formWrapper, this.menu, this.header);
 
         return this.formWrapper;
     }

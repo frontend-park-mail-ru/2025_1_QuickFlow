@@ -1,16 +1,16 @@
-.signup-personal-info {
+.auth-form__personal-info {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.signup-name-input-wrapper {
+.auth-form__name-inputs {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.auth-form-back-btn {
+.auth-form__back-btn {
     background: url(../../static/img/arrow-back-icon.svg) 0 0 no-repeat;
     width: 32px;
     height: 32px;
@@ -25,10 +25,10 @@
     background-position: center;
 }
 
-.auth-form-back-btn:hover {
+.auth-form__back-btn:hover {
     background-color: var(--button-secondary-hover);
 }
 
-.auth-form-back-btn:active {
+.auth-form__back-btn:active {
     background-color: var(--button-secondary-active);
 }
