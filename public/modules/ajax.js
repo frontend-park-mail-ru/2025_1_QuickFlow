@@ -64,10 +64,19 @@ class Ajax {
     async post({ url, body = {}, isFormData = false, callback = () => {} }) {
         let response;
         try {
+            const csrfResponse = await fetch(`${this.baseUrl}/csrf`, {
+                method: HTTP_METHOD_GET,
+                credentials: 'include'
+            });
+            const csrfToken = csrfResponse.headers.get('X-CSRF-Token');
+
             const options = {
                 method: HTTP_METHOD_POST,
                 credentials: 'include',
-                body: isFormData ? body : JSON.stringify(body)
+                body: isFormData ? body : JSON.stringify(body),
+                headers: {
+                    'X-CSRF-Token': csrfToken || ''
+                }
             };
 
             if (!isFormData) {
