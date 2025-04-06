@@ -8,7 +8,12 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "DEBUG=* && node server/server.js",
         "lint": "eslint --fix .",
-        "prepare": "husky install"
+        "prepare": "husky install",
+
+        "build": "webpack",
+
+        "sass": "sass src/styles/main.scss public/styles/main.css",
+        "sass:watch": "sass --watch src/styles/main.scss public/styles/main.css"
     },
     "author": "Илья",
     "license": "ISC",
@@ -33,7 +38,10 @@
         "globals": "^16.0.0",
         "husky": "^8.0.3",
         "lint-staged": "^15.4.3",
-        "prettier": "3.5.3"
+        "prettier": "3.5.3",
+        "sass": "^1.86.3",
+        "webpack": "^5.98.0",
+        "webpack-cli": "^6.0.1"
     },
     "lint-staged": {
         "**/*.js": "eslint --fix",
