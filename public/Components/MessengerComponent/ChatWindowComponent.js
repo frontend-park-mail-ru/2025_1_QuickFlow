@@ -137,7 +137,7 @@ export default class ChatWindowComponent {
         createElement({
             tag: 'button',
             parent: chatHeader,
-            classes: ['modal-window__close-btn']
+            classes: ['modal__close']
         })
         .addEventListener('click', () => {
             this.close();

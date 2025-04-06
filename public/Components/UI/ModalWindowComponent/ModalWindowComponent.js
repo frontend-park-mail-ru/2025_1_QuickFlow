@@ -25,28 +25,28 @@ export default class ModalWindowComponent {
 
         this.wrapper = createElement({
             parent: this.#parent,
-            classes: ['modal-window__bg'],
+            classes: ['modal__bg'],
         });
 
         this.modalWindow = createElement({
             parent: this.wrapper,
-            classes: ['modal-window'],
+            classes: ['modal'],
         });
 
         const modalTop = createElement({
             parent: this.modalWindow,
-            classes: ['modal-window__top'],
+            classes: ['modal__top'],
         });
 
         this.title = createElement({
             parent: modalTop,
-            classes: ['modal-window__title']
+            classes: ['modal__title']
         });
 
         createElement({
             tag: 'button',
             parent: modalTop,
-            classes: ['modal-window__close-btn']
+            classes: ['modal__close']
         })
         .addEventListener('click', () => {
             this.close();
@@ -65,20 +65,20 @@ export default class ModalWindowComponent {
     }
 
     renderPostInner() {
-        this.modalWindow.classList.add('modal-window_post');
+        this.modalWindow.classList.add('modal_post');
         this.title.textContent = 'Новый пост';
 
         const picsWrapper = createElement({
             parent: this.modalWindow,
-            classes: ['modal-window__pics', 'blank'],
+            classes: ['modal__pics', 'modal__pics_blank'],
         });
         const addPicWrapper = createElement({
             parent: picsWrapper,
-            classes: ['modal-window__add-pic-wrapper'],
+            classes: ['modal__add-pic'],
         });
         createElement({
             parent: addPicWrapper,
-            classes: ['modal-window__add-pic'],
+            classes: ['modal__camera'],
             attrs: {src: 'static/img/camera-dark-icon.svg'},
         });
         createElement({
@@ -111,18 +111,18 @@ export default class ModalWindowComponent {
 
     createPicWrapperTemplate() {
         const picWrapperTemplate = createElement({
-            classes: ['modal-window__pic-wrapper'],
+            classes: ['modal__pic'],
         });
         createElement({
             tag: 'img',
             parent: picWrapperTemplate,
-            classes: ['modal-window__pic'],
+            classes: ['modal__img'],
         });
         return picWrapperTemplate;
     }
 
     handlePicUpload(picsWrapper) {
-        picsWrapper.classList.remove('blank');
+        picsWrapper.classList.remove('modal__pics_blank');
     }
 
     async handlePostSubmit(text) {
@@ -154,17 +154,17 @@ export default class ModalWindowComponent {
     }
 
     renderProfileInfoInner() {
-        this.modalWindow.classList.add('modal-window_profile');
+        this.modalWindow.classList.add('modal_profile');
         this.title.textContent = 'Подробная информация';
 
         const contentWrapper = createElement({
             parent: this.modalWindow,
-            classes: ['modal-window__content'],
+            classes: ['modal__content'],
         });
 
         const items = createElement({
             parent: contentWrapper,
-            classes: ['modal-window__items'],
+            classes: ['modal__items'],
         });
 
         this.#config.createInfoItem(items, profileDataLayout['username'].icon, this.#config.data.username);
@@ -177,7 +177,7 @@ export default class ModalWindowComponent {
 
         createElement({
             parent: items,
-            classes: ['modal-window__divider'],
+            classes: ['modal__divider'],
         });
 
         for (const key in this.#config.data.school_education) {
@@ -187,7 +187,7 @@ export default class ModalWindowComponent {
 
         createElement({
             parent: items,
-            classes: ['modal-window__divider'],
+            classes: ['modal__divider'],
         });
 
         for (const key in this.#config.data.university_education) {
@@ -202,7 +202,7 @@ export default class ModalWindowComponent {
 
         // const countedItems = createElement({
         //     parent: contentWrapper,
-        //     classes: ['modal-window-items-counted'],
+        //     classes: ['modal-items-counted'],
         // });
 
         // for (const key in this.#config.data.countedData) {

@@ -1,57 +1,50 @@
-.cover-edit-btn {
+.cover__btn {
     position: absolute;
     top: 8px;
     right: 8px;
 }
 
-.profile-edit-input.input {
+.profile_edit__field {
     gap: 0;
     flex-direction: row;
     align-items: start;
     width: 100%;
 }
 
-.profile-edit-input .input__inner {
+.profile_edit__field .input__inner {
     width: 67%;
 }
 
-.profile-edit-input .input__label {
+.profile_edit__field .textarea__field {
+    width: 67%;
+}
+
+.profile_edit__field .input__label {
     width: 33%;
     height: 36px;
     align-content: center;
 }
 
-.profile-edit-form-fields {
+.profile_edit__fields {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.profile-edit-form {
+.profile_edit__form {
     display: flex;
     flex-direction: column;
     gap: 24px;
     width: 100%;
 }
 
-.profile-edit-fieldset {
+.profile_edit__fieldset {
     display: flex;
     gap: 16px;
     flex-direction: column;
 }
 
-.profile-edit-btn {
+.profile_edit__btn {
     width: fit-content;
     margin-left: 33%;
-}
-
-.profile-edit-input.textarea {
-    gap: 0;
-    flex-direction: row;
-    align-items: start;
-    width: 100%;
-}
-
-.profile-edit-input .textarea__field {
-    width: 67%;
 }

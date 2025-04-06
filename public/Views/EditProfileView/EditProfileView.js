@@ -157,21 +157,15 @@ export default class EditProfileView {
             items: {
                 profile: {
                     title: 'Профиль',
-                    onClick: () => {
-                        this.renderSection('profile');
-                    }
+                    onClick: () => this.renderSection('profile')
                 },
                 contacts: {
                     title: 'Контакты',
-                    onClick: () => {
-                        this.renderSection('contacts');
-                    }
+                    onClick: () => this.renderSection('contacts')
                 },
                 education: {
                     title: 'Образование',
-                    onClick: () => {
-                        this.renderSection('education');
-                    }
+                    onClick: () => this.renderSection('education')
                 },
             }
         });
@@ -197,7 +191,7 @@ export default class EditProfileView {
                 }
 
                 this.#userData = userData;
-                if (data.header) this.renderEditHeader();
+                if (data.header) this.renderHeader();
                 this.renderForm(data.fields);
             }
         });
@@ -207,7 +201,7 @@ export default class EditProfileView {
         const form = createElement({
             parent: this.#containerObj.left,
             tag: 'form',
-            classes: ['profile-edit-form']
+            classes: ['profile_edit__form']
         });
 
         if (this.#userData.title) {
@@ -220,7 +214,7 @@ export default class EditProfileView {
 
         const formFields = createElement({
             parent: form,
-            classes: ['profile-edit-form-fields']
+            classes: ['profile_edit__fields']
         });
 
         for (let i = 0; i < fields.length; i++) {
@@ -229,12 +223,12 @@ export default class EditProfileView {
             const fieldsetElement = createElement({
                 parent: formFields,
                 tag: 'fieldset',
-                classes: ['profile-edit-fieldset'],
+                classes: ['profile_edit__fieldset'],
             });
         
             for (const field of fieldset) {
-                field.config.classes = ['profile-edit-input'];
-                field.type === 'textarea' ? field.config.classes.push('modal-window-textarea') : null;
+                field.config.classes = ['profile_edit__field'];
+                // field.type === 'textarea' ? field.config.classes.push('modal-textarea') : null;
 
                 field.config.name = field.key;
                 field.config.placeholder = field.config.placeholder || field.config.label;
@@ -258,7 +252,7 @@ export default class EditProfileView {
             if (i < fields.length - 1) {
                 createElement({
                     parent: formFields,
-                    classes: ['modal-window__divider'],
+                    classes: ['modal__divider'],
                 });
             }
         }
@@ -267,7 +261,7 @@ export default class EditProfileView {
             text: 'Сохранить',
             variant: 'primary',
             size: 'large',
-            classes: ['profile-edit-btn'],
+            classes: ['profile_edit__btn'],
             onClick: () => this.handleFormSubmit(),
             disabled: true,
             stateUpdaters: this.#stateUpdaters,
@@ -335,20 +329,20 @@ export default class EditProfileView {
         });
     }
 
-    renderEditHeader() {
+    renderHeader() {
         const profileHeader = createElement({
             parent: this.#containerObj.left,
-            classes: ['profile-header', 'edit']
+            classes: ['profile', 'profile_edit']
         });
 
         const coverWrapper = createElement({
             parent: profileHeader,
-            classes: ['profile-cover-wrapper']
+            classes: ['cover', 'cover_edit']
         });
 
         const cover = createElement({
             parent: coverWrapper,
-            classes: ['profile-cover', 'edit'],
+            classes: ['cover__img'],
             attrs: {src: this.#userData.cover_url}
         });
 
@@ -356,7 +350,7 @@ export default class EditProfileView {
             text: 'Изменить обложку',
             variant: 'overlay',
             size: 'small',
-            classes: ['cover-edit-btn'],
+            classes: ['cover__btn'],
         });
 
         this.#stateUpdaters.push(

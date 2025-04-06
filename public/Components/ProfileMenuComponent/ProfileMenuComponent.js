@@ -55,7 +55,7 @@ export default class ProfileMenuComponent {
             classes: ['profile-menu__items'],
         });
 
-        Object.entries(this.#config.menuItems).forEach(([, { href, text, icon }],) => {
+        Object.entries(this.#config.menuItems).forEach(([key, { href, text, icon }],) => {
             const menuItem = createElement({
                 tag: 'a',
                 parent: menuItems,
@@ -69,6 +69,11 @@ export default class ProfileMenuComponent {
             createElement({
                 parent: menuItem,
                 text
+            });
+
+            menuItem.addEventListener('click', (event) => {
+                event.preventDefault();
+                this.#config.menuItems[key].render();
             });
         });
     }

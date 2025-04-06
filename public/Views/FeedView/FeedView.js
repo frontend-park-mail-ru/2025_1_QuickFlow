@@ -2,7 +2,11 @@ import Ajax from '../../modules/ajax.js';
 import PostComponent from '../../Components/PostComponent/PostComponent.js';
 import ModalWindowComponent from '../../Components/UI/ModalWindowComponent/ModalWindowComponent.js';
 import MainLayoutComponent from '../../Components/MainLayoutComponent/MainLayoutComponent.js';
+import RadioMenuComponent from '../../Components/RadioMenuComponent/RadioMenuComponent.js';
 import createElement from '../../utils/createElement.js';
+
+
+const POSTS_COUNT = 10;
 
 
 export default class FeedView {
@@ -15,49 +19,45 @@ export default class FeedView {
             type: 'feed',
         });
 
-        const feedFilter = createElement({
-            parent: containerObj.right,
-            classes: ['feed-filter']
-        });
-
-        // const feedFilter = document.createElement('div');
-        // feedFilter.classList.add('feed-filter');
-        // containerObj.right.appendChild(feedFilter);
-
-        const filterCategories = {
-            'Лента': {},
-            'Рекомендации': {},
-            'Комментарии': {},
-            'Реакции': {},
-        }
-
-        Object.entries(filterCategories).forEach(([key,],) => { // TODO: switch to RadioMenuComponent
-            createElement({
-                parent: feedFilter,
-                classes: ['feed-filter-category'],
-                text: key
-            });
+        new RadioMenuComponent(containerObj.right, {
+            items: {
+                feed: {
+                    title: 'Лента',
+                    // onClick: () => this.renderSection('profile')
+                },
+                recommendations: {
+                    title: 'Рекомендации',
+                    // onClick: () => this.renderSection('contacts')
+                },
+                comments: {
+                    title: 'Комментарии',
+                    // onClick: () => this.renderSection('education')
+                },
+                reactions: {
+                    title: 'Реакции',
+                    // onClick: () => this.renderSection('education')
+                },
+            }
         });
 
         const createPostBtn = createElement({
             parent: containerObj.left,
             tag: 'button',
-            classes: ['post-create-btn']
+            classes: ['button_feed']
         });
         createElement({
             parent: createPostBtn,
             tag: 'div',
-            classes: ['post-create-icon']
+            classes: ['button_feed__icon']
         });
         createElement({
             parent: createPostBtn,
             text: 'Создать пост',
-            classes: ['post-create-text']
         });
 
         const postsWrapper = createElement({
             parent: containerObj.left,
-            classes: ['feed-posts-wrapper'],
+            classes: ['feed__posts'],
         });
 
         createPostBtn.addEventListener('click', () => {
@@ -68,9 +68,7 @@ export default class FeedView {
 
         Ajax.get({
             url: '/feed',
-            params: {
-                posts_count: 10
-            },
+            params: { posts_count: POSTS_COUNT },
             callback: (status, feedData) => {
                 let isAuthorized = status === 200;
 

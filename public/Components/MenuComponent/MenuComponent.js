@@ -67,12 +67,10 @@ export default class MenuComponent {
         if (this.#config.isAuthorized) {
             this.menuElements.login.classList.add('hidden');
             this.menuElements.signup.classList.add('hidden');
-            this.menuElements.logout.classList.remove('hidden');
             return;
         }
         this.menuElements.login.classList.remove('hidden');
         this.menuElements.signup.classList.remove('hidden');
-        this.menuElements.logout.classList.add('hidden');
     }
 
     checkAuthPage() {

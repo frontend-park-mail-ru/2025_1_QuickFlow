@@ -2,6 +2,7 @@ import Ajax from '../../modules/ajax.js';
 import InputComponent from '../UI/InputComponent/InputComponent.js';
 import ProfileMenuComponent from '../ProfileMenuComponent/ProfileMenuComponent.js';
 import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
+import LogoutView from '../../Views/LogoutView/LogoutView.js';
 import createElement from '../../utils/createElement.js';
 import { getLsItem } from '../../utils/localStorage.js';
 
@@ -14,7 +15,7 @@ export default class HeaderComponent {
         this.#menu = menu;
 
         this.rightWrapper = null;
-        
+
         this.render();
     }
 
@@ -108,17 +109,20 @@ export default class HeaderComponent {
                     settings: {
                         href: '/settings',
                         text: 'Настройки',
-                        icon: 'settings-icon'
+                        icon: 'settings-icon',
+                        render: () => {},
                     },
                     help: {
                         href: '/help',
                         text: 'Помощь',
-                        icon: 'help-icon'
+                        icon: 'help-icon',
+                        render: () => {},
                     },
                     logout: {
                         href: '/logout',
                         text: 'Выйти',
-                        icon: 'logout-icon'
+                        icon: 'logout-icon',
+                        render: () => new LogoutView(this.#menu).render(),
                     },
                 },
             });
