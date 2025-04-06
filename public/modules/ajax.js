@@ -70,6 +70,8 @@ class Ajax {
             });
             const csrfToken = csrfResponse.headers.get('X-CSRF-Token');
 
+            console.log(csrfToken);
+
             const options = {
                 method: HTTP_METHOD_POST,
                 credentials: 'include',
