@@ -1,10 +1,13 @@
 @import url(./Components/constants.css);
 
 @import url(./Components/UI/ButtonComponent/ButtonComponent.css);
+@import url(./Components/UI/InputComponent/InputComponent.css);
 @import url(./Components/UI/RadioComponent/RadioComponent.css);
 @import url(./Components/UI/ModalWindowComponent/ModalWindowComponent.css);
 @import url(./Components/UI/TextareaComponent/TextareaComponent.css);
 
+@import url(./Components/MenuComponent/MenuComponent.css);
+@import url(./Components/HeaderComponent/HeaderComponent.css);
 @import url(./Components/RadioMenuComponent/RadioMenuComponent.css);
 @import url(./Components/LoginFormComponent/LoginFormComponent.css);
 @import url(./Components/SignupFormComponent/SignupFormComponent.css);
