@@ -186,14 +186,14 @@ export default class ProfileView {
         createElement({
             parent: coverWrapper,
             classes: ['cover__img'],
-            attrs: {src: data.cover_url}
+            attrs: {src: data.profile.cover_url}
         });
 
         new AvatarComponent(profileHeader, {
             size: 'xxxl',
             class: 'profile__avatar',
             type: 'status',
-            src: data.avatar_url,
+            src: data.profile.avatar_url,
         });
 
         const profileBottom = createElement({
@@ -208,7 +208,7 @@ export default class ProfileView {
 
         createElement({
             parent: profileInfo,
-            text: `${data.firstname} ${data.lastname}`,
+            text: `${data.profile.firstname} ${data.profile.lastname}`,
             classes: ['profile__name']
         });
 
@@ -217,7 +217,7 @@ export default class ProfileView {
             classes: ['profile__details']
         });
 
-        this.createInfoItem(fullInfo, profileDataLayout['username'].icon, data.username);
+        this.createInfoItem(fullInfo, profileDataLayout['username'].icon, data.profile.username);
 
         const moreInfo = this.createInfoItem(fullInfo, profileDataLayout['more'].icon, profileDataLayout['more'].text);
         moreInfo.classList.add('profile__detail_more');
@@ -253,7 +253,6 @@ export default class ProfileView {
         });
         createElement({
             parent: item,
-            // classes: ['profile-info-text'],
             text: title
         });
 

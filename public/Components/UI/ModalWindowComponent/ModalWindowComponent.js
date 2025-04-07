@@ -167,8 +167,8 @@ export default class ModalWindowComponent {
             classes: ['modal__items'],
         });
 
-        this.#config.createInfoItem(items, profileDataLayout['username'].icon, this.#config.data.username);
-        this.#config.createInfoItem(items, profileDataLayout['birth_date'].icon, this.#config.data.birth_date);
+        this.#config.createInfoItem(items, profileDataLayout['username'].icon, this.#config.data.profile.username);
+        this.#config.createInfoItem(items, profileDataLayout['birth_date'].icon, this.#config.data.profile.birth_date);
 
         for (const key in this.#config.data.contact_info) {
             const value = this.#config.data.contact_info[key];
@@ -180,8 +180,8 @@ export default class ModalWindowComponent {
             classes: ['modal__divider'],
         });
 
-        for (const key in this.#config.data.school_education) {
-            const value = this.#config.data.school_education[key];
+        for (const key in this.#config.data.school) {
+            const value = this.#config.data.school[key];
             this.#config.createInfoItem(items, profileDataLayout[key].icon, value);
         }
 
@@ -190,8 +190,8 @@ export default class ModalWindowComponent {
             classes: ['modal__divider'],
         });
 
-        for (const key in this.#config.data.university_education) {
-            const value = this.#config.data.university_education[key];
+        for (const key in this.#config.data.university) {
+            const value = this.#config.data.university[key];
             this.#config.createInfoItem(items, profileDataLayout[key].icon, value);
         }
 
