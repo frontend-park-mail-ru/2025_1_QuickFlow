@@ -69,24 +69,18 @@ class Ajax {
                 credentials: 'include'
             });
             const csrfToken = csrfResponse.headers.get('X-CSRF-Token');
-
-
-            var theCookies = document.cookie.split(';');
-            var aString = '';
-            for (var i = 1 ; i <= theCookies.length; i++) {
-                aString += i + ' ' + theCookies[i-1] + "\n";
-            }
-            console.log(aString);
-
-
-            console.log(csrfToken);
+            console.log(csrfResponse.headers.get('X-CSRF-Token'));
+            console.log(csrfResponse.headers.get('X-Csrf-Token'));
+            console.log(csrfResponse.headers.get('x-csrf-token'));
 
             const options = {
                 method: HTTP_METHOD_POST,
                 credentials: 'include',
                 body: isFormData ? body : JSON.stringify(body),
                 headers: {
-                    'X-CSRF-Token': csrfToken || ''
+                    'X-CSRF-Token': csrfToken || '',
+                    'X-Csrf-Token': csrfToken || '',
+                    'x-csrf-Token': csrfToken || ''
                 }
             };
 
