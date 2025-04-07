@@ -2,6 +2,7 @@ import createElement from '../../utils/createElement.js';
 
 const SIZE_PREFIX = 'avatar_';
 const DEFAULT_SIZE_CLASS = SIZE_PREFIX + 'm';
+const DEFAULT_SRC = 'static/img/default-avatar.jpg';
 
 export default class AvatarComponent {
     #parent
@@ -31,7 +32,7 @@ export default class AvatarComponent {
         this.avatar = createElement({
             parent: this.wrapper,
             attrs: {
-                src: this.#config.src,
+                src: this.#config.src || DEFAULT_SRC,
                 alt: 'Аватар',
                 title: 'Аватар',
             },

@@ -8,6 +8,7 @@ import ButtonComponent from '../../Components/UI/ButtonComponent/ButtonComponent
 import createElement from '../../utils/createElement.js';
 import { profileFriends } from '../../mocks.js';
 import { getLsItem } from '../../utils/localStorage.js';
+import CoverComponent from '../../Components/CoverComponent/CoverComponent.js';
 
 
 const POSTS_COUNT = 10;
@@ -178,15 +179,9 @@ export default class ProfileView {
             classes: ['profile']
         });
 
-        const coverWrapper = createElement({
-            parent: profileHeader,
-            classes: ['cover']
-        });
-
-        createElement({
-            parent: coverWrapper,
-            classes: ['cover__img'],
-            attrs: {src: data.profile.cover_url}
+        new CoverComponent(profileHeader, {
+            src: data.profile.cover_url,
+            type: 'profile',
         });
 
         new AvatarComponent(profileHeader, {

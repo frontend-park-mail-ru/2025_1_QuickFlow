@@ -104,7 +104,11 @@
 .avatar__edit-icon {
     margin-bottom: 4px;
     opacity: 0.9;
-    box-shadow: 0 2px 8px 0 var(--button-transparent-active);
+    filter: drop-shadow(0 2px 8px var(--button-overlay-active));
+    -webkit-filter: drop-shadow(0 2px 8px var(--button-overlay-active));
+    -moz-filter: drop-shadow(0 2px 8px var(--button-overlay-active));
+    -o-filter: drop-shadow(0 2px 8px var(--button-overlay-active));
+    -ms-filter: drop-shadow(0 2px 8px var(--button-overlay-active));
 }
 
 .avatar__overlay:hover .avatar__edit-icon {

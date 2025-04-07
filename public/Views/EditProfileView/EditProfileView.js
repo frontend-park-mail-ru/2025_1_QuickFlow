@@ -5,6 +5,7 @@ import MainLayoutComponent from '../../Components/MainLayoutComponent/MainLayout
 import AvatarComponent from '../../Components/AvatarComponent/AvatarComponent.js';
 import ButtonComponent from '../../Components/UI/ButtonComponent/ButtonComponent.js';
 import InputComponent from '../../Components/UI/InputComponent/InputComponent.js';
+import CoverComponent from '../../Components/CoverComponent/CoverComponent.js';
 import FileInputComponent from '../../Components/UI/FileInputComponent/FileInputComponent.js';
 
 import createElement from '../../utils/createElement.js';
@@ -338,32 +339,12 @@ export default class EditProfileView {
             classes: ['profile', 'profile_edit']
         });
 
-        const coverWrapper = createElement({
-            parent: profileHeader,
-            classes: ['cover', 'cover_edit']
+        const cover = new CoverComponent(profileHeader, {
+            src: this.#userData.profile.cover_url,
+            type: 'edit',
         });
 
-        const cover = createElement({
-            parent: coverWrapper,
-            classes: ['cover__img'],
-            attrs: {src: this.#userData.profile.cover_url}
-        });
-
-        const coverUploadBtn = new ButtonComponent(coverWrapper, {
-            text: 'Изменить обложку',
-            variant: 'overlay',
-            size: 'small',
-            classes: ['cover__btn'],
-        });
-
-        this.#stateUpdaters.push(
-            new FileInputComponent(this.#containerObj.left, {
-                imitator: coverUploadBtn.buttonElement,
-                preview: cover,
-                id: 'profile-cover-upload',
-                name: 'cover_url',
-            })
-        );
+        this.#stateUpdaters.push(cover.fileInput);
 
         const avatar = new AvatarComponent(profileHeader, {
             size: 'xxl',
