@@ -64,33 +64,12 @@ class Ajax {
     async post({ url, body = {}, isFormData = false, callback = () => {} }) {
         let response;
         try {
-            // const csrfResponse = await fetch(`${this.baseUrl}/csrf`, {
-            //     method: HTTP_METHOD_GET,
-            //     credentials: 'include'
-            // });
-            // const csrfToken = csrfResponse.headers.get('X-Csrf-Token');
-
-            let csrfToken;
-            await fetch(`${this.baseUrl}/csrf`, {
+            const csrfResponse = await fetch(`${this.baseUrl}/csrf`, {
                 method: HTTP_METHOD_GET,
                 credentials: 'include'
-            })
-            .then(response => {
-                for (const header of response.headers) {
-                    console.log(header);
-                }
-                csrfToken = response.headers.get('X-Csrf-Token');
             });
+            const csrfToken = csrfResponse.headers.get('X-CSRF-Token');
 
-            // fetch("/hello").then(response => {
-            //     for(header of response.headers){
-            //         console.log(header header); [1](https://metanit.com/web/javascript/20.2.php)
-            //     }
-            // });
-            // console.log(csrfResponse.headers);
-            // for (const header of csrfResponse.headers) {
-            //     console.log(header);
-            // }
             console.log(csrfToken);
 
             const options = {
@@ -98,12 +77,12 @@ class Ajax {
                 credentials: 'include',
                 body: isFormData ? body : JSON.stringify(body),
                 headers: {
-                    'X-Csrf-Token': csrfToken || ''
+                    'X-CSRF-Token': csrfToken || ''
                 }
             };
 
             if (!isFormData) {
-                options.headers = { 'Content-Type': 'application/json; charset=utf-8' };
+                options.headers['Content-Type'] = 'application/json; charset=utf-8';
             }
 
             response = await fetch(`${this.baseUrl}${url}`, options);
@@ -119,7 +98,7 @@ class Ajax {
             callback(response.status, data);
         } catch (error) {
             console.error('POST request failed:', error);
-            callback(response.status);
+            callback(response?.status || 500);
         }
     }
     
