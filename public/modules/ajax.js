@@ -70,6 +70,15 @@ class Ajax {
             });
             const csrfToken = csrfResponse.headers.get('X-CSRF-Token');
 
+
+            var theCookies = document.cookie.split(';');
+            var aString = '';
+            for (var i = 1 ; i <= theCookies.length; i++) {
+                aString += i + ' ' + theCookies[i-1] + "\n";
+            }
+            console.log(aString);
+
+
             console.log(csrfToken);
 
             const options = {
