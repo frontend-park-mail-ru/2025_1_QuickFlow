@@ -68,8 +68,8 @@ class Ajax {
                 method: HTTP_METHOD_GET,
                 credentials: 'include'
             });
-            const csrfToken = csrfResponse.headers.get('X-CSRF-Token');
-
+            const csrfToken = csrfResponse.headers.get('X-Csrf-Token');
+            console.log(csrfResponse.headers);
             console.log(csrfToken);
 
             const options = {
@@ -77,7 +77,7 @@ class Ajax {
                 credentials: 'include',
                 body: isFormData ? body : JSON.stringify(body),
                 headers: {
-                    'X-CSRF-Token': csrfToken || ''
+                    'X-Csrf-Token': csrfToken || ''
                 }
             };
 
