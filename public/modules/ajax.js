@@ -4,6 +4,11 @@ import { users, chats, messages } from '../mocks.js'
 const HTTP_METHOD_GET = 'GET';
 const HTTP_METHOD_POST = 'POST';
 const API_BASE_URL = 'https://quickflowapp.ru/api';
+const CSRF_FREE_URLS = [
+    '/login',
+    '/signup',
+    '/logout'
+];
 
 
 class Ajax {
@@ -84,7 +89,9 @@ class Ajax {
         try {
             const headers = {};
             if (!isFormData) headers['Content-Type'] = 'application/json; charset=utf-8';
-            headers['X-CSRF-Token'] = await this.csrfRequest() || '';
+            if (!CSRF_FREE_URLS.includes(url)) {
+                headers['X-CSRF-Token'] = await this.csrfRequest() || '';
+            }
             console.log(headers);
 
             const options = {
