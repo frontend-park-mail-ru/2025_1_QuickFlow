@@ -64,20 +64,33 @@ class Ajax {
     async post({ url, body = {}, isFormData = false, callback = () => {} }) {
         let response;
         try {
-            const csrfResponse = await fetch(`${this.baseUrl}/csrf`, {
+            // const csrfResponse = await fetch(`${this.baseUrl}/csrf`, {
+            //     method: HTTP_METHOD_GET,
+            //     credentials: 'include'
+            // });
+            // const csrfToken = csrfResponse.headers.get('X-Csrf-Token');
+
+            let csrfToken;
+            await fetch(`${this.baseUrl}/csrf`, {
                 method: HTTP_METHOD_GET,
                 credentials: 'include'
+            })
+            .then(response => {
+                for (const header of response.headers) {
+                    console.log(header);
+                }
+                csrfToken = response.headers.get('X-Csrf-Token');
             });
-            const csrfToken = csrfResponse.headers.get('X-Csrf-Token');
+
             // fetch("/hello").then(response => {
             //     for(header of response.headers){
             //         console.log(header header); [1](https://metanit.com/web/javascript/20.2.php)
             //     }
             // });
-            console.log(csrfResponse.headers);
-            for (const header of csrfResponse.headers) {
-                console.log(header);
-            }
+            // console.log(csrfResponse.headers);
+            // for (const header of csrfResponse.headers) {
+            //     console.log(header);
+            // }
             console.log(csrfToken);
 
             const options = {
