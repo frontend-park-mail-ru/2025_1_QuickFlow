@@ -1,6 +1,7 @@
 import ButtonComponent from '../ButtonComponent/ButtonComponent.js';
 import TextareaComponent from '../TextareaComponent/TextareaComponent.js';
 import createElement from '../../../utils/createElement.js';
+import convertDate from '../../../utils/convertDate.js';
 import { profileDataLayout } from '../../../Views/ProfileView/ProfileView.js'
 import Ajax from '../../../modules/ajax.js';
 import FileInputComponent from '../FileInputComponent/FileInputComponent.js';
@@ -167,38 +168,26 @@ export default class ModalWindowComponent {
             classes: ['modal__items'],
         });
 
-        this.#config.createInfoItem(items, profileDataLayout['username'].icon, this.#config.data.profile.username);
-        this.#config.createInfoItem(items, profileDataLayout['birth_date'].icon, this.#config.data.profile.birth_date);
+        this.#config.createInfoItem(
+            items,
+            profileDataLayout['username'].icon,
+            this.#config.data.profile.username
+        );
+        this.#config.createInfoItem(
+            items,
+            profileDataLayout['birth_date'].icon,
+            convertDate(this.#config.data.profile.birth_date)
+        );
 
-        for (const key in this.#config.data.contact_info) {
-            const value = this.#config.data.contact_info[key];
-            this.#config.createInfoItem(items, profileDataLayout[key].icon, value);
+        this.renderProfileInfoBlock(items, this.#config.data.contact_info, false);
+
+        if (this.#config.data.school.length > 0) {
+            this.renderProfileInfoBlock(items, this.#config.data.school);
         }
-
-        createElement({
-            parent: items,
-            classes: ['modal__divider'],
-        });
-
-        for (const key in this.#config.data.school) {
-            const value = this.#config.data.school[key];
-            this.#config.createInfoItem(items, profileDataLayout[key].icon, value);
+        
+        if (this.#config.data.university.length > 0) {
+            this.renderProfileInfoBlock(items, this.#config.data.university);
         }
-
-        createElement({
-            parent: items,
-            classes: ['modal__divider'],
-        });
-
-        for (const key in this.#config.data.university) {
-            const value = this.#config.data.university[key];
-            this.#config.createInfoItem(items, profileDataLayout[key].icon, value);
-        }
-
-        // createElement({
-        //     parent: contentWrapper,
-        //     classes: ['divider'],
-        // });
 
         // const countedItems = createElement({
         //     parent: contentWrapper,
@@ -209,5 +198,18 @@ export default class ModalWindowComponent {
         //     const value = this.#config.data.countedData[key];
         //     this.#config.createCountedItem(countedItems, profileDataLayout[key].text, value);
         // }
+    }
+
+    renderProfileInfoBlock(parent, blockData, showDivider = true) {
+        if (showDivider) {
+            createElement({
+                parent,
+                classes: ['modal__divider'],
+            });
+        }
+        for (const key in blockData) {
+            const value = blockData[key];
+            this.#config.createInfoItem(parent, profileDataLayout[key].icon, value);
+        }
     }
 }

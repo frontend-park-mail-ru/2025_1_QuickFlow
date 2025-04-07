@@ -67,7 +67,7 @@ app.post('/login', (req, res) => {
     if (!password || !username) {
         return res.status(400).json({ error: 'Не указано имя пользователя или пароль' });
     }
-    if (!users[username] || users[username].password !== password) {
+    if (!users[username] || users[username].profile.password !== password) {
         return res.status(400).json({ error: 'Неверное имя пользователя или пароль' });
     }
 

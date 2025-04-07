@@ -101,25 +101,27 @@ export const posts = [
 
 export const users = {
     rvasutenko: {
-        username: "rvasutenko",
-        password: 'Qwerty1!', // Нужен на тестовом серваке для авторизации
-        firstname: "Роман",
-        lastname: "Васютенко",
-        sex: 0,
-        birth_date: "2005-05-02",
-        bio: "Тут пара слов обо мне, моих увлечениях, занятиях и предпочтениях",
-        avatar_url: "/avatars/avatar.jpg",
-        cover_url: "/covers/profile-header.jpg",
+        profile: {
+            username: "rvasutenko",
+            password: 'Qwerty1!', // Нужен на тестовом серваке для авторизации
+            firstname: "Роман",
+            lastname: "Васютенко",
+            sex: 0,
+            birth_date: "2005-05-02",
+            bio: "Тут пара слов обо мне, моих увлечениях, занятиях и предпочтениях",
+            avatar_url: "/avatars/avatar.jpg",
+            cover_url: "/covers/profile-header.jpg",
+        },
         contact_info: {
             city: "Moscow",
             email: "vasyutenko20050205@mail.ru",
             phone: "89648826455"
         },
-        school_education: {
+        school: {
             school_city: "Ахтубинск",
             school_name: "МБОУ СОШ №4"
         },
-        university_education: {
+        university: {
             univ_city: "Москва",
             univ_name: "МГТУ им. Н.Э. Баумана",
             faculty: "Социальные и гуманитарные науки",

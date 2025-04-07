@@ -118,7 +118,7 @@ export default class MessageComponent {
 
         new AvatarComponent(msg, {
             size: MSG_AVATAR_SIZE,
-            src: msgData.from === this.#config.user.username ? this.#config.user.avatar_url : this.#config.chatData.avatar,
+            src: msgData.from === this.#config.user.profile.username ? this.#config.user.profile.avatar_url : this.#config.chatData.avatar,
         });
 
         const msgContent = createElement({
@@ -129,7 +129,7 @@ export default class MessageComponent {
         createElement({
             parent: msgContent,
             classes: ['chat__sender'],
-            text: msgData.from === this.#config.user.username ? `${this.#config.user.firstname} ${this.#config.user.lastname}` : this.#config.chatData.name,
+            text: msgData.from === this.#config.user.profile.username ? `${this.#config.user.profile.firstname} ${this.#config.user.profile.lastname}` : this.#config.chatData.name,
         });
 
         createElement({

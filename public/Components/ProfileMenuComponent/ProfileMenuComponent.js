@@ -30,7 +30,7 @@ export default class ProfileMenuComponent {
 
         new AvatarComponent(topWrapper, {
             size: AVATAR_SIZE,
-            src: this.#config.userData.avatar_url,
+            src: this.#config.userData.profile.avatar_url,
         });
 
         const userData = createElement({
@@ -41,13 +41,13 @@ export default class ProfileMenuComponent {
         createElement({
             parent: userData,
             classes: ['profile-menu__name'],
-            text: `${this.#config.userData.firstname} ${this.#config.userData.lastname}`
+            text: `${this.#config.userData.profile.firstname} ${this.#config.userData.profile.lastname}`
         });
 
         createElement({
             parent: userData,
             classes: ['profile-menu__username'],
-            text: `${USERNAME_PREFIX}${this.#config.userData.username}`
+            text: `${USERNAME_PREFIX}${this.#config.userData.profile.username}`
         });
 
         const menuItems = createElement({

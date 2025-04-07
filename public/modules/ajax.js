@@ -20,6 +20,24 @@ class Ajax {
         return API_BASE_URL;
     }
 
+    async csrfRequest() {
+        let csrfToken = null;
+
+        if (!this.develop) {
+            const csrfResponse = await fetch(`${this.baseUrl}/csrf`, {
+                method: HTTP_METHOD_GET,
+                credentials: 'include'
+            });
+            console.log(csrfResponse.headers.get('X-CSRF-Token'));
+            console.log(csrfResponse.headers.get('X-Csrf-Token'));
+            console.log(csrfResponse.headers.get('x-csrf-token'));
+
+            csrfToken = csrfResponse.headers.get('X-CSRF-Token');
+        }
+
+        return csrfToken;
+    }
+
     async fakeRequest(url, params, callback) {
         await new Promise(resolve => setTimeout(resolve, 30)); // Симуляция сетевой задержки
         if (!this.develop) {
@@ -64,29 +82,17 @@ class Ajax {
     async post({ url, body = {}, isFormData = false, callback = () => {} }) {
         let response;
         try {
-            const csrfResponse = await fetch(`${this.baseUrl}/csrf`, {
-                method: HTTP_METHOD_GET,
-                credentials: 'include'
-            });
-            const csrfToken = csrfResponse.headers.get('X-CSRF-Token');
-            console.log(csrfResponse.headers.get('X-CSRF-Token'));
-            console.log(csrfResponse.headers.get('X-Csrf-Token'));
-            console.log(csrfResponse.headers.get('x-csrf-token'));
+            const headers = {};
+            if (!isFormData) headers['Content-Type'] = 'application/json; charset=utf-8';
+            headers['X-CSRF-Token'] = await this.csrfRequest() || '';
+            console.log(headers);
 
             const options = {
                 method: HTTP_METHOD_POST,
                 credentials: 'include',
                 body: isFormData ? body : JSON.stringify(body),
-                headers: {
-                    'X-CSRF-Token': csrfToken || '',
-                    'X-Csrf-Token': csrfToken || '',
-                    'x-csrf-Token': csrfToken || ''
-                }
+                headers
             };
-
-            if (!isFormData) {
-                options.headers['Content-Type'] = 'application/json; charset=utf-8';
-            }
 
             response = await fetch(`${this.baseUrl}${url}`, options);
     

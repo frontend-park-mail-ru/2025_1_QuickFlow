@@ -94,7 +94,7 @@ export default class HeaderComponent {
         if (userData) {
             new AvatarComponent(this.rightWrapper, {
                 size: 'xs',
-                src: userData.avatar_url,
+                src: userData.profile.avatar_url,
             });
 
             createElement({
