@@ -69,7 +69,15 @@ class Ajax {
                 credentials: 'include'
             });
             const csrfToken = csrfResponse.headers.get('X-Csrf-Token');
+            // fetch("/hello").then(response => {
+            //     for(header of response.headers){
+            //         console.log(header header); [1](https://metanit.com/web/javascript/20.2.php)
+            //     }
+            // });
             console.log(csrfResponse.headers);
+            for (const header of csrfResponse.headers) {
+                console.log(header);
+            }
             console.log(csrfToken);
 
             const options = {
