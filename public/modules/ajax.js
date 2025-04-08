@@ -33,17 +33,13 @@ class Ajax {
                 method: HTTP_METHOD_GET,
                 credentials: 'include'
             });
+            console.log(csrfResponse);
             console.log(csrfResponse.headers);
             console.log(csrfResponse.headers.get('X-CSRF-Token'));
             console.log(csrfResponse.headers.get('X-Csrf-Token'));
             console.log(csrfResponse.headers.get('x-csrf-token'));
-            
-            csrfToken = csrfResponse.headers.get('X-CSRF-Token');
 
-            await fetch(`${this.baseUrl}/csrf`, {
-                method: HTTP_METHOD_GET,
-                credentials: 'include'
-            }).then(res => console.log(res.headers));
+            csrfToken = csrfResponse.headers.get('X-CSRF-Token');
         }
 
         return csrfToken;
