@@ -279,8 +279,6 @@ export default class EditProfileView {
             const sections = {
                 profile: () => {
                     body.profile ??= {};
-                    console.log(name);
-                    console.log(value);
                     if (name === 'avatar_url' || name === 'cover_url') {
                         body[name] = value instanceof File ? value : '';
                         return;
@@ -318,12 +316,12 @@ export default class EditProfileView {
         //     }
         // }
 
-        if (!body['cover_url']) body['cover_url'] = '';
-        if (!body['avatar_url']) body['avatar_url'] = '';
+        // if (!body['cover_url']) body['cover_url'] = '';
+        // if (!body['avatar_url']) body['avatar_url'] = '';
 
         console.log(body);
-
         const fd = convertToFormData(body);
+        console.log(fd.values);
 
         Ajax.post({
             url: '/profile',
