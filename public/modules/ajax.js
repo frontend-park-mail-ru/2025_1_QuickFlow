@@ -33,12 +33,6 @@ class Ajax {
                 method: HTTP_METHOD_GET,
                 credentials: 'include'
             });
-            console.log(csrfResponse);
-            console.log(csrfResponse.headers);
-            console.log(csrfResponse.headers.get('X-CSRF-Token'));
-            console.log(csrfResponse.headers.get('X-Csrf-Token'));
-            console.log(csrfResponse.headers.get('x-csrf-token'));
-
             csrfToken = csrfResponse.headers.get('X-CSRF-Token');
         }
 
@@ -94,7 +88,6 @@ class Ajax {
             if (!CSRF_FREE_URLS.includes(url)) {
                 headers['X-CSRF-Token'] = await this.csrfRequest() || '';
             }
-            console.log(headers);
 
             const options = {
                 method: HTTP_METHOD_POST,

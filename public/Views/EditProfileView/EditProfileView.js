@@ -279,6 +279,8 @@ export default class EditProfileView {
             const sections = {
                 profile: () => {
                     body.profile ??= {};
+                    name === 'avatar_url' || name === 'cover_url' ?
+                    body[name] = value :
                     body.profile[name] = value;
                 },
                 contacts: () => {
