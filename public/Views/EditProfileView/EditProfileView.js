@@ -282,7 +282,7 @@ export default class EditProfileView {
                     console.log(name);
                     console.log(value);
                     if (name === 'avatar_url' || name === 'cover_url') {
-                        body[name] = value.length === 1 ? value : '';
+                        body[name] = value instanceof File ? value : '';
                         return;
                     }
                     body.profile[name] = value;
