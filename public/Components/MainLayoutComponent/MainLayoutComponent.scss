@@ -1,21 +1,38 @@
 .container {
-    max-width: 932px;
     width: 100%;
     display: flex;
     align-items: flex-start;
 }
 
+.container_auth {
+    max-width: 100%;
+    padding: 24px 64px;
+    flex-direction: column;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 128px;
+    background: radial-gradient(331.49% 141.42% at 0% 0%, #ced8ff 0%, #4369fc 100%);
+}
+
 .container_feed {
+    max-width: 932px;
     flex-direction: row;
     gap: 16px;
 }
 
 .container_profile {
+    max-width: 932px;
     flex-direction: column;
     gap: 40px;
 }
 
 .container_messenger {
+    max-width: 932px;
     height: calc(100vh - 48px - 56px);
 }
 
