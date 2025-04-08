@@ -298,7 +298,10 @@ export default class EditProfileView {
             sections[this.#section]?.();
         })
 
-        if (body.profile) body.profile['sex'] = this.#userData.profile.sex;
+        if (body.profile) {
+            body.profile['sex'] = this.#userData.profile.sex;
+            body.profile = JSON.stringify(body.profile);
+        }
         if (body.contact_info) body.contact_info = JSON.stringify(body.contact_info);
         if (body.school) body.school = JSON.stringify(body.school);
         if (body.university) body.university = JSON.stringify(body.university);
@@ -319,6 +322,7 @@ export default class EditProfileView {
         console.log(body);
 
         const fd = convertToFormData(body);
+        console.log(fd);
 
         Ajax.post({
             url: '/profile',
