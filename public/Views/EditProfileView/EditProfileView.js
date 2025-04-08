@@ -237,7 +237,7 @@ export default class EditProfileView {
                 field.config.placeholder = field.config.placeholder || field.config.label;
                 field.config.value = 
                     this.#userData?.profile?.[field.key] ?? 
-                    this.#userData?.contact_info?.[field.key] ?? 
+                    this.#userData?.contact_info?.[field.key] ??
                     this.#userData?.school?.[field.key] ?? 
                     this.#userData?.university?.[field.key];
 
@@ -280,7 +280,7 @@ export default class EditProfileView {
                 profile: () => {
                     body.profile ??= {};
                     if (name === 'avatar_url' || name === 'cover_url') {
-                        body[name] = value instanceof File ? value : '';
+                        body[name] = value instanceof File || (value instanceof FileList && value.length > 0) ? value : '';
                         return;
                     }
                     body.profile[name] = value;
