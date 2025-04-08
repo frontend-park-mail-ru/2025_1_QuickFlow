@@ -313,8 +313,8 @@ export default class EditProfileView {
         //     }
         // }
 
-        // if (!body['cover_url']) body['cover_url'] = '';
-        // if (!body['avatar_url']) body['avatar_url'] = '';
+        if (!body['cover_url']) body['cover_url'] = '';
+        if (!body['avatar_url']) body['avatar_url'] = '';
 
         console.log(body);
 
