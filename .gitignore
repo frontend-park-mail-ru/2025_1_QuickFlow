@@ -4,5 +4,6 @@
 .idea/
 
 public/bundle.js
+public/bundle.js.map
 public/assets/
 public/styles/
