@@ -23,7 +23,7 @@ export default class FileInputComponent {
     }
 
     get value() {
-        if (this.input.files.length === 1) return this.input.files[0];
+        // if (this.input.files.length === 1) return this.input.files[0];
         return this.input.files;
     }
 
