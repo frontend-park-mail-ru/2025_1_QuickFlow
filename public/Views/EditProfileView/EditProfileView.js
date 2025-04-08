@@ -316,6 +316,8 @@ export default class EditProfileView {
         //     }
         // }
 
+        console.log("before condition", body);
+
         if (!body['cover_url']) body['cover_url'] = '';
         if (!body['avatar_url']) body['avatar_url'] = '';
 
