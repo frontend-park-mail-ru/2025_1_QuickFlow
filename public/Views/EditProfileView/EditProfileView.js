@@ -279,8 +279,10 @@ export default class EditProfileView {
             const sections = {
                 profile: () => {
                     body.profile ??= {};
-                    name === 'avatar_url' || name === 'cover_url' ?
-                    body[name] = value :
+                    if (name === 'avatar_url' || name === 'cover_url') {
+                        body[name] = value.length ? value : '';
+                        return;
+                    }
                     body.profile[name] = value;
                 },
                 contacts: () => {
@@ -301,18 +303,18 @@ export default class EditProfileView {
         if (body.school) body.school = JSON.stringify(body.school);
         if (body.university) body.university = JSON.stringify(body.university);
 
-        for (const key in this.#userData) {
-            if (!body[key] || body[key].length === 0) {
-                if (typeof this.#userData[key] === 'object') {
-                    body[key] = JSON.stringify(this.#userData[key]);
-                } else {
-                    body[key] = this.#userData[key];
-                }
-            }
-        }
+        // for (const key in this.#userData) {
+        //     if (!body[key] || body[key].length === 0) {
+        //         if (typeof this.#userData[key] === 'object') {
+        //             body[key] = JSON.stringify(this.#userData[key]);
+        //         } else {
+        //             body[key] = this.#userData[key];
+        //         }
+        //     }
+        // }
 
-        if (!body['cover_url']) body['cover_url'] = '';
-        if (!body['avatar_url']) body['avatar_url'] = '';
+        // if (!body['cover_url']) body['cover_url'] = '';
+        // if (!body['avatar_url']) body['avatar_url'] = '';
 
         console.log(body);
 
