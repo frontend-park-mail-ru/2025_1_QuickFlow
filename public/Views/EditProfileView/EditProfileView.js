@@ -280,7 +280,7 @@ export default class EditProfileView {
                 profile: () => {
                     body.profile ??= {};
                     if (name === 'avatar_url' || name === 'cover_url') {
-                        body[name] = value.length ? value : '';
+                        body[name] = value.length === 1 ? value : '';
                         return;
                     }
                     body.profile[name] = value;
