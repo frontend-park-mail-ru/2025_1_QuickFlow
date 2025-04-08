@@ -79,7 +79,7 @@
 }
 
 .chat__msg-status {
-    background: url(../../static/img/check-icon.svg) no-repeat;
+    background: url(./static/img/check-icon.svg) no-repeat;
     height: 16px;
     width: 16px;
     min-height: 16px;
@@ -87,7 +87,7 @@
 }
 
 .chat__msg-status_read {
-    background: url(../../static/img/double-check-icon.svg) no-repeat;
+    background: url(./static/img/double-check-icon.svg) no-repeat;
 }
 
 .chat__scroll_empty {

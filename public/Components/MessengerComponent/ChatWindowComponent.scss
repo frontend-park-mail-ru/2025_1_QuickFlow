@@ -20,7 +20,7 @@
 .chat-window__empty-icon {
     height: 48px;
     width: 48px;
-    background: url(../../static/img/comment-icon.svg) no-repeat;
+    background: url(./static/img/comment-icon.svg) no-repeat;
     background-size: cover;
 }
 
@@ -127,7 +127,7 @@
 }
 
 .chat-window__media {
-    background: url(../../static/img/primary-add-icon.svg) no-repeat;
+    background: url(./static/img/primary-add-icon.svg) no-repeat;
     height: 36px;
     width: 36px;
     min-width: 36px;
@@ -146,7 +146,7 @@
 }
 
 .chat-window__send {
-    background: url(../../static/img/plane-icon.svg) no-repeat;
+    background: url(./static/img/plane-icon.svg) no-repeat;
     height: 36px;
     width: 36px;
     min-width: 36px;

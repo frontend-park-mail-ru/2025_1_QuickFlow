@@ -1,5 +1,3 @@
-@import url(../../constants.css);
-
 .input {
     position: relative;
     display: flex;
@@ -79,13 +77,13 @@
     width: 16px;
     height: 16px;
     margin: 10px 12px;
-    background: url(../../../static/img/show-icon.svg) 0 0 no-repeat;
+    background: url(./../static/img/show-icon.svg) 0 0 no-repeat;
     background-size: contain;
     cursor: pointer;
 }
 
 .input__password-toggle_show {
-    background: url(../../../static/img/hide-icon.svg) 0 0 no-repeat;
+    background: url(./../static/img/hide-icon.svg) 0 0 no-repeat;
 }
 
 .input__field[type='search'] {
@@ -99,6 +97,6 @@
     width: 16px;
     height: 16px;
     margin: 10px 10px 10px 12px;
-    background: url(../../../static/img/search-icon.svg) 0 0 no-repeat;
+    background: url(./../static/img/search-icon.svg) 0 0 no-repeat;
     background-size: contain;
 }

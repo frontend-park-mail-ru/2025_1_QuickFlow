@@ -7,6 +7,7 @@ import HeaderComponent from './Components/HeaderComponent/HeaderComponent.js';
 import MenuComponent from './Components/MenuComponent/MenuComponent.js';
 import createElement from './utils/createElement.js';
 import Ajax from './modules/ajax.js';
+import './index.scss';
 
 
 const root = document.getElementById('root');
@@ -20,15 +21,6 @@ createElement({
     tag: 'main',
     parent: container,
     classes: ['main']
-});
-
-createElement({
-    tag: 'link',
-    parent: document.head,
-    attrs: {
-        rel: 'stylesheet',
-        href: '/Components/MenuComponent/MenuComponent.css',
-    }
 });
 
 const config = {

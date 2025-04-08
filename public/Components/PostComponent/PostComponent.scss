@@ -106,7 +106,7 @@
     }
 
     &__options-icon {
-        background: url(../../static/img/options-icon.svg) 0 0 no-repeat;
+        background: url(./static/img/options-icon.svg) 0 0 no-repeat;
         width: 16px;
         height: 16px;
     }
@@ -167,19 +167,19 @@
     }
 
     &__like {
-        background-image: url(../../static/img/like-icon.svg);
+        background-image: url(./static/img/like-icon.svg);
     }
 
     &__comment {
-        background-image: url(../../static/img/comment-icon.svg);
+        background-image: url(./static/img/comment-icon.svg);
     }
 
     &__repost {
-        background-image: url(../../static/img/repost-icon.svg);
+        background-image: url(./static/img/repost-icon.svg);
     }
 
     &__bookmark {
-        background-image: url(../../static/img/bookmark-icon.svg);
+        background-image: url(./static/img/bookmark-icon.svg);
     }
 
     &__counter {

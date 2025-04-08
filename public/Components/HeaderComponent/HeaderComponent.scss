@@ -60,28 +60,9 @@ a {
     height: 20px;
 }
 
-/* .header__logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-} */
-
-/* .search-item {
-    border: none;
-    outline: none;
-    background: transparent;
-    width: 220px;
-    height: 32px;
-    font-size: var(--font-size-s);
-    padding-left: 8px;
-
-    flex-grow: 1;
-    text-align: left;
-} */
-
 .header__dropdown-icon {
     width: 10px;
     height: 10px;
-    background: url(../../static/img/show-dropdown-arrow.svg) 0 0 no-repeat;
+    background: url(./static/img/show-dropdown-arrow.svg) 0 0 no-repeat;
     cursor: pointer;
 }
