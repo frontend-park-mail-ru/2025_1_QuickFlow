@@ -1,4 +1,4 @@
-@import url(./imports.css);
+@use './imports';
 
 html {
     font-size: 20px;
@@ -145,4 +145,8 @@ p {
     line-height: var(--line-height-m);
     text-align: center;
     color: var(--text-secondary);
+}
+
+.hidden {
+    display: none !important;
 }

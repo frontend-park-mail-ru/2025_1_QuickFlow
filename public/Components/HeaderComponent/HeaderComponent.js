@@ -2,6 +2,7 @@ import Ajax from '../../modules/ajax.js';
 import InputComponent from '../UI/InputComponent/InputComponent.js';
 import ProfileMenuComponent from '../ProfileMenuComponent/ProfileMenuComponent.js';
 import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
+import LogoutView from '../../Views/LogoutView/LogoutView.js';
 import createElement from '../../utils/createElement.js';
 import { getLsItem } from '../../utils/localStorage.js';
 
@@ -14,6 +15,8 @@ export default class HeaderComponent {
         this.#menu = menu;
 
         this.rightWrapper = null;
+
+        this.render();
     }
 
     render() {
@@ -25,7 +28,7 @@ export default class HeaderComponent {
 
         this.wrapper = createElement({
             parent: header,
-            classes: ['header-inner-wrapper']
+            classes: ['header__inner']
         });
         
         this.renderActions();
@@ -35,15 +38,15 @@ export default class HeaderComponent {
     renderActions() {
         const leftWrapper = createElement({
             parent: this.wrapper,
-            classes: ['header-left']
+            classes: ['header__left']
         });
 
-        const searchInput = new InputComponent(leftWrapper, {
+        new InputComponent(leftWrapper, {
             type: 'search',
             placeholder: 'Поиск',
-            showRequired: false
+            showRequired: false,
+            classes: ['header__search']
         });
-        searchInput.input.classList.add('header-search');
 
         // const notificationsWrapper = document.createElement('a');
         // notificationsWrapper.classList.add('icon-wrapper');
@@ -64,13 +67,11 @@ export default class HeaderComponent {
     }
 
     renderAvatarMenu() {
-        if (this.rightWrapper) {
-            this.rightWrapper.innerHTML = '';
-        }
+        if (this.rightWrapper) this.rightWrapper.innerHTML = '';
 
         this.rightWrapper = createElement({
             parent: this.wrapper,
-            classes: ['header-right']
+            classes: ['header__right']
         });
 
         Ajax.get({
@@ -93,13 +94,13 @@ export default class HeaderComponent {
         if (userData) {
             new AvatarComponent(this.rightWrapper, {
                 size: 'xs',
-                src: userData.avatar,
+                src: userData.profile.avatar_url,
             });
 
             createElement({
                 tag: 'a',
                 parent: this.rightWrapper,
-                classes: ['dropdown-button']
+                classes: ['header__dropdown-icon']
             });
 
             new ProfileMenuComponent(this.rightWrapper, {
@@ -108,17 +109,20 @@ export default class HeaderComponent {
                     settings: {
                         href: '/settings',
                         text: 'Настройки',
-                        icon: 'settings-icon'
+                        icon: 'settings-icon',
+                        render: () => {},
                     },
                     help: {
                         href: '/help',
                         text: 'Помощь',
-                        icon: 'help-icon'
+                        icon: 'help-icon',
+                        render: () => {},
                     },
                     logout: {
                         href: '/logout',
                         text: 'Выйти',
-                        icon: 'logout-icon'
+                        icon: 'logout-icon',
+                        render: () => new LogoutView(this.#menu).render(),
                     },
                 },
             });

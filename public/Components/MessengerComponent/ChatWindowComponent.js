@@ -78,7 +78,7 @@ export default class ChatWindowComponent {
     render() {
         this.#container = createElement({
             parent: this.#parent,
-            classes: ['messenger-right'],
+            classes: ['chat-window'],
         });
 
         this.renderEmptyState();
@@ -114,12 +114,12 @@ export default class ChatWindowComponent {
 
         const wrapper = createElement({
             parent: this.#container,
-            classes: ['chat-window-empty'],
+            classes: ['chat-window__empty'],
         });
 
         createElement({
             parent: wrapper,
-            classes: ['chat-window-empty-icon'],
+            classes: ['chat-window__empty-icon'],
         });
 
         createElement({
@@ -131,13 +131,13 @@ export default class ChatWindowComponent {
     renderHeader() {
         const chatHeader = createElement({
             parent: this.#container,
-            classes: ['messenger-chat-header'],
+            classes: ['chat-window__header'],
         });
 
         createElement({
             tag: 'button',
             parent: chatHeader,
-            classes: ['modal-window-close-btn']
+            classes: ['modal__close']
         })
         .addEventListener('click', () => {
             this.close();
@@ -150,18 +150,18 @@ export default class ChatWindowComponent {
 
         const chatInfo = createElement({
             parent: chatHeader,
-            classes: ['messenger-header-info'],
+            classes: ['chat-window__header-info'],
         });
 
         createElement({
             parent: chatInfo,
-            classes: ['messenger-header-title'],
+            classes: ['chat-window__title'],
             text: this.#chatData.name,
         });
 
         createElement({
             parent: chatInfo,
-            classes: ['messenger-header-status'],
+            classes: ['chat-window__status'],
             text: 'заходил 2 часа назад', // TODO: делать запрос на user и отображать статус
         });
 
@@ -170,7 +170,7 @@ export default class ChatWindowComponent {
 
     renderDropdown(parent) {
         const dropdown = createElement({
-            classes: ['dropdown', 'selected-chat'],
+            classes: ['dropdown', 'chat-window__dropdown'],
             parent,
         });
 
@@ -191,27 +191,28 @@ export default class ChatWindowComponent {
 
     renderMessageInput() {
         const bottomWrapper = createElement({
-            classes: ['msg-bottom-wrapper'],
+            classes: ['chat-window__bottom'],
             parent: this.#container,
         });
 
         const bottomBar = createElement({
-            classes: ['msg-bottom-bar'],
+            classes: ['chat-window__bottom-bar'],
             parent: bottomWrapper,
         });
 
         const dropdown = createElement({
-            classes: ['dropdown'],
+            classes: ['dropdown', 'chat-window__media-dropdown'],
             parent: bottomBar,
         });
 
         new ContextMenuComponent(dropdown, {
             data: MEDIA_CONTEXT_MENU_DATA,
-            classes: ['mini'],
+            size: 'mini',
+            position: 'above-start',
         });
 
         createElement({
-            classes: ['msg-add-media'],
+            classes: ['chat-window__media'],
             parent: dropdown,
         });
 
@@ -223,7 +224,7 @@ export default class ChatWindowComponent {
         const textarea = createElement({
             tag: 'textarea',
             parent: bottomBar,
-            classes: ['msg-textarea'],
+            classes: ['chat-window__msg'],
             attrs: {
                 placeholder: TEXTAREA_PLACEHOLDER,
                 rows: 1,
@@ -233,13 +234,13 @@ export default class ChatWindowComponent {
         focusInput(textarea, this.#focusTimer);
 
         const sendBtn = createElement({
-            classes: ['msg-send', textarea.value.trim() === '' ? 'disabled' : null],
+            classes: ['chat-window__send', textarea.value.trim() === '' ? 'chat-window__send_disabled' : null],
             parent: bottomBar,
         });
 
         textarea.addEventListener("input", () => {
             if (textarea.value.trim() !== '') {
-                sendBtn.classList.remove('disabled');
+                sendBtn.classList.remove('chat-window__send_disabled');
                 setLsItem(
                     CHAT_MSG_PREFIX + `${this.#config.user.username}-${this.#chatData.username}`,
                     textarea.value.trim()
@@ -248,7 +249,7 @@ export default class ChatWindowComponent {
             }
             removeLsItem(CHAT_MSG_PREFIX + `${this.#config.user.username}-${this.#chatData.username}`);
             this.#chatsPanel.renderLastMsg(this.#chatData);
-            sendBtn.classList.add('disabled');
+            sendBtn.classList.add('chat-window__send_disabled');
         });
 
         this.updateTextareaHeight(textarea, bottomWrapper);
@@ -263,16 +264,11 @@ export default class ChatWindowComponent {
     }
 
     renderChat() {
-        const chatWrapper = createElement({
-            parent: this.#container,
-            classes: ['messenger-chat-wrapper'],
-        });
-
-        this.#chatElement = new ChatComponent(chatWrapper, {
+        this.#chatElement = new ChatComponent(this.#container, {
             chatData: this.#chatData,
             messages: this.#msgs,
             user: this.#config.user,
         })
-        .container;
+        .scroll;
     }
 }

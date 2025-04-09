@@ -10,7 +10,7 @@
     align-items: center;
 }
 
-.radio-menu-item {
+.radio-menu__item {
     border-radius: 8px;
     padding: 0px 12px;
     width: 100%;
@@ -27,14 +27,14 @@
     cursor: pointer;
 }
 
-.radio-menu-item.active {
+.radio-menu__item_active {
     background: var(--background-light-gray);
 }
 
-.radio-menu-item:hover {
+.radio-menu__item:hover {
     background: var(--background-light-gray);
 }
 
-.radio-menu-item:active {
+.radio-menu__item:active {
     background: var(--background-gray);
 }

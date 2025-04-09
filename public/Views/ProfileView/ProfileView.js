@@ -8,7 +8,10 @@ import ButtonComponent from '../../Components/UI/ButtonComponent/ButtonComponent
 import createElement from '../../utils/createElement.js';
 import { profileFriends } from '../../mocks.js';
 import { getLsItem } from '../../utils/localStorage.js';
+import CoverComponent from '../../Components/CoverComponent/CoverComponent.js';
 
+
+const POSTS_COUNT = 10;
 
 export const profileDataLayout = {
     username: {icon: 'at'},
@@ -76,35 +79,34 @@ export default class ProfileView {
     renderFriends(friends) {
         const friendsWrapper = createElement({
             parent: this.#containerObj.right,
-            classes: ['profile-friends-wrapper'],
+            classes: ['profile__friends'],
         });
 
         const top = createElement({
             parent: friendsWrapper,
-            classes: ['profile-friends-top'],
+            classes: ['profile__friends-header'],
         });
 
         createElement({
             parent: top,
             text: 'Друзья',
-            classes: ['profile-friends-title'],
         });
 
         createElement({
             parent: top,
             text: '165',
-            classes: ['profile-friends-count'],
+            classes: ['profile__friends-count'],
         });
 
         const profileFriends = createElement({
             parent: friendsWrapper,
-            classes: ['profile-friends'],
+            classes: ['profile__friends-inner'],
         });
 
         friends.forEach(({ name, avatar }) => {
             const friend = createElement({
                 parent: profileFriends,
-                classes: ['profile-friend'],
+                classes: ['profile__friend'],
             });
 
             new AvatarComponent(friend, {
@@ -115,7 +117,6 @@ export default class ProfileView {
             createElement({
                 parent: friend,
                 text: name,
-                classes: ['profile-friend-name'],
             });
         });
     }
@@ -124,17 +125,16 @@ export default class ProfileView {
         const createPostBtn = createElement({
             parent: this.#containerObj.left,
             tag: 'button',
-            classes: ['post-create-btn']
+            classes: ['button_feed']
         });
         createElement({
             parent: createPostBtn,
             tag: 'div',
-            classes: ['post-create-icon']
+            classes: ['button_feed__icon']
         });
         createElement({
             parent: createPostBtn,
             text: 'Создать пост',
-            classes: ['post-create-text']
         });
 
         createPostBtn.addEventListener('click', () => {
@@ -145,9 +145,7 @@ export default class ProfileView {
 
         Ajax.get({
             url: '/feed',
-            params: {
-                posts_count: 10
-            },
+            params: { posts_count: POSTS_COUNT },
             callback: (status, feedData) => {
                 this.feedCallback(status, feedData);
             }
@@ -165,7 +163,7 @@ export default class ProfileView {
 
         const postsWrapper = createElement({
             parent: this.#containerObj.left,
-            classes: ['feed-posts-wrapper']
+            classes: ['feed__posts']
         });
 
         if (feedData && Array.isArray(feedData)) {
@@ -178,68 +176,57 @@ export default class ProfileView {
     renderProfileInfo(data) { 
         const profileHeader = createElement({
             parent: this.#containerObj.top,
-            classes: ['profile-header']
+            classes: ['profile']
         });
 
-        const coverWrapper = createElement({
-            parent: profileHeader,
-            classes: ['profile-cover-wrapper']
-        });
-
-        createElement({
-            parent: coverWrapper,
-            classes: ['profile-cover'],
-            attrs: {src: data.cover_url}
+        new CoverComponent(profileHeader, {
+            src: data.profile.cover_url,
+            type: 'profile',
         });
 
         new AvatarComponent(profileHeader, {
             size: 'xxxl',
-            class: 'profile-avatar',
+            class: 'profile__avatar',
             type: 'status',
-            src: data.avatar_url,
+            src: data.profile.avatar_url,
         });
 
         const profileBottom = createElement({
             parent: profileHeader,
-            classes: ['profile-bottom'],
+            classes: ['profile__content'],
         });
 
         const profileInfo = createElement({
             parent: profileBottom,
-            classes: ['profile-info']
+            classes: ['profile__info']
         });
 
         createElement({
             parent: profileInfo,
-            text: `${data.firstname} ${data.lastname}`,
-            classes: ['profile-name']
+            text: `${data.profile.firstname} ${data.profile.lastname}`,
+            classes: ['profile__name']
         });
 
         const fullInfo = createElement({
             parent: profileInfo,
-            classes: ['profile-info-full']
+            classes: ['profile__details']
         });
 
-        this.createInfoItem(fullInfo, profileDataLayout['username'].icon, data.username);
+        this.createInfoItem(fullInfo, profileDataLayout['username'].icon, data.profile.username);
 
-        // if (data.additionalData) {
-            const moreInfo = this.createInfoItem(fullInfo, profileDataLayout['more'].icon, profileDataLayout['more'].text);
-            moreInfo.classList.add('profile-more-info');
+        const moreInfo = this.createInfoItem(fullInfo, profileDataLayout['more'].icon, profileDataLayout['more'].text);
+        moreInfo.classList.add('profile__detail_more');
 
-            moreInfo.addEventListener('click', () => {
-                new ModalWindowComponent(this.#containerObj.container, {
-                    type: 'profile-full-info',
-                    data,
-                    createInfoItem: this.createInfoItem,
-                    createCountedItem: this.createCountedItem
-                })
-            });
-        // }
-
-        const profileActions = createElement({
-            parent: profileBottom,
-            classes: ['profile-actions'],
+        moreInfo.addEventListener('click', () => {
+            new ModalWindowComponent(this.#containerObj.container, {
+                type: 'profile-full-info',
+                data,
+                createInfoItem: this.createInfoItem,
+                createCountedItem: this.createCountedItem
+            })
         });
+
+        const profileActions = createElement({ parent: profileBottom });
 
         new ButtonComponent(profileActions, {
             text: 'Редактировать профиль',
@@ -252,16 +239,15 @@ export default class ProfileView {
     createCountedItem(parent, title, value) {
         const item = createElement({
             parent,
-            classes: ['modal-window-item-counted']
+            classes: ['modal__item-counted']
         });
         createElement({
             parent: item,
             text: value,
-            classes: ['modal-window-count'],
+            classes: ['modal__count'],
         });
         createElement({
             parent: item,
-            classes: ['profile-info-text'],
             text: title
         });
 
@@ -271,16 +257,15 @@ export default class ProfileView {
     createInfoItem(parent, icon, value) {
         const item = createElement({
             parent,
-            classes: ['profile-info-item']
+            classes: ['profile__detail']
         });
         createElement({
             parent: item,
-            classes: ['profile-info-icon'],
+            classes: ['profile__icon'],
             attrs: {src: `/static/img/${icon}-icon.svg`}
         });
         createElement({
             parent: item,
-            classes: ['profile-info-text'],
             text: value
         });
 

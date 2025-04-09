@@ -1,6 +1,7 @@
 import ButtonComponent from '../ButtonComponent/ButtonComponent.js';
 import TextareaComponent from '../TextareaComponent/TextareaComponent.js';
 import createElement from '../../../utils/createElement.js';
+import convertDate from '../../../utils/convertDate.js';
 import { profileDataLayout } from '../../../Views/ProfileView/ProfileView.js'
 import Ajax from '../../../modules/ajax.js';
 import FileInputComponent from '../FileInputComponent/FileInputComponent.js';
@@ -25,28 +26,28 @@ export default class ModalWindowComponent {
 
         this.wrapper = createElement({
             parent: this.#parent,
-            classes: ['modal-window-bg'],
+            classes: ['modal__bg'],
         });
 
         this.modalWindow = createElement({
             parent: this.wrapper,
-            classes: ['modal-window'],
+            classes: ['modal'],
         });
 
         const modalTop = createElement({
             parent: this.modalWindow,
-            classes: ['modal-window-top'],
+            classes: ['modal__top'],
         });
 
         this.title = createElement({
             parent: modalTop,
-            classes: ['modal-window-title']
+            classes: ['modal__title']
         });
 
         createElement({
             tag: 'button',
             parent: modalTop,
-            classes: ['modal-window-close-btn']
+            classes: ['modal__close']
         })
         .addEventListener('click', () => {
             this.close();
@@ -65,20 +66,20 @@ export default class ModalWindowComponent {
     }
 
     renderPostInner() {
-        this.modalWindow.classList.add('modal-window-post');
+        this.modalWindow.classList.add('modal_post');
         this.title.textContent = 'Новый пост';
 
         const picsWrapper = createElement({
             parent: this.modalWindow,
-            classes: ['modal-window-pics-wrapper', 'blank'],
+            classes: ['modal__pics', 'modal__pics_blank'],
         });
         const addPicWrapper = createElement({
             parent: picsWrapper,
-            classes: ['modal-window-add-pic-wrapper'],
+            classes: ['modal__add-pic'],
         });
         createElement({
             parent: addPicWrapper,
-            classes: ['modal-window-add-pic'],
+            classes: ['modal__camera'],
             attrs: {src: 'static/img/camera-dark-icon.svg'},
         });
         createElement({
@@ -97,7 +98,6 @@ export default class ModalWindowComponent {
 
         const textarea = new TextareaComponent(this.modalWindow, {
             placeholder: 'Поделитесь своими мыслями',
-            classes: ['modal-window-textarea']
         });
 
         new ButtonComponent(this.modalWindow, {
@@ -106,30 +106,28 @@ export default class ModalWindowComponent {
             size: 'small',
             onClick: () => this.handlePostSubmit(textarea.textarea.value.trim()),
             disabled: true,
-            stateUpdaters: [textarea]
+            stateUpdaters: [textarea, this.fileInput]
         });
     }
 
     createPicWrapperTemplate() {
         const picWrapperTemplate = createElement({
-            classes: ['modal-window-pic-wrapper'],
+            classes: ['modal__pic'],
         });
         createElement({
             tag: 'img',
             parent: picWrapperTemplate,
-            classes: ['modal-window-pic'],
+            classes: ['modal__img'],
         });
         return picWrapperTemplate;
     }
 
     handlePicUpload(picsWrapper) {
-        picsWrapper.classList.remove('blank');
+        picsWrapper.classList.remove('modal__pics_blank');
     }
 
     async handlePostSubmit(text) {
-        if (!text && !this.fileInput.input.files.length) {
-            return;
-        }
+        if (!text && !this.fileInput.input.files.length) return;
 
         const formData = new FormData();
         formData.append('text', text);
@@ -155,60 +153,63 @@ export default class ModalWindowComponent {
     }
 
     renderProfileInfoInner() {
-        this.modalWindow.classList.add('modal-window-profile');
+        this.modalWindow.classList.add('modal_profile');
         this.title.textContent = 'Подробная информация';
 
         const contentWrapper = createElement({
             parent: this.modalWindow,
-            classes: ['modal-window-content'],
+            classes: ['modal__content'],
         });
 
         const items = createElement({
             parent: contentWrapper,
-            classes: ['modal-window-items-default'],
+            classes: ['modal__items'],
         });
 
-        this.#config.createInfoItem(items, profileDataLayout['username'].icon, this.#config.data.username);
-        this.#config.createInfoItem(items, profileDataLayout['birth_date'].icon, this.#config.data.birth_date);
+        this.#config.createInfoItem(
+            items,
+            profileDataLayout['username'].icon,
+            this.#config.data.profile.username
+        );
+        this.#config.createInfoItem(
+            items,
+            profileDataLayout['birth_date'].icon,
+            convertDate(this.#config.data.profile.birth_date)
+        );
 
-        for (const key in this.#config.data.contact_info) {
-            const value = this.#config.data.contact_info[key];
-            this.#config.createInfoItem(items, profileDataLayout[key].icon, value);
+        if (Object.keys(this.#config.data.contact_info).length > 0) {
+            this.renderProfileInfoBlock(items, this.#config.data.contact_info);
         }
 
-        createElement({
-            parent: items,
-            classes: ['divider'],
-        });
-
-        for (const key in this.#config.data.school_education) {
-            const value = this.#config.data.school_education[key];
-            this.#config.createInfoItem(items, profileDataLayout[key].icon, value);
+        if (Object.keys(this.#config.data.school).length > 0) {
+            this.renderProfileInfoBlock(items, this.#config.data.school);
         }
-
-        createElement({
-            parent: items,
-            classes: ['divider'],
-        });
-
-        for (const key in this.#config.data.university_education) {
-            const value = this.#config.data.university_education[key];
-            this.#config.createInfoItem(items, profileDataLayout[key].icon, value);
+        
+        if (Object.keys(this.#config.data.university).length > 0) {
+            this.renderProfileInfoBlock(items, this.#config.data.university);
         }
-
-        // createElement({
-        //     parent: contentWrapper,
-        //     classes: ['divider'],
-        // });
 
         // const countedItems = createElement({
         //     parent: contentWrapper,
-        //     classes: ['modal-window-items-counted'],
+        //     classes: ['modal-items-counted'],
         // });
 
         // for (const key in this.#config.data.countedData) {
         //     const value = this.#config.data.countedData[key];
         //     this.#config.createCountedItem(countedItems, profileDataLayout[key].text, value);
         // }
+    }
+
+    renderProfileInfoBlock(parent, blockData, showDivider = true) {
+        if (showDivider) {
+            createElement({
+                parent,
+                classes: ['modal__divider'],
+            });
+        }
+        for (const key in blockData) {
+            const value = blockData[key];
+            this.#config.createInfoItem(parent, profileDataLayout[key].icon, value);
+        }
     }
 }

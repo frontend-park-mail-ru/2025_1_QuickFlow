@@ -4,6 +4,8 @@ import RadioComponent from '../UI/RadioComponent/RadioComponent.js';
 import ButtonComponent from '../UI/ButtonComponent/ButtonComponent.js';
 import createElement from '../../utils/createElement.js';
 import focusInput from '../../utils/focusInput.js';
+import convertDate from '../../utils/convertDate.js';
+import { getLsItem, removeLsItem, setLsItem } from '../../utils/localStorage.js';
 
 
 const LOGO_SRC = '/static/img/logo-icon.svg';
@@ -14,6 +16,8 @@ const PWD_TITLE = 'Придумайте пароль';
 const PWD_TEXT = 'Или используйте пароль, предложенный устройством';
 const CONTINUE_BTN_TEXT = 'Продолжить';
 const PWD_INPUT_MAX_LENGTH = 32;
+const MALE_VALUE = 1;
+const FEMALE_VALUE = 2;
 
 
 export default class SignupFormComponent {
@@ -61,32 +65,32 @@ export default class SignupFormComponent {
     renderTopWrapper(form) {
         const topWrapper = createElement({
             parent: form,
-            classes: ['auth-form-top']
+            classes: ['auth-form__top']
         });
 
         createElement({
             tag: 'a',
             parent: topWrapper,
-            classes: ['auth-form-back-btn']
+            classes: ['auth-form__back-btn']
         })
         .addEventListener('click', () => {
             if (this.#step === 1) {
-                localStorage.removeItem("username");
-                localStorage.removeItem("firstname");
-                localStorage.removeItem("lastname");
-                localStorage.removeItem("sex");
-                localStorage.removeItem("birthDate");
+                removeLsItem(this.usernameInput.name);
+                removeLsItem(this.firstnameInput.name);
+                removeLsItem(this.lastnameInput.name);
+                removeLsItem(this.sexInput.name);
+                removeLsItem(this.birthDateInput.name);
                 this.#menu.goToPage(this.#menu.menuElements.login);
-            } else {
-                this.#step = 1;
-                this.render();
+                return;
             }
+            this.#step = 1;
+            this.render();
         });
 
         if (this.#step === 2) {
             createElement({
                 parent: topWrapper,
-                classes: ['auth-form-logo'],
+                classes: ['auth-form__logo'],
                 attrs: {src: LOGO_SRC}
             })
         }
@@ -110,7 +114,7 @@ export default class SignupFormComponent {
     renderBottomWrapper(form) {
         const bottomWrapper = createElement({
             parent: form,
-            classes: ['auth-form-bottom'],
+            classes: ['auth-form__bottom'],
         })
 
         this.continueBtn = new ButtonComponent(bottomWrapper, {
@@ -143,11 +147,12 @@ export default class SignupFormComponent {
         const fieldsetPersonalInfo = createElement({
             tag: 'fieldset',
             parent: form,
-            classes: ['signup-personal-info'],
+            classes: ['auth-form__personal-info'],
         })
 
         this.usernameInput = new InputComponent(fieldsetPersonalInfo, {
             type: 'text',
+            name: 'username',
             label: 'Имя пользователя',
             placeholder: 'Имя пользователя',
             autocomplete: 'username',
@@ -155,35 +160,37 @@ export default class SignupFormComponent {
             validation: 'username',
             required: true,
             showRequired: false,
-            value: localStorage.getItem("username") || DEFAULT_INPUT_VALUE
+            value: getLsItem("username", DEFAULT_INPUT_VALUE),
         });
         focusInput(this.usernameInput.input, this.#focusTimer);
 
         const nameInputWrapper = createElement({
             parent: fieldsetPersonalInfo,
-            classes: ['signup-name-input-wrapper'],
+            classes: ['auth-form__name-inputs'],
         })
 
         this.firstnameInput = new InputComponent(nameInputWrapper, {
             type: 'text',
             label: 'Имя',
+            name: 'firstname',
             placeholder: 'Имя',
             maxLength: 25,
             validation: 'name',
             required: true,
             showRequired: false,
-            value: localStorage.getItem("firstname") || DEFAULT_INPUT_VALUE,
+            value: getLsItem("firstname", DEFAULT_INPUT_VALUE),
         });
 
         this.lastnameInput = new InputComponent(nameInputWrapper, {
             type: 'text',
             label: 'Фамилия',
+            name: 'lastname',
             placeholder: 'Фамилия',
             maxLength: 25,
             validation: 'name',
             required: true,
             showRequired: false,
-            value: localStorage.getItem("lastname") || DEFAULT_INPUT_VALUE,
+            value: getLsItem("lastname", DEFAULT_INPUT_VALUE),
         });
 
         this.sexInput = new RadioComponent(fieldsetPersonalInfo, {
@@ -204,17 +211,18 @@ export default class SignupFormComponent {
             required: true,
             showRequired: false
         });
-        this.sexInput.setChecked(localStorage.getItem("sex"));
+        this.sexInput.setChecked(getLsItem("sex", ""));
 
         this.birthDateInput = new InputComponent(fieldsetPersonalInfo, {
             type: 'text',
             label: 'Дата рождения',
+            name: 'birthDate',
             placeholder: 'дд.мм.гггг',
             autocomplete: 'date',
             validation: 'date',
             required: true,
             showRequired: false,
-            value: localStorage.getItem("birthDate") || DEFAULT_INPUT_VALUE,
+            value: getLsItem("birthDate", DEFAULT_INPUT_VALUE),
         });
 
         this.renderBottomWrapper(form);
@@ -242,60 +250,32 @@ export default class SignupFormComponent {
             showRequired: false
         });
 
-        const textInputs = [this.passwordInput, this.passwordConfirmationInput];
-
-        this.passwordConfirmationInput.input.addEventListener('input', () => {
-            this.passwordInput.input.addEventListener('input', () => {
-                this.validatePasswordConfirmation();
-                this.updateContinueButtonState(textInputs, []);
-            });
+        this.passwordConfirmationInput.addListener(() => {
+            this.passwordInput.addListener(() => this.validatePasswordConfirmation());
             this.validatePasswordConfirmation();
-            this.updateContinueButtonState(textInputs, []);
         });
 
         this.renderBottomWrapper(form);
     }
 
-    updateContinueButtonState(inputs, radios) {
-        const isInputsValid = inputs.every((input) => {
-            if (!input || !input.input) {
-                return false;
-            }
-            if (input.config.validation === 'date' && input.input.value.trim().length < 10) {
-                return false;
-            }
-            return input.input.value.trim() !== '' && !input.input.classList.contains('invalid');
-        });
-
-        // Проверяем, выбран ли хотя бы один radio-кнопка
-        const isRadiosSelected = radios.every((radio) => {
-            if (!radio) return false;
-            return radio.wrapper.querySelector('input[type="radio"]:checked') !== null;
-        });
-
-        // Разблокируем кнопку, если все поля заполнены и валидны
-        this.continueBtn.buttonElement.disabled = !(isInputsValid && isRadiosSelected);
-    }
-
     validatePasswordConfirmation() {
-        const password = this.passwordInput.input.value.trim();
-        const confirmPassword = this.passwordConfirmationInput.input.value.trim();
+        const password = this.passwordInput.value;
+        const confirmPassword = this.passwordConfirmationInput.value;
 
         if (password !== confirmPassword) {
             this.passwordConfirmationInput.showError('Пароли не совпадают');
             return false;
-        } else {
-            this.passwordConfirmationInput.hideError();
-            return true;
         }
+        this.passwordConfirmationInput.hideError();
+        return true;
     }
 
     continueBtnOnClick() {
-        localStorage.setItem("username", this.usernameInput.input.value.trim());
-        localStorage.setItem("firstname", this.firstnameInput.input.value.trim());
-        localStorage.setItem("lastname", this.lastnameInput.input.value.trim());
-        localStorage.setItem("sex", this.sexInput.getChecked().value);
-        localStorage.setItem("birthDate", this.birthDateInput.input.value.trim());
+        setLsItem(this.usernameInput.name, this.usernameInput.value);
+        setLsItem(this.firstnameInput.name, this.firstnameInput.value);
+        setLsItem(this.lastnameInput.name, this.lastnameInput.value);
+        setLsItem(this.sexInput.name, this.sexInput.value);
+        setLsItem(this.birthDateInput.name, this.birthDateInput.value);
         this.#step = 2;
         this.render();
     }
@@ -305,35 +285,26 @@ export default class SignupFormComponent {
         this.submitSignup();
     }
 
-    convertDate(dateString) {
-        const parts = dateString.split('.');
-        const day = parts[0];
-        const month = parts[1];
-        const year = parts[2];
-        return `${year}-${month}-${day}`;
-    }
-
     submitSignup() {
-        const body = {
-            username: this.usernameInput.input.value.trim(),
-            password: this.passwordInput.input.value.trim(),
-            firstname: this.firstnameInput.input.value.trim(),
-            lastname: this.lastnameInput.input.value.trim(),
-            sex: this.sexInput.getChecked().value === 'male' ? 1 : 2, 
-            birth_date: this.convertDate(this.birthDateInput.input.value.trim()),
-        }
         Ajax.post({
             url: '/signup',
-            body: body,
+            body: {
+                username: this.usernameInput.value,
+                password: this.passwordInput.value,
+                firstname: this.firstnameInput.value,
+                lastname: this.lastnameInput.value,
+                sex: this.sexInput.value === 'male' ? MALE_VALUE : FEMALE_VALUE, 
+                birth_date: convertDate(this.birthDateInput.value, 'ts'),
+            },
             callback: (status) => {
                 if (status === 200) {
                     this.#menu.goToPage(this.#menu.menuElements.feed);
                     this.#menu.checkAuthPage();
                     this.#menu.updateMenuVisibility(true);
                     this.#header.renderAvatarMenu();
-                } else {
-                    this.passwordInput.showError(CREATION_ERROR_MESSAGE);
+                    return;
                 }
+                this.passwordInput.showError(CREATION_ERROR_MESSAGE);
             }
         });
     }

@@ -1,4 +1,4 @@
-aside {
+.menu {
     width: 220px;
     height: 100vh;
     display: flex;
@@ -14,14 +14,14 @@ aside {
     z-index: 1;
 }
 
-.header-logo-wrapper {
+.menu__logo {
     height: fit-content;
     width: fit-content;
     align-self: start;
     cursor: pointer;
 }
 
-.menu-item {
+.menu__item {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -39,51 +39,30 @@ aside {
     transition: var(--trans-menu);
 }
 
-.menu-item:hover {
+.menu__item:hover {
     background: var(--button-secondary-hover);
 }
 
-.menu-item:active {
+.menu__item:active {
     background: var(--button-secondary-active);
 }
 
-.menu-item.hidden {
-    display: none;
-}
-
-.menu-icon {
+.menu__icon {
     width: 16px;
     height: 16px;
 }
 
-.menu-item.active {
+.menu__item_active {
     font-weight: var(--font-weight-bold);
     color: var(--text-accent);
 }
 
-.hide-interface header,
-.hide-interface aside {
+.container_auth .header,
+.container_auth .menu {
     display: none;
 }
 
-.hide-interface main {
-    padding: 24px 64px;
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    padding-bottom: 128px;
-    background: radial-gradient(331.49% 141.42% at 0% 0%, #ced8ff 0%, #4369fc 100%);
-}
-
-.auth-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+.container_auth .main {
+    top: unset;
+    left: unset;
 }

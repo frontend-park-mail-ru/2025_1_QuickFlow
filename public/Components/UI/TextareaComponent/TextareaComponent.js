@@ -21,7 +21,7 @@ export default class TextareaComponent {
     render() {
         this.wrapper = createElement({
             parent: this.#parent,
-            classes: ['textarea-wrapper'],
+            classes: ['textarea'],
         });
 
         if (this.#config.classes) {
@@ -33,16 +33,17 @@ export default class TextareaComponent {
                 tag: 'label',
                 parent: this.wrapper,
                 text: this.#config.label,
-                classes: ['input-label'],
+                classes: ['textarea__label'],
             });
         }
 
         this.textarea = createElement({
             tag: 'textarea',
             parent: this.wrapper,
+            classes: ['textarea__field'],
             attrs: {
                 placeholder: this.#config.placeholder || DEFAULT_PLACEHOLDER,
-                name: this.#config.name || DEFAULT_NAME,
+                name: this.name || DEFAULT_NAME,
             },
             text: this.#config.value || DEFAULT_TEXT,
         });
@@ -61,11 +62,19 @@ export default class TextareaComponent {
     }
 
     get name() {
-        return this.textarea.name.trim();
+        return this.#config.name?.trim();
     }
 
     isValid() {
-        if (!this.#config.required) return true;
+        if (!this.required) return true;
         return this.textarea.value.trim() !== '';
+    }
+
+    isEmpty() {
+        return this.textarea.value.trim() === '';
+    }
+
+    get required() {
+        return this.#config.required;
     }
 }

@@ -1,9 +1,11 @@
-.avatar-wrapper {
+.avatar {
     display: flex;
     box-sizing: content-box;
+    align-items: center;
+    justify-content: center;
 }
 
-.avatar {
+.avatar__image {
     width: 100%;
     height: 100%;
     border-radius: 50%;
@@ -12,86 +14,74 @@
     cursor: pointer;
 }
 
-.avatar-wrapper.xxs {
+.avatar_xxs {
     width: 28px;
     height: 28px;
-
     min-width: 28px;
     min-height: 28px;
 }
 
-.avatar-wrapper.xs {
+.avatar_xs {
     width: 32px;
     height: 32px;
-
     min-width: 32px;
     min-height: 32px;
 }
 
-.avatar-wrapper.s {
+.avatar_s {
     width: 40px;
     height: 40px;
-
     min-width: 40px;
     min-height: 40px;
 }
 
-.avatar-wrapper.m {
+.avatar_m {
     width: 48px;
     height: 48px;
-
     min-width: 48px;
     min-height: 48px;
 }
 
-.avatar-wrapper.l {
+.avatar_l {
     width: 56px;
     height: 56px;
-
     min-width: 56px;
     min-height: 56px;
 }
 
-.avatar-wrapper.xl {
+.avatar_xl {
     width: 64px;
     height: 64px;
-
     min-width: 64px;
     min-height: 64px;
 }
 
-.avatar-wrapper.xxl {
+.avatar_xxl {
     width: 80px;
     height: 80px;
-
     min-width: 80px;
     min-height: 80px;
 }
 
-.avatar-wrapper.xxxl {
+.avatar_xxxl {
     width: 150px;
     height: 150px;
-
     min-width: 150px;
     min-height: 150px;
 }
 
-.profile-avatar {
-    border-radius: 50%;
-    position: absolute;
-    bottom: 0;
-    left: 20px;
-    border: 4px solid var(--stroke-white);
-}
-
-.profile-avatar.edit {
+.avatar_edit {
     align-items: center;
     justify-content: center;
     bottom: -44px;
     overflow: hidden;
+    border-radius: 50%;
+    position: absolute;
+    left: 20px;
+    border: 4px solid var(--stroke-white);
 }
 
-.darken {
+.avatar__overlay {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -103,25 +93,29 @@
     justify-content: center;
 }
 
-.darken:hover {
+.avatar__overlay:hover {
     background: var(--background-black-transparent);
 }
 
-.darken:active {
+.avatar__overlay:active {
     opacity: 0.8;
 }
 
-.avatar-edit-icon {
+.avatar__edit-icon {
     margin-bottom: 4px;
     opacity: 0.9;
-    box-shadow: 0 2px 8px 0 var(--button-transparent-active);
+    filter: drop-shadow(0 2px 8px var(--button-overlay-active));
+    -webkit-filter: drop-shadow(0 2px 8px var(--button-overlay-active));
+    -moz-filter: drop-shadow(0 2px 8px var(--button-overlay-active));
+    -o-filter: drop-shadow(0 2px 8px var(--button-overlay-active));
+    -ms-filter: drop-shadow(0 2px 8px var(--button-overlay-active));
 }
 
-.darken:hover .avatar-edit-icon {
+.avatar__overlay:hover .avatar__edit-icon {
     opacity: 1;
 }
 
-.avatar-status-online {
+.avatar__status_online {
     position: absolute;
     bottom: 8px;
     right: 8px;
@@ -133,7 +127,7 @@
     height: 16px;
 }
 
-.avatar-status-offline {
+.avatar__status_offline {
     position: absolute;
     bottom: -4px;
     right: -4px;

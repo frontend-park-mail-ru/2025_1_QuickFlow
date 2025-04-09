@@ -2,12 +2,12 @@ import LoginView from './Views/LoginView/LoginView.js';
 import SignupView from './Views/SignupView/SignupView.js';
 import FeedView from './Views/FeedView/FeedView.js';
 import MessengerView from './Views/MessengerView/MessengerView.js';
-import LogoutView from './Views/LogoutView/LogoutView.js';
 import ProfileView from './Views/ProfileView/ProfileView.js';
 import HeaderComponent from './Components/HeaderComponent/HeaderComponent.js';
 import MenuComponent from './Components/MenuComponent/MenuComponent.js';
 import createElement from './utils/createElement.js';
 import Ajax from './modules/ajax.js';
+import './index.scss';
 
 
 const root = document.getElementById('root');
@@ -17,24 +17,10 @@ const container = createElement({
     classes: ['container'],
 });
 
-const menuContainer = createElement({
-    tag: 'aside',
-    parent: container,
-    classes: ['menu'],
-});
-
 createElement({
     tag: 'main',
     parent: container,
-});
-
-createElement({
-    tag: 'link',
-    parent: document.head,
-    attrs: {
-        rel: 'stylesheet',
-        href: '/Components/MenuComponent/MenuComponent.css',
-    }
+    classes: ['main']
 });
 
 const config = {
@@ -69,21 +55,12 @@ const config = {
             icon: 'messenger-icon',
             render: () => new MessengerView(menu).render(),
         },
-        logout: {
-            href: '/logout',
-            text: 'Выйти',
-            icon: 'logout-icon',
-            render: () => new LogoutView(menu).render(),
-        },
     },
     isAuthorized: true,
 };
 
-const menu = new MenuComponent(menuContainer, config);
-menu.render();
-
+const menu = new MenuComponent(container, config);
 const header = new HeaderComponent(container, menu);
-header.render();
 
 Ajax.get({
     url: '/user-dev-false',

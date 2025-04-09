@@ -44,23 +44,23 @@ export default class PostComponent {
 
         const picsWrapper = createElement({
             parent: this.wrapper,
-            classes: ['post-pics-wrapper'],
+            classes: ['post__pics'],
         });
 
         const slider = createElement({
             parent: picsWrapper,
-            classes: ['post-pics-slider'],
+            classes: ['post__slider'],
         });
 
         if (this.#config.pics && this.#config.pics.length > 0) {
             this.#config.pics.forEach((pic) => {
                 const slide = createElement({
                     parent: slider,
-                    classes: ['post-slide'],
+                    classes: ['post__slide'],
                 });
                 createElement({
                     parent: slide,
-                    classes: ['post-pic'],
+                    classes: ['post__pic'],
                     attrs: {src: pic, alt: DEAFULT_IMG_ALT}
                 });
             });
@@ -72,13 +72,13 @@ export default class PostComponent {
         if (totalPics > 1) {
             const paginator = createElement({
                 parent: picsWrapper,
-                classes: ['post-pics-paginator'],
+                classes: ['post__paginator'],
                 text: `${currentIndex + 1}/${totalPics}`
             });
 
             const prevBtn = createElement({
                 parent: picsWrapper,
-                classes: ['post-nav-btn', 'post-prev-btn', 'hidden'],
+                classes: ['post__nav', 'post__nav_prev', 'hidden'],
             });
 
             createElement({
@@ -88,7 +88,7 @@ export default class PostComponent {
 
             const nextBtn = createElement({
                 parent: picsWrapper,
-                classes: ['post-nav-btn', 'post-next-btn'],
+                classes: ['post__nav', 'post__nav_next'],
             });
 
             createElement({
@@ -131,53 +131,53 @@ export default class PostComponent {
     renderActions() {
         const actionsWrapper = createElement({
             parent: this.wrapper,
-            classes: ['post-actions-wrapper'],
+            classes: ['post__actions'],
         });
 
         const countedActions = createElement({
             parent: actionsWrapper,
-            classes: ['post-actions-counted'],
+            classes: ['post__actions_counted'],
         });
 
         for (const key of DISPLAYED_ACTIONS) {
             const actionWrapper = createElement({
                 parent: countedActions,
-                classes: ['post-action-wrapper'],
+                classes: ['post__action'],
             });
             createElement({
                 parent: actionWrapper,
-                classes: [`post-${key}`],
+                classes: [`post__${key}`],
             });
             createElement({
                 parent: actionWrapper,
-                classes: ['post-action-counter'],
+                classes: ['post__counter'],
                 text: this.#config[`${key}_count`]
             });
         }
 
         createElement({
             parent: actionsWrapper,
-            classes: ['post-action-bookmark'],
+            classes: ['post__bookmark'],
         });
     }
 
     renderText() {
         const textWrapper = createElement({
             parent: this.wrapper,
-            classes: ['post-text-wrapper'],
+            classes: ['post__content'],
         });
 
         const text = createElement({
             tag: 'p',
             parent: textWrapper,
-            classes: ['post-text-content'],
+            classes: ['post__text'],
             text: this.#config.text,
         });
 
         const readMore = createElement({
             tag: 'p',
             parent: textWrapper,
-            classes: ['post-read-more'],
+            classes: ['post__more'],
             text: READ_MORE_BTN_TEXT,
             attrs: {style: 'display: none;'}
         });
@@ -191,11 +191,11 @@ export default class PostComponent {
 
         // Добавляем обработчик клика для разворачивания и сворачивания текста
         readMore.addEventListener('click', () => {
-            if (text.classList.contains('expanded')) {
-                text.classList.remove('expanded');
+            if (text.classList.contains('post__text_expanded')) {
+                text.classList.remove('post__text_expanded');
                 readMore.textContent = READ_MORE_BTN_TEXT;
             } else {
-                text.classList.add('expanded');
+                text.classList.add('post__text_expanded');
                 readMore.textContent = READ_LESS_BTN_TEXT;
             }
         });
@@ -204,12 +204,12 @@ export default class PostComponent {
     renderTop() {
         const topWrapper = createElement({
             parent: this.wrapper,
-            classes: ['post-top-wrapper'],
+            classes: ['post__header'],
         });
 
         const authorWrapper = createElement({
             parent: topWrapper,
-            classes: ['post-author-wrapper'],
+            classes: ['post__author'],
         });
 
         new AvatarComponent(authorWrapper, {
@@ -219,12 +219,12 @@ export default class PostComponent {
 
         const topRightWrapper = createElement({
             parent: authorWrapper,
-            classes: ['post-top-right-wrapper'],
+            classes: ['post__author-info'],
         });
 
         const nameDateWrapper = createElement({
             parent: topRightWrapper,
-            classes: ['post-name-date-wrapper'],
+            classes: ['post__info'],
         });
 
         createElement({
@@ -234,13 +234,13 @@ export default class PostComponent {
         });
 
         createElement({
-            classes: ['post-date', 'p1'],
+            classes: ['post__date', 'p1'],
             parent: nameDateWrapper,
             text: AUTHOR_NAME_DATE_DIVIDER,
         });
 
         createElement({
-            classes: ['post-date', 'p1'],
+            classes: ['post__date', 'p1'],
             parent: nameDateWrapper,
             text: `${formatTimeAgo(this.#config.created_at)}`,
         });
@@ -249,7 +249,7 @@ export default class PostComponent {
         if (flag) { // TODO: сделать проверку на то, есть ли в друзьях
             createElement({
                 tag: 'a',
-                classes: ['h3', 'a-btn'],
+                classes: ['h3', 'post__add-to-friends'],
                 parent: topRightWrapper,
                 text: ADD_TO_FRIENDS_BTN_TEXT,
             });
@@ -261,12 +261,12 @@ export default class PostComponent {
         });
 
         const optionsWrapper = createElement({
-            classes: ['post-options-wrapper'],
+            classes: ['post__options'],
             parent: dropdown,
         });
 
         createElement({
-            classes: ['post-options'],
+            classes: ['post__options-icon'],
             parent: optionsWrapper,
         });
 

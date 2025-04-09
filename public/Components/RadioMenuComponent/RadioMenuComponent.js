@@ -23,7 +23,7 @@ export default class RadioMenuComponent {
         Object.entries(this.#config.items).forEach(([key, { title }], index) => {
             const menuItem = createElement({
                 parent: this.wrapper,
-                classes: ['radio-menu-item'],
+                classes: ['radio-menu__item'],
                 text: title,
                 attrs: {
                     'data-section': key,
@@ -31,7 +31,7 @@ export default class RadioMenuComponent {
             });
 
             if (index === 0) {
-                menuItem.classList.add('active');
+                menuItem.classList.add('radio-menu__item_active');
                 this.activePage = menuItem;
             }
 
@@ -45,9 +45,9 @@ export default class RadioMenuComponent {
     goToPage(menuItem) {
         if (this.activePage === menuItem) return;
         if (this.activePage) {
-            this.activePage.classList.remove('active');
+            this.activePage.classList.remove('radio-menu__item_active');
         }
-        menuItem.classList.add('active');
+        menuItem.classList.add('radio-menu__item_active');
         this.activePage = menuItem;
 
         const section = menuItem.dataset.section;

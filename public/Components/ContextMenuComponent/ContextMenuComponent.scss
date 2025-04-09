@@ -1,33 +1,11 @@
-.context-menu {
-    box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.16);
-    background: var(--background-white);
-    border-radius: 12px;
+.dropdown {
     display: flex;
-    gap: 2px;
-    flex-direction: column;
-    z-index: 1;
-
     position: absolute;
-    top: calc(100% + 4px);
+    top: 4px;
     right: 0;
-    width: 228px;
-    height: auto;
-    overflow: hidden;
-    opacity: 0;
-    padding: 8px;
-    transform: scale(0.97) translateY(-12px);
-    pointer-events: none;
-    user-select: none;
-
-    transition:
-        opacity 0.2s ease,
-        transform 0.2s ease,
-        height 0.2s ease,
-        padding 0.2s ease;
-}
-
-.context-menu.mini {
-    width: 128px;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
 }
 
 .dropdown:hover .context-menu {
@@ -39,12 +17,53 @@
     pointer-events: auto;
 }
 
-.context-menu-icon {
+.context-menu {
+    box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.16);
+    background: var(--background-white);
+    border-radius: 12px;
+    display: flex;
+    gap: 2px;
+    flex-direction: column;
+    z-index: 1;
+    position: absolute;
+    height: auto;
+    overflow: hidden;
+    opacity: 0;
+    padding: 8px;
+    pointer-events: none;
+    user-select: none;
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        height 0.2s ease,
+        padding 0.2s ease;
+}
+
+.context-menu_below-end {
+    right: 0;
+    top: calc(100% + 4px);
+    transform: scale(0.97) translateY(-12px);
+}
+
+.context-menu_above-start {
+    bottom: calc(100% + 4px);
+    transform: scale(0.97) translateY(12px);
+}
+
+.context-menu_default {
+    width: 228px;
+}
+
+.context-menu_mini {
+    width: 128px;
+}
+
+.context-menu__icon {
     width: 16px;
     height: 16px;
 }
 
-.menu-option {
+.context-menu__option {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -57,35 +76,14 @@
     transition: var(--trans-menu);
 }
 
-.menu-option:hover {
+.context-menu__option:hover {
     background: var(--button-secondary-hover);
 }
 
-.menu-option:active {
+.context-menu__option:active {
     background: var(--button-secondary-active);
 }
 
-.context-menu-text.critical {
+.context-menu__text_critical {
     color: var(--text-error);
 }
-
-.dropdown {
-    display: flex;
-    position: absolute;
-    top: 4px;
-    right: 0;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
-}
-
-/* .dropdown:hover .context-menu {
-    border: 1px solid var(--stroke-primary);
-    padding: 8px;
-    width: 228px;
-    height: auto;
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-    transition: opacity .2s ease, transform .2s ease;
-} */

@@ -5,6 +5,7 @@ import MainLayoutComponent from '../../Components/MainLayoutComponent/MainLayout
 import AvatarComponent from '../../Components/AvatarComponent/AvatarComponent.js';
 import ButtonComponent from '../../Components/UI/ButtonComponent/ButtonComponent.js';
 import InputComponent from '../../Components/UI/InputComponent/InputComponent.js';
+import CoverComponent from '../../Components/CoverComponent/CoverComponent.js';
 import FileInputComponent from '../../Components/UI/FileInputComponent/FileInputComponent.js';
 
 import createElement from '../../utils/createElement.js';
@@ -157,21 +158,15 @@ export default class EditProfileView {
             items: {
                 profile: {
                     title: 'Профиль',
-                    onClick: () => {
-                        this.renderSection('profile');
-                    }
+                    onClick: () => this.renderSection('profile')
                 },
                 contacts: {
                     title: 'Контакты',
-                    onClick: () => {
-                        this.renderSection('contacts');
-                    }
+                    onClick: () => this.renderSection('contacts')
                 },
                 education: {
                     title: 'Образование',
-                    onClick: () => {
-                        this.renderSection('education');
-                    }
+                    onClick: () => this.renderSection('education')
                 },
             }
         });
@@ -182,7 +177,7 @@ export default class EditProfileView {
     renderSection(sectionName) {
         this.#section = sectionName;
         this.#stateUpdaters = [];
-        const data = forms[this.#section];
+        const sectionData = forms[this.#section];
         this.#containerObj.left.innerHTML = '';
 
         Ajax.get({
@@ -197,30 +192,32 @@ export default class EditProfileView {
                 }
 
                 this.#userData = userData;
-                if (data.header) this.renderEditHeader();
-                this.renderForm(data.fields);
+                if (sectionData.header) this.renderHeader();
+                this.renderForm(sectionData);
             }
         });
     }
 
-    renderForm(fields) {
+    renderForm(sectionData) {
+        const fields = sectionData.fields;
+
         const form = createElement({
             parent: this.#containerObj.left,
             tag: 'form',
-            classes: ['profile-edit-form']
+            classes: ['profile_edit__form']
         });
 
-        if (this.#userData.title) {
+        if (sectionData.title) {
             createElement({
                 parent: form,
                 tag: 'h1',
-                text: this.#userData.title
+                text: sectionData.title
             });
         }
 
         const formFields = createElement({
             parent: form,
-            classes: ['profile-edit-form-fields']
+            classes: ['profile_edit__fields']
         });
 
         for (let i = 0; i < fields.length; i++) {
@@ -229,20 +226,20 @@ export default class EditProfileView {
             const fieldsetElement = createElement({
                 parent: formFields,
                 tag: 'fieldset',
-                classes: ['profile-edit-fieldset'],
+                classes: ['profile_edit__fieldset'],
             });
         
             for (const field of fieldset) {
-                field.config.classes = ['profile-edit-input'];
-                field.type === 'textarea' ? field.config.classes.push('modal-window-textarea') : null;
+                field.config.classes = ['profile_edit__field'];
+                // field.type === 'textarea' ? field.config.classes.push('modal-textarea') : null;
 
                 field.config.name = field.key;
                 field.config.placeholder = field.config.placeholder || field.config.label;
                 field.config.value = 
-                    this.#userData[field.key] ?? 
-                    this.#userData?.contact_info?.[field.key] ?? 
-                    this.#userData?.school_education?.[field.key] ?? 
-                    this.#userData?.university_education?.[field.key];
+                    this.#userData?.profile?.[field.key] ?? 
+                    this.#userData?.contact_info?.[field.key] ??
+                    this.#userData?.school?.[field.key] ?? 
+                    this.#userData?.university?.[field.key];
 
                 if (field.config.name === 'birth_date') {
                     field.config.value = convertDate(field.config.value);
@@ -258,7 +255,7 @@ export default class EditProfileView {
             if (i < fields.length - 1) {
                 createElement({
                     parent: formFields,
-                    classes: ['divider'],
+                    classes: ['modal__divider'],
                 });
             }
         }
@@ -267,7 +264,7 @@ export default class EditProfileView {
             text: 'Сохранить',
             variant: 'primary',
             size: 'large',
-            classes: ['profile-edit-btn'],
+            classes: ['profile_edit__btn'],
             onClick: () => this.handleFormSubmit(),
             disabled: true,
             stateUpdaters: this.#stateUpdaters,
@@ -281,14 +278,19 @@ export default class EditProfileView {
             if (name === 'birth_date') value = convertDate(value, 'ts');
             const sections = {
                 profile: () => {
-                    body[name] = value;
+                    body.profile ??= {};
+                    if (name === 'avatar' || name === 'cover') {
+                        body[name] = value instanceof File || (value instanceof FileList && value.length > 0) ? value : '';
+                        return;
+                    }
+                    body.profile[name] = value;
                 },
                 contacts: () => {
                     body.contact_info ??= {};
                     body.contact_info[name] = value;
                 },
                 education: () => {
-                    const key = name.startsWith('school') ? 'school_education' : 'university_education';
+                    const key = name.startsWith('school') ? 'school' : 'university';
                     body[key] ??= {};
                     body[key][name] = name === 'grad_year' ? Number(value) : value;
                 }
@@ -296,9 +298,13 @@ export default class EditProfileView {
             sections[this.#section]?.();
         })
 
+        if (body.profile) {
+            body.profile['sex'] = this.#userData.profile.sex;
+            body.profile = JSON.stringify(body.profile);
+        }
         if (body.contact_info) body.contact_info = JSON.stringify(body.contact_info);
-        if (body.school_education) body.school_education = JSON.stringify(body.school_education);
-        if (body.university_education) body.university_education = JSON.stringify(body.university_education);
+        if (body.school) body.school = JSON.stringify(body.school);
+        if (body.university) body.university = JSON.stringify(body.university);
 
         for (const key in this.#userData) {
             if (!body[key] || body[key].length === 0) {
@@ -310,30 +316,11 @@ export default class EditProfileView {
             }
         }
 
-        if (!body['cover_url']) body['cover_url'] = '';
-        if (!body['avatar_url']) body['avatar_url'] = '';
+        if (!body['cover']) body['cover'] = '';
+        if (!body['avatar']) body['avatar'] = '';
 
         console.log(body);
-
-        // const fakebody = {
-        //     "contact_info": "{\"city\":\"Moscow\",\"phone\":\"8964882645\",\"email\":\"vasyutenko20050205@mail.ru\"}",
-        //     "username": "rvasutenko",
-        //     "firstname": "Роман",
-        //     "lastname": "Васютенко",
-        //     "sex": 0,
-        //     "birth_date": "2005-05-02",
-        //     "bio": "Тут пара слов обо мне, моих увлечениях, занятиях и предпочтениях",
-        //     "avatar_url": "/avatars/avatar.jpg",
-        //     "cover_url": "/covers/profile-header.jpg",
-        //     "school_education": "{\"school_city\":\"Ахтубинск\",\"school_name\":\"МБОУ СОШ №4\"}",
-        //     "university_education": "{\"univ_city\":\"Москва\",\"univ_name\":\"МГТУ им. Н.Э. Баумана\",\"faculty\":\"Социальные и гуманитарные науки\",\"grad_year\":2027}"
-        // };
-
         const fd = convertToFormData(body);
-        // console.log(fd);
-        // for (var pair of fd.entries()) {
-        //     console.log(pair);
-        // }
 
         Ajax.post({
             url: '/profile',
@@ -353,43 +340,22 @@ export default class EditProfileView {
         });
     }
 
-    renderEditHeader() {
+    renderHeader() {
         const profileHeader = createElement({
             parent: this.#containerObj.left,
-            classes: ['profile-header', 'edit']
+            classes: ['profile', 'profile_edit']
         });
 
-        const coverWrapper = createElement({
-            parent: profileHeader,
-            classes: ['profile-cover-wrapper']
+        const cover = new CoverComponent(profileHeader, {
+            src: this.#userData.profile.cover_url,
+            type: 'edit',
         });
 
-        const cover = createElement({
-            parent: coverWrapper,
-            classes: ['profile-cover', 'edit'],
-            attrs: {src: this.#userData.cover_url}
-        });
-
-        const coverUploadBtn = new ButtonComponent(coverWrapper, {
-            text: 'Изменить обложку',
-            variant: 'overlay',
-            size: 'small',
-            classes: ['cover-edit-btn'],
-        });
-
-        this.#stateUpdaters.push(
-            new FileInputComponent(this.#containerObj.left, {
-                imitator: coverUploadBtn.buttonElement,
-                preview: cover,
-                id: 'profile-cover-upload',
-                name: 'cover_url',
-            })
-        );
+        this.#stateUpdaters.push(cover.fileInput);
 
         const avatar = new AvatarComponent(profileHeader, {
             size: 'xxl',
-            class: 'profile-avatar',
-            src: this.#userData.avatar_url,
+            src: this.#userData.profile.avatar_url,
             type: 'edit'
         });
 
@@ -398,7 +364,7 @@ export default class EditProfileView {
                 imitator: avatar.wrapper,
                 preview: avatar.avatar,
                 id: 'profile-avatar-upload',
-                name: 'avatar_url',
+                name: 'avatar',
             })
         );
     }

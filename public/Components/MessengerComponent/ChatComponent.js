@@ -15,19 +15,26 @@ const ADD_TO_FRIENDS_BTN_TEXT = 'Заявка отправлена';
 export default class MessageComponent {
     #parent
     #config
+    #container
     constructor(parent, config) {
         this.#parent = parent;
         this.#config = config;
 
-        this.container = null;
+        this.#container = null;
+        this.scroll = null;
 
         this.render();
     }
 
     render() {
-        this.container = createElement({
+        this.#container = createElement({
             parent: this.#parent,
-            classes: ['messenger-chat'],
+            classes: ['chat'],
+        });
+
+        this.scroll = createElement({
+            parent: this.#container,
+            classes: ['chat__scroll'],
         });
 
         if (!this.#config.messages || !this.#config.messages.length) {
@@ -44,13 +51,13 @@ export default class MessageComponent {
             const curDay = this.formatDateTitle(msg.timestamp);
             if (curDay !== prevDay) {
                 createElement({
-                    parent: this.container,
+                    parent: this.scroll,
                     text: prevDay === '' ? this.formatDateTitle(msg.timestamp) : curDay,
-                    classes: ['messenger-date-title'],
+                    classes: ['chat__date'],
                 });
             } else {
                 if (msg.from === prevMsg.from) {
-                    classes.push('no-from');
+                    classes.push('chat__msg_nameless');
                 }
             }
 
@@ -62,11 +69,11 @@ export default class MessageComponent {
     }
 
     renderEmptyState() {
-        this.container.classList.add('empty');
+        this.scroll.classList.add('chat__scroll_empty');
 
         const infoWrapper = createElement({
-            parent: this.container,
-            classes: ['info-wrapper']
+            parent: this.scroll,
+            classes: ['chat__profile']
         });
 
         new AvatarComponent(infoWrapper, {
@@ -86,8 +93,8 @@ export default class MessageComponent {
         });
 
         const btnsWrapper = createElement({
-            parent: this.container,
-            classes: ['btns-wrapper'],
+            parent: this.scroll,
+            classes: ['chat__buttons'],
         });
 
         new ButtonComponent(btnsWrapper, {
@@ -105,45 +112,44 @@ export default class MessageComponent {
 
     renderMsg(msgData, classes) {
         const msg = createElement({
-            parent: this.container,
-            classes: ['messenger-msg', ...classes],
+            parent: this.scroll,
+            classes: ['chat__msg', ...classes],
         });
 
         new AvatarComponent(msg, {
             size: MSG_AVATAR_SIZE,
-            src: msgData.from === this.#config.user.username ? this.#config.user.avatar : this.#config.chatData.avatar,
+            src: msgData.from === this.#config.user.profile.username ? this.#config.user.profile.avatar_url : this.#config.chatData.avatar,
         });
 
         const msgContent = createElement({
             parent: msg,
-            classes: ['msg-content'],
+            classes: ['chat__msg-content'],
         });
 
         createElement({
             parent: msgContent,
-            classes: ['msg-from'],
-            text: msgData.from === this.#config.user.username ? `${this.#config.user.firstname} ${this.#config.user.lastname}` : this.#config.chatData.name,
+            classes: ['chat__sender'],
+            text: msgData.from === this.#config.user.profile.username ? `${this.#config.user.profile.firstname} ${this.#config.user.profile.lastname}` : this.#config.chatData.name,
         });
 
         createElement({
             parent: msgContent,
-            classes: ['msg-text'],
             text: msgData.text,
         });
 
         const msgInfo = createElement({
             parent: msg,
-            classes: ['msg-info'],
+            classes: ['chat__msg-info'],
         });
 
         createElement({
             parent: msgInfo,
-            classes: ['msg-status', msgData.isRead ? 'read' : null],
+            classes: ['chat__msg-status', msgData.isRead ? 'chat__msg-status_read' : null],
         });
 
         createElement({
             parent: msgInfo,
-            classes: ['msg-sent-time'],
+            classes: ['chat__msg-ts'],
             text: '17:20', // TODO: подтягивать
         });
     }

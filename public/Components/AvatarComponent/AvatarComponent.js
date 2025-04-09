@@ -1,6 +1,8 @@
 import createElement from '../../utils/createElement.js';
 
-const DEFAULT_SIZE_CLASS = 'm';
+const SIZE_PREFIX = 'avatar_';
+const DEFAULT_SIZE_CLASS = SIZE_PREFIX + 'm';
+const DEFAULT_SRC = 'static/img/default-avatar.jpg';
 
 export default class AvatarComponent {
     #parent
@@ -18,7 +20,10 @@ export default class AvatarComponent {
     render() {
         this.wrapper = createElement({
             parent: this.#parent,
-            classes: ['avatar-wrapper', this.#config.size || DEFAULT_SIZE_CLASS]
+            classes: [
+                'avatar',
+                SIZE_PREFIX + this.#config.size || DEFAULT_SIZE_CLASS
+            ]
         });
         if (this.#config.class) {
             this.wrapper.classList.add(this.#config.class);
@@ -27,11 +32,11 @@ export default class AvatarComponent {
         this.avatar = createElement({
             parent: this.wrapper,
             attrs: {
-                src: this.#config.src,
+                src: this.#config.src || DEFAULT_SRC,
                 alt: 'Аватар',
                 title: 'Аватар',
             },
-            classes: ['avatar']
+            classes: ['avatar__image']
         });
 
         if (this.#config.type === 'status') {
@@ -42,11 +47,11 @@ export default class AvatarComponent {
     }
 
     renderEdit() {
-        this.wrapper.classList.add('edit');
+        this.wrapper.classList.add('avatar_edit');
 
         const shadow = createElement({
             parent: this.wrapper,
-            classes: ['darken']
+            classes: ['avatar__overlay']
         });
 
         createElement({
@@ -56,7 +61,7 @@ export default class AvatarComponent {
                 alt: 'Редактировать',
                 title: 'Редактировать',
             },
-            classes: ['avatar-edit-icon']
+            classes: ['avatar__edit-icon']
         });
     }
 
@@ -65,12 +70,12 @@ export default class AvatarComponent {
         if (status === 'online') {
             createElement({
                 parent: this.wrapper,
-                classes: ['avatar-status-online']
+                classes: ['avatar__status_online']
             });
         } else {
             createElement({
                 parent: this.wrapper,
-                classes: ['avatar-status-offline'],
+                classes: ['avatar__status_offline'],
                 text: this.#config.status
             });
         }

@@ -4,6 +4,11 @@ import { users, chats, messages } from '../mocks.js'
 const HTTP_METHOD_GET = 'GET';
 const HTTP_METHOD_POST = 'POST';
 const API_BASE_URL = 'https://quickflowapp.ru/api';
+const CSRF_FREE_URLS = [
+    '/login',
+    '/signup',
+    '/logout'
+];
 
 
 class Ajax {
@@ -18,6 +23,20 @@ class Ajax {
         }
         this.develop = false;
         return API_BASE_URL;
+    }
+
+    async csrfRequest() {
+        let csrfToken = null;
+
+        if (!this.develop) {
+            const csrfResponse = await fetch(`${this.baseUrl}/csrf`, {
+                method: HTTP_METHOD_GET,
+                credentials: 'include'
+            });
+            csrfToken = csrfResponse.headers.get('X-CSRF-Token');
+        }
+
+        return csrfToken;
     }
 
     async fakeRequest(url, params, callback) {
@@ -64,15 +83,18 @@ class Ajax {
     async post({ url, body = {}, isFormData = false, callback = () => {} }) {
         let response;
         try {
+            const headers = {};
+            if (!isFormData) headers['Content-Type'] = 'application/json; charset=utf-8';
+            if (!CSRF_FREE_URLS.includes(url)) {
+                headers['X-CSRF-Token'] = await this.csrfRequest() || '';
+            }
+
             const options = {
                 method: HTTP_METHOD_POST,
                 credentials: 'include',
-                body: isFormData ? body : JSON.stringify(body)
+                body: isFormData ? body : JSON.stringify(body),
+                headers
             };
-
-            if (!isFormData) {
-                options.headers = { 'Content-Type': 'application/json; charset=utf-8' };
-            }
 
             response = await fetch(`${this.baseUrl}${url}`, options);
     
@@ -87,7 +109,7 @@ class Ajax {
             callback(response.status, data);
         } catch (error) {
             console.error('POST request failed:', error);
-            callback(response.status);
+            callback(response?.status || 500);
         }
     }
     

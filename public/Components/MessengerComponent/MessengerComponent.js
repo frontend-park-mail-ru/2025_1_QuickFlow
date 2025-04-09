@@ -17,7 +17,7 @@ export default class MessengerComponent {
     render() {
         const messengerWrapper = createElement({
             parent: this.#parent.container,
-            classes: ['messenger-wrapper'],
+            classes: ['messenger'],
         });
 
         const chatsPanel = new ChatsPanelComponent(messengerWrapper, {
