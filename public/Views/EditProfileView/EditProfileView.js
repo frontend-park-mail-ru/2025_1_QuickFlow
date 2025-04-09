@@ -290,7 +290,7 @@ export default class EditProfileView {
                     body.contact_info[name] = value;
                 },
                 education: () => {
-                    const key = name.startsWith('school') ? 'school_education' : 'university_education';
+                    const key = name.startsWith('school') ? 'school' : 'university';
                     body[key] ??= {};
                     body[key][name] = name === 'grad_year' ? Number(value) : value;
                 }
