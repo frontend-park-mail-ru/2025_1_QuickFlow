@@ -127,9 +127,7 @@ export default class ModalWindowComponent {
     }
 
     async handlePostSubmit(text) {
-        if (!text && !this.fileInput.input.files.length) {
-            return;
-        }
+        if (!text && !this.fileInput.input.files.length) return;
 
         const formData = new FormData();
         formData.append('text', text);
@@ -179,13 +177,15 @@ export default class ModalWindowComponent {
             convertDate(this.#config.data.profile.birth_date)
         );
 
-        this.renderProfileInfoBlock(items, this.#config.data.contact_info, false);
+        if (Object.keys(this.#config.data.contact_info).length > 0) {
+            this.renderProfileInfoBlock(items, this.#config.data.contact_info);
+        }
 
-        if (this.#config.data.school.length > 0) {
+        if (Object.keys(this.#config.data.school).length > 0) {
             this.renderProfileInfoBlock(items, this.#config.data.school);
         }
         
-        if (this.#config.data.university.length > 0) {
+        if (Object.keys(this.#config.data.university).length > 0) {
             this.renderProfileInfoBlock(items, this.#config.data.university);
         }
 
