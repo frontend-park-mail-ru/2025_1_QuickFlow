@@ -279,7 +279,7 @@ export default class EditProfileView {
             const sections = {
                 profile: () => {
                     body.profile ??= {};
-                    if (name === 'avatar_url' || name === 'cover_url') {
+                    if (name === 'avatar' || name === 'cover') {
                         body[name] = value instanceof File || (value instanceof FileList && value.length > 0) ? value : '';
                         return;
                     }
@@ -316,8 +316,8 @@ export default class EditProfileView {
             }
         }
 
-        if (!body['cover_url']) body['cover_url'] = '';
-        if (!body['avatar_url']) body['avatar_url'] = '';
+        if (!body['cover']) body['cover'] = '';
+        if (!body['avatar']) body['avatar'] = '';
 
         console.log(body);
         const fd = convertToFormData(body);
@@ -364,7 +364,7 @@ export default class EditProfileView {
                 imitator: avatar.wrapper,
                 preview: avatar.avatar,
                 id: 'profile-avatar-upload',
-                name: 'avatar_url',
+                name: 'avatar',
             })
         );
     }

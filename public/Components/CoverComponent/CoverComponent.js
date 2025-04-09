@@ -53,7 +53,7 @@ export default class CoverComponent {
             imitator: coverUploadBtn.buttonElement,
             preview: this.cover,
             id: 'profile-cover-upload',
-            name: 'cover_url',
+            name: 'cover',
         })
     }
 }
