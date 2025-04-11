@@ -2,20 +2,16 @@ import Ajax from '../../modules/ajax.js';
 import InputComponent from '../UI/InputComponent/InputComponent.js';
 import ProfileMenuComponent from '../ProfileMenuComponent/ProfileMenuComponent.js';
 import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
-import LogoutView from '../../Views/LogoutView/LogoutView.js';
+import router from '../../Router.js';
 import createElement from '../../utils/createElement.js';
 import { getLsItem } from '../../utils/localStorage.js';
 
 
 export default class HeaderComponent {
     #parent
-    #menu
-    constructor(parent, menu) {
+    constructor(parent) {
         this.#parent = parent;
-        this.#menu = menu;
-
         this.rightWrapper = null;
-
         this.render();
     }
 
@@ -77,20 +73,16 @@ export default class HeaderComponent {
         Ajax.get({
             url: `/profiles/${getLsItem('username', '')}`,
             callback: (status, userData) => {
-                this.renderAvatarCallback(status, userData);
+                switch (status) {
+                    case 200:
+                        this.renderAvatarCallback(userData);
+                        break;
+                }
             }
         });
     }
 
-    renderAvatarCallback(status, userData) {
-        let isAuthorized = status === 200;
-
-        if (!isAuthorized) {
-            this.#menu.goToPage(this.#menu.menuElements.login);
-            this.#menu.updateMenuVisibility(false);
-            return;
-        }
-
+    renderAvatarCallback(userData) {
         if (userData) {
             new AvatarComponent(this.rightWrapper, {
                 size: 'xs',
@@ -110,7 +102,7 @@ export default class HeaderComponent {
                         href: '/settings',
                         text: 'Настройки',
                         icon: 'settings-icon',
-                        render: () => {},
+                        render: () => router.go({ path: '/profile/edit' }),
                     },
                     help: {
                         href: '/help',
@@ -122,7 +114,7 @@ export default class HeaderComponent {
                         href: '/logout',
                         text: 'Выйти',
                         icon: 'logout-icon',
-                        render: () => new LogoutView(this.#menu).render(),
+                        render: () => router.go({ path: '/logout' }),
                     },
                 },
             });

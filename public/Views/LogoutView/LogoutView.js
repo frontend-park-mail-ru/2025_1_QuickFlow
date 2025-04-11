@@ -1,21 +1,28 @@
 import Ajax from '../../modules/ajax.js';
 import createElement from '../../utils/createElement.js';
+import router from '../../Router.js';
 
 
-export default class LogoutView {
-    constructor(menu) {
-        this.menu = menu;
-    }
+class LogoutView {
+    constructor() {}
 
     render() {
         Ajax.post({
             url: '/logout',
             callback: (status) => {
-                let isUnauthorized = status === 200;
-                this.menu.goToPage(!isUnauthorized ? this.menu.menuElements.feed : this.menu.menuElements.login);
+                switch (status) {
+                    case 200:
+                        router.go({ path: '/feed' });
+                        break;
+                    case 401:
+                        router.go({ path: '/login' });
+                        break;
+                }
             }
         });
     
         return createElement({});
     }
 }
+
+export default new LogoutView();

@@ -1,5 +1,4 @@
 import Ajax from '../../modules/ajax.js';
-import EditProfileView from '../EditProfileView/EditProfileView.js';
 import PostComponent from '../../Components/PostComponent/PostComponent.js';
 import MainLayoutComponent from '../../Components/MainLayoutComponent/MainLayoutComponent.js';
 import AvatarComponent from '../../Components/AvatarComponent/AvatarComponent.js';
@@ -9,6 +8,7 @@ import createElement from '../../utils/createElement.js';
 import { profileFriends } from '../../mocks.js';
 import { getLsItem } from '../../utils/localStorage.js';
 import CoverComponent from '../../Components/CoverComponent/CoverComponent.js';
+import router from '../../Router.js';
 
 
 const POSTS_COUNT = 10;
@@ -40,31 +40,37 @@ export const profileDataLayout = {
 };
 
 
-export default class ProfileView {
-    #menu
+class ProfileView {
     #containerObj
-    constructor(menu) {
-        this.#menu = menu;
+    constructor() {
         this.#containerObj = null;
     }
 
     render() {
-        this.#containerObj = new MainLayoutComponent({
+        this.#containerObj = new MainLayoutComponent().render({
             type: 'profile',
         });
 
-        Ajax.get({
-            url: `/profiles/${getLsItem('username', '')}`,
-            callback: (status, userData) => {
-                let isAuthorized = status === 200;
-    
-                if (!isAuthorized) {
-                    this.#menu.goToPage(this.#menu.menuElements.login);
-                    this.#menu.updateMenuVisibility(false);
-                    return;
-                }
+        let username;
+        const path = router.path.split('/').filter(Boolean);
+        username = path.length === 2 ?
+            path[1] :
+            getLsItem('username', '');
 
-                this.renderProfileInfo(userData);
+        Ajax.get({
+            url: `/profiles/${username}`,
+            callback: (status, userData) => {
+                switch (status) {
+                    case 200:
+                        this.cbOk(userData);
+                        break;
+                    case 401:
+                        router.go({ path: '/login' });
+                        break;
+                    case 404:
+                        router.go({ path: '/not-found' });
+                        break;
+                }
             }
         });
 
@@ -156,8 +162,7 @@ export default class ProfileView {
         let isAuthorized = status === 200;
 
         if (!isAuthorized) {
-            this.#menu.goToPage(this.#menu.menuElements.login);
-            this.#menu.updateMenuVisibility(false);
+            router.go({ path: '/login' });
             return;
         }
 
@@ -173,7 +178,7 @@ export default class ProfileView {
         }
     }
 
-    renderProfileInfo(data) { 
+    cbOk(data) { 
         const profileHeader = createElement({
             parent: this.#containerObj.top,
             classes: ['profile']
@@ -232,7 +237,7 @@ export default class ProfileView {
             text: 'Редактировать профиль',
             variant: 'secondary',
             size: 'small',
-            onClick: () => new EditProfileView(this.#containerObj, this.#menu).render(),
+            onClick: () => router.go({ path: '/profile/edit' }),
         });
     }
 
@@ -272,3 +277,5 @@ export default class ProfileView {
         return item;
     }
 }
+
+export default new ProfileView();

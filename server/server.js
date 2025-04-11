@@ -23,15 +23,7 @@ app.use(cookie());
 
 const ids = {};
 
-// function formUser(user) {
-//     return {
-//         ...user,
-//         password: undefined,
-//         images: user.images.map((id) => ({ ...images[id], id }))
-//     };
-// }
-
-app.post('/signup', (req, res) => {
+app.post('/api/signup', (req, res) => {
     const password = req.body.password;
     const email = req.body.email;
     const age = req.body.age;
@@ -61,7 +53,7 @@ app.post('/signup', (req, res) => {
     res.status(201).json({ id });
 });
 
-app.post('/login', (req, res) => {
+app.post('/api/login', (req, res) => {
     const password = req.body.password;
     const username = req.body.username;
     if (!password || !username) {
@@ -81,7 +73,7 @@ app.post('/login', (req, res) => {
     res.status(200).json({ id });
 });
 
-app.post('/logout', (req, res) => {
+app.post('/api/logout', (req, res) => {
     const id = req.cookies['podvorot'];
     
     if (!id) {
@@ -94,18 +86,7 @@ app.post('/logout', (req, res) => {
     res.status(200).end();
 });
 
-
-// app.get('/me', (req, res) => {
-//     const id = req.cookies['podvorot'];
-//     const email = ids[id];
-//     if (!email || !users[email]) {
-//         return res.status(401).end();
-//     }
-
-//     res.json(formUser(users[email]));
-// });
-
-app.get('/feed', (req, res) => {
+app.get('/api/feed', (req, res) => {
     const id = req.cookies['podvorot'];
     const usernameSession = ids[id];
 
@@ -116,7 +97,7 @@ app.get('/feed', (req, res) => {
     res.status(200).json(posts);
 });
 
-app.get('/profiles/:username', (req, res) => {
+app.get('/api/profiles/:username', (req, res) => {
     const id = req.cookies['podvorot'];
     const username = ids[id];
     if (!username || !users[username]) {
@@ -124,14 +105,16 @@ app.get('/profiles/:username', (req, res) => {
     }
 
     const queryUsername = req.params.username;
-    if (!queryUsername || !users[queryUsername]) {
+    if (!queryUsername) {
         return res.status(400).end();
+    } else if (!users[queryUsername]) {
+        return res.status(404).end();
     }
 
     res.status(200).json(users[queryUsername]);
 });
 
-app.post('/profile', (req, res) => {
+app.post('/api/profile', (req, res) => {
     const id = req.cookies['podvorot'];
     const username = ids[id];
     if (!username || !users[username]) {
@@ -141,7 +124,7 @@ app.post('/profile', (req, res) => {
     res.status(200).end();
 });
 
-app.get('/chats', (req, res) => {
+app.get('/api/chats', (req, res) => {
     const id = req.cookies['podvorot'];
     const username = ids[id];
     if (!username || !users[username]) {
@@ -151,23 +134,42 @@ app.get('/chats', (req, res) => {
     res.status(200).json(chats[username]);
 });
 
-app.get('/chat', (req, res) => {
+app.get('/api/messages/:chat_id', (req, res) => {
     const id = req.cookies['podvorot'];
     const username = ids[id];
     if (!username || !users[username]) {
         return res.status(401).end();
     }
 
-    if (!req.query || !req.query.username) {
+    if (!req.params || !req.params.chat_id || !req.query || !req.query.messages_count) {
         return res.status(400).end();
     }
 
-    const queryUsername = req.query.username;
-    if (!queryUsername || !messages[username][queryUsername]) {
+    const chatId = req.params.chat_id;
+    if (!messages[username][chatId]) {
         return res.status(404).end();
     }
 
-    return res.status(200).json(messages[username][queryUsername]);
+    return res.status(200).json(messages[username][chatId]);
+});
+
+app.post('/api/messages/:username', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const username = ids[id];
+    if (!username || !users[username]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).json({
+        id: "9a00f4b4-7914-4a3e-91be-c5a7b51bc609",
+        text: "Новое сообщение",
+        created_at: "2025-04-10T19:08:42.323841+03:00",
+        updated_at: "2025-04-10T19:08:42.323841+03:00",
+        is_read: false,
+        attachment_urls: null,
+        sender_id: "0e146b4b-b28e-44b8-8c59-f0c182459756",
+        chat_id: "c828ab93-88dd-4855-a309-940b064e9011"
+    });
 });
 
 // app.post('/like', (req, res) => {
@@ -184,6 +186,10 @@ app.get('/chat', (req, res) => {
 // });
 
 const port = process.env.PORT || 3000;
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+});
 
 app.listen(port, function () {
     console.log(`Server listening port ${port}`);

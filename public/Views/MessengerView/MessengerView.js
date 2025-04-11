@@ -2,18 +2,14 @@ import Ajax from '../../modules/ajax.js';
 import MessengerComponent from '../../Components/MessengerComponent/MessengerComponent.js';
 import MainLayoutComponent from '../../Components/MainLayoutComponent/MainLayoutComponent.js';
 import { getLsItem } from '../../utils/localStorage.js';
+import router from '../../Router.js';
 
 
-export default class MessengerView {
-    #containerObj
-    #menu
-    constructor(menu) {
-        this.#menu = menu;
-        this.#containerObj = null;
-    }
+class MessengerView {
+    constructor() {}
 
     render() {
-        this.#containerObj = new MainLayoutComponent({
+        const containerObj = new MainLayoutComponent().render({
             type: 'messenger',
         });
 
@@ -23,18 +19,18 @@ export default class MessengerView {
                 let isAuthorized = status === 200;
         
                 if (!isAuthorized) {
-                    this.#menu.goToPage(this.#menu.menuElements.login);
-                    this.#menu.updateMenuVisibility(false);
+                    router.go({ path: '/login' });
                     return;
                 }
         
-                new MessengerComponent(this.#containerObj, {
+                new MessengerComponent(containerObj, {
                     user: userData,
-                    menu: this.#menu,
                 });
             }
         });
 
-        return this.#containerObj.container;
+        return containerObj.container;
     }
 }
+
+export default new MessengerView();

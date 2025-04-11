@@ -214,7 +214,7 @@ export default class PostComponent {
 
         new AvatarComponent(authorWrapper, {
             size: AUTHOR_AVATAR_SIZE,
-            src: this.#config.avatar,
+            src: this.#config.author.avatar_url,
         });
 
         const topRightWrapper = createElement({
@@ -228,9 +228,11 @@ export default class PostComponent {
         });
 
         createElement({
-            tag: 'h2',
+            tag: 'a',
             parent: nameDateWrapper,
-            text: `${this.#config.firstname} ${this.#config.lastname}`,
+            classes: ['post__name'],
+            attrs: { href: `/profiles/${this.#config.author.username}` },
+            text: `${this.#config.author.firstname} ${this.#config.author.lastname}`,
         });
 
         createElement({

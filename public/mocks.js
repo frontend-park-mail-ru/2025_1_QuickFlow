@@ -1,10 +1,13 @@
 export const posts = [
     {
-        firstname: 'Илья',
-        lastname: 'Мациевский',
-        avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
-        creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
+        author: {
+            id: "b143b529-9925-450f-9d26-1255658a0a8f",
+            username: "Nikita22",
+            avatar_url: "/avatars/avatar.jpg",
+            firstname: "Илья",
+            lastname: "Мациевский"
+        },
         text: 'Аԥсны (Абхазия) в переводе с абхазского — "страна души". И действительно, поездка туда впечаталась в душу и стала испытанием для тела: пока это наше единственное путешествие, где мы три дня не мылись, купались в море с коровами, все время от чего-нибудь лечились, шарахались от машин на переходах и от собак в подворотнях, сгоняли кошек со стульев в кафе и вырывали наших детей из рук прохожих. Но поскольку мы все же благополучно вернулись домой, я могу обо всем подробнейшим образом написать здесь (от души, так скажем). Сейчас — вводный пост, потом будет весь наш маршрут поэтапно, а в конце моих путевых заметок подведем итоги по стоимости поездки.',
         pics: [
             "/posts/IMG_6776.jpg",
@@ -18,84 +21,105 @@ export const posts = [
         created_at: "2005-05-02",
         like_count: 0,
         repost_count: 0,
-        comment_count: 0
+        comment_count: 0,
+        is_repost: true,
     },
     {
-        firstname: 'Илья',
-        lastname: 'Мациевский',
-        avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
-        creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
+        author: {
+            id: "b143b529-9925-450f-9d26-1255658a0a8f",
+            username: "Nikita22",
+            avatar_url: "/avatars/avatar.jpg",
+            firstname: "Илья",
+            lastname: "Мациевский"
+        },
         text: "Hello, this is my first post",
         pics: [
             "https://quickflowapp.ru/images/image1.jpg",
             "https://quickflowapp.ru/images/image2.jpg",
             "https://quickflowapp.ru/images/image3.jpg",
         ],
-        created_at: "2005-05-02",
+        created_at: "2005-05-23",
         like_count: 0,
         repost_count: 0,
-        comment_count: 0
+        comment_count: 0,
+        is_repost: false,
     },
     {
-        firstname: 'Илья',
-        lastname: 'Мациевский',
-        avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
-        creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
+        author: {
+            id: "b143b529-9925-450f-9d26-1255658a0a8f",
+            username: "Nikita22",
+            avatar_url: "/avatars/avatar.jpg",
+            firstname: "Илья",
+            lastname: "Мациевский"
+        },
         text: "Hello, this is my first post",
         pics: [
             "/posts/272464515_147005761018515_3100264353239753904_n.webp.jpg",
         ],
-        created_at: "2005-05-02",
+        created_at: "2005-03-12",
         like_count: 0,
         repost_count: 0,
-        comment_count: 0
+        comment_count: 0,
+        is_repost: false,
     },
     {
-        firstname: 'Илья',
-        lastname: 'Мациевский',
-        avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
-        creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
+        author: {
+            id: "b143b529-9925-450f-9d26-1255658a0a8f",
+            username: "Nikita22",
+            avatar_url: "/avatars/avatar.jpg",
+            firstname: "Илья",
+            lastname: "Мациевский"
+        },
         text: "Hello, this is my first post",
         pics: [
             "/posts/259096143_252774593424446_3292295880799640700_n.jpeg",
         ],
-        created_at: "2005-05-02",
+        created_at: "2005-01-01",
         like_count: 0,
         repost_count: 0,
-        comment_count: 0
+        comment_count: 0,
+        is_repost: false,
     },
     {
-        firstname: 'Илья',
-        lastname: 'Мациевский',
-        avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
-        creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
+        author: {
+            id: "b143b529-9925-450f-9d26-1255658a0a8f",
+            username: "Nikita22",
+            avatar_url: "/avatars/avatar.jpg",
+            firstname: "Илья",
+            lastname: "Мациевский"
+        },
         text: "Hello, this is my first post",
         pics: [
             "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
         ],
-        created_at: "2005-05-02",
+        created_at: "2005-02-07",
         like_count: 0,
         repost_count: 0,
-        comment_count: 0
+        comment_count: 0,
+        is_repost: true,
     },
     {
-        firstname: 'Илья',
-        lastname: 'Мациевский',
-        avatar: '/avatars/avatar.jpg',
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
-        creator_id: "9c5a7aff-c703-4b11-a5ca-d45833091c90",
+        author: {
+            id: "b143b529-9925-450f-9d26-1255658a0a8f",
+            username: "Nikita22",
+            avatar_url: "/avatars/avatar.jpg",
+            firstname: "Илья",
+            lastname: "Мациевский"
+        },
         text: "Hello, this is my first post",
         pics: [
             "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
         ],
-        created_at: "2005-05-02",
+        created_at: "2025-04-02",
         like_count: 0,
         repost_count: 0,
-        comment_count: 0
+        comment_count: 0,
+        is_repost: true,
     },
 ];
 
@@ -168,183 +192,95 @@ export const profileFriends = [
 export const chats = {
     rvasutenko: [
         {
-            username: 'pavlov',
-            name: 'Александр Павловский',
-            avatar: '/avatars/avatar4.jpg',
-            lastMsg: 'Привет, как дела?',
-            lastMsgTime: '1ч', // TODO: убрать хардкод и поменть на timestamp
+            id: "49dc794b-d8cf-404c-be69-4886bd78ada4",
+            name: "Александр Павловский",
+            avatar_url: '/avatars/avatar4.jpg',
+            created_at: "2025-04-11T16:46:32.821303+03:00",
+            updated_at: "2025-04-11T16:46:33.373724+03:00",
+            type: "private",
+            last_message: {
+                id: "218503be-332d-4639-b540-5f2f58e63f38",
+                text: "HelloHello123!",
+                created_at: "2025-04-11T16:46:33.373724+03:00",
+                updated_at: "2025-04-11T16:46:33.373724+03:00",
+                is_read: false,
+                attachment_urls: null,
+                sender_id: "12c314cb-19ae-40c8-a069-fb2c426a9cc9",
+                chat_id: "49dc794b-d8cf-404c-be69-4886bd78ada4"
+            }
         },
         {
-            username: 'andrew',
-            name: 'Андрей Контемиров',
-            avatar: '/avatars/avatar5.jpg',
-            lastMsg: 'Привет, как дела?',
-            lastMsgTime: '1ч',
+            id: "13dc794b-d8cf-404c-be69-4886bd78ada4",
+            name: "Макс Павловский",
+            avatar_url: '/avatars/avatar6.jpg',
+            created_at: "2025-04-11T16:46:32.821303+03:00",
+            updated_at: "2025-04-11T16:46:33.373724+03:00",
+            type: "private",
+            last_message: {
+                id: "248503be-332d-4639-b540-5f2f58e63f38",
+                text: "Пока",
+                created_at: "2025-04-10T16:46:33.373724+03:00",
+                updated_at: "2025-04-11T16:46:33.373724+03:00",
+                is_read: false,
+                attachment_urls: null,
+                sender_id: "02c314cb-19ae-40c8-a069-fb2c426a9cc9",
+                chat_id: "13dc794b-d8cf-404c-be69-4886bd78ada4"
+            }
         },
         {
-            username: 'maxutka',
-            name: 'Максим Поздняков',
-            avatar: '/avatars/avatar6.jpg',
-            lastMsg: 'Привет, как дела?',
-            lastMsgTime: '1ч',
-        },
-        {
-            username: 'matthew',
-            name: 'Матвей Хаметов',
-            avatar: '/avatars/avatar7.jpg',
-            lastMsg: 'Привет, как дела?',
-            lastMsgTime: '1ч',
-        },
-        {
-            username: 'nik_vor',
-            name: 'Никита Воробьев',
-            avatar: '/avatars/avatar8.jpg',
-            lastMsg: 'Привет, как дела?',
-            lastMsgTime: '1ч',
-        },
-        {
-            username: 'baran2003',
-            name: 'Анастасия Баранникова',
-            avatar: '/avatars/avatar9.jpg',
-            lastMsg: 'Привет, как дела?',
-            lastMsgTime: '1ч',
-        },
-        {
-            username: 'olchik',
-            name: 'Ольга Склярова',
-            avatar: '/avatars/avatar10.jpg',
-            lastMsg: 'Привет, как дела?',
-            lastMsgTime: '1ч',
-        },
-        {
-            username: 'vlli',
-            name: 'Влад Ли',
-            avatar: '/avatars/avatar11.jpg',
-            lastMsg: 'Привет, как дела?',
-            lastMsgTime: '1ч',
-        },
-        {
-            username: 'tolly_molly',
-            name: 'Ксения Сивашова',
-            avatar: '/avatars/avatar4.jpg',
-            lastMsg: 'Привет, как дела?',
-            lastMsgTime: '1ч',
-        },
-        {
-            username: 'braznetz',
-            name: 'Eugenii Braznetz',
-            avatar: '/avatars/avatar5.jpg',
-            lastMsg: 'Привет, как дела?',
-            lastMsgTime: '1ч',
-        },
-        {
-            username: 'xusha',
-            name: 'Ксюша Логинова',
-            avatar: '/avatars/avatar6.jpg',
-            lastMsg: 'Привет, как дела?',
-            lastMsgTime: '1ч',
-        },
-        {
-            username: 'kate_b',
-            name: 'Катя Беседовская',
-            avatar: '/avatars/avatar7.jpg',
-            lastMsg: 'Привет, как дела?',
-            lastMsgTime: '1ч',
+            id: "85dc794b-d8cf-404c-be69-4886bd78ada4",
+            name: "Валера Павловский",
+            avatar_url: '/avatars/avatar5.jpg',
+            created_at: "2025-04-11T16:46:32.821303+03:00",
+            updated_at: "2025-04-11T16:46:33.373724+03:00",
+            type: "private",
+            last_message: {
+                id: "268503be-332d-4639-b540-5f2f58e63f38",
+                text: "С новым годом",
+                created_at: "2025-03-11T16:46:33.373724+03:00",
+                updated_at: "2025-04-11T16:46:33.373724+03:00",
+                is_read: true,
+                attachment_urls: null,
+                sender_id: "42c314cb-19ae-40c8-a069-fb2c426a9cc9",
+                chat_id: "85dc794b-d8cf-404c-be69-4886bd78ada4"
+            }
         },
     ]
 };
 
 export const messages = {
     rvasutenko: {
-        pavlov: [
+        "49dc794b-d8cf-404c-be69-4886bd78ada4": [
             {
-                id: 1,
-                from: 'pavlov',
-                text: 'Привет, как дела?',
-                timestamp: '2025-03-28 22:00:00',
-                isRead: true
+                "id": "9a00f4b4-7914-4a3e-91be-c5a7b51bc607",
+                "text": "HelloHello!",
+                "created_at": "2025-04-10T19:08:42.323841+03:00",
+                "updated_at": "2025-04-10T19:08:42.323841+03:00",
+                "is_read": true,
+                "attachment_urls": null,
+                "sender_id": "0e146b4b-b28e-44b8-8c59-f0c182459756",
+                "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
             },
             {
-                id: 2,
-                from: 'pavlov',
-                text: 'Что нового произошло за неделю?',
-                timestamp: '2025-03-28 22:00:00',
-                isRead: true
+                "id": "dcbe8d04-95c3-48c1-ac1f-2d4ab726733d",
+                "text": "Hello!",
+                "created_at": "2025-04-10T19:08:27.926906+03:00",
+                "updated_at": "2025-04-10T19:08:27.926906+03:00",
+                "is_read": false,
+                "attachment_urls": null,
+                "sender_id": "0e146b4b-b28e-44b8-8c59-f0c182459756",
+                "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
             },
             {
-                id: 3,
-                from: 'rvasutenko',
-                text: 'Привет, все отлично',
-                timestamp: '2025-03-28 22:00:00',
-                isRead: true
-            },
-            {
-                id: 4,
-                from: 'rvasutenko',
-                text: 'На днях ходил на новую выставку в винзаводе',
-                timestamp: '2025-03-28 22:00:00',
-                isRead: true
-            },
-            {
-                id: 5,
-                from: 'rvasutenko',
-                text: 'Очень классная, так что советую',
-                timestamp: '2025-03-28 22:00:00',
-                isRead: true
-            },
-            {
-                id: 6,
-                from: 'rvasutenko',
-                text: 'Сам то ты как?',
-                timestamp: '2025-03-28 22:00:00',
-                isRead: true
-            },
-            {
-                id: 7,
-                from: 'pavlov',
-                text: 'Да у меня тоже все хорошо. Завтра поеду в Казань с одногруппниками. Давно собирались сгонять своей компанией, но все никак не могли спланировать нормально. Вот, наконец-то руки добрались, хахах',
-                timestamp: '2025-03-28 22:00:00',
-                isRead: true
-            },
-            {
-                id: 8,
-                from: 'rvasutenko',
-                text: 'О, Казань - это классно, нереально красивый город',
-                timestamp: '2025-03-28 22:00:00',
-                isRead: true
-            },
-            {
-                id: 9,
-                from: 'rvasutenko',
-                text: 'Расскажешь потом, как съездили',
-                timestamp: '2025-03-28 22:00:00',
-                isRead: true
-            },
-            {
-                id: 10,
-                from: 'pavlov',
-                text: 'Да, окей',
-                timestamp: '2025-03-28 22:00:00',
-                isRead: true
-            },
-            {
-                id: 11,
-                from: 'pavlov',
-                text: 'Слушай, я давно хотел у тебя спросить что-то очень важное, но вот, к сожалению, сейчас никак не могу припомнить, что именно. Знаешь, я, наверное, тебе напишу чуть позже, как вспомню) Привет! Давно хотел у тебя спросить что-то очень важное, но вот, к сожалению, сейчас никак не могу припомнить, что именно. Знаешь, я, наверное, тебе напишу чуть позже, как вспомню)',
-                timestamp: '2025-03-29 22:00:00',
-                isRead: true
-            },
-        ],
-        andrew: [],
-        maxutka: [],
-        matthew: [],
-        nik_vor: [],
-        baran2003: [],
-        olchik: [],
-        vlli: [],
-        tolly_molly: [],
-        braznetz: [],
-        xusha: [],
-        kate_b: [],
+                "id": "2ecd2a66-d5ad-4c09-8b43-0918ae59e38b",
+                "text": "Hello!",
+                "created_at": "2025-04-10T19:00:36.19391+03:00",
+                "updated_at": "2025-04-10T19:00:36.19391+03:00",
+                "is_read": false,
+                "attachment_urls": null,
+                "sender_id": "0e146b4b-b28e-44b8-8c59-f0c182459756",
+                "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+            }
+        ]
     }
 };

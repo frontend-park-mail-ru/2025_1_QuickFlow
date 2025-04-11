@@ -3,6 +3,7 @@ import ResizerComponent from '../../Components/ResizerComponent/ResizerComponent
 import InputComponent from '../../Components/UI/InputComponent/InputComponent.js';
 import createElement from '../../utils/createElement.js';
 import {setLsItem, getLsItem, removeLsItem} from '../../utils/localStorage.js';
+import getTimeDifference from '../../utils/getTimeDifference.js';
 
 
 const DEFAULT_WIDTH = 300;
@@ -100,7 +101,7 @@ export default class ChatsPanelComponent {
         const chat = createElement({
             parent: this.#chats,
             classes: ['chats-panel__chat'],
-            attrs: {id: CHAT_PREFIX + chatData.username},
+            attrs: {id: CHAT_PREFIX + chatData.id},
         });
 
         chat.addEventListener('click', () => {
@@ -108,14 +109,14 @@ export default class ChatsPanelComponent {
             this.close();
 
             chat.classList.add('chats-panel__chat_active');
-            setLsItem('active-chat', CHAT_PREFIX + chatData.username);
+            setLsItem('active-chat', CHAT_PREFIX + chatData.id);
             this.activeChatItem = chat;
             this.#chatWindow.renderActiveChat(chatData);
         });
 
         new AvatarComponent(chat, {
             size: CHAT_ITEM_AVATAR_SIZE,
-            src: chatData.avatar,
+            src: chatData.avatar_url,
         });
 
         const chatInfo = createElement({
@@ -132,7 +133,7 @@ export default class ChatsPanelComponent {
         createElement({
             parent: chatInfo,
             classes: ['chats-panel__msg-info'],
-            attrs: {id: CHAT_INFO_PREFIX + chatData.username},
+            attrs: {id: CHAT_INFO_PREFIX + chatData.id},
         });
 
         this.renderLastMsg(chatData);
@@ -141,15 +142,15 @@ export default class ChatsPanelComponent {
     }
 
     renderLastMsg(chatData) {
-        const lastMsgWrapper = document.getElementById(CHAT_INFO_PREFIX + chatData.username);
+        const lastMsgWrapper = document.getElementById(CHAT_INFO_PREFIX + chatData.id);
         lastMsgWrapper.innerHTML = '';
 
-        const value = getLsItem(
-            CHAT_MSG_PREFIX + `${this.#config.user.username}-${chatData.username}`,
+        const draftValue = getLsItem(
+            CHAT_MSG_PREFIX + `${chatData.id}`,
             ''
         );
         
-        if (value) {
+        if (draftValue) {
             createElement({
                 parent: lastMsgWrapper,
                 classes: ['chats-panel__draft'],
@@ -159,7 +160,7 @@ export default class ChatsPanelComponent {
         createElement({
             parent: lastMsgWrapper,
             classes: ['chats-panel__msg'],
-            text: value ? value : chatData.lastMsg,
+            text: draftValue ? draftValue : chatData.last_message.text,
         });
 
         createElement({
@@ -170,7 +171,7 @@ export default class ChatsPanelComponent {
 
         createElement({
             parent: lastMsgWrapper,
-            text: chatData.lastMsgTime,
+            text: getTimeDifference(chatData.last_message.created_at, { mode: 'short' }),
         });
     }
 

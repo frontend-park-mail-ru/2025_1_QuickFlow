@@ -4,18 +4,19 @@ import ModalWindowComponent from '../../Components/UI/ModalWindowComponent/Modal
 import MainLayoutComponent from '../../Components/MainLayoutComponent/MainLayoutComponent.js';
 import RadioMenuComponent from '../../Components/RadioMenuComponent/RadioMenuComponent.js';
 import createElement from '../../utils/createElement.js';
+import router from '../../Router.js';
 
 
 const POSTS_COUNT = 10;
 
 
-export default class FeedView {
-    constructor(menu) {
-        this.menu = menu;
+class FeedView {
+    constructor() {
+        this.posts = null;
     }
 
     render() {
-        const containerObj = new MainLayoutComponent({
+        const containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
 
@@ -55,7 +56,7 @@ export default class FeedView {
             text: 'Создать пост',
         });
 
-        const postsWrapper = createElement({
+        this.posts = createElement({
             parent: containerObj.left,
             classes: ['feed__posts'],
         });
@@ -70,18 +71,13 @@ export default class FeedView {
             url: '/feed',
             params: { posts_count: POSTS_COUNT },
             callback: (status, feedData) => {
-                let isAuthorized = status === 200;
-
-                if (!isAuthorized) {
-                    this.menu.goToPage(this.menu.menuElements.login);
-                    this.menu.updateMenuVisibility(false);
-                    return;
-                }
-
-                if (feedData && Array.isArray(feedData)) {
-                    feedData.forEach((config) => {
-                        new PostComponent(postsWrapper, config);
-                    });
+                switch (status) {
+                    case 401:
+                        this.cbUnauthorized();
+                        break;
+                    case 200:
+                        this.cbOk(feedData);
+                        break;
                 }
             }
         });
@@ -109,4 +105,18 @@ export default class FeedView {
 
         return containerObj.container;
     }
+
+    cbUnauthorized() {
+        router.go({ path: '/login' });
+    }
+
+    cbOk(feedData) {
+        if (feedData && Array.isArray(feedData)) {
+            feedData.forEach((config) => {
+                new PostComponent(this.posts, config);
+            });
+        }
+    }
 }
+
+export default new FeedView();

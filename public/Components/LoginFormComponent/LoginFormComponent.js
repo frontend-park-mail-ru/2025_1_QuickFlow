@@ -3,16 +3,14 @@ import InputComponent from '../UI/InputComponent/InputComponent.js';
 import ButtonComponent from '../UI/ButtonComponent/ButtonComponent.js';
 import createElement from '../../utils/createElement.js';
 import focusInput from '../../utils/focusInput.js';
+import router from '../../Router.js';
+
 
 export default class LoginFormComponent {
     #parent
-    #menu
-    #header
     #focusTimer
-    constructor(parent, menu, header) {
+    constructor(parent) {
         this.#parent = parent;
-        this.#menu = menu;
-        this.#header = header;
         
         this.step = 1;
         this.passwordInput = null;
@@ -77,7 +75,7 @@ export default class LoginFormComponent {
             .addEventListener('click', () => {
                 if (this.step === 1) {
                     localStorage.removeItem("username");
-                    this.#menu.goToPage(this.#menu.menuElements.login);
+                    router.go({ path: '/login' });
                 } else {
                     this.step = 1;
                     this.render();
@@ -130,7 +128,7 @@ export default class LoginFormComponent {
                 text: this.config.signupBtnText,
                 variant: 'secondary',
                 onClick: () => {
-                    this.#menu.goToPage(this.#menu.menuElements.signup);
+                    router.go({ path: '/signup' });
                 }
             });
         }
@@ -224,10 +222,7 @@ export default class LoginFormComponent {
             body,
             callback: (status) => {
                 if (status === 200) {
-                    this.#menu.goToPage(this.#menu.menuElements.feed);
-                    this.#menu.checkAuthPage();
-                    this.#menu.updateMenuVisibility(true);
-                    this.#header.renderAvatarMenu();
+                    router.go({ path: '/feed' });
                     return;
                 }
                 this.passwordInput.showError('Неверное имя пользователя или пароль');

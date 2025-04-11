@@ -1,23 +1,34 @@
 import createElement from '../../utils/createElement.js';
 
-export default class MainLayoutComponent {
-    #parent
-    #config
-    constructor(config) {
-        this.#parent = document.querySelector('main');
-        this.#config = config;
 
+export default class MainLayoutComponent {
+    #main
+    #config
+    #parent
+    constructor() {
+        if (MainLayoutComponent.__instance) {
+            return MainLayoutComponent.__instance;
+        }
+        this.#config = {};
+
+        this.#parent = document.getElementById('parent');
+        this.#main = document.querySelector('main');
         this.container = null;
+
         this.top = null;
         this.left = null;
         this.right = null;
 
-        this.render();
+        MainLayoutComponent.__instance = this;
     }
 
-    render() {
+    render(config) {
+        this.#config = config;
+        this.#main.innerHTML = '';
+        this.resetClasses();
+
         this.container = createElement({
-            parent: this.#parent,
+            parent: this.#main,
             classes: ['container', `container_${this.#config.type}`],
         });
 
@@ -31,20 +42,44 @@ export default class MainLayoutComponent {
             case 'messenger': 
                 this.renderMessenger();
                 break;
+            case 'auth': 
+                this.renderAuth();
+                break;
+            case 'not-found': 
+                this.renderNotFound();
+                break;
         }
+
+        return this;
+    }
+
+    resetClasses() {
+        this.#parent.classList = 'parent container';
+        this.#main.classList = 'main';
+        if (this.container) this.container.classList = 'container';
     }
 
     clear() {
         this.container.innerHTML = '';
-        this.#parent.removeChild(this.container);
+        this.#main.removeChild(this.container);
+    }
+
+    renderNotFound() {
+        this.#parent.classList.add('parent_hidden-ui');
+        this.#main.classList.add('main_wide');
+    }
+
+    renderAuth() {
+        this.#parent.classList.add('parent_hidden-ui');
+        this.#main.classList.add('main_wide');
     }
 
     renderMessenger() {
-        this.#parent.style.position = 'fixed';
+        this.#main.style.position = 'fixed';
     }
 
     renderProfile() {
-        this.#parent.style.position = 'absolute';
+        this.#main.style.position = 'absolute';
 
         this.top = createElement({
             parent: this.container,
@@ -68,7 +103,7 @@ export default class MainLayoutComponent {
     }
 
     renderFeed() {
-        this.#parent.style.position = 'absolute';
+        this.#main.style.position = 'absolute';
         
         this.left = createElement({
             parent: this.container,

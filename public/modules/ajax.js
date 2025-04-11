@@ -4,6 +4,7 @@ import { users, chats, messages } from '../mocks.js'
 const HTTP_METHOD_GET = 'GET';
 const HTTP_METHOD_POST = 'POST';
 const API_BASE_URL = 'https://quickflowapp.ru/api';
+const DEV_BASE_URL = 'http://localhost:3000/api';
 const CSRF_FREE_URLS = [
     '/login',
     '/signup',
@@ -19,7 +20,7 @@ class Ajax {
 
     detectEnvironment() {
         if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
-            return '';
+            return DEV_BASE_URL;
         }
         this.develop = false;
         return API_BASE_URL;

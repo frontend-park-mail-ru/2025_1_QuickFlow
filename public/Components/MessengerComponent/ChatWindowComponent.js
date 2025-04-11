@@ -53,25 +53,18 @@ const MEDIA_CONTEXT_MENU_DATA = {
 
 
 export default class ChatWindowComponent {
-    #parent
-    #config
-    #msgs
-    #chatElement
-    #chatData
-    #container
-    #chatsPanel
-    #focusTimer
+    #parent;
+    #config;
+    #msgs = null;
+    #chat = null;
+    #chatElement = null;
+    #chatData = null;
+    #container = null;
+    #chatsPanel = null;
+    #focusTimer = null;
     constructor(parent, config) {
         this.#parent = parent;
         this.#config = config;
-
-        this.#chatElement = null;
-        this.#chatData = null;
-        this.#msgs = null;
-        this.#container = null;
-        this.#chatsPanel = null;
-        this.#focusTimer = null;
-
         this.render();
     }
 
@@ -96,7 +89,10 @@ export default class ChatWindowComponent {
         this.#chatData = chatData;
         this.#container.innerHTML = '';
 
-        this.#config.messenger.ajaxGetChat(this.#chatData.username, (chatMsgs) => {
+        this.#config.messenger.ajaxGetMessages({
+            chatId: this.#chatData.id,
+            count: 50,
+        }, (status, chatMsgs) => {
             this.#msgs = chatMsgs;
             this.renderHeader();
             this.renderChat();
@@ -145,7 +141,7 @@ export default class ChatWindowComponent {
 
         new AvatarComponent(chatHeader, {
             size: HEADER_AVATAR_SIZE,
-            src: this.#chatData.avatar,
+            src: this.#chatData.avatar_url,
         });
 
         const chatInfo = createElement({
@@ -175,12 +171,12 @@ export default class ChatWindowComponent {
         });
 
         const optionsWrapper = createElement({
-            classes: ['post-options-wrapper'],
+            classes: ['post__options'],
             parent: dropdown,
         });
 
         createElement({
-            classes: ['post-options'],
+            classes: ['post__options-icon'],
             parent: optionsWrapper,
         });
 
@@ -217,7 +213,7 @@ export default class ChatWindowComponent {
         });
 
         const value = getLsItem(
-            CHAT_MSG_PREFIX + `${this.#config.user.username}-${this.#chatData.username}`,
+            CHAT_MSG_PREFIX + `${this.#chatData.id}`,
             ''
         );
 
@@ -234,20 +230,45 @@ export default class ChatWindowComponent {
         focusInput(textarea, this.#focusTimer);
 
         const sendBtn = createElement({
-            classes: ['chat-window__send', textarea.value.trim() === '' ? 'chat-window__send_disabled' : null],
+            classes: [
+                'chat-window__send',
+                textarea.value.trim() === '' ? 'chat-window__send_disabled' : null
+            ],
             parent: bottomBar,
+        });
+
+        sendBtn.addEventListener('click', () => {
+            if (sendBtn.classList.contains('chat-window__send_disabled')) return;
+
+            const messageText = textarea.value.trim();
+            textarea.value = '';
+            sendBtn.classList.add('chat-window__send_disabled');
+
+            this.#config.messenger.ajaxPostMessages({
+                username: "rvasutenko", // TODO: this.#chatData.username
+                request: {
+                    attachment_urls: [],
+                    chat_id: this.#chatData.id,
+                    text: messageText
+                }
+            }, (status, msgData) => {
+                console.log(msgData);
+                this.#msgs.push(msgData);
+                this.#chat.renderMsg(msgData, []);
+                // this.renderChat();
+            });
         });
 
         textarea.addEventListener("input", () => {
             if (textarea.value.trim() !== '') {
                 sendBtn.classList.remove('chat-window__send_disabled');
                 setLsItem(
-                    CHAT_MSG_PREFIX + `${this.#config.user.username}-${this.#chatData.username}`,
+                    CHAT_MSG_PREFIX + `${this.#chatData.id}`,
                     textarea.value.trim()
                 );
                 return;
             }
-            removeLsItem(CHAT_MSG_PREFIX + `${this.#config.user.username}-${this.#chatData.username}`);
+            removeLsItem(CHAT_MSG_PREFIX + `${this.#chatData.id}`);
             this.#chatsPanel.renderLastMsg(this.#chatData);
             sendBtn.classList.add('chat-window__send_disabled');
         });
@@ -264,11 +285,12 @@ export default class ChatWindowComponent {
     }
 
     renderChat() {
-        this.#chatElement = new ChatComponent(this.#container, {
+        this.#chat = new ChatComponent(this.#container, {
             chatData: this.#chatData,
             messages: this.#msgs,
             user: this.#config.user,
-        })
-        .scroll;
+        });
+
+        this.#chatElement = this.#chat.scroll;
     }
 }

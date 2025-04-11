@@ -14,6 +14,8 @@ import { getLsItem } from '../../utils/localStorage.js';
 import convertDate from '../../utils/convertDate.js';
 import convertToFormData from '../../utils/convertToFormData.js';
 
+import router from '../../Router.js';
+
 
 const forms = {
     profile: {
@@ -133,24 +135,19 @@ const forms = {
 };
 
 
-export default class EditProfileView {
+class EditProfileView {
     #containerObj
-    #menu
     #section
     #userData
     #stateUpdaters
-    constructor(containerObj, menu) {
-        this.#containerObj = containerObj;
-        this.#menu = menu;
-        
+    constructor() {
         this.#userData = null;
         this.#stateUpdaters = [];
         this.#section = null;
     }
 
-    render() {
-        this.#containerObj.clear();
-        this.#containerObj = new MainLayoutComponent({
+    render(params, section = 'profile') {
+        this.#containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
 
@@ -168,10 +165,11 @@ export default class EditProfileView {
                     title: 'Образование',
                     onClick: () => this.renderSection('education')
                 },
-            }
+            },
+            active: section,
         });
 
-        this.renderSection('profile');
+        this.renderSection(section);
     }
 
     renderSection(sectionName) {
@@ -183,19 +181,26 @@ export default class EditProfileView {
         Ajax.get({
             url: `/profiles/${getLsItem('username', '')}`,
             callback: (status, userData) => {
-                let isAuthorized = status === 200;
-    
-                if (!isAuthorized) {
-                    this.#menu.goToPage(this.#menu.menuElements.login);
-                    this.#menu.updateMenuVisibility(false);
-                    return;
+                switch (status) {
+                    case 200:
+                        this.getCbOk(userData, sectionData);
+                        break;
+                    case 401:
+                        this.cbUnauthorized();
+                        break;
                 }
-
-                this.#userData = userData;
-                if (sectionData.header) this.renderHeader();
-                this.renderForm(sectionData);
             }
         });
+    }
+
+    cbUnauthorized() {
+        router.go({ path: '/login' });
+    }
+
+    getCbOk(userData, sectionData) {
+        this.#userData = userData;
+        if (sectionData.header) this.renderHeader();
+        this.renderForm(sectionData);
     }
 
     renderForm(sectionData) {
@@ -327,17 +332,20 @@ export default class EditProfileView {
             body: fd,
             isFormData: true,
             callback: (status) => {
-                let isAuthorized = status === 200;
-
-                if (!isAuthorized) {
-                    this.#menu.goToPage(this.#menu.menuElements.login);
-                    this.#menu.updateMenuVisibility(false);
-                    return;
+                switch (status) {
+                    case 200:
+                        this.postCbOk();
+                        break;
+                    case 401:
+                        this.cbUnauthorized();
+                        break;
                 }
-
-                this.render();
             }
         });
+    }
+
+    postCbOk() {
+        this.render(this.#section);
     }
 
     renderHeader() {
@@ -369,3 +377,5 @@ export default class EditProfileView {
         );
     }
 }
+
+export default new EditProfileView();
