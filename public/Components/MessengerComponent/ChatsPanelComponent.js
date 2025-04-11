@@ -73,7 +73,7 @@ export default class ChatsPanelComponent {
             classes: ['chats-panel__chats'],
         });
 
-        this.#config.messenger.ajaxGetChats((chatsData) => {
+        this.#config.messenger.ajaxGetChats((status, chatsData) => {
             const activeChatId = getLsItem('active-chat', null);
                 
             for (const chatData of chatsData) {

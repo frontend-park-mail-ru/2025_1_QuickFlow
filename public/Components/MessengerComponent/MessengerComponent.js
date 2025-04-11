@@ -51,9 +51,10 @@ export default class MessengerComponent {
     ajaxGetChats(cb) {
         Ajax.get({
             url: '/chats',
+            params: { chats_count: 10 },
             callback: (status, chatsData) => {
                 this.ajaxCallbackAuth(status);
-                cb(chatsData);
+                cb(status, chatsData);
             }
         });
     }
