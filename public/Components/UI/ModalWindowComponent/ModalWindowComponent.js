@@ -80,7 +80,7 @@ export default class ModalWindowComponent {
         createElement({
             parent: addPicWrapper,
             classes: ['modal__camera'],
-            attrs: {src: 'static/img/camera-dark-icon.svg'},
+            attrs: {src: '/static/img/camera-dark-icon.svg'},
         });
         createElement({
             tag: 'h4',

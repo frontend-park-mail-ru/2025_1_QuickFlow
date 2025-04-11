@@ -134,7 +134,7 @@ app.get('/api/chats', (req, res) => {
     res.status(200).json(chats[username]);
 });
 
-app.get('/api/messages/:chat_id', (req, res) => {
+app.get('/api/chats/:chat_id/messages', (req, res) => {
     const id = req.cookies['podvorot'];
     const username = ids[id];
     if (!username || !users[username]) {

@@ -36,7 +36,7 @@ export default class MessengerComponent {
 
     ajaxGetMessages(params, cb) {
         Ajax.get({
-            url: `/messages/${params.chatId}`,
+            url: `/chats/${params.chatId}/messages`,
             params: {
                 messages_count: params.count,
                 ...(params?.ts && { ts: params.ts })
