@@ -1,4 +1,4 @@
-import { users, chats, messages } from '../mocks.js'
+import { users } from '../mocks.js'
 
 
 const HTTP_METHOD_GET = 'GET';
@@ -46,13 +46,14 @@ class Ajax {
             if (url === '/user') {
                 callback(200, users['rvasutenko']);
                 return true;
-            } else if (url === '/chats') {
-                callback(200, chats['rvasutenko']);
-                return true;
-            } else if (url.startsWith('/chats/')) {
-                callback(200, messages['rvasutenko'][url.slice(7, -9)]);
-                return true;
             }
+            // else if (url === '/chats') {
+            //     callback(200, chats['rvasutenko']);
+            //     return true;
+            // } else if (url.startsWith('/chats/')) {
+            //     callback(200, messages['rvasutenko'][url.slice(7, -9)]);
+            //     return true;
+            // }
         }
         return false;
     }
@@ -60,7 +61,7 @@ class Ajax {
     async get({ url, params = {}, callback = () => {} }) {
         try {
             if (await this.fakeRequest(url, params, callback)) return;
-            if (url === '/user-dev-false') url = '/feed';
+            // if (url === '/user-dev-false') url = '/feed';
 
             const queryString = new URLSearchParams(params).toString();
             const fullUrl = `${this.baseUrl}${url}${queryString ? `?${queryString}` : ''}`;

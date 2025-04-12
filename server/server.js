@@ -1,196 +1,196 @@
-'use strict';
+// 'use strict';
 
-import express from 'express';
-import body from 'body-parser';
-import cookie from 'cookie-parser';
-import morgan from 'morgan';
-import path from 'path';
-import crypto from 'crypto';
-import { users, posts, chats, messages } from '../public/mocks.js';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+// import express from 'express';
+// import body from 'body-parser';
+// import cookie from 'cookie-parser';
+// import morgan from 'morgan';
+// import path from 'path';
+// import crypto from 'crypto';
+// import { users, posts, chats, messages } from '../public/mocks.js';
+// import { fileURLToPath } from 'url';
+// import { dirname } from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const app = express();
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = dirname(__filename);
+// const app = express();
 
-app.use(morgan('dev'));
-app.use(express.static(path.resolve(__dirname, '..', 'public')));
-app.use(express.static(path.resolve(__dirname, 'images')));
-app.use('/static', express.static('static'));
-app.use(body.json());
-app.use(cookie());
+// app.use(morgan('dev'));
+// app.use(express.static(path.resolve(__dirname, '..', 'public')));
+// app.use(express.static(path.resolve(__dirname, 'images')));
+// app.use('/static', express.static('static'));
+// app.use(body.json());
+// app.use(cookie());
 
-const ids = {};
+// const ids = {};
 
-app.post('/api/signup', (req, res) => {
-    const password = req.body.password;
-    const email = req.body.email;
-    const age = req.body.age;
-    if (
-        !password ||
-        !email ||
-        !age ||
-        !password.match(/^\S{4,}$/) ||
-        !email.match(/@/) ||
-        !(typeof age === 'number' && age > 10 && age < 100)
-    ) {
-        return res.status(400).json({ error: 'Не валидные данные пользователя' });
-    }
-    if (users[email]) {
-        return res.status(400).json({ error: 'Пользователь уже существует' });
-    }
+// app.post('/api/signup', (req, res) => {
+//     const password = req.body.password;
+//     const email = req.body.email;
+//     const age = req.body.age;
+//     if (
+//         !password ||
+//         !email ||
+//         !age ||
+//         !password.match(/^\S{4,}$/) ||
+//         !email.match(/@/) ||
+//         !(typeof age === 'number' && age > 10 && age < 100)
+//     ) {
+//         return res.status(400).json({ error: 'Не валидные данные пользователя' });
+//     }
+//     if (users[email]) {
+//         return res.status(400).json({ error: 'Пользователь уже существует' });
+//     }
 
-    const id = crypto.randomUUID();
-    const user = { password, email, age, images: [] };
-    ids[id] = email;
-    users[email] = user;
+//     const id = crypto.randomUUID();
+//     const user = { password, email, age, images: [] };
+//     ids[id] = email;
+//     users[email] = user;
 
-    res.cookie('podvorot', id, {
-        expires: new Date(Date.now() + 10000 * 60 * 10),
-        httpOnly: true
-    });
-    res.status(201).json({ id });
-});
+//     res.cookie('podvorot', id, {
+//         expires: new Date(Date.now() + 10000 * 60 * 10),
+//         httpOnly: true
+//     });
+//     res.status(201).json({ id });
+// });
 
-app.post('/api/login', (req, res) => {
-    const password = req.body.password;
-    const username = req.body.username;
-    if (!password || !username) {
-        return res.status(400).json({ error: 'Не указано имя пользователя или пароль' });
-    }
-    if (!users[username] || users[username].profile.password !== password) {
-        return res.status(400).json({ error: 'Неверное имя пользователя или пароль' });
-    }
+// app.post('/api/login', (req, res) => {
+//     const password = req.body.password;
+//     const username = req.body.username;
+//     if (!password || !username) {
+//         return res.status(400).json({ error: 'Не указано имя пользователя или пароль' });
+//     }
+//     if (!users[username] || users[username].profile.password !== password) {
+//         return res.status(400).json({ error: 'Неверное имя пользователя или пароль' });
+//     }
 
-    const id = crypto.randomUUID();
-    ids[id] = username;
+//     const id = crypto.randomUUID();
+//     ids[id] = username;
 
-    res.cookie('podvorot', id, {
-        expires: new Date(Date.now() + 10000 * 60 * 10),
-        httpOnly: true
-    });
-    res.status(200).json({ id });
-});
+//     res.cookie('podvorot', id, {
+//         expires: new Date(Date.now() + 10000 * 60 * 10),
+//         httpOnly: true
+//     });
+//     res.status(200).json({ id });
+// });
 
-app.post('/api/logout', (req, res) => {
-    const id = req.cookies['podvorot'];
-    
-    if (!id) {
-        return res.status(400).end();
-    }
-
-    delete ids[id];
-    res.clearCookie('podvorot');
-
-    res.status(200).end();
-});
-
-app.get('/api/feed', (req, res) => {
-    const id = req.cookies['podvorot'];
-    const usernameSession = ids[id];
-
-    if (!usernameSession || !users[usernameSession]) {
-        return res.status(401).end();
-    }
-
-    res.status(200).json(posts);
-});
-
-app.get('/api/profiles/:username', (req, res) => {
-    const id = req.cookies['podvorot'];
-    const username = ids[id];
-    if (!username || !users[username]) {
-        return res.status(401).end();
-    }
-
-    const queryUsername = req.params.username;
-    if (!queryUsername) {
-        return res.status(400).end();
-    } else if (!users[queryUsername]) {
-        return res.status(404).end();
-    }
-
-    res.status(200).json(users[queryUsername]);
-});
-
-app.post('/api/profile', (req, res) => {
-    const id = req.cookies['podvorot'];
-    const username = ids[id];
-    if (!username || !users[username]) {
-        return res.status(401).end();
-    }
-    // TODO: добавить логику обновления данных
-    res.status(200).end();
-});
-
-app.get('/api/chats', (req, res) => {
-    const id = req.cookies['podvorot'];
-    const username = ids[id];
-    if (!username || !users[username]) {
-        return res.status(401).end();
-    }
-    
-    res.status(200).json(chats[username]);
-});
-
-app.get('/api/chats/:chat_id/messages', (req, res) => {
-    const id = req.cookies['podvorot'];
-    const username = ids[id];
-    if (!username || !users[username]) {
-        return res.status(401).end();
-    }
-
-    if (!req.params || !req.params.chat_id || !req.query || !req.query.messages_count) {
-        return res.status(400).end();
-    }
-
-    const chatId = req.params.chat_id;
-    if (!messages[username][chatId]) {
-        return res.status(404).end();
-    }
-
-    return res.status(200).json(messages[username][chatId]);
-});
-
-app.post('/api/messages/:username', (req, res) => {
-    const id = req.cookies['podvorot'];
-    const username = ids[id];
-    if (!username || !users[username]) {
-        return res.status(401).end();
-    }
-
-    res.status(200).json({
-        id: "9a00f4b4-7914-4a3e-91be-c5a7b51bc609",
-        text: "Новое сообщение",
-        created_at: "2025-04-10T19:08:42.323841+03:00",
-        updated_at: "2025-04-10T19:08:42.323841+03:00",
-        is_read: false,
-        attachment_urls: null,
-        sender_id: "0e146b4b-b28e-44b8-8c59-f0c182459756",
-        chat_id: "c828ab93-88dd-4855-a309-940b064e9011"
-    });
-});
-
-// app.post('/like', (req, res) => {
+// app.post('/api/logout', (req, res) => {
 //     const id = req.cookies['podvorot'];
-//     const emailSession = ids[id];
-//     if (!emailSession || !users[emailSession]) {
+    
+//     if (!id) {
+//         return res.status(400).end();
+//     }
+
+//     delete ids[id];
+//     res.clearCookie('podvorot');
+
+//     res.status(200).end();
+// });
+
+// app.get('/api/feed', (req, res) => {
+//     const id = req.cookies['podvorot'];
+//     const usernameSession = ids[id];
+
+//     if (!usernameSession || !users[usernameSession]) {
 //         return res.status(401).end();
 //     }
 
-//     const { id: imageId } = req.body;
-//     images[imageId].likes++;
-
-//     res.status(200).json({ status: 'ok' });
+//     res.status(200).json(posts);
 // });
 
-const port = process.env.PORT || 3000;
+// app.get('/api/profiles/:username', (req, res) => {
+//     const id = req.cookies['podvorot'];
+//     const username = ids[id];
+//     if (!username || !users[username]) {
+//         return res.status(401).end();
+//     }
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
-});
+//     const queryUsername = req.params.username;
+//     if (!queryUsername) {
+//         return res.status(400).end();
+//     } else if (!users[queryUsername]) {
+//         return res.status(404).end();
+//     }
 
-app.listen(port, function () {
-    console.log(`Server listening port ${port}`);
-});
+//     res.status(200).json(users[queryUsername]);
+// });
+
+// app.post('/api/profile', (req, res) => {
+//     const id = req.cookies['podvorot'];
+//     const username = ids[id];
+//     if (!username || !users[username]) {
+//         return res.status(401).end();
+//     }
+//     // TODO: добавить логику обновления данных
+//     res.status(200).end();
+// });
+
+// app.get('/api/chats', (req, res) => {
+//     const id = req.cookies['podvorot'];
+//     const username = ids[id];
+//     if (!username || !users[username]) {
+//         return res.status(401).end();
+//     }
+    
+//     res.status(200).json(chats[username]);
+// });
+
+// app.get('/api/chats/:chat_id/messages', (req, res) => {
+//     const id = req.cookies['podvorot'];
+//     const username = ids[id];
+//     if (!username || !users[username]) {
+//         return res.status(401).end();
+//     }
+
+//     if (!req.params || !req.params.chat_id || !req.query || !req.query.messages_count) {
+//         return res.status(400).end();
+//     }
+
+//     const chatId = req.params.chat_id;
+//     if (!messages[username][chatId]) {
+//         return res.status(404).end();
+//     }
+
+//     return res.status(200).json(messages[username][chatId]);
+// });
+
+// app.post('/api/messages/:username', (req, res) => {
+//     const id = req.cookies['podvorot'];
+//     const username = ids[id];
+//     if (!username || !users[username]) {
+//         return res.status(401).end();
+//     }
+
+//     res.status(200).json({
+//         id: "9a00f4b4-7914-4a3e-91be-c5a7b51bc609",
+//         text: "Новое сообщение",
+//         created_at: "2025-04-10T19:08:42.323841+03:00",
+//         updated_at: "2025-04-10T19:08:42.323841+03:00",
+//         is_read: false,
+//         attachment_urls: null,
+//         sender_id: "0e146b4b-b28e-44b8-8c59-f0c182459756",
+//         chat_id: "c828ab93-88dd-4855-a309-940b064e9011"
+//     });
+// });
+
+// // app.post('/like', (req, res) => {
+// //     const id = req.cookies['podvorot'];
+// //     const emailSession = ids[id];
+// //     if (!emailSession || !users[emailSession]) {
+// //         return res.status(401).end();
+// //     }
+
+// //     const { id: imageId } = req.body;
+// //     images[imageId].likes++;
+
+// //     res.status(200).json({ status: 'ok' });
+// // });
+
+// const port = process.env.PORT || 3000;
+
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+// });
+
+// app.listen(port, function () {
+//     console.log(`Server listening port ${port}`);
+// });
