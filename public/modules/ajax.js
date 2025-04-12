@@ -108,6 +108,36 @@ class Ajax {
         }
     }
     
+    async delete({ url, params = {}, callback = () => {} }) {
+        try {
+            const headers = {};
+            if (!CSRF_FREE_URLS.includes(url)) {
+                headers['X-CSRF-Token'] = await this.csrfRequest() || '';
+            }
+    
+            const queryString = new URLSearchParams(params).toString();
+            const fullUrl = `${this.baseUrl}${url}${queryString ? `?${queryString}` : ''}`;
+    
+            const response = await fetch(fullUrl, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers
+            });
+    
+            let data = null;
+            if (
+                response.headers.get('content-length') !== '0' &&
+                response.headers.get('content-type')?.includes('application/json')
+            ) {
+                data = await response.json();
+            }
+    
+            callback(response.status, data);
+        } catch (error) {
+            console.error('DELETE request failed:', error);
+            callback(500);
+        }
+    }    
 }
 
 export default new Ajax();

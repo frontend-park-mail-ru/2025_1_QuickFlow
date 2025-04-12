@@ -3,7 +3,7 @@ export const posts = [
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
         author: {
             id: "b143b529-9925-450f-9d26-1255658a0a8f",
-            username: "Nikita22",
+            username: "rvasutenko",
             avatar_url: "/avatars/avatar.jpg",
             firstname: "Илья",
             lastname: "Мациевский"

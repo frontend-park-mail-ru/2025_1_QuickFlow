@@ -14,6 +14,8 @@ export default class ContextMenuComponent {
     }
 
     render() {
+        if (Object.keys(this.#config.data).length === 0) return;
+        
         this.wrapper = createElement({
             parent: this.#parent,
             classes: [

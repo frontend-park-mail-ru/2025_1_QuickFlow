@@ -233,12 +233,14 @@ class ProfileView {
 
         const profileActions = createElement({ parent: profileBottom });
 
-        new ButtonComponent(profileActions, {
-            text: 'Редактировать профиль',
-            variant: 'secondary',
-            size: 'small',
-            onClick: () => router.go({ path: '/profile/edit' }),
-        });
+        if (data.profile.username === getLsItem('username', '')) {
+            new ButtonComponent(profileActions, {
+                text: 'Редактировать профиль',
+                variant: 'secondary',
+                size: 'small',
+                onClick: () => router.go({ path: '/profile/edit' }),
+            });
+        }
     }
 
     createCountedItem(parent, title, value) {

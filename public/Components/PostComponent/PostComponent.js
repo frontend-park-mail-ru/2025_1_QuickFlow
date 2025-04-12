@@ -2,6 +2,9 @@ import ContextMenuComponent from '../ContextMenuComponent/ContextMenuComponent.j
 import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
 import formatTimeAgo from '../../utils/formatTimeAgo.js';
 import createElement from '../../utils/createElement.js';
+import { getLsItem } from '../../utils/localStorage.js';
+import Ajax from '../../modules/ajax.js';
+import router from '../../Router.js';
 
 
 const AUTHOR_AVATAR_SIZE = 's';
@@ -272,28 +275,51 @@ export default class PostComponent {
             parent: optionsWrapper,
         });
 
-        new ContextMenuComponent(dropdown, {
-            data: {
-                notify: {
-                    href: '/notify',
-                    text: 'Уведомлять о постах',
-                    icon: 'notice-icon',
-                },
-                copyLink: {
-                    href: '/copy-link',
-                    text: 'Скопировать ссылку',
-                    icon: 'copy-icon',
-                },
-                notInterested: {
-                    href: '/not-interested',
-                    text: 'Не интересно',
-                    icon: 'cross-circle-icon',
-                },
-                ban: {
-                    href: '/ban',
-                    text: 'Пожаловаться',
-                    icon: 'ban-icon',
-                    isCritical: true
+        const data = {
+            // notify: {
+            //     href: '/notify',
+            //     text: 'Уведомлять о постах',
+            //     icon: 'notice-icon',
+            // },
+            // copyLink: {
+            //     href: '/copy-link',
+            //     text: 'Скопировать ссылку',
+            //     icon: 'copy-icon',
+            // },
+            // notInterested: {
+            //     href: '/not-interested',
+            //     text: 'Не интересно',
+            //     icon: 'cross-circle-icon',
+            // },
+            // ban: {
+            //     href: '/ban',
+            //     text: 'Пожаловаться',
+            //     icon: 'ban-icon',
+            //     isCritical: true
+            // }
+        };
+
+        if (this.#config.author.username === getLsItem('username', '')) {
+            data.delete = {
+                href: '/delete',
+                text: 'Удалить',
+                icon: 'trash-accent-icon',
+                isCritical: true,
+                onClick: () => this.ajaxDeletePost(this.#config.id),
+            }
+        }
+
+        new ContextMenuComponent(dropdown, { data });
+    }
+
+    ajaxDeletePost(id) {
+        Ajax.post({
+            url: `/post/${id}`,
+            callback: (status) => {
+                switch (status) {
+                    case 401:
+                        router.go({ path: '/login' });
+                        break;
                 }
             }
         });
