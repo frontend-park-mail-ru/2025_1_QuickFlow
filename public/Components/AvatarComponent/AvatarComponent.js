@@ -1,4 +1,5 @@
 import createElement from '../../utils/createElement.js';
+import getTimeDifference from '../../utils/getTimeDifference.js';
 
 const SIZE_PREFIX = 'avatar_';
 const DEFAULT_SIZE_CLASS = SIZE_PREFIX + 'm';
@@ -66,17 +67,19 @@ export default class AvatarComponent {
     }
 
     renderStatus() {
-        const status = 'online'; // TODO: получать данные запросом
-        if (status === 'online') {
+        if (this.#config.status.online) {
             createElement({
                 parent: this.wrapper,
-                classes: ['avatar__status_online']
+                classes: ['avatar__status_online'],
             });
         } else {
             createElement({
                 parent: this.wrapper,
                 classes: ['avatar__status_offline'],
-                text: this.#config.status
+                text: getTimeDifference(
+                    this.#config.status.lastSeen,
+                    { mode: 'short' }
+                ),
             });
         }
     }

@@ -35,10 +35,26 @@ wss.on('connection', (ws) => {
             const { type, payload } = JSON.parse(data);
             console.log(`[WS] Message received:`, type, payload);
 
-            if (type === 'FIRE') {
-                const result = handleFire(payload);
-                ws.send(JSON.stringify({ type: 'FIRE_RESULT', payload: result }));
-            }
+            const response = {
+                type: 'message',
+                payload: {
+                    id: "uuidv4()",
+                    text: "hello!",
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    is_read: false,
+                    attachment_urls: null,
+                    sender: {
+                        id: "1eabe150-7b9e-42b3-a8d5-ad6ad900180c",
+                        username: "Nikita2",
+                        firstname: "Myname",
+                        lastname: "Mysurname"
+                    },
+                    chat_id: "99f9d7dd-e955-4eda-97ec-91c958208b3b"
+                }
+            };
+
+            ws.send(JSON.stringify(response));
         } catch (err) {
             console.error('[WS] Failed to parse message', data);
         }
@@ -49,18 +65,6 @@ wss.on('connection', (ws) => {
     });
 });
 
-function handleFire(payload) {
-    // Простая заглушка для FIRE_RESULT
-    const cell = payload.cell;
-    const hit = Math.random() > 0.5;
-
-    return {
-        state: {
-            cell,
-            result: hit ? 'hit' : 'miss'
-        }
-    };
-}
 
 
 
@@ -235,6 +239,12 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
-app.listen(port, function () {
+
+
+// app.listen(port, function () {
+//     console.log(`Server listening port ${port}`);
+// });
+
+server.listen(port, function () {
     console.log(`Server listening port ${port}`);
 });

@@ -193,6 +193,10 @@ class ProfileView {
             size: 'xxxl',
             class: 'profile__avatar',
             type: 'status',
+            status: {
+                online: data.online,
+                lastSeen: data.last_seen,
+            },
             src: data.profile.avatar_url,
         });
 
