@@ -313,7 +313,7 @@ export default class PostComponent {
     }
 
     ajaxDeletePost(id) {
-        Ajax.post({
+        Ajax.delete({
             url: `/post/${id}`,
             callback: (status) => {
                 switch (status) {
