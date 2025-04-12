@@ -7,9 +7,8 @@ class WebSocketService {
     }
 
     #detectWebSocketUrl(path) {
-        // const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
-        // const protocol = isLocalhost ? 'ws://' : 'wss://';
-        const protocol = 'ws://';
+        const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
+        const protocol = isLocalhost ? 'ws://' : 'wss://';
         const host = window.location.host;
         return `${protocol}${host}${path}`;
     }
