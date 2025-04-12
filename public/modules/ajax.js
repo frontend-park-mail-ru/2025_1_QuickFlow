@@ -42,7 +42,7 @@ class Ajax {
 
     async fakeRequest(url, params, callback) {
         await new Promise(resolve => setTimeout(resolve, 30)); // Симуляция сетевой задержки
-        if (this.develop) {
+        if (!this.develop) {
             if (url === '/user') {
                 callback(200, users['rvasutenko']);
                 return true;
