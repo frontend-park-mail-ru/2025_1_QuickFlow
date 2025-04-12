@@ -1,4 +1,4 @@
-import { users } from '../mocks.js'
+import { users, chats, messages } from '../mocks.js'
 
 
 const HTTP_METHOD_GET = 'GET';
@@ -42,9 +42,15 @@ class Ajax {
 
     async fakeRequest(url, params, callback) {
         await new Promise(resolve => setTimeout(resolve, 30)); // Симуляция сетевой задержки
-        if (!this.develop) {
+        if (this.develop) {
             if (url === '/user') {
                 callback(200, users['rvasutenko']);
+                return true;
+            } else if (url === '/chats') {
+                callback(200, chats['rvasutenko']);
+                return true;
+            } else if (url.startsWith('/chats/')) {
+                callback(200, messages['rvasutenko'][url.slice(7, -9)]);
                 return true;
             }
         }
