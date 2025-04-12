@@ -11,7 +11,7 @@ import HeaderComponent from './Components/HeaderComponent/HeaderComponent.js';
 import MenuComponent from './Components/MenuComponent/MenuComponent.js';
 import createElement from './utils/createElement.js';
 import router from './Router.js';
-import ws from './modules/WebSocketService.js';
+// import ws from './modules/WebSocketService.js';
 import './index.scss';
 
 
@@ -72,10 +72,10 @@ const config = {
 router.menu = new MenuComponent(container, config);
 router.header = new HeaderComponent(container);
 
-ws.subscribe('message', (payload) => {
-    console.log("eeee", payload);
-});
+// ws.subscribe('message', (payload) => {
+//     console.log("eeee", payload);
+// });
 
-setTimeout(() => ws.send('message', { d: 12 }), 300);
+// setTimeout(() => ws.send('message', { d: 12 }), 300);
 
 router.start();
