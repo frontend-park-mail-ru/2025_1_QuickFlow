@@ -244,6 +244,7 @@ export default class ChatWindowComponent {
             textarea.value = '';
             sendBtn.classList.add('chat-window__send_disabled');
 
+            console.log(this.#chatData);
             this.#config.messenger.ajaxPostMessages({
                 username: "rvasutenko", // TODO: this.#chatData.username
                 request: {

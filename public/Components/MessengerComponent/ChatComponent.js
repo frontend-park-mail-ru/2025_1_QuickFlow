@@ -119,7 +119,7 @@ export default class MessageComponent {
 
         new AvatarComponent(msg, {
             size: MSG_AVATAR_SIZE,
-            // src: msgData.sender_id === this.#config.chatData.name ? this.#config.user.profile.avatar_url : this.#config.chatData.avatar,
+            src: msgData.sender?.avatar_url || '',
         });
 
         const msgContent = createElement({
@@ -130,8 +130,7 @@ export default class MessageComponent {
         createElement({
             parent: msgContent,
             classes: ['chat__sender'],
-            text: "Заглушка"
-            // text: msgData.sender_id === this.#config.user.profile.username ? `${this.#config.user.profile.firstname} ${this.#config.user.profile.lastname}` : this.#config.chatData.name,
+            text: `${msgData.sender.firstname} ${msgData.sender.lastname}`
         });
 
         createElement({
@@ -146,7 +145,10 @@ export default class MessageComponent {
 
         createElement({
             parent: msgInfo,
-            classes: ['chat__msg-status', msgData.is_read ? 'chat__msg-status_read' : null],
+            classes: [
+                'chat__msg-status',
+                msgData.is_read ? 'chat__msg-status_read' : null
+            ],
         });
 
         createElement({

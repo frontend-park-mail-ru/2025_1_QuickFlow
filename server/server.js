@@ -6,13 +6,66 @@ import cookie from 'cookie-parser';
 import morgan from 'morgan';
 import path from 'path';
 import crypto from 'crypto';
+
+import http from 'http';
+import { WebSocketServer } from 'ws';
+
 import { users, posts, chats, messages } from '../public/mocks.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
 const app = express();
+const server = http.createServer(app);
+const wss = new WebSocketServer({ server, path: '/api/ws' });
+
+const ids = {};
+
+
+
+
+
+wss.on('connection', (ws) => {
+    console.log('[WS] Client connected');
+
+    ws.on('message', (data) => {
+        try {
+            const { type, payload } = JSON.parse(data);
+            console.log(`[WS] Message received:`, type, payload);
+
+            if (type === 'FIRE') {
+                const result = handleFire(payload);
+                ws.send(JSON.stringify({ type: 'FIRE_RESULT', payload: result }));
+            }
+        } catch (err) {
+            console.error('[WS] Failed to parse message', data);
+        }
+    });
+
+    ws.on('close', () => {
+        console.log('[WS] Client disconnected');
+    });
+});
+
+function handleFire(payload) {
+    // Простая заглушка для FIRE_RESULT
+    const cell = payload.cell;
+    const hit = Math.random() > 0.5;
+
+    return {
+        state: {
+            cell,
+            result: hit ? 'hit' : 'miss'
+        }
+    };
+}
+
+
+
+
+
 
 app.use(morgan('dev'));
 app.use(express.static(path.resolve(__dirname, '..', 'public')));
@@ -20,8 +73,6 @@ app.use(express.static(path.resolve(__dirname, 'images')));
 app.use('/static', express.static('static'));
 app.use(body.json());
 app.use(cookie());
-
-const ids = {};
 
 app.post('/api/signup', (req, res) => {
     const password = req.body.password;
@@ -167,23 +218,16 @@ app.post('/api/messages/:username', (req, res) => {
         updated_at: "2025-04-10T19:08:42.323841+03:00",
         is_read: false,
         attachment_urls: null,
-        sender_id: "0e146b4b-b28e-44b8-8c59-f0c182459756",
+        "sender": {
+            "id": "0e146b4b-b28e-44b8-8c59-f0c182459756",
+            "username": "rvasutenko",
+            "firstname": "Роман",
+            "lastname": "Васютенко",
+            "avatar_url": "/avatars/avatar.jpg",
+        },
         chat_id: "c828ab93-88dd-4855-a309-940b064e9011"
     });
 });
-
-// app.post('/like', (req, res) => {
-//     const id = req.cookies['podvorot'];
-//     const emailSession = ids[id];
-//     if (!emailSession || !users[emailSession]) {
-//         return res.status(401).end();
-//     }
-
-//     const { id: imageId } = req.body;
-//     images[imageId].likes++;
-
-//     res.status(200).json({ status: 'ok' });
-// });
 
 const port = process.env.PORT || 3000;
 

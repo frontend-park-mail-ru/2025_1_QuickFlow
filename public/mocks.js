@@ -258,7 +258,13 @@ export const messages = {
                 "updated_at": "2025-04-10T19:00:36.19391+03:00",
                 "is_read": true,
                 "attachment_urls": null,
-                "sender_id": "0e146b4b-b28e-44b8-8c59-f0c182459756",
+                "sender": {
+                    "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                    "username": "Nikita2",
+                    "firstname": "Никита",
+                    "lastname": "Могилин",
+                    "avatar_url": "/avatars/avatar4.jpg",
+                },
                 "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
             },
             {
@@ -268,7 +274,13 @@ export const messages = {
                 "updated_at": "2025-04-10T19:08:42.323841+03:00",
                 "is_read": true,
                 "attachment_urls": null,
-                "sender_id": "0e146b4b-b28e-44b8-8c59-f0c182459756",
+                "sender": {
+                    "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                    "username": "Nikita2",
+                    "firstname": "Никита",
+                    "lastname": "Могилин",
+                    "avatar_url": "/avatars/avatar4.jpg",
+                },
                 "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
             },
             {
@@ -278,7 +290,13 @@ export const messages = {
                 "updated_at": "2025-04-10T19:08:27.926906+03:00",
                 "is_read": true,
                 "attachment_urls": null,
-                "sender_id": "0e146b4b-b28e-44b8-8c59-f0c182459756",
+                "sender": {
+                    "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                    "username": "Nikita2",
+                    "firstname": "Никита",
+                    "lastname": "Могилин",
+                    "avatar_url": "/avatars/avatar4.jpg",
+                },
                 "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
             }
         ]
