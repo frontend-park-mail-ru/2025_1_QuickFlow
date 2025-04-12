@@ -199,19 +199,19 @@ export const chats = {
             updated_at: "2025-04-11T16:46:33.373724+03:00",
             type: "private",
             last_message: {
-                id: "218503be-332d-4639-b540-5f2f58e63f38",
-                text: "HelloHello123!",
-                created_at: "2025-04-11T16:46:33.373724+03:00",
-                updated_at: "2025-04-11T16:46:33.373724+03:00",
-                is_read: false,
-                attachment_urls: null,
-                sender_id: "12c314cb-19ae-40c8-a069-fb2c426a9cc9",
-                chat_id: "49dc794b-d8cf-404c-be69-4886bd78ada4"
+                "id": "dcbe8d04-95c3-48c1-ac1f-2d4ab726733d",
+                "text": "Что у тебя нового за неделю произошло?",
+                "created_at": "2025-04-10T19:08:27.926906+03:00",
+                "updated_at": "2025-04-10T19:08:27.926906+03:00",
+                "is_read": false,
+                "attachment_urls": null,
+                "sender_id": "0e146b4b-b28e-44b8-8c59-f0c182459756",
+                "chat_id": "49dc794b-d8cf-404c-be69-4886bd78ada4"
             }
         },
         {
             id: "13dc794b-d8cf-404c-be69-4886bd78ada4",
-            name: "Макс Павловский",
+            name: "Макс Андреев",
             avatar_url: '/avatars/avatar6.jpg',
             created_at: "2025-04-11T16:46:32.821303+03:00",
             updated_at: "2025-04-11T16:46:33.373724+03:00",
@@ -229,7 +229,7 @@ export const chats = {
         },
         {
             id: "85dc794b-d8cf-404c-be69-4886bd78ada4",
-            name: "Валера Павловский",
+            name: "Валера Турилкин",
             avatar_url: '/avatars/avatar5.jpg',
             created_at: "2025-04-11T16:46:32.821303+03:00",
             updated_at: "2025-04-11T16:46:33.373724+03:00",
@@ -256,7 +256,7 @@ export const messages = {
                 "text": "Привет",
                 "created_at": "2025-04-10T19:00:36.19391+03:00",
                 "updated_at": "2025-04-10T19:00:36.19391+03:00",
-                "is_read": false,
+                "is_read": true,
                 "attachment_urls": null,
                 "sender_id": "0e146b4b-b28e-44b8-8c59-f0c182459756",
                 "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
@@ -276,7 +276,7 @@ export const messages = {
                 "text": "Что у тебя нового за неделю произошло?",
                 "created_at": "2025-04-10T19:08:27.926906+03:00",
                 "updated_at": "2025-04-10T19:08:27.926906+03:00",
-                "is_read": false,
+                "is_read": true,
                 "attachment_urls": null,
                 "sender_id": "0e146b4b-b28e-44b8-8c59-f0c182459756",
                 "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
