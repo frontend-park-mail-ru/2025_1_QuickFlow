@@ -8,10 +8,16 @@ import router from '../../Router.js';
 class MessengerView {
     constructor() {}
 
-    render() {
+    render(params) {
         const containerObj = new MainLayoutComponent().render({
             type: 'messenger',
         });
+
+        const hasTargetChat = (
+            typeof params === 'object' &&
+            Object.keys(params).length &&
+            params?.username
+        );
 
         Ajax.get({
             url: `/profiles/${getLsItem('username', '')}`,
@@ -25,6 +31,7 @@ class MessengerView {
         
                 new MessengerComponent(containerObj, {
                     user: userData,
+                    target: hasTargetChat ? params.username : null,
                 });
             }
         });

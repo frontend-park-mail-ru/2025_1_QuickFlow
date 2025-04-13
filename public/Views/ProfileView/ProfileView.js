@@ -53,14 +53,20 @@ const ACTIONS_PROPERTIES = {
         },
         {
             icon: "/static/img/messenger-primary-icon.svg",
-            onClick: () => {
-                router.go({ path: '/messenger' });
+            onClick: function(data) {
+                router.go({ path: `/messenger/${data.profile.username}` });
             },
         }],
     following: [{
             text: "Вы подписаны",
             variant: "secondary",
-            onClick: () => {},
+            onClick: function(data) {
+                Ajax.delete({
+                    url: '/follow',
+                    body: { friend_id: data.id },
+                    callback: () => {}
+                });
+            },
         },
         {
             icon: "/static/img/messenger-primary-icon.svg",
@@ -336,7 +342,7 @@ class ProfileView {
                 icon: properties[1].icon,
                 variant: "secondary",
                 size: 'small',
-                onClick: properties[1].onClick,
+                onClick: properties[1].onClick.bind(this, data),
             });
         }
     }

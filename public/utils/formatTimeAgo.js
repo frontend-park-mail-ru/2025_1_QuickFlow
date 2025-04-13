@@ -1,7 +1,9 @@
 export default function formatTimeAgo(dateString) {
     const date = new Date(dateString);
-    const now = new Date();
-    const diffInSeconds = Math.floor((now - date) / 1000);
+    // const now = new Date();
+
+    const diffInSeconds = Math.floor((new Date() - new Date(dateString)) / 1000);
+    // const diffInSeconds = Math.floor((now - date) / 1000);
     
     if (diffInSeconds < 60) {
         return `${diffInSeconds} секунд${getEnding(diffInSeconds)} назад`;

@@ -35,9 +35,9 @@ router.register(SignupView, { path: '/signup', section: null });
 router.register(LogoutView, { path: '/logout', section: null });
 router.register(FeedView, { path: '/feed' });
 router.register(ProfileView, { path: '/profiles/{username}', section: '/profiles' });
-router.register(MessengerView, { path: '/messenger/{username}' });
+router.register(MessengerView, { path: '/messenger/{username}', section: '/messenger' });
 router.register(EditProfileView, { path: '/profile/edit', section: '/profiles' });
-router.register(MessengerView, { path: '/messenger' });
+router.register(MessengerView, { path: '/messenger', section: '/messenger' });
 router.register(NotFoundView, { path: '/not-found', section: null });
 
 const config = {

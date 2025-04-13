@@ -77,6 +77,10 @@ export default class ChatWindowComponent {
         });
 
         this.renderEmptyState();
+
+        // if (this.#config.target) {
+
+        // }
     }
 
     get chatData() {
