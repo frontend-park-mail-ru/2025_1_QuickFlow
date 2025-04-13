@@ -87,7 +87,7 @@ export default class PostComponent {
 
             createElement({
                 parent: prevBtn,
-                attrs: {src: 'static/img/prev-arrow-icon.svg'}
+                attrs: {src: '/static/img/prev-arrow-icon.svg'}
             });
 
             const nextBtn = createElement({
@@ -97,7 +97,7 @@ export default class PostComponent {
 
             createElement({
                 parent: nextBtn,
-                attrs: {src: 'static/img/next-arrow-icon.svg'}
+                attrs: {src: '/static/img/next-arrow-icon.svg'}
             });
 
             prevBtn.addEventListener('click', () => {
