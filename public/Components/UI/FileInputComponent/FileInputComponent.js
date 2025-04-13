@@ -3,7 +3,7 @@ import createElement from '../../../utils/createElement.js';
 
 const DEFAULT_TYPE = 'file';
 const DEFAULT_NAME = '';
-const DEFAULT_ACCEPT_IMAGE = 'image/*';
+const DEFAULT_ACCEPT_IMAGE = '.jpg, .jpeg, .png, .gif';
 
 
 export default class FileInputComponent {

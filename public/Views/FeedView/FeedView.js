@@ -11,16 +11,17 @@ const POSTS_COUNT = 10;
 
 
 class FeedView {
+    #containerObj = null;
     constructor() {
         this.posts = null;
     }
 
     render() {
-        const containerObj = new MainLayoutComponent().render({
+        this.#containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
 
-        new RadioMenuComponent(containerObj.right, {
+        new RadioMenuComponent(this.#containerObj.right, {
             items: {
                 feed: {
                     title: 'Лента',
@@ -42,7 +43,7 @@ class FeedView {
         });
 
         const createPostBtn = createElement({
-            parent: containerObj.left,
+            parent: this.#containerObj.left,
             tag: 'button',
             classes: ['button_feed']
         });
@@ -57,12 +58,12 @@ class FeedView {
         });
 
         this.posts = createElement({
-            parent: containerObj.left,
+            parent: this.#containerObj.left,
             classes: ['feed__posts'],
         });
 
         createPostBtn.addEventListener('click', () => {
-            new ModalWindowComponent(containerObj.container, {
+            new ModalWindowComponent(this.#containerObj.container, {
                 type: 'create-post',
             });
         });
@@ -103,7 +104,7 @@ class FeedView {
         //     }
         // });
 
-        return containerObj.container;
+        return this.#containerObj.container;
     }
 
     cbUnauthorized() {
@@ -113,6 +114,7 @@ class FeedView {
     cbOk(feedData) {
         if (feedData && Array.isArray(feedData)) {
             feedData.forEach((config) => {
+                config.container = this.#containerObj.container;
                 new PostComponent(this.posts, config);
             });
         }

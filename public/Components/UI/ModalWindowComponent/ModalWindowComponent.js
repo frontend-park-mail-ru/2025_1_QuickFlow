@@ -55,6 +55,8 @@ export default class ModalWindowComponent {
 
         if (this.#config.type === 'create-post') {
             this.renderPostInner();
+        } else if (this.#config.type === 'edit-post') {
+            this.renderPostInner(true);
         } else if (this.#config.type === 'profile-full-info') {
             this.renderProfileInfoInner();
         }
@@ -65,9 +67,9 @@ export default class ModalWindowComponent {
         document.body.style.overflow = 'auto';
     }
 
-    renderPostInner() {
+    renderPostInner(isFilled = false) {
         this.modalWindow.classList.add('modal_post');
-        this.title.textContent = 'Новый пост';
+        this.title.textContent = isFilled ? 'Редактировать пост' : 'Новый пост';
 
         const picsWrapper = createElement({
             parent: this.modalWindow,

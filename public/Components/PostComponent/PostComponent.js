@@ -1,5 +1,6 @@
 import ContextMenuComponent from '../ContextMenuComponent/ContextMenuComponent.js'
 import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
+import ModalWindowComponent from '../UI/ModalWindowComponent/ModalWindowComponent.js';
 import formatTimeAgo from '../../utils/formatTimeAgo.js';
 import createElement from '../../utils/createElement.js';
 import { getLsItem } from '../../utils/localStorage.js';
@@ -284,13 +285,24 @@ export default class PostComponent {
         };
 
         if (this.#config.author.username === getLsItem('username', '')) {
+            data.edit = {
+                href: '/edit',
+                text: 'Редактировать',
+                icon: 'pencil-primary-icon',
+                onClick: () => {
+                    new ModalWindowComponent(this.#config.container, {
+                        type: 'edit-post',
+                        data: this.#config,
+                    });
+                },
+            };
             data.delete = {
                 href: '/delete',
                 text: 'Удалить',
                 icon: 'trash-accent-icon',
                 isCritical: true,
                 onClick: () => this.ajaxDeletePost(this.#config.id),
-            }
+            };
         } else {
             data.notify = {
                 href: '/notify',

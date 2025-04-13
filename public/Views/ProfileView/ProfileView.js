@@ -229,6 +229,7 @@ class ProfileView {
 
         if (feedData && Array.isArray(feedData)) {
             feedData.forEach((config) => {
+                config.container = this.#containerObj.container;
                 new PostComponent(postsWrapper, config);
             });
         }
