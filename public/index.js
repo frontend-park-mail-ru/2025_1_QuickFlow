@@ -35,6 +35,7 @@ router.register(SignupView, { path: '/signup', section: null });
 router.register(LogoutView, { path: '/logout', section: null });
 router.register(FeedView, { path: '/feed' });
 router.register(ProfileView, { path: '/profiles/{username}', section: '/profiles' });
+router.register(MessengerView, { path: '/messenger/{username}' });
 router.register(EditProfileView, { path: '/profile/edit', section: '/profiles' });
 router.register(MessengerView, { path: '/messenger' });
 router.register(NotFoundView, { path: '/not-found', section: null });
@@ -73,8 +74,6 @@ const config = {
 router.menu = new MenuComponent(container, config);
 router.header = new HeaderComponent(container);
 
-if (ws) {
-    console.log('OK: WS INITIALIZED');
-}
+if (ws) console.log('OK: WS INITIALIZED');
 
 router.start();

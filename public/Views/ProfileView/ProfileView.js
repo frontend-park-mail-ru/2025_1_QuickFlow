@@ -43,53 +43,57 @@ const ACTIONS_PROPERTIES = {
     stranger: [{
             text: "Добавить в друзья",
             variant: "primary",
-            onClick: () => {
-
+            onClick: function(data) {
+                Ajax.post({
+                    url: '/follow',
+                    body: { receiver_id: data.id },
+                    callback: () => {}
+                });
             },
         },
         {
             icon: "/static/img/messenger-primary-icon.svg",
             onClick: () => {
-                
+                router.go({ path: '/messenger' });
             },
         }],
     following: [{
             text: "Вы подписаны",
             variant: "secondary",
-            onClick: () => {
-                
-            },
+            onClick: () => {},
         },
         {
             icon: "/static/img/messenger-primary-icon.svg",
-            onClick: () => {
-                
-            },
+            onClick: () => {},
         }],
     followed_by: [{
             text: "Подписан на вас",
             variant: "primary",
-            onClick: () => {
-                
+            onClick: function(data) {
+                Ajax.post({
+                    url: '/followers/accept',
+                    body: { receiver_id: data.id },
+                    callback: () => {}
+                });
             },
         },
         {
             icon: "/static/img/messenger-primary-icon.svg",
-            onClick: () => {
-                
-            },
+            onClick: () => {},
         }],
     friend: [{
             text: "Сообщение",
             variant: "primary",
-            onClick: () => {
-                
-            },
+            onClick: () => {},
         },
         {
             icon: "/static/img/user-added-icon.svg",
-            onClick: () => {
-                
+            onClick: function(data) {
+                Ajax.delete({
+                    url: '/friends',
+                    body: { friend_id: data.id },
+                    callback: () => {}
+                });
             },
         }],
 };
@@ -102,16 +106,19 @@ class ProfileView {
         this.#containerObj = null;
     }
 
-    render() {
+    render(params) {
         this.#containerObj = new MainLayoutComponent().render({
             type: 'profile',
         });
 
-        let username;
-        const path = router.path.split('/').filter(Boolean);
-        username = path.length === 2 ?
-            path[1] :
-            getLsItem('username', '');
+        // let username;
+        // console.log(params);
+        // const path = router.path.split('/').filter(Boolean);
+        // username = path.length === 2 ?
+        //     path[1] :
+        //     getLsItem('username', '');
+
+        const username = params?.username || getLsItem('username', '');
 
         Ajax.get({
             url: `/profiles/${username}`,
@@ -235,7 +242,7 @@ class ProfileView {
         }
     }
 
-    cbOk(data) { 
+    cbOk(data) {
         const profileHeader = createElement({
             parent: this.#containerObj.top,
             classes: ['profile']
@@ -296,7 +303,6 @@ class ProfileView {
     }
 
     renderActions(profileBottom, data) {
-        console.log(this.#profileActions);
         if (this.#profileActions) {
             this.#profileActions.innerHTML = '';
             profileBottom.appendChild(this.#profileActions);
@@ -307,20 +313,24 @@ class ProfileView {
             });
         }
 
-        if (data.profile.username === getLsItem('username', '')) {
-            new ButtonComponent(this.#profileActions, {
-                text: 'Редактировать профиль',
-                variant: 'secondary',
-                size: 'small',
-                onClick: () => router.go({ path: '/profile/edit' }),
-            });
-        } else if (Object.keys(ACTIONS_PROPERTIES).includes(data.relation)) {
+        // if (data.profile.username === getLsItem('username', '')) {
+        //     new ButtonComponent(this.#profileActions, {
+        //         text: 'Редактировать профиль',
+        //         variant: 'secondary',
+        //         size: 'small',
+        //         onClick: () => router.go({ path: '/profile/edit' }),
+        //     });
+        // } else
+
+        data.relation = "stranger";
+
+        if (Object.keys(ACTIONS_PROPERTIES).includes(data.relation)) {
             const properties = ACTIONS_PROPERTIES[data.relation];
             new ButtonComponent(this.#profileActions, {
                 text: properties[0].text,
                 variant: properties[0].variant,
                 size: 'small',
-                onClick: properties[0].onClick,
+                onClick: properties[0].onClick.bind(this, data),
             });
             new ButtonComponent(this.#profileActions, {
                 icon: properties[1].icon,
