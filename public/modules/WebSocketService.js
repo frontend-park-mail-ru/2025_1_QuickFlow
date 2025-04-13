@@ -12,7 +12,7 @@ class WebSocketService {
     #detectWebSocketUrl(path) {
         const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
         const protocol = isLocalhost ? 'ws://' : 'wss://';
-        const host = isLocalhost ? window.location.host : "www.quickflowapp.ru";
+        const host = isLocalhost ? window.location.host : "quickflowapp.ru";
         return `${protocol}${host}${path}`;
     }
 
