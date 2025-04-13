@@ -23,7 +23,8 @@ export default class MessengerComponent {
 
         const chatsPanel = new ChatsPanelComponent(messengerWrapper, {
             user: this.#config.user,
-            messenger: this
+            messenger: this,
+            chat_id: this.#config?.chat_id,
         });
         const chatWindow = new ChatWindowComponent(messengerWrapper, {
             user: this.#config.user,
