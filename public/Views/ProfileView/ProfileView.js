@@ -358,6 +358,7 @@ class ProfileView {
         });
         createElement({
             parent: item,
+            classes: ['profile__detail-text'],
             text: value
         });
 

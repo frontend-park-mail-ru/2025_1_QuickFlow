@@ -84,6 +84,10 @@
     color: var(--text-secondary);
 }
 
+.profile__detail-text {
+    word-break: break-word;
+}
+
 .profile__icon {
     width: 16px;
     height: 16px;
