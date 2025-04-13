@@ -296,6 +296,7 @@ class ProfileView {
     }
 
     renderActions(profileBottom, data) {
+        console.log(this.#profileActions);
         if (!this.#profileActions) {
             this.#profileActions = createElement({
                 parent: profileBottom,
