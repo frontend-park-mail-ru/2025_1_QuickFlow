@@ -305,7 +305,7 @@ class ProfileView {
 
         console.log(getLsItem('username', ''), data.profile.username);
         if (data.profile.username === getLsItem('username', '')) {
-            return new ButtonComponent(this.#profileActions, {
+            new ButtonComponent(this.#profileActions, {
                 text: 'Редактировать профиль',
                 variant: 'secondary',
                 size: 'small',
