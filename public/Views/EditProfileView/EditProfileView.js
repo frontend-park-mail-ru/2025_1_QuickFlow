@@ -26,7 +26,8 @@ const forms = {
                 config: {
                     label: 'Имя пользователя',
                     validation: 'username',
-                    required: true
+                    required: true,
+                    maxLength: 20,
                 }
             }],
             [{
@@ -34,7 +35,8 @@ const forms = {
                 config: {
                     label: 'Имя',
                     validation: 'name',
-                    required: true
+                    required: true,
+                    maxLength: 25,
                 }
             },
             {
@@ -42,7 +44,8 @@ const forms = {
                 config: {
                     label: 'Фамилия',
                     validation: 'name',
-                    required: true
+                    required: true,
+                    maxLength: 25,
                 }
             },
             {
@@ -52,7 +55,8 @@ const forms = {
                     validation: 'date',
                     autocomplete: 'date',
                     placeholder: 'дд.мм.гггг',
-                    required: true
+                    required: true,
+                    maxLength: 10,
                 }
             }],
             [{
@@ -72,6 +76,7 @@ const forms = {
                 key: 'city',
                 config: {
                     label: 'Город',
+                    maxLength: 25,
                 }
             }],
             [{
@@ -86,6 +91,7 @@ const forms = {
                 config: {
                     label: 'Почта',
                     validation: 'email',
+                    maxLength: 32,
                 }
             }]
         ]
@@ -97,30 +103,35 @@ const forms = {
                 key: 'school_city',
                 config: {
                     label: 'Город',
+                    maxLength: 25,
                 }
             },
             {
                 key: 'school_name',
                 config: {
                     label: 'Школа',
+                    maxLength: 32,
                 }
             }],
             [{
                 key: 'univ_city',
                 config: {
                     label: 'Город',
+                    maxLength: 25,
                 }
             },
             {
                 key: 'univ_name',
                 config: {
                     label: 'Высшее учебное заведение',
+                    maxLength: 50,
                 }
             },
             {
                 key: 'faculty',
                 config: {
                     label: 'Факультет',
+                    maxLength: 32,
                 }
             },
             {
