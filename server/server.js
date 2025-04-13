@@ -32,6 +32,7 @@ wss.on('connection', (ws) => {
 
     ws.on('message', (data) => {
         try {
+            console.log(data);
             const { type, payload } = JSON.parse(data);
             console.log(`[WS] Message received:`, type, payload);
 

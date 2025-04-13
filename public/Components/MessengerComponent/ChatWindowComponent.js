@@ -3,7 +3,9 @@ import AvatarComponent from '../../Components/AvatarComponent/AvatarComponent.js
 import ContextMenuComponent from '../../Components/ContextMenuComponent/ContextMenuComponent.js';
 import createElement from '../../utils/createElement.js';
 import focusInput from '../../utils/focusInput.js';
-import {setLsItem, getLsItem, removeLsItem} from '../../utils/localStorage.js';
+import { setLsItem, getLsItem, removeLsItem } from '../../utils/localStorage.js';
+import getTimeDifference from '../../utils/getTimeDifference.js';
+import ws from '../../modules/WebSocketService.js';
 
 
 const TEXTAREA_PLACEHOLDER = 'Напишите сообщение...';
@@ -95,7 +97,14 @@ export default class ChatWindowComponent {
         }, (status, chatMsgs) => {
             this.#msgs = chatMsgs;
             this.renderHeader();
+
             this.renderChat();
+            ws.subscribe('message', (payload) => {
+                console.log(payload);
+                this.#msgs.push(payload);
+                this.#chat.renderMsg(payload, []);
+            });
+
             this.renderMessageInput();
         });
     }
@@ -158,7 +167,7 @@ export default class ChatWindowComponent {
         createElement({
             parent: chatInfo,
             classes: ['chat-window__status'],
-            text: 'заходил 2 часа назад', // TODO: делать запрос на user и отображать статус
+            text: this.#chatData.online ? "в сети" : `заходил ${getTimeDifference(this.#chatData.last_seen, { mode: "long" })}`,
         });
 
         this.renderDropdown(chatHeader);
@@ -244,19 +253,9 @@ export default class ChatWindowComponent {
             textarea.value = '';
             sendBtn.classList.add('chat-window__send_disabled');
 
-            console.log(this.#chatData);
-            this.#config.messenger.ajaxPostMessages({
-                username: "rvasutenko", // TODO: this.#chatData.username
-                request: {
-                    attachment_urls: [],
-                    chat_id: this.#chatData.id,
-                    text: messageText
-                }
-            }, (status, msgData) => {
-                console.log(msgData);
-                this.#msgs.push(msgData);
-                this.#chat.renderMsg(msgData, []);
-                // this.renderChat();
+            ws.send('message', {
+                chat_id: this.#chatData.id,
+                text: messageText,
             });
         });
 

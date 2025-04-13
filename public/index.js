@@ -73,11 +73,6 @@ const config = {
 router.menu = new MenuComponent(container, config);
 router.header = new HeaderComponent(container);
 
-// ws.subscribe('message', (payload) => {
-//     console.log("eeee", payload);
-// });
-
-// setTimeout(() => ws.send('message', { d: 12 }), 300);
 if (ws) {
     console.log('OK: WS INITIALIZED');
 }
