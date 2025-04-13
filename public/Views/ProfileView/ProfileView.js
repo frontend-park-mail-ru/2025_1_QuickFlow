@@ -299,6 +299,7 @@ class ProfileView {
         console.log(this.#profileActions);
         if (this.#profileActions) {
             this.#profileActions.innerHTML = '';
+            profileBottom.appendChild(this.#profileActions);
         } else {
             this.#profileActions = createElement({
                 parent: profileBottom,
