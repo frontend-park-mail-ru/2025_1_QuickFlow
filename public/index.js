@@ -13,6 +13,7 @@ import createElement from './utils/createElement.js';
 import router from './Router.js';
 // import ws from './modules/WebSocketService.js';
 import './index.scss';
+import { getLsItem } from './utils/localStorage.js';
 
 
 const root = document.getElementById('root');
@@ -41,7 +42,7 @@ router.register(NotFoundView, { path: '/not-found', section: null });
 const config = {
     menu: {
         profiles: {
-            href: '/profiles/rvasutenko',
+            href: `/profiles/${getLsItem('username', '')}`,
             text: 'Профиль',
             icon: 'profile-icon',
         },
