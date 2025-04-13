@@ -297,15 +297,15 @@ class ProfileView {
 
     renderActions(profileBottom, data) {
         console.log(this.#profileActions);
-        if (!this.#profileActions) {
+        if (this.#profileActions) {
+            this.#profileActions.innerHTML = '';
+        } else {
             this.#profileActions = createElement({
                 parent: profileBottom,
                 classes: ['profile__actions']
             });
         }
-        this.#profileActions.innerHTML = '';
 
-        console.log(getLsItem('username', ''), data.profile.username);
         if (data.profile.username === getLsItem('username', '')) {
             new ButtonComponent(this.#profileActions, {
                 text: 'Редактировать профиль',
