@@ -315,7 +315,7 @@ export default class PostComponent {
 
     ajaxDeletePost(id) {
         Ajax.delete({
-            url: `/post/${id}`,
+            url: `/posts/${id}`,
             callback: (status) => {
                 switch (status) {
                     case 401:
