@@ -64,7 +64,8 @@ const forms = {
                 type: 'textarea',
                 config: {
                     label: 'Краткая информация',
-                    placeholder: 'Расскажите о себе'
+                    placeholder: 'Расскажите о себе',
+                    maxLength: 256,
                 }
             }]
         ]
