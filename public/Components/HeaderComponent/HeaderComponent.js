@@ -108,18 +108,18 @@ export default class HeaderComponent {
     }
 
     cdOk(users) {
-        if (
-            !users ||
-            !users.payload ||
-            users.payload.length === 0
-        ) return this.showNotFound();
-
         if (!this.#searchResults) {
             this.#searchResults = createElement({
                 parent: this.#search,
                 classes: ['header__results'],
             });
         }
+
+        if (
+            !users ||
+            !users.payload ||
+            users.payload.length === 0
+        ) return this.showNotFound();
 
         this.#searchResults.innerHTML = '';
         
