@@ -321,6 +321,9 @@ export default class PostComponent {
                     case 401:
                         router.go({ path: '/login' });
                         break;
+                    case 200:
+                        this.wrapper.remove();
+                        break;
                 }
             }
         });
