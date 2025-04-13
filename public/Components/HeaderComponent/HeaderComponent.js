@@ -57,15 +57,7 @@ export default class HeaderComponent {
         });
 
         input.addListener(() => {
-            if (input.value === '') {
-                this.#searchResults.innerHTML = '';
-                createElement({
-                    parent: this.#searchResults,
-                    text: 'Ничего не найдено',
-                    classes: ['header__result_empty'],
-                });
-                return;
-            }
+            if (input.value === '') return this.showNotFound();
 
             input.input.onfocus = () => this.#searchResults.classList.remove('hidden');
             document.addEventListener('mouseup', (e) => {
@@ -106,8 +98,21 @@ export default class HeaderComponent {
         // wrapper.appendChild(musicWrapper);
     }
 
+    showNotFound() {
+        this.#searchResults.innerHTML = '';
+        createElement({
+            parent: this.#searchResults,
+            text: 'Ничего не найдено',
+            classes: ['header__result_empty'],
+        });
+    }
+
     cdOk(users) {
-        if (users.payload.length === 0) return this.#searchResults.innerHTML = '';
+        if (
+            !users ||
+            !users.payload ||
+            users.payload.length === 0
+        ) return this.showNotFound();
 
         if (!this.#searchResults) {
             this.#searchResults = createElement({
