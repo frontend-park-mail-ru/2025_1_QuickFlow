@@ -39,9 +39,65 @@ export const profileDataLayout = {
     }
 };
 
+const ACTIONS_PROPERTIES = {
+    stranger: [{
+            text: "Добавить в друзья",
+            variant: "primary",
+            onClick: () => {
+
+            },
+        },
+        {
+            icon: "/static/img/messenger-primary-icon.svg",
+            onClick: () => {
+                
+            },
+        }],
+    following: [{
+            text: "Вы подписаны",
+            variant: "secondary",
+            onClick: () => {
+                
+            },
+        },
+        {
+            icon: "/static/img/messenger-primary-icon.svg",
+            onClick: () => {
+                
+            },
+        }],
+    followed_by: [{
+            text: "Подписан на вас",
+            variant: "primary",
+            onClick: () => {
+                
+            },
+        },
+        {
+            icon: "/static/img/messenger-primary-icon.svg",
+            onClick: () => {
+                
+            },
+        }],
+    friend: [{
+            text: "Сообщение",
+            variant: "primary",
+            onClick: () => {
+                
+            },
+        },
+        {
+            icon: "/static/img/user-added-icon.svg",
+            onClick: () => {
+                
+            },
+        }],
+};
+
 
 class ProfileView {
     #containerObj
+    #profileActions = null;
     constructor() {
         this.#containerObj = null;
     }
@@ -235,14 +291,38 @@ class ProfileView {
             })
         });
 
-        const profileActions = createElement({ parent: profileBottom });
+        this.renderActions(profileBottom, data);
+    }
+
+    renderActions(profileBottom, data) {
+        if (!this.#profileActions) {
+            this.#profileActions = createElement({
+                parent: profileBottom,
+                classes: ['profile__actions']
+            });
+        }
+        this.#profileActions.innerHTML = '';
 
         if (data.profile.username === getLsItem('username', '')) {
-            new ButtonComponent(profileActions, {
+            return new ButtonComponent(this.#profileActions, {
                 text: 'Редактировать профиль',
                 variant: 'secondary',
                 size: 'small',
                 onClick: () => router.go({ path: '/profile/edit' }),
+            });
+        } else if (Object.keys(ACTIONS_PROPERTIES).includes(data.relation)) {
+            const properties = ACTIONS_PROPERTIES[data.relation];
+            new ButtonComponent(this.#profileActions, {
+                text: properties[0].text,
+                variant: properties[0].variant,
+                size: 'small',
+                onClick: properties[0].onClick,
+            });
+            new ButtonComponent(this.#profileActions, {
+                icon: properties[1].icon,
+                variant: "secondary",
+                size: 'small',
+                onClick: properties[1].onClick,
             });
         }
     }

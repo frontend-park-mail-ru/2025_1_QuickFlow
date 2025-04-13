@@ -1,8 +1,11 @@
+const RECONNECTION_TIMEOUT = 10 * 1000;
+
+
 class WebSocketService {
     constructor(path = '/api/ws') {
         this.baseUrl = this.#detectWebSocketUrl(path);
         this.socket = null;
-        this.subscribers = {}; // { EVENT_TYPE: [callback1, callback2, ...] }
+        this.subscribers = {};
         this.#connect();
     }
 
@@ -31,7 +34,7 @@ class WebSocketService {
 
         this.socket.addEventListener('close', () => {
             console.warn('[WebSocket] Connection closed. Reconnecting...');
-            setTimeout(() => this.#connect(), 1000);
+            setTimeout(() => this.#connect(), RECONNECTION_TIMEOUT);
         });
 
         this.socket.addEventListener('error', (error) => {

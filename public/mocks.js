@@ -128,6 +128,7 @@ export const users = {
         id: "ada65c04-fc5a-4d1e-a0f1-867ebdd08a8e",
         last_seen: "2025-04-10T00:00:00Z",
         online: false,
+        relation: "stranger",
         profile: {
             username: "rvasutenko",
             password: 'Qwerty1!', // Нужен на тестовом серваке для авторизации

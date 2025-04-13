@@ -59,6 +59,13 @@
     border: 4px solid var(--stroke-white);
 }
 
+.profile__actions {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+    gap: 8px;
+}
+
 .profile__details {
     display: flex;
     flex-direction: row;
