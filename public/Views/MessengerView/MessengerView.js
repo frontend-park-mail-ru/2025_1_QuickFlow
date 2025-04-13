@@ -33,7 +33,7 @@ class MessengerView {
         
                 new MessengerComponent(containerObj, {
                     user: userData,
-                    receiver_id: params?.receiver_id,
+                    receiver_username: params?.username,
                     chat_id: params?.chat_id,
                 });
             }

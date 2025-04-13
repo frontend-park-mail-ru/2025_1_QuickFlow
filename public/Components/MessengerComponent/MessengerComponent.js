@@ -27,7 +27,7 @@ export default class MessengerComponent {
         });
         const chatWindow = new ChatWindowComponent(messengerWrapper, {
             user: this.#config.user,
-            receiver_id: this.#config?.receiver_id,
+            receiver_username: this.#config?.receiver_username,
             chat_id: this.#config?.chat_id,
             messenger: this
         });

@@ -6,6 +6,8 @@ import focusInput from '../../utils/focusInput.js';
 import { setLsItem, getLsItem, removeLsItem } from '../../utils/localStorage.js';
 import getTimeDifference from '../../utils/getTimeDifference.js';
 import ws from '../../modules/WebSocketService.js';
+import Ajax from '../../modules/ajax.js';
+import router from '../../Router.js';
 
 
 const TEXTAREA_PLACEHOLDER = 'Напишите сообщение...';
@@ -79,8 +81,57 @@ export default class ChatWindowComponent {
         this.renderEmptyState();
 
         // if (this.#config.chat_id) {
-        //     renderActiveChat();
+        //     this.#config.messenger.ajaxGetMessages({
+        //         chatId: this.#config.chat_id,
+        //         count: 50,
+        //     }, (status, chatMsgs) => {
+        //         this.#msgs = chatMsgs;
+    
+        //         this.renderChat();
+        //         ws.subscribe('message', (payload) => {
+        //             console.log(payload);
+        //             this.#msgs.push(payload);
+        //             this.#chat.renderMsg(payload, []);
+        //         });
+        //         this.renderMessageInput();
+
+        //         return;
+        //     });
         // }
+
+        if (!this.#config.chat_id && this.#config.chat_username) {
+            Ajax.get({
+                url: `/profiles/${this.#config.chat_username}`,
+                callback: (status, chatUser) => {
+                    switch (status) {
+                        case 200:
+                            this.#chatData = {
+                                name: `${chatUser.profile.firstname} ${chatUser.profile.lastname}`,
+                                online: chatUser.online,
+                                avatar_url: chatUser.profile.avatar_url,
+                            };
+
+                            this.renderHeader();
+
+                            this.renderChat();
+                            ws.subscribe('message', (payload) => {
+                                console.log(payload);
+                                this.#msgs.push(payload);
+                                this.#chat.renderMsg(payload, []);
+                            });
+                            this.renderMessageInput();
+
+                            break;
+                        case 401:
+                            router.go({ path: '/login' });
+                            break;
+                        case 404:
+                            router.go({ path: '/not-found' });
+                            break;
+                    }
+                }
+            });
+        }
     }
 
     get chatData() {
