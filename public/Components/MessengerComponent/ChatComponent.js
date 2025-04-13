@@ -57,7 +57,7 @@ export default class MessageComponent {
                     classes: ['chat__date'],
                 });
             } else {
-                if (msg.sender_id === prevMsg.sender_id) {
+                if (msg.sender.id === prevMsg.sender.id) {
                     classes.push('chat__msg_nameless');
                 }
             }
