@@ -13,11 +13,13 @@ class MessengerView {
             type: 'messenger',
         });
 
-        const hasTargetChat = (
-            typeof params === 'object' &&
-            Object.keys(params).length &&
-            params?.username
-        );
+        console.log(params);
+
+        // const hasTargetChat = (
+        //     typeof params === 'object' &&
+        //     Object.keys(params).length &&
+        //     (params?.receiver_id || params?.chat_id)
+        // );
 
         Ajax.get({
             url: `/profiles/${getLsItem('username', '')}`,
@@ -31,7 +33,8 @@ class MessengerView {
         
                 new MessengerComponent(containerObj, {
                     user: userData,
-                    target: hasTargetChat ? params.username : null,
+                    receiver_id: params?.receiver_id,
+                    chat_id: params?.chat_id,
                 });
             }
         });

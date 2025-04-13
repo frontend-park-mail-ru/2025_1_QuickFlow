@@ -34,7 +34,8 @@ class Router {
     }
 
     #matchRoute(path) {
-        const pathSegments = path.split('/').filter(Boolean);
+        const [pathname] = path.split('?');
+        const pathSegments = pathname.split('/').filter(Boolean);
 
         for (const route in this.#routes) {
             const routeSegments = route.split('/').filter(Boolean);
@@ -71,7 +72,9 @@ class Router {
     }
 
     go(data) {
-        if (AUTH_PATHS.includes(this.path)) {
+        // const pathWithoutQuery = data.path.split('?')[0];
+
+        if (AUTH_PATHS.includes(this.path)) { // TODO
             this.#header.renderAvatarMenu();
         }
  
@@ -82,7 +85,7 @@ class Router {
     }
 
     get path() {
-        return window.location.pathname;
+        return window.location.pathname + window.location.search;
     }
 
     back() {
@@ -109,22 +112,37 @@ class Router {
     //     );
     // }
 
-    #renderPath(data) {
-        const path = data.path;
-        console.error(path);
+    #parseQueryParams(queryString) {
+        const params = {};
+        const query = new URLSearchParams(queryString);
+        for (const [key, value] of query.entries()) {
+            params[key] = value;
+        }
+        return params;
+    }
 
-        const matchResult = this.#matchRoute(path);
+    #renderPath(data) {
+        const [pathname, queryString] = data.path.split('?');
+        console.log(pathname);
+
+        // const path = data.path;
+        // console.error(path);
+
+        const matchResult = this.#matchRoute(data.path);
         if (!matchResult) {
-            console.error(`No view registered for path: ${path}`);
+            console.error(`No view registered for path: ${data.path}`);
             return this.go({ path: NOT_FOUND_PATH });
         }
-        const { view, params, section } = matchResult;
+        // const { view, params, section } = matchResult;
+        const { view, params: routeParams, section } = matchResult;
+        const queryParams = queryString ? this.#parseQueryParams(queryString) : {};
 
         if (section && this.#menu) {
             this.#menu.setActive(section);
         }
 
-        view.render(params);
+        view.render({ ...routeParams, ...queryParams });
+        // view.render(params);
     }
 }
 

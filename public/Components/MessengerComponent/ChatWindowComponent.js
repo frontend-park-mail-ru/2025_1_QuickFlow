@@ -78,8 +78,8 @@ export default class ChatWindowComponent {
 
         this.renderEmptyState();
 
-        // if (this.#config.target) {
-
+        // if (this.#config.chat_id) {
+        //     renderActiveChat();
         // }
     }
 

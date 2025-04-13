@@ -11,7 +11,7 @@ import CoverComponent from '../../Components/CoverComponent/CoverComponent.js';
 import router from '../../Router.js';
 
 
-const POSTS_COUNT = 10;
+const POSTS_COUNT = 50;
 
 export const profileDataLayout = {
     username: {icon: 'at'},
@@ -54,7 +54,9 @@ const ACTIONS_PROPERTIES = {
         {
             icon: "/static/img/messenger-primary-icon.svg",
             onClick: function(data) {
-                router.go({ path: `/messenger/${data.profile.username}` });
+                router.go({
+                    path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
+                });
             },
         }],
     following: [{
