@@ -47,13 +47,6 @@ class Ajax {
                 callback(200, users['rvasutenko']);
                 return true;
             }
-            // else if (url === '/chats') {
-            //     callback(200, chats['rvasutenko']);
-            //     return true;
-            // } else if (url.startsWith('/chats/')) {
-            //     callback(200, messages['rvasutenko'][url.slice(7, -9)]);
-            //     return true;
-            // }
         }
         return false;
     }
@@ -143,6 +136,39 @@ class Ajax {
         } catch (error) {
             console.error('DELETE request failed:', error);
             callback(500);
+        }
+    }
+
+    async put({ url, body = {}, isFormData = false, callback = () => {} }) {
+        let response;
+        try {
+            const headers = {};
+            if (!isFormData) headers['Content-Type'] = 'application/json; charset=utf-8';
+            if (!CSRF_FREE_URLS.includes(url)) {
+                headers['X-CSRF-Token'] = await this.csrfRequest() || '';
+            }
+    
+            const options = {
+                method: 'PUT',
+                credentials: 'include',
+                body: isFormData ? body : JSON.stringify(body),
+                headers
+            };
+    
+            response = await fetch(`${this.baseUrl}${url}`, options);
+    
+            let data = null;
+            if (
+                response.headers.get('content-length') !== '0' &&
+                response.headers.get('content-type')?.includes('application/json')
+            ) {
+                data = await response.json();
+            }
+    
+            callback(response.status, data);
+        } catch (error) {
+            console.error('PUT request failed:', error);
+            callback(response?.status || 500);
         }
     }    
 }

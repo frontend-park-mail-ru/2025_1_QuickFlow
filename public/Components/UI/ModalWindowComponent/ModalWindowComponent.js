@@ -69,7 +69,7 @@ export default class ModalWindowComponent {
 
     renderPostInner(isFilled = false) {
         this.modalWindow.classList.add('modal_post');
-        this.title.textContent = isFilled ? 'Редактировать пост' : 'Новый пост';
+        this.title.textContent = isFilled ? 'Редактирование поста' : 'Новый пост';
 
         const picsWrapper = createElement({
             parent: this.modalWindow,
@@ -90,20 +90,28 @@ export default class ModalWindowComponent {
             text: 'Добавьте фото',
         });
 
-        this.fileInput = new FileInputComponent(picsWrapper, {
+        const fileInputConfig = {
             imitator: addPicWrapper,
             preview: this.createPicWrapperTemplate(),
             id: 'post-pic-upload',
             onUpload: () => this.handlePicUpload(picsWrapper),
             multiple: true,
-        });
+        };
+
+        if (isFilled &&
+            this.#config?.data?.pics &&
+            this.#config?.data?.pics.length > 0
+        ) fileInputConfig.preloaded = this.#config.data.pics;
+
+        this.fileInput = new FileInputComponent(picsWrapper, fileInputConfig);
 
         const textarea = new TextareaComponent(this.modalWindow, {
             placeholder: 'Поделитесь своими мыслями',
+            value: this.#config?.data?.text || '',
         });
 
         new ButtonComponent(this.modalWindow, {
-            text: 'Опубликовать',
+            text: isFilled ? 'Сохранить' : 'Опубликовать',
             variant: 'primary',
             size: 'small',
             onClick: () => this.handlePostSubmit(textarea.textarea.value.trim()),
@@ -140,18 +148,33 @@ export default class ModalWindowComponent {
             }
         }
 
-        Ajax.post({
-            body: formData,
-            isFormData: true,
-            url: '/post',
-            callback: (status) => {
-                if (status === 200) {
-                    this.close();
-                } else if (status === 413) {
-                    alert('File is too large');
+        if (this.#config.type === 'create-post') {
+            Ajax.post({
+                url: '/post',
+                body: formData,
+                isFormData: true,
+                callback: (status) => {
+                    if (status === 200) {
+                        this.close();
+                    } else if (status === 413) {
+                        alert('File is too large');
+                    }
                 }
-            }
-        });
+            });
+        } else if (this.#config.type === 'edit-post') {
+            Ajax.put({
+                url: `/posts/${this.#config.data.id}`,
+                body: formData,
+                isFormData: true,
+                callback: (status) => {
+                    if (status === 200) {
+                        this.close();
+                    } else if (status === 413) {
+                        alert('File is too large');
+                    }
+                }
+            });
+        }
     }
 
     renderProfileInfoInner() {
