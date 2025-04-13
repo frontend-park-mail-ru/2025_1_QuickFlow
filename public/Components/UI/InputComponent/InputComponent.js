@@ -160,8 +160,17 @@ export default class InputComponent {
         }
     }
 
-    addListener(listener) {
-        this.input.addEventListener('input', listener);
+    addListener(listener, delayTime = 0) {
+        let debounce = function(func, delay) {
+            let inDebounce;
+            return function() {
+                clearTimeout(inDebounce);
+                inDebounce = setTimeout(() => func.apply(this, arguments), delay);
+            };
+        };
+        this.input.addEventListener('input', debounce(listener, delayTime));
+
+        // this.input.addEventListener('input', listener);
     }
 
     isValid() {

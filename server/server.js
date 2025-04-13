@@ -10,7 +10,7 @@ import crypto from 'crypto';
 import http from 'http';
 import { WebSocketServer } from 'ws';
 
-import { users, posts, chats, messages } from '../public/mocks.js';
+import { users, posts, chats, messages, search } from '../public/mocks.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -150,6 +150,21 @@ app.get('/api/feed', (req, res) => {
     }
 
     res.status(200).json(posts);
+});
+
+app.get('/api/users/search', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const username = ids[id];
+    if (!username || !users[username]) {
+        return res.status(401).end();
+    }
+
+    const string = req.query.string;
+    if (!string) {
+        return res.status(400).end();
+    }
+
+    res.status(200).json(search);
 });
 
 app.get('/api/profiles/:username', (req, res) => {

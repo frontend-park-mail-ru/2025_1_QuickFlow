@@ -305,3 +305,39 @@ export const messages = {
         ]
     }
 };
+
+export const search = {
+    "payload": [
+        {
+            "id": "feffb772-0644-4c36-957e-1019c55373f4",
+            "username": "Nikit",
+            "firstname": "Myname",
+            "lastname": "Mysurname"
+        },
+        {
+            "id": "2835eda5-82c3-42aa-a86b-49a35b1be79e",
+            "username": "Nikita",
+            "firstname": "Myname",
+            "lastname": "Mysurname"
+        },
+        {
+            "id": "4d2f9159-5503-4410-b718-7f75a3495d2b",
+            "username": "Nikita1",
+            "firstname": "Myname",
+            "lastname": "Mysurname"
+        },
+        {
+            "id": "901677fb-5c6f-4091-a85e-b79ec1279499",
+            "username": "Nikita12",
+            "avatar_url": "https://quickflowapp.ru/minio/posts/adf7b467-9942-4ab7-909a-eabe1ff5f8c6.jpg",
+            "firstname": "OtherFirstName",
+            "lastname": "otherLastName"
+        },
+        {
+            "id": "5294cb5b-05a9-4711-b142-5b7878f8a0b9",
+            "username": "Nikt",
+            "firstname": "Myname",
+            "lastname": "Mysurname"
+        }
+    ]
+}

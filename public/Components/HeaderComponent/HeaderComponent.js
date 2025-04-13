@@ -7,8 +7,15 @@ import createElement from '../../utils/createElement.js';
 import { getLsItem } from '../../utils/localStorage.js';
 
 
+const DEBOUNCE_DELAY = 500;
+const REQUEST_USERS_COUNT = 10;
+
+
 export default class HeaderComponent {
-    #parent
+    #parent;
+    #left = null;
+    #search = null;
+    #searchResults = null;
     constructor(parent) {
         this.#parent = parent;
         this.rightWrapper = null;
@@ -32,17 +39,54 @@ export default class HeaderComponent {
     }
 
     renderActions() {
-        const leftWrapper = createElement({
+        this.#left = createElement({
             parent: this.wrapper,
             classes: ['header__left']
         });
 
-        new InputComponent(leftWrapper, {
+        this.#search = createElement({
+            parent: this.#left,
+            classes: ['header__search-wrapper']
+        });
+
+        const input = new InputComponent(this.#search, {
             type: 'search',
             placeholder: 'Поиск',
             showRequired: false,
             classes: ['header__search']
         });
+
+        input.addListener(() => {
+            if (input.value === '') {
+                this.#searchResults.innerHTML = '';
+                createElement({
+                    parent: this.#searchResults,
+                    text: 'Ничего не найдено',
+                    classes: ['header__result_empty'],
+                });
+                return;
+            }
+
+            input.input.onfocus = () => this.#searchResults.classList.remove('hidden');
+            document.addEventListener('mouseup', (e) => {
+                if (!this.#search.contains(e.target)) this.#searchResults.classList.add('hidden');
+            });
+            
+            Ajax.get({
+                url: '/users/search',
+                params: {
+                    string: input.value,
+                    users_count: REQUEST_USERS_COUNT,
+                },
+                callback: (status, users) => {
+                    switch (status) {
+                        case 200:
+                            this.cdOk(users);
+                            break;
+                    }
+                }
+            });
+        }, DEBOUNCE_DELAY);
 
         // const notificationsWrapper = document.createElement('a');
         // notificationsWrapper.classList.add('icon-wrapper');
@@ -60,6 +104,29 @@ export default class HeaderComponent {
 
         // wrapper.appendChild(notificationsWrapper);
         // wrapper.appendChild(musicWrapper);
+    }
+
+    cdOk(users) {
+        if (users.payload.length === 0) return this.#searchResults.innerHTML = '';
+
+        if (!this.#searchResults) {
+            this.#searchResults = createElement({
+                parent: this.#search,
+                classes: ['header__results'],
+            });
+        }
+
+        this.#searchResults.innerHTML = '';
+        
+        for (const user of users.payload) {
+            createElement({
+                tag: 'a',
+                parent: this.#searchResults,
+                text: `${user.firstname} ${user.lastname}`,
+                classes: ['header__result'],
+                attrs: { href: `/profiles/${user.username}` },
+            });
+        }
     }
 
     renderAvatarMenu() {
