@@ -1,7 +1,8 @@
 import ContextMenuComponent from '../ContextMenuComponent/ContextMenuComponent.js'
 import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
 import ModalWindowComponent from '../UI/ModalWindowComponent/ModalWindowComponent.js';
-import formatTimeAgo from '../../utils/formatTimeAgo.js';
+// import formatTimeAgo from '../../utils/formatTimeAgo.js';
+import getTimeDifference from '../../utils/getTimeDifference.js';
 import createElement from '../../utils/createElement.js';
 import { getLsItem } from '../../utils/localStorage.js';
 import Ajax from '../../modules/ajax.js';
@@ -248,7 +249,7 @@ export default class PostComponent {
         createElement({
             classes: ['post__date', 'p1'],
             parent: nameDateWrapper,
-            text: `${formatTimeAgo(this.#config.created_at)}`,
+            text: `${getTimeDifference(this.#config.created_at)}`,
         });
 
         const flag = true;
