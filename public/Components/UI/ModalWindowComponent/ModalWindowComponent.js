@@ -71,9 +71,18 @@ export default class ModalWindowComponent {
         this.modalWindow.classList.add('modal_post');
         this.title.textContent = isFilled ? 'Редактирование поста' : 'Новый пост';
 
+        const hasPics = (
+            isFilled &&
+            this.#config?.data?.pics &&
+            this.#config?.data?.pics.length > 0
+        )
+
         const picsWrapper = createElement({
             parent: this.modalWindow,
-            classes: ['modal__pics', 'modal__pics_blank'],
+            classes: [
+                'modal__pics',
+                hasPics ? 'modal__pics' : 'modal__pics_blank',
+            ],
         });
         const addPicWrapper = createElement({
             parent: picsWrapper,
@@ -97,11 +106,8 @@ export default class ModalWindowComponent {
             onUpload: () => this.handlePicUpload(picsWrapper),
             multiple: true,
         };
-
-        if (isFilled &&
-            this.#config?.data?.pics &&
-            this.#config?.data?.pics.length > 0
-        ) fileInputConfig.preloaded = this.#config.data.pics;
+        
+        if (hasPics) fileInputConfig.preloaded = this.#config.data.pics;
 
         this.fileInput = new FileInputComponent(picsWrapper, fileInputConfig);
 
