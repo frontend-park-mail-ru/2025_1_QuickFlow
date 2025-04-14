@@ -5,7 +5,7 @@ import AvatarComponent from '../../Components/AvatarComponent/AvatarComponent.js
 import ModalWindowComponent from '../../Components/UI/ModalWindowComponent/ModalWindowComponent.js';
 import ButtonComponent from '../../Components/UI/ButtonComponent/ButtonComponent.js';
 import createElement from '../../utils/createElement.js';
-import { profileFriends } from '../../mocks.js';
+// import { profileFriends } from '../../mocks.js';
 import { getLsItem } from '../../utils/localStorage.js';
 import CoverComponent from '../../Components/CoverComponent/CoverComponent.js';
 import router from '../../Router.js';
@@ -186,14 +186,34 @@ class ProfileView {
         });
 
         this.renderFeed();
-
-        const friends = profileFriends; // TODO: надо дергать метод
-        this.renderFriends(friends);
+        this.renderFriends();
 
         return this.#containerObj.container;
     }
 
-    renderFriends(friends) {
+    renderFriends() {
+        Ajax.get({
+            url: '/friends',
+            params: { count: 8, offset: 0 },
+            callback: (status, friendsData) => {
+                switch (status) {
+                    case 200:
+                        this.friendsCbOk(friendsData);
+                        break;
+                    case 401:
+                        router.go({ path: '/login' });
+                        break;
+                    case 404:
+                        router.go({ path: '/not-found' });
+                        break;
+                }
+            }
+        });
+    }
+
+    friendsCbOk(data) {
+        if (!data.friends || data.friends.length === 0) return;
+
         const friendsWrapper = createElement({
             parent: this.#containerObj.right,
             classes: ['profile__friends'],
@@ -211,7 +231,7 @@ class ProfileView {
 
         createElement({
             parent: top,
-            text: '165',
+            text: data.total_count,
             classes: ['profile__friends-count'],
         });
 
@@ -220,20 +240,22 @@ class ProfileView {
             classes: ['profile__friends-inner'],
         });
 
-        friends.forEach(({ name, avatar }) => {
+        data.friends.forEach(({ username, firstname, avatar_url }) => {
             const friend = createElement({
+                tag: 'a',
                 parent: profileFriends,
                 classes: ['profile__friend'],
+                attrs: { href: `/profiles/${username}` },
             });
 
             new AvatarComponent(friend, {
                 size: 'xl',
-                src: avatar,
+                src: avatar_url,
             });
 
             createElement({
                 parent: friend,
-                text: name,
+                text: firstname,
             });
         });
     }
