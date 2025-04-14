@@ -176,6 +176,7 @@ class FeedView {
                 new PostComponent(this.posts, config);
                 this.#lastTs = config.created_at;
             });
+            this.posts.appendChild(this.sentinel);
             return;
         }
         this.#endOfFeed = true;
