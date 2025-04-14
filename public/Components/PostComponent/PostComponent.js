@@ -265,7 +265,11 @@ export default class PostComponent {
             const isStranger = this.#config?.author?.relation === RELATION_STRANGER;
             const actionBtn = createElement({
                 tag: 'a',
-                classes: ['h3', 'post__add-to-friends'],
+                classes: [
+                    'h3',
+                    'post__add-to-friends',
+                    `js-post-action-${this.#config?.author?.username}`,
+                ],
                 parent: topRightWrapper,
                 text: isStranger ? ADD_TO_FRIENDS_BTN_TEXT : ACCEPT_BTN_TEXT,
             });
@@ -276,7 +280,8 @@ export default class PostComponent {
                     callback: (status) => {
                         switch (status) {
                             case 200:
-                                topRightWrapper.removeChild(actionBtn);
+                                this.actionCbOk();
+                                // topRightWrapper.removeChild(actionBtn);
                                 break;
                         }
                     },
@@ -346,6 +351,11 @@ export default class PostComponent {
         }
 
         new ContextMenuComponent(dropdown, { data });
+    }
+
+    actionCbOk() {
+        const actions = document.getElementsByClassName(`js-post-action-${this.#config?.author?.username}`);
+        for (const action of actions) action.remove();
     }
 
     ajaxDeletePost(id) {
