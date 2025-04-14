@@ -129,21 +129,6 @@ class FeedView {
                 classes: ['feed__bottom-sentinel'],
             });
             this.#createIntersectionObserver();
-
-            Ajax.get({
-                url: '/feed',
-                params: { posts_count: POSTS_COUNT },
-                callback: (status, feedData) => {
-                    switch (status) {
-                        case 401:
-                            this.cbUnauthorized();
-                            break;
-                        case 200:
-                            this.cbOk(feedData);
-                            break;
-                    }
-                }
-            });
         }
     }
 
