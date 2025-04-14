@@ -134,6 +134,7 @@ export default class ChatWindowComponent {
                 this.#msgs.push(payload);
                 this.#chat.renderMsg(payload, []);
             }
+            removeLsItem(CHAT_MSG_PREFIX + `${this.#chatData.id}`);
         });
     }
 
