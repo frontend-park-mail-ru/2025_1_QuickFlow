@@ -20,11 +20,13 @@ export default class AvatarComponent {
 
     render() {
         this.wrapper = createElement({
+            tag: this.#config.href ? 'a' : 'div',
             parent: this.#parent,
             classes: [
                 'avatar',
                 SIZE_PREFIX + this.#config.size || DEFAULT_SIZE_CLASS
-            ]
+            ],
+            attrs: { href: this.#config.href || '' },
         });
         if (this.#config.class) {
             this.wrapper.classList.add(this.#config.class);
@@ -36,6 +38,7 @@ export default class AvatarComponent {
                 src: this.#config.src || DEFAULT_SRC,
                 alt: 'Аватар',
                 title: 'Аватар',
+                loading: "lazy",
             },
             classes: ['avatar__image']
         });

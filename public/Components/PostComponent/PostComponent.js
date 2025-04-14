@@ -224,6 +224,7 @@ export default class PostComponent {
         new AvatarComponent(authorWrapper, {
             size: AUTHOR_AVATAR_SIZE,
             src: this.#config.author.avatar_url,
+            href: `/profiles/${this.#config.author.username}`,
         });
 
         const topRightWrapper = createElement({
