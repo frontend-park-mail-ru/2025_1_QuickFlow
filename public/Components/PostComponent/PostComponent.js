@@ -14,10 +14,13 @@ const PICTURE_WIDTH = 553;
 const READ_MORE_BTN_TEXT = 'Показать ещё';
 const READ_LESS_BTN_TEXT = 'Скрыть';
 const ADD_TO_FRIENDS_BTN_TEXT = 'Добавить в друзья';
+const ACCEPT_BTN_TEXT = "Принять заявку";
 const AUTHOR_NAME_DATE_DIVIDER = '•';
 const DEAFULT_IMG_ALT = 'post image';
 const DISPLAYED_ACTIONS = ['like', 'comment', 'repost'];
 const RELATION_STRANGER = "stranger";
+const RELATION_FOLLOWED_BY = "followed_by";
+const DISPLAYED_RELATIONS = [RELATION_STRANGER, RELATION_FOLLOWED_BY];
 
 
 export default class PostComponent {
@@ -258,21 +261,22 @@ export default class PostComponent {
             text: `${getTimeDifference(this.#config.created_at)}`,
         });
 
-        if (this.#config?.author?.relation === RELATION_STRANGER) {
-            const addToFriendsBtn = createElement({
+        if (DISPLAYED_RELATIONS.includes(this.#config?.author?.relation)) {
+            const isStranger = this.#config?.author?.relation === RELATION_STRANGER;
+            const actionBtn = createElement({
                 tag: 'a',
                 classes: ['h3', 'post__add-to-friends'],
                 parent: topRightWrapper,
-                text: ADD_TO_FRIENDS_BTN_TEXT,
+                text: isStranger ? ADD_TO_FRIENDS_BTN_TEXT : ACCEPT_BTN_TEXT,
             });
-            addToFriendsBtn.addEventListener('click', () => {
+            actionBtn.addEventListener('click', () => {
                 Ajax.post({
-                    url: '/follow',
+                    url: isStranger ? '/follow' : '/followers/accept',
                     body: { receiver_id: this.#config?.author?.id },
                     callback: (status) => {
                         switch (status) {
                             case 200:
-                                topRightWrapper.removeChild(addToFriendsBtn);
+                                topRightWrapper.removeChild(actionBtn);
                                 break;
                         }
                     },
