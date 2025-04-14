@@ -68,6 +68,7 @@ export default class ChatsPanelComponent {
     }
 
     renderChatList() {
+        if (this.#chats) this.#chats.remove();
         this.#chats = createElement({
             parent: this.container,
             classes: ['chats-panel__chats'],
