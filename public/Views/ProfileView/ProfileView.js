@@ -50,7 +50,7 @@ const ACTIONS_PROPERTIES = {
                     callback: (status) => {
                         switch (status) {
                             case 200:
-                                data.relation = "followed_by";
+                                data.relation = "following";
                                 this.renderOtherActions(data)
                                 break;
                         }
@@ -136,7 +136,7 @@ const ACTIONS_PROPERTIES = {
                     callback: (status) => {
                         switch (status) {
                             case 200:
-                                data.relation = "following";
+                                data.relation = "followed_by";
                                 this.renderOtherActions(data)
                                 break;
                         }
