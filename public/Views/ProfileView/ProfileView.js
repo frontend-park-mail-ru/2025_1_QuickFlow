@@ -47,7 +47,14 @@ const ACTIONS_PROPERTIES = {
                 Ajax.post({
                     url: '/follow',
                     body: { receiver_id: data.id },
-                    callback: () => {}
+                    callback: (status) => {
+                        switch (status) {
+                            case 200:
+                                data.reltion = "followed_by";
+                                this.renderOtherActions(data)
+                                break;
+                        }
+                    },
                 });
             },
         },
@@ -66,7 +73,14 @@ const ACTIONS_PROPERTIES = {
                 Ajax.delete({
                     url: '/follow',
                     body: { friend_id: data.id },
-                    callback: () => {}
+                    callback: (status) => {
+                        switch (status) {
+                            case 200:
+                                data.reltion = "stranger";
+                                this.renderOtherActions(data)
+                                break;
+                        }
+                    },
                 });
             },
         },
@@ -85,7 +99,14 @@ const ACTIONS_PROPERTIES = {
                 Ajax.post({
                     url: '/followers/accept',
                     body: { receiver_id: data.id },
-                    callback: () => {}
+                    callback: (status) => {
+                        switch (status) {
+                            case 200:
+                                data.reltion = "friend";
+                                this.renderOtherActions(data)
+                                break;
+                        }
+                    },
                 });
             },
         },
@@ -112,7 +133,14 @@ const ACTIONS_PROPERTIES = {
                 Ajax.delete({
                     url: '/friends',
                     body: { friend_id: data.id },
-                    callback: () => {}
+                    callback: (status) => {
+                        switch (status) {
+                            case 200:
+                                data.reltion = "following";
+                                this.renderOtherActions(data)
+                                break;
+                        }
+                    },
                 });
             },
         }],
@@ -341,20 +369,24 @@ class ProfileView {
                 onClick: () => router.go({ path: '/profile/edit' }),
             });
         } else if (Object.keys(ACTIONS_PROPERTIES).includes(data.relation)) {
-            const properties = ACTIONS_PROPERTIES[data.relation];
-            new ButtonComponent(this.#profileActions, {
-                text: properties[0].text,
-                variant: properties[0].variant,
-                size: 'small',
-                onClick: properties[0].onClick.bind(this, data),
-            });
-            new ButtonComponent(this.#profileActions, {
-                icon: properties[1].icon,
-                variant: "secondary",
-                size: 'small',
-                onClick: properties[1].onClick.bind(this, data),
-            });
+            this.renderOtherActions(data);
         }
+    }
+
+    renderOtherActions(data) {
+        const properties = ACTIONS_PROPERTIES[data.relation];
+        new ButtonComponent(this.#profileActions, {
+            text: properties[0].text,
+            variant: properties[0].variant,
+            size: 'small',
+            onClick: properties[0].onClick.bind(this, data),
+        });
+        new ButtonComponent(this.#profileActions, {
+            icon: properties[1].icon,
+            variant: "secondary",
+            size: 'small',
+            onClick: properties[1].onClick.bind(this, data),
+        });
     }
 
     createCountedItem(parent, title, value) {
