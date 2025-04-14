@@ -355,7 +355,11 @@ export default class PostComponent {
 
     actionCbOk() {
         const actions = document.getElementsByClassName(`js-post-action-${this.#config?.author?.username}`);
-        for (const action of actions) action.remove();
+        console.log(actions);
+        for (const action of actions) {
+            console.log(action);
+            action.remove()
+        };
     }
 
     ajaxDeletePost(id) {
