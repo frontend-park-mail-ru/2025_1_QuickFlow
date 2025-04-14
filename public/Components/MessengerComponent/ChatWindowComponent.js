@@ -333,14 +333,14 @@ export default class ChatWindowComponent {
     sendMessage(sendBtn) {
         if (sendBtn.classList.contains('chat-window__send_disabled')) return;
 
-        this.#messageInput.value = '';
-        sendBtn.classList.add('chat-window__send_disabled');
-
         ws.send('message', {
             chat_id: this.#chatData?.id,
             receiver_id: this.#chatData?.receiver_id,
             text: this.#messageInput.value.trim(),
         });
+
+        this.#messageInput.value = '';
+        sendBtn.classList.add('chat-window__send_disabled');
     }
 
     updateTextareaHeight(
