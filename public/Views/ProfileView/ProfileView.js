@@ -66,7 +66,7 @@ const ACTIONS_PROPERTIES = {
                 });
             },
         }],
-    following: [{
+    followed_by: [{
             text: "Вы подписаны",
             variant: "secondary",
             onClick: function(data) {
@@ -92,7 +92,7 @@ const ACTIONS_PROPERTIES = {
                 });
             },
         }],
-    followed_by: [{
+    following: [{
             text: "Подписан на вас",
             variant: "primary",
             onClick: function(data) {
