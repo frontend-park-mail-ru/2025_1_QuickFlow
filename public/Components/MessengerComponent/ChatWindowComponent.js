@@ -122,12 +122,10 @@ export default class ChatWindowComponent {
                             this.renderChat();
                             ws.subscribe('message', (payload) => {
                                 console.log(payload);
-                                if (!this.#chatData?.id && this.#chatData?.receiver_id) {
-                                    setLsItem('active-chat', `chat-${payload.chat_id}`);
-                                    this.#chatsPanel.renderChatList();
-                                }
-                                this.#msgs.push(payload);
-                                this.#chat.renderMsg(payload, []);
+                                setLsItem('active-chat', `chat-${payload.chat_id}`);
+                                this.#chatsPanel.renderChatList();
+                                // this.#msgs.push(payload);
+                                // this.#chat.renderMsg(payload, []);
                             });
                             this.renderMessageInput();
 
