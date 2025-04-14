@@ -113,8 +113,9 @@ export default class ChatWindowComponent {
                                 avatar_url: chatUser.profile.avatar_url,
                             };
 
-                            this.renderHeader();
+                            console.log(this.#chatData);
 
+                            this.renderHeader();
                             this.renderChat();
                             ws.subscribe('message', (payload) => {
                                 console.log(payload);
@@ -191,6 +192,8 @@ export default class ChatWindowComponent {
     }
 
     renderHeader() {
+        console.log(this.#chatData);
+
         const chatHeader = createElement({
             parent: this.#container,
             classes: ['chat-window__header'],
