@@ -1,8 +1,9 @@
 import Ajax from '../../modules/ajax.js';
 import PostComponent from '../../Components/PostComponent/PostComponent.js';
-import ModalWindowComponent from '../../Components/UI/ModalWindowComponent/ModalWindowComponent.js';
+// import ModalWindowComponent from '../../Components/UI/ModalWindowComponent/ModalWindowComponent.js';
 import MainLayoutComponent from '../../Components/MainLayoutComponent/MainLayoutComponent.js';
 import RadioMenuComponent from '../../Components/RadioMenuComponent/RadioMenuComponent.js';
+import FeedComponent from '../../Components/FeedComponent/FeedComponent.js';
 import createElement from '../../utils/createElement.js';
 import router from '../../Router.js';
 
@@ -45,48 +46,50 @@ class FeedView {
             }
         });
 
-        const createPostBtn = createElement({
-            parent: this.#containerObj.left,
-            tag: 'button',
-            classes: ['button_feed']
-        });
-        createElement({
-            parent: createPostBtn,
-            tag: 'div',
-            classes: ['button_feed__icon']
-        });
-        createElement({
-            parent: createPostBtn,
-            text: 'Создать пост',
-        });
+        new FeedComponent(this.#containerObj.left, {});
 
-        this.posts = createElement({
-            parent: this.#containerObj.left,
-            classes: ['feed__posts'],
-        });
+        // const createPostBtn = createElement({
+        //     parent: this.#containerObj.left,
+        //     tag: 'button',
+        //     classes: ['button_feed']
+        // });
+        // createElement({
+        //     parent: createPostBtn,
+        //     tag: 'div',
+        //     classes: ['button_feed__icon']
+        // });
+        // createElement({
+        //     parent: createPostBtn,
+        //     text: 'Создать пост',
+        // });
 
-        createPostBtn.addEventListener('click', () => {
-            new ModalWindowComponent(this.#containerObj.container, {
-                type: 'create-post',
-            });
-        });
+        // this.posts = createElement({
+        //     parent: this.#containerObj.left,
+        //     classes: ['feed__posts'],
+        // });
 
-        Ajax.get({
-            url: '/feed',
-            params: {
-                posts_count: POSTS_COUNT
-            },
-            callback: (status, feedData) => {
-                switch (status) {
-                    case 401:
-                        this.cbUnauthorized();
-                        break;
-                    case 200:
-                        this.cbOk(feedData);
-                        break;
-                }
-            }
-        });
+        // createPostBtn.addEventListener('click', () => {
+        //     new ModalWindowComponent(this.#containerObj.container, {
+        //         type: 'create-post',
+        //     });
+        // });
+
+        // Ajax.get({
+        //     url: '/feed',
+        //     params: {
+        //         posts_count: POSTS_COUNT
+        //     },
+        //     callback: (status, feedData) => {
+        //         switch (status) {
+        //             case 401:
+        //                 this.cbUnauthorized();
+        //                 break;
+        //             case 200:
+        //                 this.cbOk(feedData);
+        //                 break;
+        //         }
+        //     }
+        // });
 
         // // Обработчик лайков на постах
         // feed.addEventListener('click', (event) => {
