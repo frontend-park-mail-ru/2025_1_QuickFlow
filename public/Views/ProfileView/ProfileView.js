@@ -1,6 +1,7 @@
 import Ajax from '../../modules/ajax.js';
-import PostComponent from '../../Components/PostComponent/PostComponent.js';
+// import PostComponent from '../../Components/PostComponent/PostComponent.js';
 import MainLayoutComponent from '../../Components/MainLayoutComponent/MainLayoutComponent.js';
+import FeedComponent from '../../Components/FeedComponent/FeedComponent.js';
 import AvatarComponent from '../../Components/AvatarComponent/AvatarComponent.js';
 import ModalWindowComponent from '../../Components/UI/ModalWindowComponent/ModalWindowComponent.js';
 import ButtonComponent from '../../Components/UI/ButtonComponent/ButtonComponent.js';
@@ -11,7 +12,7 @@ import CoverComponent from '../../Components/CoverComponent/CoverComponent.js';
 import router from '../../Router.js';
 
 
-const POSTS_COUNT = 50;
+// const POSTS_COUNT = 50;
 
 export const profileDataLayout = {
     username: {icon: 'at'},
@@ -178,7 +179,8 @@ class ProfileView {
             }
         });
 
-        this.renderFeed();
+        new FeedComponent(this.#containerObj.left, {});
+        // this.renderFeed();
 
         return this.#containerObj.container;
     }
@@ -252,57 +254,57 @@ class ProfileView {
         });
     }
 
-    renderFeed() {
-        const createPostBtn = createElement({
-            parent: this.#containerObj.left,
-            tag: 'button',
-            classes: ['button_feed']
-        });
-        createElement({
-            parent: createPostBtn,
-            tag: 'div',
-            classes: ['button_feed__icon']
-        });
-        createElement({
-            parent: createPostBtn,
-            text: 'Создать пост',
-        });
+    // renderFeed() {
+    //     const createPostBtn = createElement({
+    //         parent: this.#containerObj.left,
+    //         tag: 'button',
+    //         classes: ['button_feed']
+    //     });
+    //     createElement({
+    //         parent: createPostBtn,
+    //         tag: 'div',
+    //         classes: ['button_feed__icon']
+    //     });
+    //     createElement({
+    //         parent: createPostBtn,
+    //         text: 'Создать пост',
+    //     });
 
-        createPostBtn.addEventListener('click', () => {
-            new ModalWindowComponent(this.#containerObj.container, {
-                type: 'create-post',
-            });
-        });
+    //     createPostBtn.addEventListener('click', () => {
+    //         new ModalWindowComponent(this.#containerObj.container, {
+    //             type: 'create-post',
+    //         });
+    //     });
 
-        Ajax.get({
-            url: '/feed',
-            params: { posts_count: POSTS_COUNT },
-            callback: (status, feedData) => {
-                this.feedCallback(status, feedData);
-            }
-        });
-    }
+    //     Ajax.get({
+    //         url: '/feed',
+    //         params: { posts_count: POSTS_COUNT },
+    //         callback: (status, feedData) => {
+    //             this.feedCallback(status, feedData);
+    //         }
+    //     });
+    // }
 
-    feedCallback(status, feedData) {
-        let isAuthorized = status === 200;
+    // feedCallback(status, feedData) {
+    //     let isAuthorized = status === 200;
 
-        if (!isAuthorized) {
-            router.go({ path: '/login' });
-            return;
-        }
+    //     if (!isAuthorized) {
+    //         router.go({ path: '/login' });
+    //         return;
+    //     }
 
-        const postsWrapper = createElement({
-            parent: this.#containerObj.left,
-            classes: ['feed__posts']
-        });
+    //     const postsWrapper = createElement({
+    //         parent: this.#containerObj.left,
+    //         classes: ['feed__posts']
+    //     });
 
-        if (feedData && Array.isArray(feedData)) {
-            feedData.forEach((config) => {
-                config.container = this.#containerObj.container;
-                new PostComponent(postsWrapper, config);
-            });
-        }
-    }
+    //     if (feedData && Array.isArray(feedData)) {
+    //         feedData.forEach((config) => {
+    //             config.container = this.#containerObj.container;
+    //             new PostComponent(postsWrapper, config);
+    //         });
+    //     }
+    // }
 
     cbOk(data) {
         const profileHeader = createElement({
