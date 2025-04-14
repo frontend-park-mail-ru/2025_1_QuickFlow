@@ -12,6 +12,9 @@ const POSTS_COUNT = 50;
 
 class FeedView {
     #containerObj = null;
+    #isLoading = false;
+    #endOfFeed = false;
+    #lastTs = null;
     constructor() {
         this.posts = null;
     }
@@ -70,7 +73,9 @@ class FeedView {
 
         Ajax.get({
             url: '/feed',
-            params: { posts_count: POSTS_COUNT },
+            params: {
+                posts_count: POSTS_COUNT
+            },
             callback: (status, feedData) => {
                 switch (status) {
                     case 401:
@@ -116,8 +121,80 @@ class FeedView {
             feedData.forEach((config) => {
                 config.container = this.#containerObj.container;
                 new PostComponent(this.posts, config);
+                this.#lastTs = config.created_at;
+            });
+
+            this.sentinel = createElement({
+                parent: this.posts,
+                classes: ['feed__bottom-sentinel'],
+            });
+            this.#createIntersectionObserver();
+
+            Ajax.get({
+                url: '/feed',
+                params: { posts_count: POSTS_COUNT },
+                callback: (status, feedData) => {
+                    switch (status) {
+                        case 401:
+                            this.cbUnauthorized();
+                            break;
+                        case 200:
+                            this.cbOk(feedData);
+                            break;
+                    }
+                }
             });
         }
+    }
+
+    #createIntersectionObserver() {
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !this.#isLoading && !this.#endOfFeed) {
+                this.#loadMorePosts();
+            }
+        }, {
+            rootMargin: '100px',
+        });
+    
+        observer.observe(this.sentinel);
+    }
+    
+    #loadMorePosts() {
+        this.#isLoading = true;
+    
+        Ajax.get({
+            url: '/feed',
+            params: {
+                posts_count: POSTS_COUNT,
+                ts: this.#lastTs,
+            },
+            callback: (status, feedData) => {
+                this.#isLoading = false;
+
+                switch (status) {
+                    case 200:
+                        this.extraLoadCbOk(feedData);
+                        break;
+                    default:
+                        this.#endOfFeed = true;
+                        this.sentinel.remove();
+                        break;
+                }
+            }
+        });
+    }    
+
+    extraLoadCbOk(feedData) {
+        if (Array.isArray(feedData) && feedData.length > 0) {
+            feedData.forEach((config) => {
+                config.container = this.#containerObj.container;
+                new PostComponent(this.posts, config);
+                this.#lastTs = config.created_at;
+            });
+            return;
+        }
+        this.#endOfFeed = true;
+        this.sentinel.remove();
     }
 }
 
