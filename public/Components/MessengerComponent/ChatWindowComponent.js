@@ -66,6 +66,7 @@ export default class ChatWindowComponent {
     #container = null;
     #chatsPanel = null;
     #focusTimer = null;
+    #messageInput = null;
     constructor(parent, config) {
         this.#parent = parent;
         this.#config = config;
@@ -101,16 +102,6 @@ export default class ChatWindowComponent {
 
                             this.renderHeader();
                             this.renderChat();
-                            // ws.subscribe('message', (payload) => {
-                            //     console.log(payload);
-                            //     if (!this.#chatData?.id && this.#chatData?.receiver_id) {
-                            //         setLsItem('active-chat', `chat-${payload.chat_id}`);
-                            //         this.#chatsPanel.renderChatList();
-                            //     } else {
-                            //         this.#msgs.push(payload);
-                            //         this.#chat.renderMsg(payload, []);
-                            //     }
-                            // });
                             this.renderMessageInput();
 
                             break;
@@ -142,6 +133,7 @@ export default class ChatWindowComponent {
                     }
                 });
             }
+            focusInput(this.#messageInput, this.#focusTimer);
         });
     }
 
@@ -298,6 +290,7 @@ export default class ChatWindowComponent {
             },
             text: value
         });
+        this.#messageInput = textarea;
         focusInput(textarea, this.#focusTimer);
 
         const sendBtn = createElement({
