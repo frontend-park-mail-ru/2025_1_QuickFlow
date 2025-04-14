@@ -108,7 +108,7 @@ class Ajax {
         }
     }
     
-    async delete({ url, params = {}, callback = () => {} }) {
+    async delete({ url, params = {}, body = {}, callback = () => {} }) {
         try {
             const headers = {};
             if (!CSRF_FREE_URLS.includes(url)) {
@@ -121,7 +121,8 @@ class Ajax {
             const response = await fetch(fullUrl, {
                 method: 'DELETE',
                 credentials: 'include',
-                headers
+                headers,
+                body: JSON.stringify(body),
             });
     
             let data = null;
