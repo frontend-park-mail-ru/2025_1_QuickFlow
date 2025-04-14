@@ -7,7 +7,7 @@ import createElement from '../../utils/createElement.js';
 import router from '../../Router.js';
 
 
-const POSTS_COUNT = 50;
+const POSTS_COUNT = 10;
 
 
 class FeedView {
