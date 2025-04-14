@@ -17,6 +17,7 @@ const ADD_TO_FRIENDS_BTN_TEXT = 'Добавить в друзья';
 const AUTHOR_NAME_DATE_DIVIDER = '•';
 const DEAFULT_IMG_ALT = 'post image';
 const DISPLAYED_ACTIONS = ['like', 'comment', 'repost'];
+const RELATION_STRANGER = "stranger";
 
 
 export default class PostComponent {
@@ -257,13 +258,25 @@ export default class PostComponent {
             text: `${getTimeDifference(this.#config.created_at)}`,
         });
 
-        const flag = true;
-        if (flag) { // TODO: сделать проверку на то, есть ли в друзьях
-            createElement({
+        if (this.#config?.author?.relation === RELATION_STRANGER) {
+            const addToFriendsBtn = createElement({
                 tag: 'a',
                 classes: ['h3', 'post__add-to-friends'],
                 parent: topRightWrapper,
                 text: ADD_TO_FRIENDS_BTN_TEXT,
+            });
+            addToFriendsBtn.addEventListener('click', () => {
+                Ajax.post({
+                    url: '/follow',
+                    body: { receiver_id: this.#config?.author?.id },
+                    callback: (status) => {
+                        switch (status) {
+                            case 200:
+                                topRightWrapper.removeChild(addToFriendsBtn);
+                                break;
+                        }
+                    },
+                });
             });
         }
 

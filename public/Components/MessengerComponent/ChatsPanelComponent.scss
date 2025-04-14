@@ -128,6 +128,7 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     line-clamp: 1;
+    word-break: break-all;
 }
 
 .chats-panel__msg-info {
@@ -147,6 +148,7 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     line-clamp: 1;
+    word-break: break-all;
 }
 
 .chats-panel_mini {
