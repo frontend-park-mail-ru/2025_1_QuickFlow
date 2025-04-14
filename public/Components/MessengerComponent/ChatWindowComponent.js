@@ -301,19 +301,7 @@ export default class ChatWindowComponent {
             parent: bottomBar,
         });
 
-        sendBtn.addEventListener('click', () => {
-            if (sendBtn.classList.contains('chat-window__send_disabled')) return;
-
-            const messageText = textarea.value.trim();
-            textarea.value = '';
-            sendBtn.classList.add('chat-window__send_disabled');
-
-            ws.send('message', {
-                chat_id: this.#chatData?.id,
-                receiver_id: this.#chatData?.receiver_id,
-                text: messageText,
-            });
-        });
+        sendBtn.addEventListener('click', () => this.sendMessage(textarea, sendBtn));
 
         textarea.addEventListener("input", () => {
             if (textarea.value.trim() !== '') {
@@ -329,8 +317,27 @@ export default class ChatWindowComponent {
             sendBtn.classList.add('chat-window__send_disabled');
         });
 
+        textarea.addEventListener('keypress', (event) => {
+            event.preventDefault();
+            if (event.key === 'Enter') this.sendMessage(textarea, sendBtn);
+        });
+
         this.updateTextareaHeight(textarea, bottomWrapper);
         textarea.addEventListener("input", () => this.updateTextareaHeight(textarea, bottomWrapper));
+    }
+
+    sendMessage(textarea, sendBtn) {
+        if (sendBtn.classList.contains('chat-window__send_disabled')) return;
+
+        const messageText = textarea.value.trim();
+        textarea.value = '';
+        sendBtn.classList.add('chat-window__send_disabled');
+
+        ws.send('message', {
+            chat_id: this.#chatData?.id,
+            receiver_id: this.#chatData?.receiver_id,
+            text: messageText,
+        });
     }
 
     updateTextareaHeight(textarea, bottomWrapper) {
