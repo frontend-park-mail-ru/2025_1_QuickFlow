@@ -101,7 +101,8 @@ export default class ChatsPanelComponent {
 
         this.activeChatItem.classList.remove('chats-panel__chat_active');
         this.activeChatItem = null;
-        this.renderLastMsg(this.#chatWindow.chatData);
+        this.renderDraftMessage();
+        // this.renderLastMsg(this.#chatWindow.chatData);
         removeLsItem('active-chat');
     }
 
@@ -115,7 +116,6 @@ export default class ChatsPanelComponent {
         chat.addEventListener('click', () => {
             if (chat === this.activeChatItem) return;
             this.close();
-
             chat.classList.add('chats-panel__chat_active');
             setLsItem('active-chat', CHAT_PREFIX + chatData.id);
             this.activeChatItem = chat;
@@ -159,27 +159,40 @@ export default class ChatsPanelComponent {
         );
         
         if (draftValue) {
+            this.renderDraftMessage(lastMsgWrapper, draftValue);
+        } else {
             createElement({
                 parent: lastMsgWrapper,
-                classes: ['chats-panel__draft'],
-                text: DRAFT_PREFIX_TEXT,
+                classes: ['chats-panel__msg'],
+                text: draftValue ? draftValue : chatData.last_message.text,
+            });
+    
+            createElement({
+                parent: lastMsgWrapper,
+                classes: ['chats-panel__msg-divider'],
+                text: LAST_MSG_TIME_DIVIDER,
+            });
+    
+            createElement({
+                parent: lastMsgWrapper,
+                text: getTimeDifference(chatData.last_message.created_at, { mode: 'short' }),
             });
         }
+    }
+
+    renderDraftMessage(
+        lastMsgWrapper = document.getElementById(CHAT_INFO_PREFIX + this.#chatWindow.chatData.id),
+        draftValue = getLsItem(CHAT_MSG_PREFIX + `${this.#chatWindow.chatData.id}`)
+    ) {
+        createElement({
+            parent: lastMsgWrapper,
+            classes: ['chats-panel__draft'],
+            text: DRAFT_PREFIX_TEXT,
+        });
         createElement({
             parent: lastMsgWrapper,
             classes: ['chats-panel__msg'],
-            text: draftValue ? draftValue : chatData.last_message.text,
-        });
-
-        createElement({
-            parent: lastMsgWrapper,
-            classes: ['chats-panel__msg-divider'],
-            text: LAST_MSG_TIME_DIVIDER,
-        });
-
-        createElement({
-            parent: lastMsgWrapper,
-            text: getTimeDifference(chatData.last_message.created_at, { mode: 'short' }),
+            text: draftValue,
         });
     }
 
