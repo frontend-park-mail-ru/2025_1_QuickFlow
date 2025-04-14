@@ -50,7 +50,7 @@ const ACTIONS_PROPERTIES = {
                     callback: (status) => {
                         switch (status) {
                             case 200:
-                                data.reltion = "followed_by";
+                                data.relation = "followed_by";
                                 this.renderOtherActions(data)
                                 break;
                         }
@@ -76,7 +76,7 @@ const ACTIONS_PROPERTIES = {
                     callback: (status) => {
                         switch (status) {
                             case 200:
-                                data.reltion = "stranger";
+                                data.relation = "stranger";
                                 this.renderOtherActions(data)
                                 break;
                         }
@@ -102,7 +102,7 @@ const ACTIONS_PROPERTIES = {
                     callback: (status) => {
                         switch (status) {
                             case 200:
-                                data.reltion = "friend";
+                                data.relation = "friend";
                                 this.renderOtherActions(data)
                                 break;
                         }
@@ -136,7 +136,7 @@ const ACTIONS_PROPERTIES = {
                     callback: (status) => {
                         switch (status) {
                             case 200:
-                                data.reltion = "following";
+                                data.relation = "following";
                                 this.renderOtherActions(data)
                                 break;
                         }
@@ -374,6 +374,7 @@ class ProfileView {
     }
 
     renderOtherActions(data) {
+        this.#profileActions.innerHTML = '';
         const properties = ACTIONS_PROPERTIES[data.relation];
         new ButtonComponent(this.#profileActions, {
             text: properties[0].text,
