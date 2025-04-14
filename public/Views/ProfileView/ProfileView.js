@@ -179,15 +179,14 @@ class ProfileView {
         });
 
         this.renderFeed();
-        this.renderFriends();
 
         return this.#containerObj.container;
     }
 
-    renderFriends() {
+    renderFriends(user_id) {
         Ajax.get({
             url: '/friends',
-            params: { count: 8, offset: 0 },
+            params: { count: 8, offset: 0, user_id },
             callback: (status, friendsData) => {
                 switch (status) {
                     case 200:
@@ -363,6 +362,8 @@ class ProfileView {
         });
 
         this.renderActions(profileBottom, data);
+
+        this.renderFriends(data.id);
     }
 
     renderActions(profileBottom, data) {
