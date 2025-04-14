@@ -80,25 +80,6 @@ export default class ChatWindowComponent {
 
         this.renderEmptyState();
 
-        // if (this.#config.chat_id) {
-        //     this.#config.messenger.ajaxGetMessages({
-        //         chatId: this.#config.chat_id,
-        //         count: 50,
-        //     }, (status, chatMsgs) => {
-        //         this.#msgs = chatMsgs;
-    
-        //         this.renderChat();
-        //         ws.subscribe('message', (payload) => {
-        //             console.log(payload);
-        //             this.#msgs.push(payload);
-        //             this.#chat.renderMsg(payload, []);
-        //         });
-        //         this.renderMessageInput();
-
-        //         return;
-        //     });
-        // }
-
         console.log(this.#config.chat_id, this.#config.receiver_username);
 
         if (!this.#config.chat_id && this.#config.receiver_username) {
@@ -125,9 +106,10 @@ export default class ChatWindowComponent {
                                 if (!this.#chatData?.id && this.#chatData?.receiver_id) {
                                     setLsItem('active-chat', `chat-${payload.chat_id}`);
                                     this.#chatsPanel.renderChatList();
+                                } else {
+                                    this.#msgs.push(payload);
+                                    this.#chat.renderMsg(payload, []);
                                 }
-                                // this.#msgs.push(payload);
-                                // this.#chat.renderMsg(payload, []);
                             });
                             this.renderMessageInput();
 
@@ -166,8 +148,13 @@ export default class ChatWindowComponent {
             this.renderChat();
             ws.subscribe('message', (payload) => {
                 console.log(payload);
-                this.#msgs.push(payload);
-                this.#chat.renderMsg(payload, []);
+                if (!this.#chatData?.id && this.#chatData?.receiver_id) {
+                    setLsItem('active-chat', `chat-${payload.chat_id}`);
+                    this.#chatsPanel.renderChatList();
+                } else {
+                    this.#msgs.push(payload);
+                    this.#chat.renderMsg(payload, []);
+                }
             });
 
             this.renderMessageInput();
