@@ -127,6 +127,7 @@ export default class ChatWindowComponent {
 
         ws.subscribe('message', (payload) => {
             console.log(payload);
+            removeLsItem(CHAT_MSG_PREFIX + `${this.#chatData.id}`);
             if (!this.#chatData?.id && this.#chatData?.receiver_id) {
                 setLsItem('active-chat', `chat-${payload.chat_id}`);
                 this.#chatsPanel.renderChatList();
@@ -141,7 +142,6 @@ export default class ChatWindowComponent {
                     }
                 });
             }
-            removeLsItem(CHAT_MSG_PREFIX + `${this.#chatData.id}`);
         });
     }
 
