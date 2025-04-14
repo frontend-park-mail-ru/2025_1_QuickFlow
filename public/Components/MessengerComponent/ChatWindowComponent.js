@@ -126,6 +126,7 @@ export default class ChatWindowComponent {
                 if (`chat-${payload.chat_id}` === getLsItem('active-chat', null)) { // payload.chat_id === this.#chatData?.id
                     this.#msgs.push(payload);
                     this.#chat.renderMsg(payload, []);
+                    this.updateTextareaHeight();
                 }
                 this.#chatsPanel.renderLastMsg({
                     id: payload.chat_id,
@@ -253,6 +254,7 @@ export default class ChatWindowComponent {
         const bottomWrapper = createElement({
             classes: ['chat-window__bottom'],
             parent: this.#container,
+            attrs: { id: 'chat-window__bottom' },
         });
 
         const bottomBar = createElement({
@@ -281,7 +283,7 @@ export default class ChatWindowComponent {
             ''
         );
 
-        const textarea = createElement({
+        this.#messageInput = createElement({
             tag: 'textarea',
             parent: bottomBar,
             classes: ['chat-window__msg'],
@@ -291,25 +293,24 @@ export default class ChatWindowComponent {
             },
             text: value
         });
-        this.#messageInput = textarea;
-        focusInput(textarea, this.#focusTimer);
+        focusInput(this.#messageInput, this.#focusTimer);
 
         const sendBtn = createElement({
             classes: [
                 'chat-window__send',
-                textarea.value.trim() === '' ? 'chat-window__send_disabled' : null
+                this.#messageInput.value.trim() === '' ? 'chat-window__send_disabled' : null
             ],
             parent: bottomBar,
         });
 
-        sendBtn.addEventListener('click', () => this.sendMessage(textarea, sendBtn));
+        sendBtn.addEventListener('click', () => this.sendMessage(sendBtn));
 
-        textarea.addEventListener("input", () => {
-            if (textarea.value.trim() !== '') {
+        this.#messageInput.addEventListener("input", () => {
+            if (this.#messageInput.value.trim() !== '') {
                 sendBtn.classList.remove('chat-window__send_disabled');
                 setLsItem(
                     CHAT_MSG_PREFIX + `${this.#chatData.id}`,
-                    textarea.value.trim()
+                    this.#messageInput.value.trim()
                 );
                 return;
             }
@@ -318,34 +319,35 @@ export default class ChatWindowComponent {
             sendBtn.classList.add('chat-window__send_disabled');
         });
 
-        textarea.addEventListener('keypress', (event) => {
+        this.#messageInput.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
                 event.preventDefault();
-                this.sendMessage(textarea, sendBtn);
+                this.sendMessage(sendBtn);
             }
         });
 
-        this.updateTextareaHeight(textarea, bottomWrapper);
-        textarea.addEventListener("input", () => this.updateTextareaHeight(textarea, bottomWrapper));
+        this.updateTextareaHeight(bottomWrapper);
+        this.#messageInput.addEventListener("input", () => this.updateTextareaHeight(bottomWrapper));
     }
 
-    sendMessage(textarea, sendBtn) {
+    sendMessage(sendBtn) {
         if (sendBtn.classList.contains('chat-window__send_disabled')) return;
 
-        const messageText = textarea.value.trim();
-        textarea.value = '';
+        this.#messageInput.value = '';
         sendBtn.classList.add('chat-window__send_disabled');
 
         ws.send('message', {
             chat_id: this.#chatData?.id,
             receiver_id: this.#chatData?.receiver_id,
-            text: messageText,
+            text: this.#messageInput.value.trim(),
         });
     }
 
-    updateTextareaHeight(textarea, bottomWrapper) {
-        textarea.style.height = 'auto';
-        textarea.style.height = (textarea.scrollHeight) + 'px';
+    updateTextareaHeight(
+        bottomWrapper = document.getElementById('chat-window__bottom')
+    ) {
+        this.#messageInput.style.height = 'auto';
+        this.#messageInput.style.height = (this.#messageInput.scrollHeight) + 'px';
         this.#chatElement.style.paddingBottom = bottomWrapper.scrollHeight + CHAT_DEFAULT_PADDING_BOTTOM + 'px';
         this.#chatElement.parentNode.scrollTop = this.#chatElement.parentNode.scrollHeight;
     }
