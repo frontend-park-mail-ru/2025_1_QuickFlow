@@ -76,7 +76,11 @@ export default class ChatsPanelComponent {
         this.#config.messenger.ajaxGetChats((status, chatsData) => {
             if (!chatsData || chatsData.length === 0) return;
 
-            const activeChatId = this.#config.chat_id ? `chat-${this.#config.chat_id}` : getLsItem('active-chat', null);
+            if (this.#config.chat_id) {
+                setLsItem('active-chat', `chat-${this.#config.chat_id}`);
+            }
+            const activeChatId = getLsItem('active-chat', null);
+
             console.log(this.#config.chat_id);
             console.log(getLsItem('active-chat', null));
             for (const chatData of chatsData) {
