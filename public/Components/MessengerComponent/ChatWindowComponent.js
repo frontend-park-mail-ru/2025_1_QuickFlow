@@ -99,6 +99,8 @@ export default class ChatWindowComponent {
         //     });
         // }
 
+        console.log(this.#config.chat_id, this.#config.chat_username);
+
         if (!this.#config.chat_id && this.#config.chat_username) {
             Ajax.get({
                 url: `/profiles/${this.#config.chat_username}`,
