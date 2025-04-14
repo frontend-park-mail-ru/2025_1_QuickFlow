@@ -123,8 +123,10 @@ export default class ChatWindowComponent {
                 setLsItem('active-chat', `chat-${payload.chat_id}`);
                 this.#chatsPanel.renderChatList();
             } else {
-                this.#msgs.push(payload);
-                this.#chat.renderMsg(payload, []);
+                if (`chat-${payload.chat_id}` === getLsItem('active-chat', null)) { // payload.chat_id === this.#chatData?.id
+                    this.#msgs.push(payload);
+                    this.#chat.renderMsg(payload, []);
+                }
                 this.#chatsPanel.renderLastMsg({
                     id: payload.chat_id,
                     last_message: {
@@ -155,7 +157,6 @@ export default class ChatWindowComponent {
         }, (status, chatMsgs) => {
             this.#msgs = chatMsgs;
             this.renderHeader();
-
             this.renderChat();
             this.renderMessageInput();
         });
