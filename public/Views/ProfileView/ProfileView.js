@@ -320,7 +320,7 @@ class ProfileView {
             class: 'profile__avatar',
             type: 'status',
             status: {
-                online: data.online,
+                online: data.relation === "self" ? true : data.online,
                 lastSeen: data.last_seen,
             },
             src: data.profile.avatar_url,
@@ -362,7 +362,6 @@ class ProfileView {
         });
 
         this.renderActions(profileBottom, data);
-
         this.renderFriends(data.id);
     }
 
