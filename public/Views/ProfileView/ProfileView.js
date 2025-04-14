@@ -59,7 +59,7 @@ const ACTIONS_PROPERTIES = {
                 });
             },
         }],
-    following: [{
+    followed_by: [{
             text: "Вы подписаны",
             variant: "secondary",
             onClick: function(data) {
@@ -72,9 +72,13 @@ const ACTIONS_PROPERTIES = {
         },
         {
             icon: "/static/img/messenger-primary-icon.svg",
-            onClick: () => {},
+            onClick: function(data) {
+                router.go({
+                    path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
+                });
+            },
         }],
-    followed_by: [{
+    following: [{
             text: "Подписан на вас",
             variant: "primary",
             onClick: function(data) {
@@ -87,12 +91,20 @@ const ACTIONS_PROPERTIES = {
         },
         {
             icon: "/static/img/messenger-primary-icon.svg",
-            onClick: () => {},
+            onClick: function(data) {
+                router.go({
+                    path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
+                });
+            },
         }],
     friend: [{
             text: "Сообщение",
             variant: "primary",
-            onClick: () => {},
+            onClick: function(data) {
+                router.go({
+                    path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
+                });
+            },
         },
         {
             icon: "/static/img/user-added-icon.svg",
