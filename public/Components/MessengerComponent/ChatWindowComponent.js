@@ -108,11 +108,12 @@ export default class ChatWindowComponent {
                     switch (status) {
                         case 200:
                             this.#container.innerHTML = '';
-                            
+
                             this.#chatData = {
                                 name: `${chatUser.profile.firstname} ${chatUser.profile.lastname}`,
                                 online: chatUser.online,
                                 avatar_url: chatUser.profile.avatar_url,
+                                receiver_id: chatUser.id,
                             };
 
                             console.log(this.#chatData);
@@ -316,7 +317,8 @@ export default class ChatWindowComponent {
             sendBtn.classList.add('chat-window__send_disabled');
 
             ws.send('message', {
-                chat_id: this.#chatData.id,
+                chat_id: this.#chatData?.id,
+                receiver_id: this.#chatData?.receiver_id,
                 text: messageText,
             });
         });
