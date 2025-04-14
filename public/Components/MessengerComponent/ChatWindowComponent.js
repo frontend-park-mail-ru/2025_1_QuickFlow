@@ -99,11 +99,11 @@ export default class ChatWindowComponent {
         //     });
         // }
 
-        console.log(this.#config.chat_id, this.#config.chat_username);
+        console.log(this.#config.chat_id, this.#config.receiver_username);
 
-        if (!this.#config.chat_id && this.#config.chat_username) {
+        if (!this.#config.chat_id && this.#config.receiver_username) {
             Ajax.get({
-                url: `/profiles/${this.#config.chat_username}`,
+                url: `/profiles/${this.#config.receiver_username}`,
                 callback: (status, chatUser) => {
                     switch (status) {
                         case 200:
