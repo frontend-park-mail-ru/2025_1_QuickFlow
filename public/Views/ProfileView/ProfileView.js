@@ -321,18 +321,14 @@ class ProfileView {
             });
         }
 
-        // if (data.profile.username === getLsItem('username', '')) {
-        //     new ButtonComponent(this.#profileActions, {
-        //         text: 'Редактировать профиль',
-        //         variant: 'secondary',
-        //         size: 'small',
-        //         onClick: () => router.go({ path: '/profile/edit' }),
-        //     });
-        // } else
-
-        data.relation = "stranger";
-
-        if (Object.keys(ACTIONS_PROPERTIES).includes(data.relation)) {
+        if (data.relation === "self") {
+            new ButtonComponent(this.#profileActions, {
+                text: 'Редактировать профиль',
+                variant: 'secondary',
+                size: 'small',
+                onClick: () => router.go({ path: '/profile/edit' }),
+            });
+        } else if (Object.keys(ACTIONS_PROPERTIES).includes(data.relation)) {
             const properties = ACTIONS_PROPERTIES[data.relation];
             new ButtonComponent(this.#profileActions, {
                 text: properties[0].text,

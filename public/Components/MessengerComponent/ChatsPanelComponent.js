@@ -182,10 +182,10 @@ export default class ChatsPanelComponent {
 
     renderDraftMessage(
         lastMsgWrapper = document.getElementById(CHAT_INFO_PREFIX + this.#chatWindow.chatData.id),
-        draftValue = getLsItem(CHAT_MSG_PREFIX + `${this.#chatWindow.chatData.id}`)
+        draftValue = getLsItem(CHAT_MSG_PREFIX + `${this.#chatWindow.chatData.id}`, null)
     ) {
         if (!draftValue) return;
-        
+
         lastMsgWrapper.innerHTML = '';
 
         createElement({
