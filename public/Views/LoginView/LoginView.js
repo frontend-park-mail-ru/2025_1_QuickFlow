@@ -1,19 +1,19 @@
 import LoginFormComponent from '../../Components/LoginFormComponent/LoginFormComponent.js';
-import createElement from '../../utils/createElement.js';
+import MainLayoutComponent from '../../Components/MainLayoutComponent/MainLayoutComponent.js';
 
 
-export default class LoginView {
-    constructor(menu, header) {
-        this.menu = menu;
-        this.header = header;
-
-        this.formWrapper = null;
-    }
+class LoginView {
+    constructor() {}
 
     render() {
-        this.formWrapper = createElement({});
-        new LoginFormComponent(this.formWrapper, this.menu, this.header);
+        const containerObj = new MainLayoutComponent().render({
+            type: 'auth',
+        });
 
-        return this.formWrapper;
+        new LoginFormComponent(containerObj.container);
+
+        return containerObj.container;
     }
 }
+
+export default new LoginView();

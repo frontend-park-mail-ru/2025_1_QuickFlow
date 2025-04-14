@@ -4,6 +4,7 @@ import createElement from "../../../utils/createElement.js";
 const DEFAULT_PLACEHOLDER = '';
 const DEFAULT_TEXT = '';
 const DEFAULT_NAME = '';
+const DEFAULT_MAX_LENGTH = 256;
 
 
 export default class TextareaComponent {
@@ -44,6 +45,7 @@ export default class TextareaComponent {
             attrs: {
                 placeholder: this.#config.placeholder || DEFAULT_PLACEHOLDER,
                 name: this.name || DEFAULT_NAME,
+                maxlength: this.#config.maxLength || DEFAULT_MAX_LENGTH,
             },
             text: this.#config.value || DEFAULT_TEXT,
         });

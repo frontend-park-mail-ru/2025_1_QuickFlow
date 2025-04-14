@@ -2,20 +2,24 @@ import Ajax from '../../modules/ajax.js';
 import MessengerComponent from '../../Components/MessengerComponent/MessengerComponent.js';
 import MainLayoutComponent from '../../Components/MainLayoutComponent/MainLayoutComponent.js';
 import { getLsItem } from '../../utils/localStorage.js';
+import router from '../../Router.js';
 
 
-export default class MessengerView {
-    #containerObj
-    #menu
-    constructor(menu) {
-        this.#menu = menu;
-        this.#containerObj = null;
-    }
+class MessengerView {
+    constructor() {}
 
-    render() {
-        this.#containerObj = new MainLayoutComponent({
+    render(params) {
+        const containerObj = new MainLayoutComponent().render({
             type: 'messenger',
         });
+
+        console.log(params);
+
+        // const hasTargetChat = (
+        //     typeof params === 'object' &&
+        //     Object.keys(params).length &&
+        //     (params?.receiver_id || params?.chat_id)
+        // );
 
         Ajax.get({
             url: `/profiles/${getLsItem('username', '')}`,
@@ -23,18 +27,20 @@ export default class MessengerView {
                 let isAuthorized = status === 200;
         
                 if (!isAuthorized) {
-                    this.#menu.goToPage(this.#menu.menuElements.login);
-                    this.#menu.updateMenuVisibility(false);
+                    router.go({ path: '/login' });
                     return;
                 }
         
-                new MessengerComponent(this.#containerObj, {
+                new MessengerComponent(containerObj, {
                     user: userData,
-                    menu: this.#menu,
+                    receiver_username: params?.username,
+                    chat_id: params?.chat_id,
                 });
             }
         });
 
-        return this.#containerObj.container;
+        return containerObj.container;
     }
 }
+
+export default new MessengerView();

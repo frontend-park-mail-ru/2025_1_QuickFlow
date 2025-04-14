@@ -1,19 +1,19 @@
 import SignupFormComponent from '../../Components/SignupFormComponent/SignupFormComponent.js';
-import createElement from '../../utils/createElement.js';
+import MainLayoutComponent from '../../Components/MainLayoutComponent/MainLayoutComponent.js';
 
 
-export default class SignupView {
-    constructor(menu, header) {
-        this.menu = menu;
-        this.header = header;
-
-        this.formWrapper = null;
-    }
+class SignupView {
+    constructor() {}
 
     render() {
-        this.formWrapper = createElement({});
-        new SignupFormComponent(this.formWrapper, this.menu, this.header);
+        const containerObj = new MainLayoutComponent().render({
+            type: 'auth',
+        });
+        
+        new SignupFormComponent(containerObj.container);
 
-        return this.formWrapper;
+        return containerObj.container;
     }
 }
+
+export default new SignupView();

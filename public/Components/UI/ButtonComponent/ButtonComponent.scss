@@ -3,6 +3,14 @@
 button {
     cursor: pointer;
     transition: var(--trans-btn);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button_textless {
+    aspect-ratio: 1 / 1;
+    padding: 0 !important;
 }
 
 .button {
@@ -91,4 +99,9 @@ button {
 .button_overlay:active {
     background: var(--button-overlay-active);
     border: 1px solid var(--stroke-white-transp-active);
+}
+
+.button__icon {
+    width: 16px;
+    height: 16px;
 }

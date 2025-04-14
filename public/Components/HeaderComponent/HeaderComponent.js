@@ -2,20 +2,23 @@ import Ajax from '../../modules/ajax.js';
 import InputComponent from '../UI/InputComponent/InputComponent.js';
 import ProfileMenuComponent from '../ProfileMenuComponent/ProfileMenuComponent.js';
 import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
-import LogoutView from '../../Views/LogoutView/LogoutView.js';
+import router from '../../Router.js';
 import createElement from '../../utils/createElement.js';
 import { getLsItem } from '../../utils/localStorage.js';
 
 
+const DEBOUNCE_DELAY = 500;
+const REQUEST_USERS_COUNT = 10;
+
+
 export default class HeaderComponent {
-    #parent
-    #menu
-    constructor(parent, menu) {
+    #parent;
+    #left = null;
+    #search = null;
+    #searchResults = null;
+    constructor(parent) {
         this.#parent = parent;
-        this.#menu = menu;
-
         this.rightWrapper = null;
-
         this.render();
     }
 
@@ -36,17 +39,46 @@ export default class HeaderComponent {
     }
 
     renderActions() {
-        const leftWrapper = createElement({
+        this.#left = createElement({
             parent: this.wrapper,
             classes: ['header__left']
         });
 
-        new InputComponent(leftWrapper, {
+        this.#search = createElement({
+            parent: this.#left,
+            classes: ['header__search-wrapper']
+        });
+
+        const input = new InputComponent(this.#search, {
             type: 'search',
             placeholder: 'Поиск',
             showRequired: false,
             classes: ['header__search']
         });
+
+        input.addListener(() => {
+            if (input.value === '') return this.showNotFound();
+
+            input.input.onfocus = () => this.#searchResults.classList.remove('hidden');
+            document.addEventListener('mouseup', (e) => {
+                if (!this.#search.contains(e.target)) this.#searchResults.classList.add('hidden');
+            });
+            
+            Ajax.get({
+                url: '/users/search',
+                params: {
+                    string: input.value,
+                    users_count: REQUEST_USERS_COUNT,
+                },
+                callback: (status, users) => {
+                    switch (status) {
+                        case 200:
+                            this.cdOk(users);
+                            break;
+                    }
+                }
+            });
+        }, DEBOUNCE_DELAY);
 
         // const notificationsWrapper = document.createElement('a');
         // notificationsWrapper.classList.add('icon-wrapper');
@@ -66,6 +98,42 @@ export default class HeaderComponent {
         // wrapper.appendChild(musicWrapper);
     }
 
+    showNotFound() {
+        this.#searchResults.innerHTML = '';
+        createElement({
+            parent: this.#searchResults,
+            text: 'Ничего не найдено',
+            classes: ['header__result_empty'],
+        });
+    }
+
+    cdOk(users) {
+        if (!this.#searchResults) {
+            this.#searchResults = createElement({
+                parent: this.#search,
+                classes: ['header__results'],
+            });
+        }
+
+        if (
+            !users ||
+            !users.payload ||
+            users.payload.length === 0
+        ) return this.showNotFound();
+
+        this.#searchResults.innerHTML = '';
+        
+        for (const user of users.payload) {
+            createElement({
+                tag: 'a',
+                parent: this.#searchResults,
+                text: `${user.firstname} ${user.lastname}`,
+                classes: ['header__result'],
+                attrs: { href: `/profiles/${user.username}` },
+            });
+        }
+    }
+
     renderAvatarMenu() {
         if (this.rightWrapper) this.rightWrapper.innerHTML = '';
 
@@ -77,20 +145,16 @@ export default class HeaderComponent {
         Ajax.get({
             url: `/profiles/${getLsItem('username', '')}`,
             callback: (status, userData) => {
-                this.renderAvatarCallback(status, userData);
+                switch (status) {
+                    case 200:
+                        this.renderAvatarCallback(userData);
+                        break;
+                }
             }
         });
     }
 
-    renderAvatarCallback(status, userData) {
-        let isAuthorized = status === 200;
-
-        if (!isAuthorized) {
-            this.#menu.goToPage(this.#menu.menuElements.login);
-            this.#menu.updateMenuVisibility(false);
-            return;
-        }
-
+    renderAvatarCallback(userData) {
         if (userData) {
             new AvatarComponent(this.rightWrapper, {
                 size: 'xs',
@@ -110,7 +174,7 @@ export default class HeaderComponent {
                         href: '/settings',
                         text: 'Настройки',
                         icon: 'settings-icon',
-                        render: () => {},
+                        render: () => router.go({ path: '/profile/edit' }),
                     },
                     help: {
                         href: '/help',
@@ -122,7 +186,7 @@ export default class HeaderComponent {
                         href: '/logout',
                         text: 'Выйти',
                         icon: 'logout-icon',
-                        render: () => new LogoutView(this.#menu).render(),
+                        render: () => router.go({ path: '/logout' }),
                     },
                 },
             });

@@ -3,7 +3,7 @@ import FileInputComponent from '../UI/FileInputComponent/FileInputComponent.js';
 import createElement from '../../utils/createElement.js';
 
 
-const DEFAULT_SRC = 'static/img/default-cover.jpg';
+const DEFAULT_SRC = '/static/img/default-cover.jpg';
 
 
 export default class CoverComponent {

@@ -1,6 +1,7 @@
 import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
 import ButtonComponent from '../UI/ButtonComponent/ButtonComponent.js';
 import createElement from '../../utils/createElement.js';
+import getTime from '../../utils/getTime.js';
 
 
 const MSG_AVATAR_SIZE = 'xs';
@@ -48,15 +49,15 @@ export default class MessageComponent {
         for (const msg of this.#config.messages) {
             const classes = [];
 
-            const curDay = this.formatDateTitle(msg.timestamp);
+            const curDay = this.formatDateTitle(msg.created_at);
             if (curDay !== prevDay) {
                 createElement({
                     parent: this.scroll,
-                    text: prevDay === '' ? this.formatDateTitle(msg.timestamp) : curDay,
+                    text: prevDay === '' ? this.formatDateTitle(msg.created_at) : curDay,
                     classes: ['chat__date'],
                 });
             } else {
-                if (msg.from === prevMsg.from) {
+                if (msg.sender.id === prevMsg.sender.id) {
                     classes.push('chat__msg_nameless');
                 }
             }
@@ -64,7 +65,7 @@ export default class MessageComponent {
             this.renderMsg(msg, classes);
 
             prevMsg = msg;
-            prevDay = this.formatDateTitle(msg.timestamp);
+            prevDay = this.formatDateTitle(msg.created_at);
         }
     }
 
@@ -78,7 +79,7 @@ export default class MessageComponent {
 
         new AvatarComponent(infoWrapper, {
             size: EMPTY_STATE_AVATAR_SIZE,
-            src: this.#config.chatData.avatar,
+            src: this.#config.chatData.avatar_url,
         });
 
         createElement({
@@ -118,7 +119,7 @@ export default class MessageComponent {
 
         new AvatarComponent(msg, {
             size: MSG_AVATAR_SIZE,
-            src: msgData.from === this.#config.user.profile.username ? this.#config.user.profile.avatar_url : this.#config.chatData.avatar,
+            src: msgData.sender?.avatar_url || '',
         });
 
         const msgContent = createElement({
@@ -129,7 +130,7 @@ export default class MessageComponent {
         createElement({
             parent: msgContent,
             classes: ['chat__sender'],
-            text: msgData.from === this.#config.user.profile.username ? `${this.#config.user.profile.firstname} ${this.#config.user.profile.lastname}` : this.#config.chatData.name,
+            text: `${msgData.sender.firstname} ${msgData.sender.lastname}`
         });
 
         createElement({
@@ -144,13 +145,16 @@ export default class MessageComponent {
 
         createElement({
             parent: msgInfo,
-            classes: ['chat__msg-status', msgData.isRead ? 'chat__msg-status_read' : null],
+            classes: [
+                'chat__msg-status',
+                msgData.is_read ? 'chat__msg-status_read' : null
+            ],
         });
 
         createElement({
             parent: msgInfo,
             classes: ['chat__msg-ts'],
-            text: '17:20', // TODO: подтягивать
+            text: getTime(msgData.created_at),
         });
     }
 

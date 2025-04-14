@@ -4,22 +4,24 @@ import ModalWindowComponent from '../../Components/UI/ModalWindowComponent/Modal
 import MainLayoutComponent from '../../Components/MainLayoutComponent/MainLayoutComponent.js';
 import RadioMenuComponent from '../../Components/RadioMenuComponent/RadioMenuComponent.js';
 import createElement from '../../utils/createElement.js';
+import router from '../../Router.js';
 
 
-const POSTS_COUNT = 10;
+const POSTS_COUNT = 50;
 
 
-export default class FeedView {
-    constructor(menu) {
-        this.menu = menu;
+class FeedView {
+    #containerObj = null;
+    constructor() {
+        this.posts = null;
     }
 
     render() {
-        const containerObj = new MainLayoutComponent({
+        this.#containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
 
-        new RadioMenuComponent(containerObj.right, {
+        new RadioMenuComponent(this.#containerObj.right, {
             items: {
                 feed: {
                     title: 'Лента',
@@ -41,7 +43,7 @@ export default class FeedView {
         });
 
         const createPostBtn = createElement({
-            parent: containerObj.left,
+            parent: this.#containerObj.left,
             tag: 'button',
             classes: ['button_feed']
         });
@@ -55,13 +57,13 @@ export default class FeedView {
             text: 'Создать пост',
         });
 
-        const postsWrapper = createElement({
-            parent: containerObj.left,
+        this.posts = createElement({
+            parent: this.#containerObj.left,
             classes: ['feed__posts'],
         });
 
         createPostBtn.addEventListener('click', () => {
-            new ModalWindowComponent(containerObj.container, {
+            new ModalWindowComponent(this.#containerObj.container, {
                 type: 'create-post',
             });
         });
@@ -70,18 +72,13 @@ export default class FeedView {
             url: '/feed',
             params: { posts_count: POSTS_COUNT },
             callback: (status, feedData) => {
-                let isAuthorized = status === 200;
-
-                if (!isAuthorized) {
-                    this.menu.goToPage(this.menu.menuElements.login);
-                    this.menu.updateMenuVisibility(false);
-                    return;
-                }
-
-                if (feedData && Array.isArray(feedData)) {
-                    feedData.forEach((config) => {
-                        new PostComponent(postsWrapper, config);
-                    });
+                switch (status) {
+                    case 401:
+                        this.cbUnauthorized();
+                        break;
+                    case 200:
+                        this.cbOk(feedData);
+                        break;
                 }
             }
         });
@@ -107,6 +104,21 @@ export default class FeedView {
         //     }
         // });
 
-        return containerObj.container;
+        return this.#containerObj.container;
+    }
+
+    cbUnauthorized() {
+        router.go({ path: '/login' });
+    }
+
+    cbOk(feedData) {
+        if (feedData && Array.isArray(feedData)) {
+            feedData.forEach((config) => {
+                config.container = this.#containerObj.container;
+                new PostComponent(this.posts, config);
+            });
+        }
     }
 }
+
+export default new FeedView();

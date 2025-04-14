@@ -1,4 +1,8 @@
 import createElement from '../../utils/createElement.js';
+import router from '../../Router.js';
+
+
+const LOGO_SRC = '/static/img/annotated-logo.svg';
 
 
 export default class MenuComponent {
@@ -6,14 +10,32 @@ export default class MenuComponent {
     #parent
     #container
     constructor(parent, config) {
+        if (MenuComponent.__instance) {
+            return MenuComponent.__instance;
+        }
+
         this.#parent = parent;
         this.#config = config;
-
         this.#container = null;
         this.activePageLink = null;
         this.menuElements = {};
-
         this.render();
+
+        MenuComponent.__instance = this;
+    }
+
+    renderLogo() {
+        const logo = createElement({
+            parent: this.#container,
+            classes: ['menu__logo'],
+        });
+
+        createElement({
+            parent: logo,
+            attrs: {src: LOGO_SRC}
+        });
+
+        logo.addEventListener('click', () => this.goToPage(this.menuElements.feed));
     }
 
     render() {
@@ -23,7 +45,7 @@ export default class MenuComponent {
             classes: ['menu'],
         });
 
-        new LogoComponent(this.#container, this).render();
+        this.renderLogo();
 
         Object.entries(this.#config.menu).forEach(([key, { href, text, icon }], index) => {
             const menuElement = createElement({
@@ -58,7 +80,6 @@ export default class MenuComponent {
             if (event.target.closest('a')) {
                 event.preventDefault();
                 this.goToPage(event.target.closest('a'));
-                this.checkAuthPage();
             }
         });
     }
@@ -73,53 +94,19 @@ export default class MenuComponent {
         this.menuElements.signup.classList.remove('hidden');
     }
 
-    checkAuthPage() {
-        const path = this.activePageLink.href;
-        const href = path.substr(path.lastIndexOf('/') + 1);
-        if (href === 'login' || href === 'signup') {
-            this.#parent.classList.add("container_auth");
-            return;
+    setActive(section) {
+        const menuElement = this.menuElements[section];
+        if (this.activePageLink) {
+            this.activePageLink.classList.remove('menu__item_active');
         }
-        this.#parent.classList.remove("container_auth");
+        menuElement.classList.add('menu__item_active');
+        this.activePageLink = menuElement;
     }
 
     goToPage(menuElement) {
-        this.#parent.querySelector('main').innerHTML = '';
-        if (this.activePageLink) this.activePageLink.classList.remove('menu__item_active');
+        if (menuElement.dataset.section === router.path.slice(1)) return;
 
-        menuElement.classList.add('menu__item_active');
-        this.activePageLink = menuElement;
-
-        const section = menuElement.dataset.section;
-        if (this.#config.menu[section].render) {
-            const element = this.#config.menu[section].render();
-            this.#parent.querySelector('main').appendChild(element);
-        }
-
-        this.checkAuthPage();
-    }
-}
-
-
-export class LogoComponent {
-    #parent
-    #menu
-    constructor(parent, menu) {
-        this.#parent = parent;
-        this.#menu = menu;
-    }
-
-    render() {
-        const wrapper = createElement({
-            parent: this.#parent,
-            classes: ['menu__logo'],
-        });
-
-        createElement({
-            parent: wrapper,
-            attrs: {src: '/static/img/annotated-logo.svg'}
-        });
-
-        wrapper.addEventListener('click', () => this.#menu.goToPage(this.#menu.menuElements.feed));
+        this.setActive(menuElement.dataset.section);
+        router.go({ path: menuElement.getAttribute('href') });
     }
 }

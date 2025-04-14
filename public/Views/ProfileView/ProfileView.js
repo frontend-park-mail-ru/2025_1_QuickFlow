@@ -1,5 +1,4 @@
 import Ajax from '../../modules/ajax.js';
-import EditProfileView from '../EditProfileView/EditProfileView.js';
 import PostComponent from '../../Components/PostComponent/PostComponent.js';
 import MainLayoutComponent from '../../Components/MainLayoutComponent/MainLayoutComponent.js';
 import AvatarComponent from '../../Components/AvatarComponent/AvatarComponent.js';
@@ -9,9 +8,10 @@ import createElement from '../../utils/createElement.js';
 import { profileFriends } from '../../mocks.js';
 import { getLsItem } from '../../utils/localStorage.js';
 import CoverComponent from '../../Components/CoverComponent/CoverComponent.js';
+import router from '../../Router.js';
 
 
-const POSTS_COUNT = 10;
+const POSTS_COUNT = 50;
 
 export const profileDataLayout = {
     username: {icon: 'at'},
@@ -39,32 +39,109 @@ export const profileDataLayout = {
     }
 };
 
+const ACTIONS_PROPERTIES = {
+    stranger: [{
+            text: "Добавить в друзья",
+            variant: "primary",
+            onClick: function(data) {
+                Ajax.post({
+                    url: '/follow',
+                    body: { receiver_id: data.id },
+                    callback: () => {}
+                });
+            },
+        },
+        {
+            icon: "/static/img/messenger-primary-icon.svg",
+            onClick: function(data) {
+                router.go({
+                    path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
+                });
+            },
+        }],
+    following: [{
+            text: "Вы подписаны",
+            variant: "secondary",
+            onClick: function(data) {
+                Ajax.delete({
+                    url: '/follow',
+                    body: { friend_id: data.id },
+                    callback: () => {}
+                });
+            },
+        },
+        {
+            icon: "/static/img/messenger-primary-icon.svg",
+            onClick: () => {},
+        }],
+    followed_by: [{
+            text: "Подписан на вас",
+            variant: "primary",
+            onClick: function(data) {
+                Ajax.post({
+                    url: '/followers/accept',
+                    body: { receiver_id: data.id },
+                    callback: () => {}
+                });
+            },
+        },
+        {
+            icon: "/static/img/messenger-primary-icon.svg",
+            onClick: () => {},
+        }],
+    friend: [{
+            text: "Сообщение",
+            variant: "primary",
+            onClick: () => {},
+        },
+        {
+            icon: "/static/img/user-added-icon.svg",
+            onClick: function(data) {
+                Ajax.delete({
+                    url: '/friends',
+                    body: { friend_id: data.id },
+                    callback: () => {}
+                });
+            },
+        }],
+};
 
-export default class ProfileView {
-    #menu
+
+class ProfileView {
     #containerObj
-    constructor(menu) {
-        this.#menu = menu;
+    #profileActions = null;
+    constructor() {
         this.#containerObj = null;
     }
 
-    render() {
-        this.#containerObj = new MainLayoutComponent({
+    render(params) {
+        this.#containerObj = new MainLayoutComponent().render({
             type: 'profile',
         });
 
-        Ajax.get({
-            url: `/profiles/${getLsItem('username', '')}`,
-            callback: (status, userData) => {
-                let isAuthorized = status === 200;
-    
-                if (!isAuthorized) {
-                    this.#menu.goToPage(this.#menu.menuElements.login);
-                    this.#menu.updateMenuVisibility(false);
-                    return;
-                }
+        // let username;
+        // console.log(params);
+        // const path = router.path.split('/').filter(Boolean);
+        // username = path.length === 2 ?
+        //     path[1] :
+        //     getLsItem('username', '');
 
-                this.renderProfileInfo(userData);
+        const username = params?.username || getLsItem('username', '');
+
+        Ajax.get({
+            url: `/profiles/${username}`,
+            callback: (status, userData) => {
+                switch (status) {
+                    case 200:
+                        this.cbOk(userData);
+                        break;
+                    case 401:
+                        router.go({ path: '/login' });
+                        break;
+                    case 404:
+                        router.go({ path: '/not-found' });
+                        break;
+                }
             }
         });
 
@@ -156,8 +233,7 @@ export default class ProfileView {
         let isAuthorized = status === 200;
 
         if (!isAuthorized) {
-            this.#menu.goToPage(this.#menu.menuElements.login);
-            this.#menu.updateMenuVisibility(false);
+            router.go({ path: '/login' });
             return;
         }
 
@@ -168,12 +244,13 @@ export default class ProfileView {
 
         if (feedData && Array.isArray(feedData)) {
             feedData.forEach((config) => {
+                config.container = this.#containerObj.container;
                 new PostComponent(postsWrapper, config);
             });
         }
     }
 
-    renderProfileInfo(data) { 
+    cbOk(data) {
         const profileHeader = createElement({
             parent: this.#containerObj.top,
             classes: ['profile']
@@ -188,6 +265,10 @@ export default class ProfileView {
             size: 'xxxl',
             class: 'profile__avatar',
             type: 'status',
+            status: {
+                online: data.online,
+                lastSeen: data.last_seen,
+            },
             src: data.profile.avatar_url,
         });
 
@@ -226,14 +307,46 @@ export default class ProfileView {
             })
         });
 
-        const profileActions = createElement({ parent: profileBottom });
+        this.renderActions(profileBottom, data);
+    }
 
-        new ButtonComponent(profileActions, {
-            text: 'Редактировать профиль',
-            variant: 'secondary',
-            size: 'small',
-            onClick: () => new EditProfileView(this.#containerObj, this.#menu).render(),
-        });
+    renderActions(profileBottom, data) {
+        if (this.#profileActions) {
+            this.#profileActions.innerHTML = '';
+            profileBottom.appendChild(this.#profileActions);
+        } else {
+            this.#profileActions = createElement({
+                parent: profileBottom,
+                classes: ['profile__actions']
+            });
+        }
+
+        // if (data.profile.username === getLsItem('username', '')) {
+        //     new ButtonComponent(this.#profileActions, {
+        //         text: 'Редактировать профиль',
+        //         variant: 'secondary',
+        //         size: 'small',
+        //         onClick: () => router.go({ path: '/profile/edit' }),
+        //     });
+        // } else
+
+        data.relation = "stranger";
+
+        if (Object.keys(ACTIONS_PROPERTIES).includes(data.relation)) {
+            const properties = ACTIONS_PROPERTIES[data.relation];
+            new ButtonComponent(this.#profileActions, {
+                text: properties[0].text,
+                variant: properties[0].variant,
+                size: 'small',
+                onClick: properties[0].onClick.bind(this, data),
+            });
+            new ButtonComponent(this.#profileActions, {
+                icon: properties[1].icon,
+                variant: "secondary",
+                size: 'small',
+                onClick: properties[1].onClick.bind(this, data),
+            });
+        }
     }
 
     createCountedItem(parent, title, value) {
@@ -266,9 +379,12 @@ export default class ProfileView {
         });
         createElement({
             parent: item,
+            classes: ['profile__detail-text'],
             text: value
         });
 
         return item;
     }
 }
+
+export default new ProfileView();

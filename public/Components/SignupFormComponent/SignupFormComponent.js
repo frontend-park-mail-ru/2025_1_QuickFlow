@@ -6,6 +6,7 @@ import createElement from '../../utils/createElement.js';
 import focusInput from '../../utils/focusInput.js';
 import convertDate from '../../utils/convertDate.js';
 import { getLsItem, removeLsItem, setLsItem } from '../../utils/localStorage.js';
+import router from '../../Router.js';
 
 
 const LOGO_SRC = '/static/img/logo-icon.svg';
@@ -23,13 +24,9 @@ const FEMALE_VALUE = 2;
 export default class SignupFormComponent {
     #parent
     #step
-    #menu
-    #header
     #focusTimer
-    constructor(parent, menu, header) {
+    constructor(parent) {
         this.#parent = parent;
-        this.#menu = menu;
-        this.#header = header;
 
         this.#focusTimer = null;
         this.usernameInput = null;
@@ -80,7 +77,7 @@ export default class SignupFormComponent {
                 removeLsItem(this.lastnameInput.name);
                 removeLsItem(this.sexInput.name);
                 removeLsItem(this.birthDateInput.name);
-                this.#menu.goToPage(this.#menu.menuElements.login);
+                router.go({ path: '/login' });
                 return;
             }
             this.#step = 1;
@@ -298,10 +295,7 @@ export default class SignupFormComponent {
             },
             callback: (status) => {
                 if (status === 200) {
-                    this.#menu.goToPage(this.#menu.menuElements.feed);
-                    this.#menu.checkAuthPage();
-                    this.#menu.updateMenuVisibility(true);
-                    this.#header.renderAvatarMenu();
+                    router.go({ path: '/feed' });
                     return;
                 }
                 this.passwordInput.showError(CREATION_ERROR_MESSAGE);

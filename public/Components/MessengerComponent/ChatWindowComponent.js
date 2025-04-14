@@ -3,7 +3,11 @@ import AvatarComponent from '../../Components/AvatarComponent/AvatarComponent.js
 import ContextMenuComponent from '../../Components/ContextMenuComponent/ContextMenuComponent.js';
 import createElement from '../../utils/createElement.js';
 import focusInput from '../../utils/focusInput.js';
-import {setLsItem, getLsItem, removeLsItem} from '../../utils/localStorage.js';
+import { setLsItem, getLsItem, removeLsItem } from '../../utils/localStorage.js';
+import getTimeDifference from '../../utils/getTimeDifference.js';
+import ws from '../../modules/WebSocketService.js';
+import Ajax from '../../modules/ajax.js';
+import router from '../../Router.js';
 
 
 const TEXTAREA_PLACEHOLDER = 'Напишите сообщение...';
@@ -53,25 +57,18 @@ const MEDIA_CONTEXT_MENU_DATA = {
 
 
 export default class ChatWindowComponent {
-    #parent
-    #config
-    #msgs
-    #chatElement
-    #chatData
-    #container
-    #chatsPanel
-    #focusTimer
+    #parent;
+    #config;
+    #msgs = null;
+    #chat = null;
+    #chatElement = null;
+    #chatData = null;
+    #container = null;
+    #chatsPanel = null;
+    #focusTimer = null;
     constructor(parent, config) {
         this.#parent = parent;
         this.#config = config;
-
-        this.#chatElement = null;
-        this.#chatData = null;
-        this.#msgs = null;
-        this.#container = null;
-        this.#chatsPanel = null;
-        this.#focusTimer = null;
-
         this.render();
     }
 
@@ -82,6 +79,70 @@ export default class ChatWindowComponent {
         });
 
         this.renderEmptyState();
+
+        console.log(this.#config.chat_id, this.#config.receiver_username);
+
+        if (!this.#config.chat_id && this.#config.receiver_username) {
+            Ajax.get({
+                url: `/profiles/${this.#config.receiver_username}`,
+                callback: (status, chatUser) => {
+                    switch (status) {
+                        case 200:
+                            this.#container.innerHTML = '';
+
+                            this.#chatData = {
+                                name: `${chatUser.profile.firstname} ${chatUser.profile.lastname}`,
+                                online: chatUser.online,
+                                avatar_url: chatUser.profile.avatar_url,
+                                receiver_id: chatUser.id,
+                            };
+
+                            console.log(this.#chatData);
+
+                            this.renderHeader();
+                            this.renderChat();
+                            // ws.subscribe('message', (payload) => {
+                            //     console.log(payload);
+                            //     if (!this.#chatData?.id && this.#chatData?.receiver_id) {
+                            //         setLsItem('active-chat', `chat-${payload.chat_id}`);
+                            //         this.#chatsPanel.renderChatList();
+                            //     } else {
+                            //         this.#msgs.push(payload);
+                            //         this.#chat.renderMsg(payload, []);
+                            //     }
+                            // });
+                            this.renderMessageInput();
+
+                            break;
+                        case 401:
+                            router.go({ path: '/login' });
+                            break;
+                        case 404:
+                            router.go({ path: '/not-found' });
+                            break;
+                    }
+                }
+            });
+        }
+
+        ws.subscribe('message', (payload) => {
+            console.log(payload);
+            removeLsItem(CHAT_MSG_PREFIX + `${this.#chatData.id}`);
+            if (!this.#chatData?.id && this.#chatData?.receiver_id) {
+                setLsItem('active-chat', `chat-${payload.chat_id}`);
+                this.#chatsPanel.renderChatList();
+            } else {
+                this.#msgs.push(payload);
+                this.#chat.renderMsg(payload, []);
+                this.#chatsPanel.renderLastMsg({
+                    id: payload.chat_id,
+                    last_message: {
+                        text: payload.text,
+                        created_at: payload.created_at,
+                    }
+                });
+            }
+        });
     }
 
     get chatData() {
@@ -96,9 +157,13 @@ export default class ChatWindowComponent {
         this.#chatData = chatData;
         this.#container.innerHTML = '';
 
-        this.#config.messenger.ajaxGetChat(this.#chatData.username, (chatMsgs) => {
+        this.#config.messenger.ajaxGetMessages({
+            chatId: this.#chatData.id,
+            count: 50,
+        }, (status, chatMsgs) => {
             this.#msgs = chatMsgs;
             this.renderHeader();
+
             this.renderChat();
             this.renderMessageInput();
         });
@@ -129,6 +194,8 @@ export default class ChatWindowComponent {
     }
 
     renderHeader() {
+        console.log(this.#chatData);
+
         const chatHeader = createElement({
             parent: this.#container,
             classes: ['chat-window__header'],
@@ -145,7 +212,7 @@ export default class ChatWindowComponent {
 
         new AvatarComponent(chatHeader, {
             size: HEADER_AVATAR_SIZE,
-            src: this.#chatData.avatar,
+            src: this.#chatData.avatar_url,
         });
 
         const chatInfo = createElement({
@@ -162,7 +229,7 @@ export default class ChatWindowComponent {
         createElement({
             parent: chatInfo,
             classes: ['chat-window__status'],
-            text: 'заходил 2 часа назад', // TODO: делать запрос на user и отображать статус
+            text: this.#chatData.online ? "в сети" : `заходил ${getTimeDifference(this.#chatData.last_seen, { mode: "long" })}`,
         });
 
         this.renderDropdown(chatHeader);
@@ -175,12 +242,12 @@ export default class ChatWindowComponent {
         });
 
         const optionsWrapper = createElement({
-            classes: ['post-options-wrapper'],
+            classes: ['post__options'],
             parent: dropdown,
         });
 
         createElement({
-            classes: ['post-options'],
+            classes: ['post__options-icon'],
             parent: optionsWrapper,
         });
 
@@ -217,7 +284,7 @@ export default class ChatWindowComponent {
         });
 
         const value = getLsItem(
-            CHAT_MSG_PREFIX + `${this.#config.user.username}-${this.#chatData.username}`,
+            CHAT_MSG_PREFIX + `${this.#chatData.id}`,
             ''
         );
 
@@ -234,20 +301,37 @@ export default class ChatWindowComponent {
         focusInput(textarea, this.#focusTimer);
 
         const sendBtn = createElement({
-            classes: ['chat-window__send', textarea.value.trim() === '' ? 'chat-window__send_disabled' : null],
+            classes: [
+                'chat-window__send',
+                textarea.value.trim() === '' ? 'chat-window__send_disabled' : null
+            ],
             parent: bottomBar,
+        });
+
+        sendBtn.addEventListener('click', () => {
+            if (sendBtn.classList.contains('chat-window__send_disabled')) return;
+
+            const messageText = textarea.value.trim();
+            textarea.value = '';
+            sendBtn.classList.add('chat-window__send_disabled');
+
+            ws.send('message', {
+                chat_id: this.#chatData?.id,
+                receiver_id: this.#chatData?.receiver_id,
+                text: messageText,
+            });
         });
 
         textarea.addEventListener("input", () => {
             if (textarea.value.trim() !== '') {
                 sendBtn.classList.remove('chat-window__send_disabled');
                 setLsItem(
-                    CHAT_MSG_PREFIX + `${this.#config.user.username}-${this.#chatData.username}`,
+                    CHAT_MSG_PREFIX + `${this.#chatData.id}`,
                     textarea.value.trim()
                 );
                 return;
             }
-            removeLsItem(CHAT_MSG_PREFIX + `${this.#config.user.username}-${this.#chatData.username}`);
+            removeLsItem(CHAT_MSG_PREFIX + `${this.#chatData.id}`);
             this.#chatsPanel.renderLastMsg(this.#chatData);
             sendBtn.classList.add('chat-window__send_disabled');
         });
@@ -264,11 +348,12 @@ export default class ChatWindowComponent {
     }
 
     renderChat() {
-        this.#chatElement = new ChatComponent(this.#container, {
+        this.#chat = new ChatComponent(this.#container, {
             chatData: this.#chatData,
             messages: this.#msgs,
             user: this.#config.user,
-        })
-        .scroll;
+        });
+
+        this.#chatElement = this.#chat.scroll;
     }
 }

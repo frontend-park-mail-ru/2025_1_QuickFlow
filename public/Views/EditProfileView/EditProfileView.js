@@ -14,6 +14,8 @@ import { getLsItem } from '../../utils/localStorage.js';
 import convertDate from '../../utils/convertDate.js';
 import convertToFormData from '../../utils/convertToFormData.js';
 
+import router from '../../Router.js';
+
 
 const forms = {
     profile: {
@@ -24,7 +26,8 @@ const forms = {
                 config: {
                     label: 'Имя пользователя',
                     validation: 'username',
-                    required: true
+                    required: true,
+                    maxLength: 20,
                 }
             }],
             [{
@@ -32,7 +35,8 @@ const forms = {
                 config: {
                     label: 'Имя',
                     validation: 'name',
-                    required: true
+                    required: true,
+                    maxLength: 25,
                 }
             },
             {
@@ -40,7 +44,8 @@ const forms = {
                 config: {
                     label: 'Фамилия',
                     validation: 'name',
-                    required: true
+                    required: true,
+                    maxLength: 25,
                 }
             },
             {
@@ -50,7 +55,8 @@ const forms = {
                     validation: 'date',
                     autocomplete: 'date',
                     placeholder: 'дд.мм.гггг',
-                    required: true
+                    required: true,
+                    maxLength: 10,
                 }
             }],
             [{
@@ -58,7 +64,8 @@ const forms = {
                 type: 'textarea',
                 config: {
                     label: 'Краткая информация',
-                    placeholder: 'Расскажите о себе'
+                    placeholder: 'Расскажите о себе',
+                    maxLength: 256,
                 }
             }]
         ]
@@ -70,6 +77,7 @@ const forms = {
                 key: 'city',
                 config: {
                     label: 'Город',
+                    maxLength: 25,
                 }
             }],
             [{
@@ -84,6 +92,7 @@ const forms = {
                 config: {
                     label: 'Почта',
                     validation: 'email',
+                    maxLength: 32,
                 }
             }]
         ]
@@ -95,30 +104,35 @@ const forms = {
                 key: 'school_city',
                 config: {
                     label: 'Город',
+                    maxLength: 25,
                 }
             },
             {
                 key: 'school_name',
                 config: {
                     label: 'Школа',
+                    maxLength: 32,
                 }
             }],
             [{
                 key: 'univ_city',
                 config: {
                     label: 'Город',
+                    maxLength: 25,
                 }
             },
             {
                 key: 'univ_name',
                 config: {
                     label: 'Высшее учебное заведение',
+                    maxLength: 50,
                 }
             },
             {
                 key: 'faculty',
                 config: {
                     label: 'Факультет',
+                    maxLength: 32,
                 }
             },
             {
@@ -133,24 +147,19 @@ const forms = {
 };
 
 
-export default class EditProfileView {
+class EditProfileView {
     #containerObj
-    #menu
     #section
     #userData
     #stateUpdaters
-    constructor(containerObj, menu) {
-        this.#containerObj = containerObj;
-        this.#menu = menu;
-        
+    constructor() {
         this.#userData = null;
         this.#stateUpdaters = [];
         this.#section = null;
     }
 
-    render() {
-        this.#containerObj.clear();
-        this.#containerObj = new MainLayoutComponent({
+    render(params, section = 'profile') {
+        this.#containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
 
@@ -168,10 +177,11 @@ export default class EditProfileView {
                     title: 'Образование',
                     onClick: () => this.renderSection('education')
                 },
-            }
+            },
+            active: section,
         });
 
-        this.renderSection('profile');
+        this.renderSection(section);
     }
 
     renderSection(sectionName) {
@@ -183,19 +193,26 @@ export default class EditProfileView {
         Ajax.get({
             url: `/profiles/${getLsItem('username', '')}`,
             callback: (status, userData) => {
-                let isAuthorized = status === 200;
-    
-                if (!isAuthorized) {
-                    this.#menu.goToPage(this.#menu.menuElements.login);
-                    this.#menu.updateMenuVisibility(false);
-                    return;
+                switch (status) {
+                    case 200:
+                        this.getCbOk(userData, sectionData);
+                        break;
+                    case 401:
+                        this.cbUnauthorized();
+                        break;
                 }
-
-                this.#userData = userData;
-                if (sectionData.header) this.renderHeader();
-                this.renderForm(sectionData);
             }
         });
+    }
+
+    cbUnauthorized() {
+        router.go({ path: '/login' });
+    }
+
+    getCbOk(userData, sectionData) {
+        this.#userData = userData;
+        if (sectionData.header) this.renderHeader();
+        this.renderForm(sectionData);
     }
 
     renderForm(sectionData) {
@@ -327,17 +344,20 @@ export default class EditProfileView {
             body: fd,
             isFormData: true,
             callback: (status) => {
-                let isAuthorized = status === 200;
-
-                if (!isAuthorized) {
-                    this.#menu.goToPage(this.#menu.menuElements.login);
-                    this.#menu.updateMenuVisibility(false);
-                    return;
+                switch (status) {
+                    case 200:
+                        this.postCbOk();
+                        break;
+                    case 401:
+                        this.cbUnauthorized();
+                        break;
                 }
-
-                this.render();
             }
         });
+    }
+
+    postCbOk() {
+        this.render(this.#section);
     }
 
     renderHeader() {
@@ -369,3 +389,5 @@ export default class EditProfileView {
         );
     }
 }
+
+export default new EditProfileView();

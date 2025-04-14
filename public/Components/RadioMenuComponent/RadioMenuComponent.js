@@ -25,12 +25,13 @@ export default class RadioMenuComponent {
                 parent: this.wrapper,
                 classes: ['radio-menu__item'],
                 text: title,
-                attrs: {
-                    'data-section': key,
-                },
+                attrs: { 'data-section': key },
             });
 
-            if (index === 0) {
+            if (
+                key === this.#config.active ||
+                (!this.#config.active && index === 0)
+            ) {
                 menuItem.classList.add('radio-menu__item_active');
                 this.activePage = menuItem;
             }

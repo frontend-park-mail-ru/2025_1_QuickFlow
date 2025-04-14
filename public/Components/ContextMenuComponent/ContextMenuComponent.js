@@ -14,6 +14,8 @@ export default class ContextMenuComponent {
     }
 
     render() {
+        if (Object.keys(this.#config.data).length === 0) return;
+
         this.wrapper = createElement({
             parent: this.#parent,
             classes: [
@@ -24,12 +26,19 @@ export default class ContextMenuComponent {
             ]
         });
 
-        Object.entries(this.#config.data).forEach(([, { href, text, icon, isCritical }],) => {
+        Object.entries(this.#config.data).forEach(([, { href, text, icon, isCritical, onClick }],) => {
             const menuOption = createElement({
                 parent: this.wrapper,
                 classes: ['context-menu__option'],
                 attrs: {'data-href': href}
             });
+
+            if (onClick) {
+                menuOption.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    onClick();
+                })
+            }
 
             createElement({
                 parent: menuOption,

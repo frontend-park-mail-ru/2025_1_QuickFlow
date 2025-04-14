@@ -32,6 +32,14 @@ export default class ButtonComponent {
             text: this.#config.text || DEFAULT_TEXT_CONTENT,
         });
         
+        if (this.#config.icon) {
+            this.buttonElement.appendChild(createElement({
+                parent: this.#parent,
+                attrs: { src: this.#config.icon },
+                classes: ['button__icon'],
+            }));
+            this.buttonElement.classList.add('button_textless');
+        }
 
         if (this.#config.disabled) {
             this.buttonElement.disabled = true;

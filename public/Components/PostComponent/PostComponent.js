@@ -1,7 +1,12 @@
 import ContextMenuComponent from '../ContextMenuComponent/ContextMenuComponent.js'
 import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
-import formatTimeAgo from '../../utils/formatTimeAgo.js';
+import ModalWindowComponent from '../UI/ModalWindowComponent/ModalWindowComponent.js';
+// import formatTimeAgo from '../../utils/formatTimeAgo.js';
+import getTimeDifference from '../../utils/getTimeDifference.js';
 import createElement from '../../utils/createElement.js';
+import { getLsItem } from '../../utils/localStorage.js';
+import Ajax from '../../modules/ajax.js';
+import router from '../../Router.js';
 
 
 const AUTHOR_AVATAR_SIZE = 's';
@@ -83,7 +88,7 @@ export default class PostComponent {
 
             createElement({
                 parent: prevBtn,
-                attrs: {src: 'static/img/prev-arrow-icon.svg'}
+                attrs: {src: '/static/img/prev-arrow-icon.svg'}
             });
 
             const nextBtn = createElement({
@@ -93,7 +98,7 @@ export default class PostComponent {
 
             createElement({
                 parent: nextBtn,
-                attrs: {src: 'static/img/next-arrow-icon.svg'}
+                attrs: {src: '/static/img/next-arrow-icon.svg'}
             });
 
             prevBtn.addEventListener('click', () => {
@@ -214,7 +219,7 @@ export default class PostComponent {
 
         new AvatarComponent(authorWrapper, {
             size: AUTHOR_AVATAR_SIZE,
-            src: this.#config.avatar,
+            src: this.#config.author.avatar_url,
         });
 
         const topRightWrapper = createElement({
@@ -228,9 +233,11 @@ export default class PostComponent {
         });
 
         createElement({
-            tag: 'h2',
+            tag: 'a',
             parent: nameDateWrapper,
-            text: `${this.#config.firstname} ${this.#config.lastname}`,
+            classes: ['post__name'],
+            attrs: { href: `/profiles/${this.#config.author.username}` },
+            text: `${this.#config.author.firstname} ${this.#config.author.lastname}`,
         });
 
         createElement({
@@ -242,7 +249,7 @@ export default class PostComponent {
         createElement({
             classes: ['post__date', 'p1'],
             parent: nameDateWrapper,
-            text: `${formatTimeAgo(this.#config.created_at)}`,
+            text: `${getTimeDifference(this.#config.created_at)}`,
         });
 
         const flag = true;
@@ -270,28 +277,66 @@ export default class PostComponent {
             parent: optionsWrapper,
         });
 
-        new ContextMenuComponent(dropdown, {
-            data: {
-                notify: {
-                    href: '/notify',
-                    text: 'Уведомлять о постах',
-                    icon: 'notice-icon',
+        const data = {
+            copyLink: {
+                href: '/copy-link',
+                text: 'Скопировать ссылку',
+                icon: 'copy-icon',
+            },
+        };
+
+        if (this.#config.author.username === getLsItem('username', '')) {
+            data.edit = {
+                href: '/edit',
+                text: 'Редактировать',
+                icon: 'pencil-primary-icon',
+                onClick: () => {
+                    new ModalWindowComponent(this.#config.container, {
+                        type: 'edit-post',
+                        data: this.#config,
+                    });
                 },
-                copyLink: {
-                    href: '/copy-link',
-                    text: 'Скопировать ссылку',
-                    icon: 'copy-icon',
-                },
-                notInterested: {
-                    href: '/not-interested',
-                    text: 'Не интересно',
-                    icon: 'cross-circle-icon',
-                },
-                ban: {
-                    href: '/ban',
-                    text: 'Пожаловаться',
-                    icon: 'ban-icon',
-                    isCritical: true
+            };
+            data.delete = {
+                href: '/delete',
+                text: 'Удалить',
+                icon: 'trash-accent-icon',
+                isCritical: true,
+                onClick: () => this.ajaxDeletePost(this.#config.id),
+            };
+        } else {
+            data.notify = {
+                href: '/notify',
+                text: 'Уведомлять о постах',
+                icon: 'notice-icon',
+            };
+            data.notInterested = {
+                href: '/not-interested',
+                text: 'Не интересно',
+                icon: 'cross-circle-icon',
+            };
+            data.ban = {
+                href: '/ban',
+                text: 'Пожаловаться',
+                icon: 'ban-icon',
+                isCritical: true
+            };
+        }
+
+        new ContextMenuComponent(dropdown, { data });
+    }
+
+    ajaxDeletePost(id) {
+        Ajax.delete({
+            url: `/posts/${id}`,
+            callback: (status) => {
+                switch (status) {
+                    case 401:
+                        router.go({ path: '/login' });
+                        break;
+                    case 200:
+                        this.wrapper.remove();
+                        break;
                 }
             }
         });

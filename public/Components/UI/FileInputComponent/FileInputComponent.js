@@ -3,7 +3,7 @@ import createElement from '../../../utils/createElement.js';
 
 const DEFAULT_TYPE = 'file';
 const DEFAULT_NAME = '';
-const DEFAULT_ACCEPT_IMAGE = 'image/*';
+const DEFAULT_ACCEPT_IMAGE = '.jpg, .jpeg, .png, .gif';
 
 
 export default class FileInputComponent {
@@ -73,6 +73,10 @@ export default class FileInputComponent {
                 }
             };
         }
+
+        if (Array.isArray(this.#config.preloaded) && this.#config.preloaded.length > 0) {
+            this.loadPreloadedFiles(this.#config.preloaded);
+        }
     }
     
     async multipleOnchange(event) {
@@ -112,6 +116,30 @@ export default class FileInputComponent {
         }
 
         this.input.files = dataTransfer.files;
+    }
+
+    async loadPreloadedFiles(srcList) {
+        const preloadedFiles = await Promise.all(
+            srcList.map(this.fetchImageAsFile)
+        );
+
+        this.#files.push(...preloadedFiles);
+        this.updateInputFiles();
+
+        if (this.#config.preview) {
+            for (const src of srcList) {
+                const picWrapper = this.#config.preview.cloneNode(true);
+                picWrapper.querySelector('img').src = src;
+                this.#parent.insertBefore(picWrapper, this.#config.imitator);
+            }
+        }
+    }
+
+    async fetchImageAsFile(src) {
+        const response = await fetch(src);
+        const blob = await response.blob();
+        const filename = src.split('/').pop().split('?')[0] || 'image.jpg';
+        return new File([blob], filename, { type: blob.type });
     }
 
     addListener(listener) {
