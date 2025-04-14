@@ -52,7 +52,7 @@ export default class FeedView {
         });
 
         Ajax.get({
-            url: '/feed',
+            url: this.#config.getUrl,
             params: { posts_count: POSTS_COUNT },
             callback: (status, feedData) => {
                 switch (status) {
@@ -103,7 +103,7 @@ export default class FeedView {
         this.#isLoading = true;
     
         Ajax.get({
-            url: '/feed',
+            url: this.#config.getUrl,
             params: {
                 posts_count: POSTS_COUNT,
                 ts: this.#lastTs,

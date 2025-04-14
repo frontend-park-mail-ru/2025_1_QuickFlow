@@ -15,11 +15,21 @@ class FeedView {
             items: {
                 feed: {
                     title: 'Лента',
-                    // onClick: () => this.renderSection('profile')
+                    onClick: () => {
+                        containerObj.left.innerHTML = '';
+                        new FeedComponent(containerObj.left, {
+                            getUrl: "/feed",
+                        });
+                    },
                 },
                 recommendations: {
                     title: 'Рекомендации',
-                    // onClick: () => this.renderSection('contacts')
+                    onClick: () => {
+                        containerObj.left.innerHTML = '';
+                        new FeedComponent(containerObj.left, {
+                            getUrl: "/recommendations",
+                        });
+                    },
                 },
                 comments: {
                     title: 'Комментарии',
@@ -32,7 +42,9 @@ class FeedView {
             }
         });
 
-        new FeedComponent(containerObj.left, {});
+        new FeedComponent(containerObj.left, {
+            getUrl: "/feed",
+        });
 
         return containerObj.container;
     }
