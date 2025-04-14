@@ -354,10 +354,10 @@ export default class PostComponent {
     }
 
     actionCbOk() {
-        const actions = document.getElementsByClassName(`js-post-action-${this.#config?.author?.username}`);
-        console.log(actions);
+        const actions = Array.from(
+            document.getElementsByClassName(`js-post-action-${this.#config?.author?.username}`)
+        );
         for (const action of actions) {
-            console.log(action);
             action.remove()
         };
     }
