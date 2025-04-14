@@ -318,8 +318,10 @@ export default class ChatWindowComponent {
         });
 
         textarea.addEventListener('keypress', (event) => {
-            event.preventDefault();
-            if (event.key === 'Enter') this.sendMessage(textarea, sendBtn);
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                this.sendMessage(textarea, sendBtn);
+            }
         });
 
         this.updateTextareaHeight(textarea, bottomWrapper);
