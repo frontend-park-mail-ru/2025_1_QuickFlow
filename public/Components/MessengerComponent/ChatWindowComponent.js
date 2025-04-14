@@ -133,6 +133,13 @@ export default class ChatWindowComponent {
             } else {
                 this.#msgs.push(payload);
                 this.#chat.renderMsg(payload, []);
+                this.#chatsPanel.renderLastMsg({
+                    id: payload.chat_id,
+                    last_message: {
+                        text: payload.text,
+                        created_at: payload.created_at,
+                    }
+                });
             }
             removeLsItem(CHAT_MSG_PREFIX + `${this.#chatData.id}`);
         });
