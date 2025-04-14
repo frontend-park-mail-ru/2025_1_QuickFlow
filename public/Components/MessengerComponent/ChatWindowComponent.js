@@ -107,6 +107,8 @@ export default class ChatWindowComponent {
                 callback: (status, chatUser) => {
                     switch (status) {
                         case 200:
+                            this.#container.innerHTML = '';
+                            
                             this.#chatData = {
                                 name: `${chatUser.profile.firstname} ${chatUser.profile.lastname}`,
                                 online: chatUser.online,
