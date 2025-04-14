@@ -66,7 +66,11 @@ export default class PostComponent {
                 createElement({
                     parent: slide,
                     classes: ['post__pic'],
-                    attrs: {src: pic, alt: DEAFULT_IMG_ALT}
+                    attrs: {
+                        src: pic,
+                        alt: DEAFULT_IMG_ALT,
+                        loading: "lazy",
+                    }
                 });
             });
         }
