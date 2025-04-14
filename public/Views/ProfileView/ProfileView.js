@@ -159,13 +159,6 @@ class ProfileView {
             type: 'profile',
         });
 
-        // let username;
-        // console.log(params);
-        // const path = router.path.split('/').filter(Boolean);
-        // username = path.length === 2 ?
-        //     path[1] :
-        //     getLsItem('username', '');
-
         const username = params?.username || getLsItem('username', '');
 
         Ajax.get({
@@ -198,7 +191,7 @@ class ProfileView {
             callback: (status, friendsData) => {
                 switch (status) {
                     case 200:
-                        this.friendsCbOk(friendsData);
+                        this.friendsCbOk(friendsData.body);
                         break;
                     case 401:
                         router.go({ path: '/login' });
