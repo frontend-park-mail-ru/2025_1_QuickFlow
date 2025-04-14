@@ -6,6 +6,7 @@ import router from '../../Router.js';
 
 
 const POSTS_COUNT = 10;
+const OBSERVER_MARGIN = 500;
 
 
 export default class FeedView {
@@ -92,7 +93,7 @@ export default class FeedView {
                 this.#loadMorePosts();
             }
         }, {
-            rootMargin: '100px',
+            rootMargin: `${OBSERVER_MARGIN}px`,
         });
     
         observer.observe(this.sentinel);
