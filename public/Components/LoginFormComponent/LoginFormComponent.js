@@ -222,6 +222,7 @@ export default class LoginFormComponent {
             body,
             callback: (status) => {
                 if (status === 200) {
+                    router.menu.renderProfileMenuItem();
                     router.go({ path: '/feed' });
                     return;
                 }

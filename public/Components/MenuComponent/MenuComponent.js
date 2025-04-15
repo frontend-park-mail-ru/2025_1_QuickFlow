@@ -1,4 +1,5 @@
 import createElement from '../../utils/createElement.js';
+import { getLsItem } from '../../utils/localStorage.js';
 import router from '../../Router.js';
 
 
@@ -51,7 +52,10 @@ export default class MenuComponent {
             const menuElement = createElement({
                 tag: 'a',
                 parent: this.#container,
-                classes: ['menu__item'],
+                classes: [
+                    'menu__item',
+                    key === 'profiles' ? 'js-profile-menu-item' : 'menu__item'
+                ],
                 attrs: {href, 'data-section': key}
             });
 
@@ -82,6 +86,11 @@ export default class MenuComponent {
                 this.goToPage(event.target.closest('a'));
             }
         });
+    }
+
+    renderProfileMenuItem() {
+        const profileMenuItem = this.#container.getElementsByClassName('js-profile-menu-item');
+        profileMenuItem.href = `/profiles/${getLsItem('username', '')}`;
     }
 
     updateMenuVisibility() {

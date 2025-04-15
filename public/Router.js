@@ -24,6 +24,10 @@ class Router {
         this.#header = header;
     }
 
+    get menu() {
+        return this.#menu;
+    }
+
     register(view, config) {
         const { path, section } = config;
         this.#routes[path] = {
