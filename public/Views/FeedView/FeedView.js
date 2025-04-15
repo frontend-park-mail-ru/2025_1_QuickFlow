@@ -49,6 +49,7 @@ class FeedView {
 
         new FeedComponent(containerObj.left, {
             getUrl: "/feed",
+            hasCreateButton: HAS_CREATE_BUTTON,
         });
 
         return containerObj.container;
