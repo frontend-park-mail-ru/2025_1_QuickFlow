@@ -84,6 +84,7 @@ export default class ChatWindowComponent {
         console.log(this.#config.chat_id, this.#config.receiver_username);
 
         if (!this.#config.chat_id && this.#config.receiver_username) {
+            removeLsItem('active-chat');
             Ajax.get({
                 url: `/profiles/${this.#config.receiver_username}`,
                 callback: (status, chatUser) => {
@@ -207,7 +208,6 @@ export default class ChatWindowComponent {
         new AvatarComponent(chatHeader, {
             size: HEADER_AVATAR_SIZE,
             src: this.#chatData.avatar_url,
-            href: this.#chatData.avatar_url,
         });
 
         const chatInfo = createElement({
