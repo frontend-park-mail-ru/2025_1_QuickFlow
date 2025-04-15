@@ -209,6 +209,7 @@ export default class ChatWindowComponent {
         new AvatarComponent(chatHeader, {
             size: HEADER_AVATAR_SIZE,
             src: this.#chatData.avatar_url,
+            href: `/profiles/${this.#chatData.username}`,
         });
 
         const chatInfo = createElement({
@@ -217,9 +218,11 @@ export default class ChatWindowComponent {
         });
 
         createElement({
+            tag: 'a',
             parent: chatInfo,
             classes: ['chat-window__title'],
             text: this.#chatData.name,
+            attrs: { href: `/profiles/${this.#chatData.username}` },
         });
 
         createElement({

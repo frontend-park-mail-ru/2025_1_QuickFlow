@@ -7,7 +7,7 @@ import Ajax from '../../../modules/ajax.js';
 import FileInputComponent from '../FileInputComponent/FileInputComponent.js';
 
 
-const POST_TEXT_MAX_LENGTH = 1000;
+const POST_TEXT_MAX_LENGTH = 4000;
 
 
 export default class ModalWindowComponent {
