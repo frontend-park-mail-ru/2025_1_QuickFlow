@@ -72,7 +72,7 @@ export default class TextareaComponent {
             if (this.#config.showCharactersLeft) {
                 const counter = createElement({
                     tag: 'span',
-                    text: this.#config.maxLength,
+                    text: this.#config.maxLength - this.textarea.value.length,
                     parent: descWrapper,
                     classes: ['input__counter'],
                 });
