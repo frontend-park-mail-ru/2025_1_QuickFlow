@@ -329,7 +329,13 @@ export default class PostComponent {
                 text: 'Удалить',
                 icon: 'trash-accent-icon',
                 isCritical: true,
-                onClick: () => this.ajaxDeletePost(this.#config.id),
+                onClick: () => {
+                    new ModalWindowComponent(this.#config.container, {
+                        type: 'delete-post',
+                        data: this.#config,
+                        ajaxDeletePost: () => this.ajaxDeletePost(this.#config.id),
+                    });
+                }
             };
         } else {
             data.notify = {

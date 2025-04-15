@@ -56,18 +56,54 @@ export default class ModalWindowComponent {
             this.close();
         });
 
-        if (this.#config.type === 'create-post') {
-            this.renderPostInner();
-        } else if (this.#config.type === 'edit-post') {
-            this.renderPostInner(true);
-        } else if (this.#config.type === 'profile-full-info') {
-            this.renderProfileInfoInner();
+        switch (this.#config.type) {
+            case 'create-post':
+                this.renderPostInner();
+                break;
+            case 'edit-post':
+                this.renderPostInner(true);
+                break;
+            case 'delete-post':
+                this.renderDeletePostInner();
+                break;
+            case 'profile-full-info':
+                this.renderProfileInfoInner();
+                break;
         }
     }
 
     close() {
         this.wrapper.remove();
         document.body.style.overflow = 'auto';
+    }
+
+    renderDeletePostInner() {
+        this.modalWindow.classList.add('modal_post-delete');
+        this.title.textContent = 'Вы уверены, что хотите удалить этот пост?';
+
+        createElement({
+            parent: this.modalWindow,
+            text: 'Пост будет удалён навсегда, это действие нельзя будет отменить',
+        });
+
+        const buttons = createElement({
+            parent: this.modalWindow,
+            classes: ['modal__buttons'],
+        });
+
+        new ButtonComponent(buttons, {
+            text: 'Отменить',
+            variant: 'secondary',
+            size: 'small',
+            onClick: () => this.close(),
+        });
+
+        new ButtonComponent(buttons, {
+            text: 'Удалить',
+            variant: 'primary',
+            size: 'small',
+            onClick: () => this.#config.ajaxDeletePost(),
+        });
     }
 
     renderPostInner(isFilled = false) {

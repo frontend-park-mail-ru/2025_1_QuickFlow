@@ -29,6 +29,21 @@
     gap: 8px;
 }
 
+.modal_post-delete {
+    font-size: 14px;
+    line-height: 130%;
+    color: var(--text-secondary);
+    text-align: center;
+    gap: 4px;
+}
+
+.modal__buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    margin-top: 8px;
+}
+
 .modal_profile {
     gap: 12px;
 }
