@@ -98,6 +98,7 @@ export default class ChatWindowComponent {
                                 online: chatUser.online,
                                 avatar_url: chatUser.profile.avatar_url,
                                 receiver_id: chatUser.id,
+                                username: this.#config.receiver_username,
                             };
 
                             console.log(this.#chatData);
