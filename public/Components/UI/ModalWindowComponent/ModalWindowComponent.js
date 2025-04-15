@@ -246,14 +246,21 @@ export default class ModalWindowComponent {
         this.#config.createInfoItem(
             items,
             profileDataLayout['username'].icon,
-            this.#config.data.profile.username
+            this.#config.data.profile.username,
         );
         this.#config.createInfoItem(
             items,
             profileDataLayout['birth_date'].icon,
-            convertDate(this.#config.data.profile.birth_date)
+            convertDate(this.#config.data.profile.birth_date),
         );
-
+        if (this.#config.data.profile.bio) {
+            this.#config.createInfoItem(
+                items,
+                profileDataLayout['bio'].icon,
+                this.#config.data.profile.bio,
+            );    
+        }
+        
         if (Object.keys(this.#config.data.contact_info).length > 0) {
             this.renderProfileInfoBlock(items, this.#config.data.contact_info);
         }

@@ -13,6 +13,7 @@ import router from '../../Router.js';
 export const profileDataLayout = {
     username: {icon: 'at'},
     birth_date: {icon: 'gift'},
+    bio: {icon: 'profile-primary'},
 
     city: {icon: 'location'},
     email: {icon: 'envelope'},
