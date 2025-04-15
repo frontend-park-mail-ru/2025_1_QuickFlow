@@ -175,7 +175,9 @@ class ProfileView {
             }
         });
 
-        new FeedComponent(this.#containerObj.left, {});
+        new FeedComponent(this.#containerObj.left, {
+            getUrl: "/feed",
+        });
 
         return this.#containerObj.container;
     }
