@@ -27,6 +27,7 @@
         line-clamp: 2;
         width: 100%;
         word-break: break-word;
+        white-space: pre-line;
 
         &_expanded {
             display: block;

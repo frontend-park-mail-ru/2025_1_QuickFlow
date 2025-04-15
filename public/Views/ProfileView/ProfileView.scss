@@ -137,6 +137,8 @@
     font-size: var(--font-size-xs);
     line-height: var(--line-height-m);
     color: var(--text-primary);
+    word-break: break-word;
+    text-align: center;
 }
 
 .profile__detail_more {
