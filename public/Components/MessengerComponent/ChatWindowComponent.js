@@ -15,6 +15,7 @@ const HEADER_AVATAR_SIZE = 'xs';
 const EMPTY_CHAT_WINDOW_TEXT = 'Выберите чат или создайте новый';
 const CHAT_DEFAULT_PADDING_BOTTOM = 16;
 const CHAT_MSG_PREFIX = 'chat-msg-';
+const MSG_MAX_LENGTH = 4000;
 
 const HEADER_CONTEXT_MENU_DATA = {
     disableNotify: {
@@ -291,6 +292,7 @@ export default class ChatWindowComponent {
             attrs: {
                 placeholder: TEXTAREA_PLACEHOLDER,
                 rows: 1,
+                maxLength: MSG_MAX_LENGTH,
             },
             text: value
         });
