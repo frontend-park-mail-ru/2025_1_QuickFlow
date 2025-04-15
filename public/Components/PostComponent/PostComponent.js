@@ -36,7 +36,7 @@ export default class PostComponent {
 
     render() {
         if (this.wrapper) this.wrapper.remove();
-        
+
         this.wrapper = createElement({
             classes: ['post'],
         });
@@ -393,6 +393,7 @@ export default class PostComponent {
 
     onAjaxEditPost(config) {
         this.#config = config;
+        this.#config.position = "top";
         this.render();
     }
 }
