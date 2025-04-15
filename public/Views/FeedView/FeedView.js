@@ -23,6 +23,7 @@ class FeedView {
                         new FeedComponent(containerObj.left, {
                             getUrl: "/feed",
                             hasCreateButton: HAS_CREATE_BUTTON,
+                            emptyStateText: "Ваша лента пока пуста",
                         });
                     },
                 },
@@ -33,6 +34,7 @@ class FeedView {
                         new FeedComponent(containerObj.left, {
                             getUrl: "/recommendations",
                             hasCreateButton: HAS_CREATE_BUTTON,
+                            emptyStateText: "Ваши рекомендации пока пусты",
                         });
                     },
                 },
@@ -50,6 +52,7 @@ class FeedView {
         new FeedComponent(containerObj.left, {
             getUrl: "/feed",
             hasCreateButton: HAS_CREATE_BUTTON,
+            emptyStateText: "Ваша лента пока пуста",
         });
 
         return containerObj.container;

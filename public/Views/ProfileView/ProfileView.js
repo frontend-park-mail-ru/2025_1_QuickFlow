@@ -309,6 +309,7 @@ class ProfileView {
         new FeedComponent(this.#containerObj.left, {
             getUrl: `/profiles/${data.profile.username}/posts`,
             hasCreateButton: data.relation === "self" ? true : false,
+            emptyStateText: data.relation === "self" ? "Напишите свой первый пост" : "Пользователь пока не опубликовал ни одного поста",
         });
 
         this.renderFriends(data.id);

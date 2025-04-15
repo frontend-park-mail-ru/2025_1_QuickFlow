@@ -71,7 +71,7 @@ export default class FeedView {
     }
 
     cbOk(feedData) {
-        if (feedData && Array.isArray(feedData)) {
+        if (feedData && Array.isArray(feedData) && feedData.length > 0) {
             feedData.forEach((config) => {
                 config.container = this.#parent.parentNode;
                 new PostComponent(this.#posts, config);
@@ -83,7 +83,26 @@ export default class FeedView {
                 classes: ['feed__bottom-sentinel'],
             });
             this.#createIntersectionObserver();
+            return;
         }
+        this.renderEmptyState();
+    }
+
+    renderEmptyState() {
+        const emptyWrapper = createElement({
+            parent: this.#posts,
+            classes: ['feed__empty'],
+        });
+        createElement({
+            parent: emptyWrapper,
+            classes: ['feed__empty-icon'],
+            attrs: { src: "/static/img/feed-primary-icon.svg" },
+        });
+        createElement({
+            parent: emptyWrapper,
+            classes: ['feed__empty-text'],
+            text: this.#config.emptyStateText,
+        });
     }
 
     #createIntersectionObserver() {

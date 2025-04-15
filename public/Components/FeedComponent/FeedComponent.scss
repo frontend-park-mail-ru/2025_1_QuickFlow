@@ -1,0 +1,20 @@
+.feed__empty {
+    border: 1px solid var(--stroke-primary);
+    height: 180px;
+    width: 100%;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    line-height: 130%;
+    color: var(--text-secondary);
+    text-align: center;
+    gap: 12px;
+}
+
+.feed__empty-icon {
+    width: 48px;
+    height: 48px;
+}
