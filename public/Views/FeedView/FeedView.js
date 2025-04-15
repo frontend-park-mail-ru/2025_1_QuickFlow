@@ -3,6 +3,9 @@ import RadioMenuComponent from '../../Components/RadioMenuComponent/RadioMenuCom
 import FeedComponent from '../../Components/FeedComponent/FeedComponent.js';
 
 
+const HAS_CREATE_BUTTON = true;
+
+
 class FeedView {
     constructor() {}
 
@@ -19,6 +22,7 @@ class FeedView {
                         containerObj.left.innerHTML = '';
                         new FeedComponent(containerObj.left, {
                             getUrl: "/feed",
+                            hasCreateButton: HAS_CREATE_BUTTON,
                         });
                     },
                 },
@@ -28,6 +32,7 @@ class FeedView {
                         containerObj.left.innerHTML = '';
                         new FeedComponent(containerObj.left, {
                             getUrl: "/recommendations",
+                            hasCreateButton: HAS_CREATE_BUTTON,
                         });
                     },
                 },

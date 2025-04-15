@@ -175,10 +175,6 @@ class ProfileView {
             }
         });
 
-        new FeedComponent(this.#containerObj.left, {
-            getUrl: `/profiles/${username}/posts`,
-        });
-
         return this.#containerObj.container;
     }
 
@@ -309,6 +305,12 @@ class ProfileView {
         });
 
         this.renderActions(profileBottom, data);
+
+        new FeedComponent(this.#containerObj.left, {
+            getUrl: `/profiles/${data.profile.username}/posts`,
+            hasCreateButton: data.relation === "self" ? true : false,
+        });
+
         this.renderFriends(data.id);
     }
 

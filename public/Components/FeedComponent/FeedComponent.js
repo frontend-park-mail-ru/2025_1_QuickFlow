@@ -23,32 +23,31 @@ export default class FeedView {
     }
 
     render() {
-        console.log(this.#config);
-
-        const createPostBtn = createElement({
-            parent: this.#parent,
-            tag: 'button',
-            classes: ['button_feed']
-        });
-        createElement({
-            parent: createPostBtn,
-            tag: 'div',
-            classes: ['button_feed__icon']
-        });
-        createElement({
-            parent: createPostBtn,
-            text: 'Создать пост',
-        });
+        if (this.#config.hasCreateButton) {
+            const createPostBtn = createElement({
+                parent: this.#parent,
+                tag: 'button',
+                classes: ['button_feed']
+            });
+            createElement({
+                parent: createPostBtn,
+                tag: 'div',
+                classes: ['button_feed__icon']
+            });
+            createElement({
+                parent: createPostBtn,
+                text: 'Создать пост',
+            });
+            createPostBtn.addEventListener('click', () => {
+                new ModalWindowComponent(this.#parent.parentNode, {
+                    type: 'create-post',
+                });
+            });
+        }
 
         this.#posts = createElement({
             parent: this.#parent,
             classes: ['feed__posts'],
-        });
-
-        createPostBtn.addEventListener('click', () => {
-            new ModalWindowComponent(this.#parent.parentNode, {
-                type: 'create-post',
-            });
         });
 
         Ajax.get({
