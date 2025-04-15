@@ -41,6 +41,7 @@ export default class FeedView {
             createPostBtn.addEventListener('click', () => {
                 new ModalWindowComponent(this.#parent.parentNode, {
                     type: 'create-post',
+                    renderCreatedPost: (config) => this.renderPost(config, "top"),
                 });
             });
         }
@@ -70,11 +71,16 @@ export default class FeedView {
         router.go({ path: '/login' });
     }
 
+    renderPost(config, position = null) {
+        config.container = this.#parent.parentNode;
+        if (position) config.position = "top";
+        new PostComponent(this.#posts, config);
+    }
+
     cbOk(feedData) {
         if (feedData && Array.isArray(feedData) && feedData.length > 0) {
             feedData.forEach((config) => {
-                config.container = this.#parent.parentNode;
-                new PostComponent(this.#posts, config);
+                this.renderPost(config);
                 this.#lastTs = config.created_at;
             });
 
@@ -145,8 +151,7 @@ export default class FeedView {
     extraLoadCbOk(feedData) {
         if (Array.isArray(feedData) && feedData.length > 0) {
             feedData.forEach((config) => {
-                config.container = this.#parent.parentNode;
-                new PostComponent(this.#posts, config);
+                this.renderPost(config);
                 this.#lastTs = config.created_at;
             });
             this.#posts.appendChild(this.sentinel);

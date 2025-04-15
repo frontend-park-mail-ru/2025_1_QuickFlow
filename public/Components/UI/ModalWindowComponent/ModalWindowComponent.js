@@ -203,8 +203,9 @@ export default class ModalWindowComponent {
                 url: '/post',
                 body: formData,
                 isFormData: true,
-                callback: (status) => {
+                callback: (status, config) => {
                     if (status === 200) {
+                        this.#config.renderCreatedPost(config?.payload);
                         this.close();
                     } else if (status === 413) {
                         alert('File is too large');

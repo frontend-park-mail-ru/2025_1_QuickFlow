@@ -36,9 +36,14 @@ export default class PostComponent {
 
     render() {
         this.wrapper = createElement({
-            parent: this.#parent,
             classes: ['post'],
         });
+
+        if (this.#config.position && this.#config.position === "top") {
+            this.#parent.prepend(this.wrapper);
+        } else {
+            this.#parent.appendChild(this.wrapper);
+        }
 
         this.renderTop();
         this.renderPics();
@@ -281,7 +286,6 @@ export default class PostComponent {
                         switch (status) {
                             case 200:
                                 this.actionCbOk();
-                                // topRightWrapper.removeChild(actionBtn);
                                 break;
                         }
                     },
