@@ -72,7 +72,6 @@ export default class FeedView {
     }
 
     renderPost(config, position = null) {
-        // config.container = this.#parent.parentNode;
         if (position) config.position = "top";
         new PostComponent(this.#posts, config);
     }
