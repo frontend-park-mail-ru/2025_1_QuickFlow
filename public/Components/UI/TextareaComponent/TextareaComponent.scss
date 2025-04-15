@@ -8,6 +8,7 @@
     font-size: var(--font-size-s);
     line-height: var(--line-height-m);
     color: var(--text-secondary);
+    // margin-bottom: 8px;
 }
 
 .textarea__label {
@@ -20,7 +21,7 @@
     color: var(--text-primary);
     font-size: var(--font-size-s);
 
-    margin-bottom: 8px;
+    // margin-bottom: 8px;
     border: 1px solid var(--stroke-primary);
     border-radius: 8px;
     padding: 8px 12px;
@@ -44,4 +45,9 @@
 
 .textarea__field::placeholder {
     color: var(--text-secondary);
+}
+
+.textarea__description-wrapper {
+    display: flex;
+    justify-content: flex-end;
 }

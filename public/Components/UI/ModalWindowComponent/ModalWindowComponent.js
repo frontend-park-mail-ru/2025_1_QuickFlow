@@ -7,6 +7,9 @@ import Ajax from '../../../modules/ajax.js';
 import FileInputComponent from '../FileInputComponent/FileInputComponent.js';
 
 
+const POST_TEXT_MAX_LENGTH = 1000;
+
+
 export default class ModalWindowComponent {
     #parent
     #config
@@ -114,6 +117,8 @@ export default class ModalWindowComponent {
         const textarea = new TextareaComponent(this.modalWindow, {
             placeholder: 'Поделитесь своими мыслями',
             value: this.#config?.data?.text || '',
+            showCharactersLeft: true,
+            maxLength: POST_TEXT_MAX_LENGTH,
         });
 
         new ButtonComponent(this.modalWindow, {

@@ -53,6 +53,35 @@ export default class TextareaComponent {
         for (const attr in this.#config.attrs) {
             this.textarea.setAttribute(attr, this.#config.attrs[attr]);
         }
+
+        if (this.#config.description || this.#config.maxLength) {
+            const descWrapper = createElement({
+                parent: this.wrapper,
+                classes: ['textarea__description-wrapper'],
+            });
+
+            if (this.#config.description) {
+                createElement({
+                    tag: 'span',
+                    text: this.#config.description,
+                    parent: descWrapper,
+                    classes: ['input__description'],
+                });
+            }
+
+            if (this.#config.showCharactersLeft) {
+                const counter = createElement({
+                    tag: 'span',
+                    text: this.#config.maxLength,
+                    parent: descWrapper,
+                    classes: ['input__counter'],
+                });
+
+                this.textarea.addEventListener('input', () => {
+                    counter.textContent = this.#config.maxLength - this.textarea.value.length;
+                });
+            }
+        }
     }
 
     addListener(listener) {
