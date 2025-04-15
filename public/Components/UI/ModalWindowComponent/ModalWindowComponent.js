@@ -217,8 +217,9 @@ export default class ModalWindowComponent {
                 url: `/posts/${this.#config.data.id}`,
                 body: formData,
                 isFormData: true,
-                callback: (status) => {
+                callback: (status, config) => {
                     if (status === 200) {
+                        this.#config.onAjaxEditPost(config?.payload);
                         this.close();
                     } else if (status === 413) {
                         alert('File is too large');

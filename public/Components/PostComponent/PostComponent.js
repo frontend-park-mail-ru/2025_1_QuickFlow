@@ -35,11 +35,13 @@ export default class PostComponent {
     }
 
     render() {
+        if (this.wrapper) this.wrapper.remove();
+        
         this.wrapper = createElement({
             classes: ['post'],
         });
 
-        if (this.#config.position && this.#config.position === "top") {
+        if (this.#config?.position && this.#config?.position === "top") {
             this.#parent.prepend(this.wrapper);
         } else {
             this.#parent.appendChild(this.wrapper);
@@ -325,6 +327,7 @@ export default class PostComponent {
                     new ModalWindowComponent(this.#config.container, {
                         type: 'edit-post',
                         data: this.#config,
+                        onAjaxEditPost: (config) => this.onAjaxEditPost(config),
                     });
                 },
             };
@@ -386,5 +389,10 @@ export default class PostComponent {
                 }
             }
         });
+    }
+
+    onAjaxEditPost(config) {
+        this.#config = config;
+        this.render();
     }
 }
