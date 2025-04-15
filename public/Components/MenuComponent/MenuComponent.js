@@ -89,8 +89,10 @@ export default class MenuComponent {
     }
 
     renderProfileMenuItem() {
-        const profileMenuItem = this.#container.getElementByClassName('js-profile-menu-item');
-        profileMenuItem.href = `/profiles/${getLsItem('username', '')}`;
+        const profileMenuItem = this.#container.getElementsByClassName('js-profile-menu-item')[0];
+        if (profileMenuItem) {
+            profileMenuItem.href = `/profiles/${getLsItem('username', '')}`;
+        }
     }
 
     updateMenuVisibility() {
