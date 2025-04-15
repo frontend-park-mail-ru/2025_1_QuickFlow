@@ -2,6 +2,7 @@ import AvatarComponent from '../AvatarComponent/AvatarComponent.js';
 import ButtonComponent from '../UI/ButtonComponent/ButtonComponent.js';
 import createElement from '../../utils/createElement.js';
 import getTime from '../../utils/getTime.js';
+import router from '../../Router.js';
 
 
 const MSG_AVATAR_SIZE = 'xs';
@@ -10,7 +11,7 @@ const EMPTY_STATE_BTN_SIZE = 'small';
 const EMPTY_STATE_BTN_VARIANT = 'secondary';
 const EMPTY_STATE_CALL_TO_ACTION_TEXT = 'Напишите или отправьте стикер';
 const OPEN_PROFILE_BTN_TEXT = 'Открыть профиль';
-const ADD_TO_FRIENDS_BTN_TEXT = 'Заявка отправлена';
+// const ADD_TO_FRIENDS_BTN_TEXT = 'Заявка отправлена';
 
 
 export default class MessageComponent {
@@ -80,6 +81,7 @@ export default class MessageComponent {
         new AvatarComponent(infoWrapper, {
             size: EMPTY_STATE_AVATAR_SIZE,
             src: this.#config.chatData.avatar_url,
+            href: `/profiles/${this.#config.chatData.username}`,
         });
 
         createElement({
@@ -102,13 +104,14 @@ export default class MessageComponent {
             text: OPEN_PROFILE_BTN_TEXT,
             variant: EMPTY_STATE_BTN_VARIANT,
             size: EMPTY_STATE_BTN_SIZE,
+            onClick: () => router.go({ path: `/profiles/${this.#config.chatData.username}` }),
         });
 
-        new ButtonComponent(btnsWrapper, {
-            text: ADD_TO_FRIENDS_BTN_TEXT,
-            variant: EMPTY_STATE_BTN_VARIANT,
-            size: EMPTY_STATE_BTN_SIZE,
-        });
+        // new ButtonComponent(btnsWrapper, {
+        //     text: ADD_TO_FRIENDS_BTN_TEXT,
+        //     variant: EMPTY_STATE_BTN_VARIANT,
+        //     size: EMPTY_STATE_BTN_SIZE,
+        // });
     }
 
     renderMsg(msgData, classes) {
