@@ -120,6 +120,7 @@ export default class MessageComponent {
         new AvatarComponent(msg, {
             size: MSG_AVATAR_SIZE,
             src: msgData.sender?.avatar_url || '',
+            href: `/profiles/${msgData.sender?.username}`
         });
 
         const msgContent = createElement({

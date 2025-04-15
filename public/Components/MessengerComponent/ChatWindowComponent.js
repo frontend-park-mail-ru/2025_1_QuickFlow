@@ -207,6 +207,7 @@ export default class ChatWindowComponent {
         new AvatarComponent(chatHeader, {
             size: HEADER_AVATAR_SIZE,
             src: this.#chatData.avatar_url,
+            href: this.#chatData.avatar_url,
         });
 
         const chatInfo = createElement({
