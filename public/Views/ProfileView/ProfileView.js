@@ -176,7 +176,7 @@ class ProfileView {
         });
 
         new FeedComponent(this.#containerObj.left, {
-            getUrl: "/feed",
+            getUrl: `/profiles/${username}/posts`,
         });
 
         return this.#containerObj.container;
