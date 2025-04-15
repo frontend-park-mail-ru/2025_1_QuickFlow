@@ -102,7 +102,10 @@ export default class ModalWindowComponent {
             text: 'Удалить',
             variant: 'primary',
             size: 'small',
-            onClick: () => this.#config.ajaxDeletePost(),
+            onClick: () => {
+                this.#config.ajaxDeletePost();
+                this.close();
+            },
         });
     }
 
