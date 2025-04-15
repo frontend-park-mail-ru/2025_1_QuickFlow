@@ -18,6 +18,7 @@ const CHAT_INFO_PREFIX = 'chat-info-';
 const CHAT_MSG_PREFIX = 'chat-msg-';
 const CHAT_PREFIX = 'chat-';
 const CLASS_SIZE_MINI = 'chats-panel_mini';
+const EMPTY_CHATS_LIST_TEXT = "Начните общаться с друзьями, и здесь появятся ваши чаты";
 
 
 export default class ChatsPanelComponent {
@@ -75,7 +76,11 @@ export default class ChatsPanelComponent {
         });
 
         this.#config.messenger.ajaxGetChats((status, chatsData) => {
-            if (!chatsData || chatsData.length === 0) return;
+            if (!chatsData || chatsData.length === 0) {
+                this.#chats.classList.add('chats-panel__chats_empty');
+                this.renderEmptyState();
+                return;
+            }
 
             if (this.#config.chat_id) {
                 setLsItem('active-chat', `chat-${this.#config.chat_id}`);
@@ -93,6 +98,25 @@ export default class ChatsPanelComponent {
                     this.#chatWindow.renderActiveChat(chatData);
                 }
             }
+        });
+    }
+
+    renderEmptyState() {
+        this.#chats.innerHTML = '';
+
+        const wrapper = createElement({
+            parent: this.#chats,
+            classes: ['chat-window__empty'],
+        });
+
+        createElement({
+            parent: wrapper,
+            classes: ['chat-window__empty-icon'],
+        });
+
+        createElement({
+            parent: wrapper,
+            text: EMPTY_CHATS_LIST_TEXT,
         });
     }
 

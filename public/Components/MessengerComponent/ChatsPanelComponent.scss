@@ -79,6 +79,10 @@
     -ms-overflow-style: none;
 }
 
+.chats-panel__chats_empty {
+    height: 100%;
+}
+
 .chats-panel__chats::-webkit-scrollbar {
     display: none;
 }
@@ -154,6 +158,10 @@
 .chats-panel_mini {
     max-width: 72px;
     min-width: 72px;
+}
+
+.chats-panel_mini .chat-window__empty {
+    display: none;
 }
 
 .chats-panel_mini .chats-panel__chats {
