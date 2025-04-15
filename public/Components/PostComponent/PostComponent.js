@@ -318,6 +318,8 @@ export default class PostComponent {
             },
         };
 
+        console.log(this.#config);
+
         if (this.#config.author.username === getLsItem('username', '')) {
             data.edit = {
                 href: '/edit',
