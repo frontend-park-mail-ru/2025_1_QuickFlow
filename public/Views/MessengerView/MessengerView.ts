@@ -23,19 +23,19 @@ class MessengerView {
 
         Ajax.get({
             url: `/profiles/${getLsItem('username', '')}`,
-            callback: (status, userData) => {
-                let isAuthorized = status === 200;
-        
-                if (!isAuthorized) {
-                    router.go({ path: '/login' });
-                    return;
+            callback: (status: number, userData: any) => {
+                switch (status) {
+                    case 200:
+                        new MessengerComponent(containerObj, {
+                            user: userData,
+                            receiver_username: params?.username,
+                            chat_id: params?.chat_id,
+                        });
+                        break;
+                    case 401:
+                        router.go({ path: '/login' });
+                        break;
                 }
-        
-                new MessengerComponent(containerObj, {
-                    user: userData,
-                    receiver_username: params?.username,
-                    chat_id: params?.chat_id,
-                });
             }
         });
 
