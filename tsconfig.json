@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "checkJs": false, 
+        "target": "es6",
+        "module": "esnext",
+        "strict": false,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "noEmit": true,
+        "baseUrl": "./public",
+        "paths": {
+            "@components/*": ["Components/*"],
+            "@views/*": ["Views/*"],
+            "@modules/*": ["modules/*"],
+            "@styles/*": ["styles/*"],
+            "@utils/*": ["utils/*"],
+            "@assets/*": ["assets/*"],
+            "@constants": ["constants.scss"],
+            "@router": ["Router.ts"]
+        }
+    },
+    "include": ["public/**/*"],
+    "exclude": ["node_modules"]
+}
