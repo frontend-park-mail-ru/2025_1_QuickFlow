@@ -177,6 +177,8 @@ export default class InputComponent {
         switch (this.#config.validation) {
             case "phone":
                 return this.formatPhoneInput(value);
+            default:
+                return value;
         }
     }
 

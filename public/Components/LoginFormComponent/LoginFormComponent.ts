@@ -4,6 +4,7 @@ import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import createElement from '@utils/createElement';
 import focusInput from '@utils/focusInput';
 import router from '@router';
+import { setLsItem, getLsItem, removeLsItem } from '@utils/localStorage';
 
 
 export default class LoginFormComponent {
@@ -73,7 +74,7 @@ export default class LoginFormComponent {
             })
             .addEventListener('click', () => {
                 if (this.step === 1) {
-                    localStorage.removeItem("username");
+                    removeLsItem("username");
                     router.go({ path: '/login' });
                 } else {
                     this.step = 1;
@@ -148,7 +149,7 @@ export default class LoginFormComponent {
             autocomplete: 'username',
             required: true,
             showRequired: false,
-            value: localStorage.getItem("username") || ''
+            value: getLsItem("username", ""),
         });
         if (this.usernameInput.input) focusInput(this.usernameInput.input, this.#focusTimer);
 
@@ -201,7 +202,7 @@ export default class LoginFormComponent {
 
     continueBtnOnClick() {
         if (!this.usernameInput?.input?.value.trim()) return;
-        localStorage.setItem("username", this.usernameInput.input.value.trim());
+        setLsItem("username", this.usernameInput.value),
         this.step = 2;
         this.render();
     }

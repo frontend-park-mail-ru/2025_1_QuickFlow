@@ -83,13 +83,13 @@ export default class SignupFormComponent {
             this.render();
         });
 
-        if (this.#step === 2) {
-            createElement({
-                parent: topWrapper,
-                classes: ['auth-form__logo'],
-                attrs: {src: LOGO_SRC}
-            })
-        }
+        // if (this.#step === 2) {
+        //     createElement({
+        //         parent: topWrapper,
+        //         classes: ['auth-form__logo'],
+        //         attrs: {src: LOGO_SRC}
+        //     })
+        // }
 
         createElement({
             tag: 'h1',
