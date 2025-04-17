@@ -10,7 +10,7 @@ export default class LoginFormComponent {
     #parent: HTMLElement;
     #focusTimer: any = null;
     config: Record<string, string> = {
-        usernameTitle: 'Вход QuickFlow',
+        usernameTitle: 'Вход в аккаунт',
         pwdTitle: 'Введите пароль',
         usernameDescription: 'Введите имя пользователя, которое привязано к вашему аккаунту',
         pwdDescription: 'Введите ваш текущий пароль,\r\nпривязанный к ',
@@ -22,6 +22,7 @@ export default class LoginFormComponent {
     passwordInput: InputComponent | null = null;
     usernameInput: InputComponent | null = null;
     continueBtn: ButtonComponent | null = null;
+    form: HTMLFormElement | null = null;
     constructor(parent: HTMLElement) {
         this.#parent = parent;
 
@@ -29,20 +30,20 @@ export default class LoginFormComponent {
     }
 
     render() {
-        this.#parent.innerHTML = '';
+        if (this.form) this.form.remove();
 
-        const form = createElement({
+        this.form = createElement({
             tag: 'form',
             parent: this.#parent,
             classes: ['auth-form']
         }) as HTMLFormElement;
 
-        this.handleFormSubmission(form);
+        this.handleFormSubmission(this.form);
 
         if (this.step === 1) {
-            this.renderUsernameStep(form);
+            this.renderUsernameStep(this.form);
         } else if (this.step === 2) {
-            this.renderPasswordStep(form);
+            this.renderPasswordStep(this.form);
         }
     }
 
@@ -81,11 +82,11 @@ export default class LoginFormComponent {
             });
         }
 
-        createElement({
-            parent: topWrapper,
-            classes: ['auth-form__logo'],
-            attrs: {src: '/static/img/logo-icon.svg'}
-        })
+        // createElement({
+        //     parent: topWrapper,
+        //     classes: ['auth-form__logo'],
+        //     attrs: {src: '/static/img/logo-icon.svg'}
+        // })
 
         createElement({
             tag: 'h1',
@@ -127,9 +128,7 @@ export default class LoginFormComponent {
             new ButtonComponent(bottomWrapper, {
                 text: this.config.signupBtnText,
                 variant: 'secondary',
-                onClick: () => {
-                    router.go({ path: '/signup' });
-                }
+                onClick: () => router.go({ path: '/signup' }),
             });
         }
     }

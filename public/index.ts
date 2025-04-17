@@ -1,20 +1,20 @@
-import LoginView from './Views/LoginView/LoginView';
-import SignupView from './Views/SignupView/SignupView';
-import FeedView from './Views/FeedView/FeedView';
-import MessengerView from './Views/MessengerView/MessengerView';
-import ProfileView from './Views/ProfileView/ProfileView';
-import LogoutView from './Views/LogoutView/LogoutView';
-import EditProfileView from './Views/EditProfileView/EditProfileView';
-import NotFoundView from './Views/NotFoundView/NotFoundView';
+import LoginView from '@views/LoginView/LoginView';
+import SignupView from '@views/SignupView/SignupView';
+import FeedView from '@views/FeedView/FeedView';
+import MessengerView from '@views/MessengerView/MessengerView';
+import ProfileView from '@views/ProfileView/ProfileView';
+import LogoutView from '@views/LogoutView/LogoutView';
+import EditProfileView from '@views/EditProfileView/EditProfileView';
+import NotFoundView from '@views/NotFoundView/NotFoundView';
 
 import HeaderComponent from '@components/HeaderComponent/HeaderComponent';
 import MenuComponent from '@components/MenuComponent/MenuComponent';
-import createElement from './utils/createElement';
+import createElement from '@utils/createElement';
 import router from '@router';
 
-import ws from './modules/WebSocketService';
+import ws from '@modules/WebSocketService';
 import './index.scss';
-import { getLsItem } from './utils/localStorage';
+import { getLsItem } from '@utils/localStorage';
 
 
 const root = document.getElementById('root');

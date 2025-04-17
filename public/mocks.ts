@@ -127,8 +127,8 @@ export const users = {
     rvasutenko: {
         id: "ada65c04-fc5a-4d1e-a0f1-867ebdd08a8e",
         last_seen: "2025-04-10T00:00:00Z",
-        online: false,
-        relation: "stranger",
+        online: true,
+        relation: "self",
         profile: {
             username: "rvasutenko",
             password: 'Qwerty1!',
@@ -138,6 +138,38 @@ export const users = {
             birth_date: "2005-05-02",
             bio: "Тут пара слов обо мне, моих увлечениях, занятиях и предпочтениях",
             avatar_url: "/avatars/avatar.jpg",
+            cover_url: "/covers/profile-header.jpg",
+        },
+        contact_info: {
+            city: "Moscow",
+            email: "vasyutenko20050205@mail.ru",
+            phone: "89648826455"
+        },
+        school: {
+            school_city: "Ахтубинск",
+            school_name: "МБОУ СОШ №4"
+        },
+        university: {
+            univ_city: "Москва",
+            univ_name: "МГТУ им. Н.Э. Баумана",
+            faculty: "Социальные и гуманитарные науки",
+            grad_year: 2027
+        }
+    },
+    poporkaaa: {
+        id: "bda65c04-fc5a-4d1e-a0f1-867ebdd08a8e",
+        last_seen: "2025-04-10T00:00:00Z",
+        online: false,
+        relation: "stranger",
+        profile: {
+            username: "poporkaaa",
+            password: 'Qwerty1!',
+            firstname: "Лилия",
+            lastname: "Поваляева",
+            sex: 1,
+            birth_date: "2005-08-29",
+            bio: "Тут пара слов обо мне, моих увлечениях, занятиях и предпочтениях",
+            avatar_url: "/avatars/avatar5.jpg",
             cover_url: "/covers/profile-header.jpg",
         },
         contact_info: {
@@ -310,10 +342,10 @@ export const messages = {
 export const search = {
     "payload": [
         {
-            "id": "feffb772-0644-4c36-957e-1019c55373f4",
-            "username": "Nikit",
-            "firstname": "Myname",
-            "lastname": "Mysurname"
+            "id": "bda65c04-fc5a-4d1e-a0f1-867ebdd08a8e",
+            "username": "poporkaaa",
+            "firstname": "Лилия",
+            "lastname": "Поваляева"
         },
         {
             "id": "2835eda5-82c3-42aa-a86b-49a35b1be79e",

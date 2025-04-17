@@ -50,7 +50,10 @@ export default class ButtonComponent {
         }
 
         if (this.#config.stateUpdaters) {
-            if (Array.isArray(this.#config.stateUpdaters) && this.#config.stateUpdaters.length > 0) {
+            if (
+                Array.isArray(this.#config.stateUpdaters) &&
+                this.#config.stateUpdaters.length > 0
+            ) {
                 this.#config.stateUpdaters.forEach((stateUpdater: any) => {
                     stateUpdater.addListener(() => this.updateBtnState());
                 });
@@ -63,15 +66,20 @@ export default class ButtonComponent {
         if (!this.buttonElement) return;
 
         const isRequiredValid = this.#config.stateUpdaters.every((stateUpdater: any) => {
-            if (stateUpdater.required) return stateUpdater.isValid();
-            return true;
+            return stateUpdater.isValid();
         });
+        this.buttonElement.disabled = !isRequiredValid;
 
-        const isOptionalFilled = this.#config.stateUpdaters.some((stateUpdater: any) => {
-            if (!stateUpdater.required) return !stateUpdater.isEmpty();
-            return true;
-        });
+        // const isRequiredValid = this.#config.stateUpdaters.every((stateUpdater: any) => {
+        //     if (stateUpdater.required) return stateUpdater.isValid();
+        //     return true;
+        // });
 
-        this.buttonElement.disabled = !(isRequiredValid && isOptionalFilled);
+        // const isOptionalFilled = this.#config.stateUpdaters.some((stateUpdater: any) => {
+        //     if (!stateUpdater.required) return !stateUpdater.isEmpty();
+        //     return true;
+        // });
+
+        // this.buttonElement.disabled = !(isRequiredValid && isOptionalFilled);
     }
 }

@@ -25,6 +25,7 @@ export default class SignupFormComponent {
     #parent;
     #step: number = 1;
     #focusTimer: any = null;
+    private form: HTMLFormElement;
 
     usernameInput: InputComponent | null = null;
     firstnameInput: InputComponent | null = null;
@@ -42,18 +43,18 @@ export default class SignupFormComponent {
     }
 
     render() {
-        this.#parent.innerHTML = '';
+        if (this.form) this.form.remove();
 
-        const form = createElement({
+        this.form = createElement({
             tag: 'form',
             parent: this.#parent,
             classes: ['auth-form']
         }) as HTMLFormElement;
 
         if (this.#step === 1) {
-            this.renderPersonalInfoStep(form);
+            this.renderPersonalInfoStep(this.form);
         } else if (this.#step === 2) {
-            this.renderCreatePasswordStep(form);
+            this.renderCreatePasswordStep(this.form);
         }
     }
 

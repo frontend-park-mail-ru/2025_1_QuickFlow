@@ -12,12 +12,14 @@ const MAX_DATE_INPUT_LENGTH = 10;
 const MIN_NAME_INPUT_LENGTH = 2;
 const MIN_PASSWORD_INPUT_LENGTH = 8;
 const DEFAULT_NAME = 'undefined';
+const YEAR_INPUT_MIN = 1925;
+const YEAR_INPUT_MAX = 2050;
 
 
 export default class InputComponent {
     #parent;
     #config;
-    
+
     input: HTMLInputElement | null = null;
     error: HTMLElement | null = null;
     wrapper: HTMLElement | null = null;
@@ -58,7 +60,6 @@ export default class InputComponent {
             classes: [this.#config.classes, 'input'],
         });
 
-        // Label (если задан)
         if (this.#config.label) {
             const label = createElement({
                 tag: 'label',
@@ -67,7 +68,7 @@ export default class InputComponent {
                 classes: ['input__label'],
             });
             if (this.#config.showRequired) {
-                createElement({ // TODO: протестировать
+                createElement({
                     tag: 'span',
                     text: REQUIRED_MARK_TEXT,
                     parent: label,
@@ -81,20 +82,24 @@ export default class InputComponent {
             classes: ['input__inner'],
         });
 
-        // Поле ввода
         this.input = createElement({
             tag: 'input',
             parent: this.innnerWrapper,
             classes: ['input__field'],
             attrs: {
-                type: this.#config.type || DEFAULT_TYPE,
                 autocomplete: this.#config.autocomplete || DEFAULT_AUTOCOMPLETE,
                 placeholder: this.#config.placeholder || DEFAULT_PLACEHOLDER,
                 maxLength: this.#config.maxLength || DEFAULT_MAX_LENGTH,
-                value: this.#config.value || DEFAULT_INPUT_VALUE,
+                value: this.formatValue(this.#config.value) || DEFAULT_INPUT_VALUE,
                 name: this.name || DEFAULT_NAME,
             },
         }) as HTMLInputElement;
+
+        this.input.setAttribute("type",
+            this.#config.type === 'number' ?
+            DEFAULT_TYPE :
+            (this.#config.type || DEFAULT_TYPE)
+        );
 
         if (this.required) {
             this.input.setAttribute('required', '');
@@ -104,7 +109,7 @@ export default class InputComponent {
             classes: ['input__error'],
         });
 
-        if (this.input.type === 'password') {
+        if (this.#config.type === 'password') {
             const pwdControl = createElement({
                 parent: this.innnerWrapper,
                 tag: 'a',
@@ -122,19 +127,21 @@ export default class InputComponent {
                 }
                 this.input.setAttribute('type', isPwdType ? 'text' : 'password');
             });
-        } else if (this.input.type === 'search') {
+        } else if (this.#config.type === 'search') {
             createElement({
                 parent: this.innnerWrapper,
                 classes: ['input__search-icon'],
             });
+        } else if (this.#config.type === 'number') {
+            this.input.addEventListener('input', () => {
+                this.input.value = this.value.replace(/\D/g, '');
+            });
         }
 
-        // Добавление обработчиков валидации
         if (this.#config.validation) {
             this.input.addEventListener('input', () => this.validate());
         }
 
-        // Описание (если задано)
         if (this.#config.description || this.#config.maxLength) { // TODO: протестировать 
             const descWrapper = createElement({
                 parent: this.wrapper,
@@ -166,6 +173,13 @@ export default class InputComponent {
         }
     }
 
+    formatValue(value: string): string {
+        switch (this.#config.validation) {
+            case "phone":
+                return this.formatPhoneInput(value);
+        }
+    }
+
     addListener(listener: any, delayTime = 0) {
         if (!this.input) return;
         let debounce = function(func: any, delay: number) {
@@ -180,38 +194,112 @@ export default class InputComponent {
 
     isValid() {
         if (!this || !this.input) return false;
-        if (this.#config.validation === 'date' && this.input.value.trim().length < MAX_DATE_INPUT_LENGTH) {
-            return false;
-        }
-        if (!this.required && !this.input.classList.contains('input__field_invalid')) return true;
+
+        if (
+            this.#config.validation === 'date' &&
+            this.input.value.trim().length < MAX_DATE_INPUT_LENGTH
+        ) return false;
+
+        if (
+            !this.required &&
+            !this.input.classList.contains('input__field_invalid')
+        ) return true;
+
         return this.input.value.trim() !== '' && !this.input.classList.contains('input__field_invalid');
     }
 
     validate() {
         if (!this.input) return;
+
         const value = this.input.value;
 
-        if (this.#config.validation === 'email') {
-            this.validateEmail(value);
-        } else if (this.#config.validation === 'password') {
-            this.input.minLength = MIN_PASSWORD_INPUT_LENGTH;
-            this.validatePassword(value);
-        } else if (this.#config.validation === 'username') {
-            this.validateUsername(value);
-        } else if (this.#config.validation === 'name') {
-            this.validateName(value);
-        } else if (this.#config.validation === 'date') {
-            this.input.maxLength = MAX_DATE_INPUT_LENGTH;
-            this.input.addEventListener('input', () => {
-                if (!this.input) return;
-                formatDateInput(this.input);
-            }); // TODO
-            if (value.length === MAX_DATE_INPUT_LENGTH) {
+        switch (this.#config.validation) {
+            case 'email':
+                this.validateEmail(value);
+                break;
+            case 'password':
+                this.validatePassword(value);
+                break;
+            case 'username':
+                this.validateUsername(value);
+                break;
+            case 'name':
+                this.validateName(value);
+                break;
+            case 'date':
                 this.validateDate(value);
-            } else {
-                this.hideError();
-            }
+                break;
+            case 'year':
+                this.validateYear(value);
+                break;
+            case 'phone':
+                this.validatePhone(value);
+                break;
         }
+    }
+
+    validatePhone(phone: string) {
+        this.input.maxLength = 16;
+        this.input.value = this.formatPhoneInput(this.value);
+        
+        const raw = phone.replace(/\D/g, '');
+    
+        if (!raw && !this.#config.required) return this.hideError();
+
+        if (!raw) {
+            this.showError('Введите номер телефона');
+        } else if (raw.length !== 11 || !raw.startsWith('7')) {
+            this.showError('Введите корректный российский номер телефона');
+        } else this.hideError();
+    }
+
+    formatPhoneInput(phone: string): string {
+        const raw = phone.replace(/\D/g, '');
+
+        // Ограничим 11 цифрами
+        let digits = raw.slice(0, 11);
+
+        // Удаляем первую 8 и заменяем на 7
+        if (digits[0] === '8') {
+            digits = '7' + digits.slice(1);
+        }
+
+        // Форматируем по шаблону +7 999 999-99-99
+        let formatted = '+7';
+        if (digits.length === 0) formatted = '';
+        if (digits.length > 1) {
+            formatted += ' ' + digits.slice(1, 4);
+        }
+        if (digits.length >= 4) {
+            if (digits.length !== 4) formatted += ' ' + digits.slice(4, 7);
+        }
+        if (digits.length >= 7) {
+            if (digits.length !== 7) formatted += '-' + digits.slice(7, 9);
+        }
+        if (digits.length >= 9) {
+            if (digits.length !== 9) formatted += '-' + digits.slice(9, 11);
+        }
+
+        return formatted;
+    }    
+
+    validateYear(value: string) {
+        this.input.maxLength = 4;
+
+        const year = Number(value);
+
+        if (!isNaN(year)) {
+            if (year < this.#config.min) {
+                this.showError(`Год не может быть меньше ${this.#config.min}`);
+            } else if (year > this.#config.max) {
+                this.showError(`Год не может быть больше ${this.#config.max}`);
+            } else this.hideError();
+        }
+
+        if (
+            !this.#config.required &&
+            !this.value
+        ) this.hideError();
     }
 
     validateName(name: string) {
@@ -255,6 +343,8 @@ export default class InputComponent {
     }
 
     validatePassword(password: string) {
+        this.input.minLength = MIN_PASSWORD_INPUT_LENGTH;
+
         const chars = Array.from(password);
         const hasValidCharacters = chars.every((char) => /[A-Za-z0-9_/!@#$%^&*(),.?":{}|<>]/.test(char));
         const hasUppercase = chars.some((char) => /[A-Z]/.test(char));
@@ -274,12 +364,14 @@ export default class InputComponent {
             this.showError('Пароль должен содержать хотя бы одну цифру');
         } else if (!hasSpecial) {
             this.showError('Пароль должен содержать хотя бы один спецсимвол');
-        } else {
-            this.hideError();
-        }
+        } else this.hideError();
     }
 
     validateDate(date: string) {
+        this.input.maxLength = MAX_DATE_INPUT_LENGTH;
+        formatDateInput(this.input);
+        if (this.value.length !== MAX_DATE_INPUT_LENGTH) return this.hideError();
+
         const datePattern = /^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[0-2])\.(\d{4})$/;
 
         if (!datePattern.test(date)) {
@@ -291,13 +383,11 @@ export default class InputComponent {
         const inputDate = new Date(year, month - 1, day);
         const today = new Date();
 
-        // Проверка на будущее время
         if (inputDate > today) {
             this.showError('Дата не должна быть в будущем');
             return;
         }
 
-        // Проверка корректности даты
         if (
             inputDate.getDate() !== day ||
             inputDate.getMonth() + 1 !== month ||
@@ -307,7 +397,7 @@ export default class InputComponent {
             return;
         }
 
-        this.hideError(); // Если все ок, скрываем ошибку
+        this.hideError();
     }
 
     showError(message: string) {

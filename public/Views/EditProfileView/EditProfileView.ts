@@ -84,7 +84,7 @@ const forms = {
                 key: 'phone',
                 config: {
                     label: 'Телефон',
-                    maxLength: 11,
+                    validation: 'phone',
                 }
             },
             {
@@ -139,7 +139,10 @@ const forms = {
                 key: 'grad_year',
                 config: {
                     label: 'Год выпуска',
-                    maxLength: 4,
+                    max: 2050,
+                    min: 1925,
+                    validation: "year",
+                    type: "number",
                 }
             }]
         ]
@@ -286,6 +289,8 @@ class EditProfileView {
             disabled: true,
             stateUpdaters: this.#stateUpdaters,
         });
+
+        console.log(this.#stateUpdaters);
     }
 
     handleFormSubmit() {
