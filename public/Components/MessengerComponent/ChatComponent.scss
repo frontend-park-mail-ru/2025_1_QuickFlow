@@ -57,6 +57,12 @@
 .chat__sender {
     font-weight: 500;
     color: var(--text-accent);
+    word-break: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
 }
 
 .chat__msg_nameless .chat__sender {

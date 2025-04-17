@@ -42,6 +42,12 @@
         font-size: var(--font-size-l);
         line-height: var(--line-height-m);
         color: var(--text-primary);
+        word-break: break-word;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
     }
 
     &__more {
@@ -79,6 +85,7 @@
 
     &__date {
         color: var(--text-secondary);
+        white-space: nowrap;
     }
 
     &__info {
@@ -86,6 +93,7 @@
         flex-direction: row;
         align-items: center;
         gap: 8px;
+        padding-right: 64px;
     }
 
     &__add-to-friends {

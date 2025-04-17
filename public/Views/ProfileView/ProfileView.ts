@@ -292,9 +292,20 @@ class ProfileView {
             classes: ['profile__details']
         });
 
-        this.createInfoItem(fullInfo, profileDataLayout['username'].icon, data.profile.username);
+        this.createInfoItem(
+            fullInfo,
+            profileDataLayout['username'].icon,
+            data.profile.username,
+            true
+        );
 
-        const moreInfo = this.createInfoItem(fullInfo, profileDataLayout['more'].icon, profileDataLayout['more'].text);
+        const moreInfo = this.createInfoItem(
+            fullInfo,
+            profileDataLayout['more'].icon,
+            profileDataLayout['more'].text,
+            true
+        );
+        
         moreInfo.classList.add('profile__detail_more');
 
         moreInfo.addEventListener('click', () => {
@@ -378,7 +389,7 @@ class ProfileView {
         return item;
     }
 
-    createInfoItem(parent: HTMLElement, icon: string, value: any) {
+    createInfoItem(parent: HTMLElement, icon: string, value: any, isShort: Boolean = false) {
         const item = createElement({
             parent,
             classes: ['profile__detail']
@@ -390,7 +401,10 @@ class ProfileView {
         });
         createElement({
             parent: item,
-            classes: ['profile__detail-text'],
+            classes: [
+                'profile__detail-text',
+                isShort ? 'profile__detail-text_short' : 'profile__detail-text',
+            ],
             text: value
         });
 
