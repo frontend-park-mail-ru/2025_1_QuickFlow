@@ -103,7 +103,7 @@ export default class FeedComponent {
     }
 
     cbOk(feedData: any) {
-        feedData.forEach((config: Record<string, any>) => {
+        feedData?.forEach((config: Record<string, any>) => {
             this.renderPost(config);
             this.#lastTs = config.created_at;
         });
