@@ -53,12 +53,10 @@ export default class FeedComponent {
     }
 
     private createMutationObserver() {
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach(() => {
-                if (this.posts.hasChildNodes())
-                    return this.emptyWrapper.remove();
-                return this.posts.appendChild(this.emptyWrapper);
-            });
+        const observer = new MutationObserver(() => {
+            if (this.posts.hasChildNodes())
+                return this.emptyWrapper.remove();
+            return this.posts.appendChild(this.emptyWrapper);
         });
         
         observer.observe(this.posts, {
