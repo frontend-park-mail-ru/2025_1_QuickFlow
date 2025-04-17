@@ -57,24 +57,18 @@ export default class FeedComponent {
     }
 
     private createMutationObserver() {
-        // const observer = new MutationObserver(() => {
-        //     if (this.posts.hasChildNodes())
-        //         return this.emptyWrapper.remove();
-        //     return this.posts.appendChild(this.emptyWrapper);
-        // });
-
         const observer = new MutationObserver(() => {
             if (this.hasPosts())
                 return this.emptyWrapper.remove();
 
             if (!this.posts.contains(this.emptyWrapper))
-                this.posts.appendChild(this.emptyWrapper);
+                this.posts.prepend(this.emptyWrapper);
         });
         
         observer.observe(this.posts, {
-            attributes: true,
+            attributes: false,
             childList: true,
-            subtree: true
+            subtree: false,
         });
     }
 
