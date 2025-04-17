@@ -12,10 +12,10 @@ export default function getTimediff(ts: string, config: Record<string, any> = {}
 
     if (diff < msPerMinute) {
         value = Math.round(diff / 1000);
-        unit = config.mode === 'short' ? 'с' : pluralize(value, ['секунда', 'секунды', 'секунд']);
+        unit = config.mode === 'short' ? 'с' : pluralize(value, ['секунду', 'секунды', 'секунд']);
     } else if (diff < msPerHour) {
         value = Math.round(diff / msPerMinute);
-        unit = config.mode === 'short' ? 'мин' : pluralize(value, ['минута', 'минуты', 'минут']);
+        unit = config.mode === 'short' ? 'мин' : pluralize(value, ['минуту', 'минуты', 'минут']);
     } else if (diff < msPerDay) {
         value = Math.round(diff / msPerHour);
         unit = config.mode === 'short' ? 'ч' : pluralize(value, ['час', 'часа', 'часов']);
