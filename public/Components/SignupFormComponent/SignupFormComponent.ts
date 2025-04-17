@@ -14,7 +14,7 @@ const DEFAULT_INPUT_VALUE = '';
 const CREATION_ERROR_MESSAGE = 'Не удалось создать аккаунт';
 const USER_INFO_TITLE = 'Информация о себе';
 const PWD_TITLE = 'Придумайте пароль';
-const PWD_TEXT = 'Или используйте пароль, предложенный устройством';
+const PWD_TEXT = 'Или используйте пароль,\nпредложенный устройством';
 const CONTINUE_BTN_TEXT = 'Продолжить';
 const PWD_INPUT_MAX_LENGTH = 32;
 const MALE_VALUE = 1;
@@ -101,7 +101,7 @@ export default class SignupFormComponent {
             createElement({
                 tag: 'p',
                 parent: topWrapper,
-                classes: ['p1'],
+                classes: ['p1', 'auth-form__description'],
                 text: PWD_TEXT,
             })
         }

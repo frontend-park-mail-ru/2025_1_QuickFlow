@@ -32,3 +32,7 @@
 .auth-form__back-btn:active {
     background-color: var(--button-secondary-active);
 }
+
+.auth-form__description {
+    white-space: pre-line;
+}
