@@ -14,6 +14,7 @@ const MIN_PASSWORD_INPUT_LENGTH = 8;
 const DEFAULT_NAME = 'undefined';
 const YEAR_INPUT_MIN = 1925;
 const YEAR_INPUT_MAX = 2050;
+const DEFAULT_MIN_BIRTH_YEAR = 1900;
 
 
 export default class InputComponent {
@@ -60,22 +61,7 @@ export default class InputComponent {
             classes: [this.#config.classes, 'input'],
         });
 
-        if (this.#config.label) {
-            const label = createElement({
-                tag: 'label',
-                text: this.#config.label,
-                parent: this.wrapper,
-                classes: ['input__label'],
-            });
-            if (this.#config.showRequired) {
-                createElement({
-                    tag: 'span',
-                    text: REQUIRED_MARK_TEXT,
-                    parent: label,
-                    classes: ['input__required'],
-                });
-            }
-        }
+        this.renderHeader();
         
         this.innnerWrapper = createElement({
             parent: this.wrapper,
@@ -101,79 +87,117 @@ export default class InputComponent {
             (this.#config.type || DEFAULT_TYPE)
         );
 
-        if (this.required) {
-            this.input.setAttribute('required', '');
-        }
+        if (this.required) this.input.setAttribute('required', '');
 
         this.error = createElement({
             classes: ['input__error'],
         });
 
-        if (this.#config.type === 'password') {
-            const pwdControl = createElement({
-                parent: this.innnerWrapper,
-                tag: 'a',
-                classes: ['input__password-toggle'],
-            });
-
-            pwdControl.addEventListener('click', () => {
-                if (!this.input) return;
-
-                const isPwdType = this.input.getAttribute('type') === 'password';
-                if (isPwdType) {
-                    pwdControl.classList.add('input__password-toggle_show');
-                } else {
-                    pwdControl.classList.remove('input__password-toggle_show');
-                }
-                this.input.setAttribute('type', isPwdType ? 'text' : 'password');
-            });
-        } else if (this.#config.type === 'search') {
-            createElement({
-                parent: this.innnerWrapper,
-                classes: ['input__search-icon'],
-            });
-        } else if (this.#config.type === 'number') {
-            this.input.addEventListener('input', () => {
-                this.input.value = this.value.replace(/\D/g, '');
-            });
+        switch (this.#config.type) {
+            case 'password':
+                this.setPasswordInitOptions();
+                break;
+            case 'search':
+                this.setSearchInitOptions();
+                break;
+            case 'number':
+                this.setNumberInitOptions();
+                break;
         }
 
         if (this.#config.validation) {
             this.input.addEventListener('input', () => this.validate());
         }
 
-        if (this.#config.description || this.#config.maxLength) { // TODO: протестировать 
-            const descWrapper = createElement({
-                parent: this.wrapper,
-                classes: ['input__description-wrapper'],
+        this.renderBottom();
+    }
+
+    renderBottom() {
+        if (!this.#config.description && !this.#config.maxLength) return;
+        
+        const descWrapper = createElement({
+            parent: this.wrapper,
+            classes: ['input__description-wrapper'],
+        });
+
+        if (this.#config.description) {
+            createElement({
+                tag: 'span',
+                text: this.#config.description,
+                parent: descWrapper,
+                classes: ['input__description'],
+            });
+        }
+
+        if (this.#config.showCharactersLeft) {
+            const counter = createElement({
+                tag: 'span',
+                text: this.#config.maxLength,
+                parent: descWrapper,
+                classes: ['input__counter'],
             });
 
-            if (this.#config.description) {
-                createElement({
-                    tag: 'span',
-                    text: this.#config.description,
-                    parent: descWrapper,
-                    classes: ['input__description'],
-                });
-            }
-
-            if (this.#config.showCharactersLeft) {
-                const counter = createElement({
-                    tag: 'span',
-                    text: this.#config.maxLength,
-                    parent: descWrapper,
-                    classes: ['input__counter'],
-                });
-
-                this.input.addEventListener('input', () => {
-                    if (!this.input) return;
-                    counter.textContent = (this.#config.maxLength - this.input.value.length).toString();
-                });
-            }
+            this.input.addEventListener('input', () => {
+                if (!this.input) return;
+                counter.textContent = (this.#config.maxLength - this.input.value.length).toString();
+            });
         }
     }
 
-    formatValue(value: string): string {
+    private renderHeader() {
+        if (!this.#config.label) return;
+
+        const label = createElement({
+            tag: 'label',
+            text: this.#config.label,
+            parent: this.wrapper,
+            classes: ['input__label'],
+        });
+
+        if (!this.#config.showRequired) return;
+
+        createElement({
+            tag: 'span',
+            text: REQUIRED_MARK_TEXT,
+            parent: label,
+            classes: ['input__required'],
+        });
+    }
+
+    private setNumberInitOptions() {
+        this.input.addEventListener('input', () => {
+            this.input.value = this.value.replace(/\D/g, '');
+        });
+    }
+
+    private setSearchInitOptions() {
+        createElement({
+            parent: this.innnerWrapper,
+            classes: ['input__search-icon'],
+        });
+    }
+
+    private setPasswordInitOptions() {
+        const pwdControl = createElement({
+            parent: this.innnerWrapper,
+            tag: 'a',
+            classes: ['input__password-toggle'],
+        });
+
+        pwdControl.addEventListener('click', () => {
+            if (!this.input) return;
+
+            const isPwdType = this.input.getAttribute('type') === 'password';
+            if (isPwdType) {
+                pwdControl.classList.add('input__password-toggle_show');
+            } else {
+                pwdControl.classList.remove('input__password-toggle_show');
+            }
+            this.input.setAttribute('type', isPwdType ? 'text' : 'password');
+        });
+    }
+
+    private formatValue(value: string): string {
         switch (this.#config.validation) {
             case "phone":
                 return this.formatPhoneInput(value);
@@ -240,7 +264,7 @@ export default class InputComponent {
         }
     }
 
-    validatePhone(phone: string) {
+    private validatePhone(phone: string) {
         this.input.maxLength = 16;
         this.input.value = this.formatPhoneInput(this.value);
         
@@ -255,7 +279,7 @@ export default class InputComponent {
         } else this.hideError();
     }
 
-    formatPhoneInput(phone: string): string {
+    private formatPhoneInput(phone: string): string {
         const raw = phone.replace(/\D/g, '');
 
         // Ограничим 11 цифрами
@@ -285,7 +309,7 @@ export default class InputComponent {
         return formatted;
     }    
 
-    validateYear(value: string) {
+    private validateYear(value: string) {
         this.input.maxLength = 4;
 
         const year = Number(value);
@@ -304,7 +328,7 @@ export default class InputComponent {
         ) this.hideError();
     }
 
-    validateName(name: string) {
+    private validateName(name: string) {
         const chars = Array.from(name);
         const hasValidCharacters = chars.every((char: any) => /^[\p{L}-]+$/u.test(char));
 
@@ -319,7 +343,7 @@ export default class InputComponent {
         }
     }
 
-    validateUsername(username: string) {
+    private validateUsername(username: string) {
         const chars = Array.from(username);
         const hasValidCharacters = chars.every((char) => /^[a-zA-Z0-9._]+$/.test(char));
 
@@ -334,7 +358,7 @@ export default class InputComponent {
         }
     }
 
-    validateEmail(email: string) {
+    private validateEmail(email: string) {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailPattern.test(email) && email) {
@@ -344,7 +368,7 @@ export default class InputComponent {
         }
     }
 
-    validatePassword(password: string) {
+    private validatePassword(password: string) {
         this.input.minLength = MIN_PASSWORD_INPUT_LENGTH;
 
         const chars = Array.from(password);
@@ -369,35 +393,33 @@ export default class InputComponent {
         } else this.hideError();
     }
 
-    validateDate(date: string) {
+    private validateDate(date: string) {
         this.input.maxLength = MAX_DATE_INPUT_LENGTH;
         formatDateInput(this.input);
-        if (this.value.length !== MAX_DATE_INPUT_LENGTH) return this.hideError();
+        
+        if (this.value.length !== MAX_DATE_INPUT_LENGTH)
+            return this.hideError();
 
         const datePattern = /^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[0-2])\.(\d{4})$/;
 
-        if (!datePattern.test(date)) {
-            this.showError('Некорректный формат даты');
-            return;
-        }
+        if (!datePattern.test(date))
+            return this.showError('Некорректный формат даты');
 
         const [day, month, year] = date.split('.').map(Number);
         const inputDate = new Date(year, month - 1, day);
         const today = new Date();
 
-        if (inputDate > today) {
-            this.showError('Дата не должна быть в будущем');
-            return;
-        }
+        if (year < DEFAULT_MIN_BIRTH_YEAR)
+            return this.showError(`Дата не должна быть ранее ${DEFAULT_MIN_BIRTH_YEAR} года`);
+        
+        if (inputDate > today)
+            return this.showError('Дата не должна быть в будущем');
 
         if (
             inputDate.getDate() !== day ||
             inputDate.getMonth() + 1 !== month ||
             inputDate.getFullYear() !== year
-        ) {
-            this.showError('Некорректная дата');
-            return;
-        }
+        ) return this.showError('Некорректная дата');
 
         this.hideError();
     }

@@ -153,24 +153,24 @@ export default class LoginFormComponent {
         });
         if (this.usernameInput.input) focusInput(this.usernameInput.input, this.#focusTimer);
 
-        const checkboxWrapper = createElement({
-            parent: form,
-            classes: ['auth-form__checkboxes'],
-        })
+        // const checkboxWrapper = createElement({
+        //     parent: form,
+        //     classes: ['auth-form__checkboxes'],
+        // })
 
-        createElement({
-            tag: 'input',
-            parent: checkboxWrapper,
-            classes: ['auth-form__checkbox'],
-            attrs: {type: 'checkbox', id:'rememberMe'}
-        })
+        // createElement({
+        //     tag: 'input',
+        //     parent: checkboxWrapper,
+        //     classes: ['auth-form__checkbox'],
+        //     attrs: {type: 'checkbox', id:'rememberMe'}
+        // })
 
-        createElement({
-            tag: 'label',
-            parent: checkboxWrapper,
-            attrs: {htmlFor: 'rememberMe'},
-            text: 'Запомнить меня'
-        })
+        // createElement({
+        //     tag: 'label',
+        //     parent: checkboxWrapper,
+        //     attrs: {htmlFor: 'rememberMe'},
+        //     text: 'Запомнить меня'
+        // })
 
         this.renderBottomWrapper(form);
     }

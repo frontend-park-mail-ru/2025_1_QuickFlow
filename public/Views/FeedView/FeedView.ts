@@ -38,14 +38,14 @@ class FeedView {
                         });
                     },
                 },
-                comments: {
-                    title: 'Комментарии',
-                    // onClick: () => this.renderSection('education')
-                },
-                reactions: {
-                    title: 'Реакции',
-                    // onClick: () => this.renderSection('education')
-                },
+                // comments: {
+                //     title: 'Комментарии',
+                //     // onClick: () => this.renderSection('education')
+                // },
+                // reactions: {
+                //     title: 'Реакции',
+                //     // onClick: () => this.renderSection('education')
+                // },
             }
         });
 

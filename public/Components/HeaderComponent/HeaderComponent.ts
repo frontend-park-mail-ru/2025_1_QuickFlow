@@ -192,12 +192,12 @@ export default class HeaderComponent {
                         icon: 'settings-icon',
                         render: () => router.go({ path: '/profile/edit' }),
                     },
-                    help: {
-                        href: '/help',
-                        text: 'Помощь',
-                        icon: 'help-icon',
-                        render: () => {},
-                    },
+                    // help: {
+                    //     href: '/help',
+                    //     text: 'Помощь',
+                    //     icon: 'help-icon',
+                    //     render: () => {},
+                    // },
                     logout: {
                         href: '/logout',
                         text: 'Выйти',

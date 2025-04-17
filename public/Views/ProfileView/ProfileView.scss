@@ -155,3 +155,11 @@
     text-decoration: underline;
     color: var(--text-secondary-hover);
 }
+
+.profile__friend-name {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}

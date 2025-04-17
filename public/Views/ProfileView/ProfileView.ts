@@ -244,6 +244,7 @@ class ProfileView {
             createElement({
                 parent: friend,
                 text: firstname,
+                classes: ['profile__friend-name']
             });
         });
     }
