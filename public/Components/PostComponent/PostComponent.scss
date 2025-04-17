@@ -42,7 +42,7 @@
         font-size: var(--font-size-l);
         line-height: var(--line-height-m);
         color: var(--text-primary);
-        word-break: break-word;
+        word-break: break-all;
         overflow: hidden;
         display: -webkit-box;
         -webkit-box-orient: vertical;

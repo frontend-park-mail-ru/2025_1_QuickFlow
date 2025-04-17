@@ -50,7 +50,7 @@
     font-size: 13px;
     line-height: 130%;
     color: var(--text-primary);
-    word-break: break-word;
+    word-break: break-all;
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -64,7 +64,7 @@
     font-size: 13px;
     line-height: 130%;
     color: var(--text-secondary);
-    word-break: break-word;
+    word-break: break-all;
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;

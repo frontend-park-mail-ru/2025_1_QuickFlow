@@ -57,7 +57,7 @@
 .chat__sender {
     font-weight: 500;
     color: var(--text-accent);
-    word-break: break-word;
+    word-break: break-all;
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
