@@ -52,11 +52,23 @@ export default class FeedComponent {
         });
     }
 
+    private hasPosts(): boolean {
+        return this.posts?.querySelectorAll('.post')?.length > 0;
+    }
+
     private createMutationObserver() {
+        // const observer = new MutationObserver(() => {
+        //     if (this.posts.hasChildNodes())
+        //         return this.emptyWrapper.remove();
+        //     return this.posts.appendChild(this.emptyWrapper);
+        // });
+
         const observer = new MutationObserver(() => {
-            if (this.posts.hasChildNodes())
+            if (this.hasPosts())
                 return this.emptyWrapper.remove();
-            return this.posts.appendChild(this.emptyWrapper);
+
+            if (!this.posts.contains(this.emptyWrapper))
+                this.posts.appendChild(this.emptyWrapper);
         });
         
         observer.observe(this.posts, {
