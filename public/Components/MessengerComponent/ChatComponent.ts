@@ -180,7 +180,7 @@ export default class ChatComponent {
 
         if (msgData.sender.username !== getLsItem('username', null)) {
             const msgTime = new Date(msgData.created_at).getTime();
-            if (msgTime >= this.lastReadTime) {
+            if (msgTime > this.lastReadTime) {
                 this.observer.observe(msg);
             }
         }
@@ -213,11 +213,12 @@ export default class ChatComponent {
         });
 
         if (msgData.sender.username === getLsItem('username', null)) {
+            const msgTime = new Date(msgData.created_at).getTime();
             createElement({
                 parent: msgInfo,
                 classes: [
                     'chat__msg-status',
-                    msgData.is_read ? 'chat__msg-status_read' : null
+                    msgTime <= this.lastReadTime ? 'chat__msg-status_read' : 'chat__msg-status_unread'
                 ],
             });
         }
