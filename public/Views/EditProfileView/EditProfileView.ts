@@ -190,10 +190,7 @@ class EditProfileView {
             sections[this.#section]?.();
         })
 
-        console.log(body);
-        console.log(body.profile);
-        console.log(body.profile.username);
-        setLsItem('profile', body.profile.username);
+        const newUsername = body?.profile?.username;
 
         if (body.profile) {
             body.profile['sex'] = this.#userData.profile.sex;
@@ -225,7 +222,7 @@ class EditProfileView {
             callback: (status) => {
                 switch (status) {
                     case 200:
-                        this.postCbOk();
+                        this.postCbOk(newUsername);
                         break;
                     case 401:
                         this.cbUnauthorized();
@@ -235,7 +232,9 @@ class EditProfileView {
         });
     }
 
-    postCbOk() {
+    postCbOk(newUsername: string) {
+        setLsItem('username', newUsername);
+        router?.menu?.renderProfileMenuItem();
         router?.header?.renderAvatarMenu();
         this.render(this.#section);
     }
