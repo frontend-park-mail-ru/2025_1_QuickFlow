@@ -36,17 +36,41 @@ export default class PostComponent {
     }
 
     render() {
-        if (this.wrapper) this.wrapper.remove();
+        let referenceNode: ChildNode | null = null;
+
+        if (this.wrapper) {
+            referenceNode = this.wrapper.nextSibling;
+            this.wrapper.remove();
+        }
+
+        // if (this.wrapper) this.wrapper.remove();
 
         this.wrapper = createElement({
             classes: ['post'],
         });
 
-        if (this.#config?.position && this.#config?.position === "top") {
-            this.#parent.prepend(this.wrapper);
-        } else {
-            this.#parent.appendChild(this.wrapper);
+        switch (this.#config?.position) {
+            case "top":
+                this.#parent.prepend(this.wrapper);
+                break;
+            case "same":
+                if (referenceNode) {
+                    this.#parent.insertBefore(this.wrapper, referenceNode);
+                } else {
+                    this.#parent.appendChild(this.wrapper);
+                }
+                break;
+            default:
+                this.#parent.appendChild(this.wrapper);
+                break;
         }
+        // if (this.#config?.position === "top") {
+        //     this.#parent.prepend(this.wrapper);
+        // } else if (this.#config?.position === "same") {
+        //     this.#parent.appendChild(this.wrapper);
+        // } else {
+        //     this.#parent.appendChild(this.wrapper);
+        // }
 
         this.renderTop();
         this.renderPics();
@@ -399,7 +423,7 @@ export default class PostComponent {
 
     onAjaxEditPost(config: any) {
         this.#config = config;
-        this.#config.position = "top";
+        this.#config.position = "same";
         this.render();
     }
 }
