@@ -11,6 +11,7 @@ const POST_TEXT_MAX_LENGTH = 4000;
 
 export default class PostMwComponent extends ModalWindowComponent {
     fileInput: FileInputComponent | null = null;
+    button: ButtonComponent;
 
     constructor(parent: any, config: any) {
         super(parent, config);
@@ -183,7 +184,7 @@ export default class PostMwComponent extends ModalWindowComponent {
             required: true,
         });
 
-        new ButtonComponent(this.modalWindow, {
+        this.button = new ButtonComponent(this.modalWindow, {
             text: isFilled ? 'Сохранить' : 'Опубликовать',
             variant: 'primary',
             size: 'small',
@@ -225,6 +226,8 @@ export default class PostMwComponent extends ModalWindowComponent {
     }
 
     async handlePostSubmit(text: string) {
+        this.button.disable();
+
         if (
             !text && (
                 !this.fileInput ||
