@@ -192,6 +192,11 @@ export default class FileInputComponent {
         this.files = this.files.filter(file => file !== fileToRemove);
         this.updateInputFiles();
         wrapper.remove();
+
+        if (!this.input) return;
+
+        const event = new Event('change', { bubbles: true });
+        this.input.dispatchEvent(event);
     }
     
 

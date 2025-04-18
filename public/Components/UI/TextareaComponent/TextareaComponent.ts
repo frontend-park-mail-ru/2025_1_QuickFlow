@@ -57,6 +57,10 @@ export default class TextareaComponent {
             this.textarea.setAttribute(attr, this.#config.attrs[attr]);
         }
 
+        if (this.required) {
+            this.textarea.setAttribute("required", "");
+        }
+
         if (this.#config.description || this.#config.maxLength) {
             const descWrapper = createElement({
                 parent: this.wrapper,

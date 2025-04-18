@@ -73,6 +73,7 @@ export default class PostMwComponent extends ModalWindowComponent {
             id: 'post-pic-upload',
             onUpload: () => this.handlePicUpload(scrollWrapper),
             multiple: true,
+            required: true,
         };
         
         if (hasPics) {
@@ -179,6 +180,7 @@ export default class PostMwComponent extends ModalWindowComponent {
             value: this.config?.data?.text || '',
             showCharactersLeft: true,
             maxLength: POST_TEXT_MAX_LENGTH,
+            required: true,
         });
 
         new ButtonComponent(this.modalWindow, {
@@ -190,7 +192,8 @@ export default class PostMwComponent extends ModalWindowComponent {
                 this.handlePostSubmit(textarea.textarea.value.trim());
             },
             disabled: true,
-            stateUpdaters: [textarea, this.fileInput]
+            validationType: 'some',
+            stateUpdaters: [textarea, this.fileInput],
         });
     }
 
