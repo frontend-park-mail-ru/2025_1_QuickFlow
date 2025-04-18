@@ -15,139 +15,7 @@ import convertDate from '@utils/convertDate';
 import convertToFormData from '@utils/convertToFormData';
 
 import router from '@router';
-
-
-const forms = {
-    profile: {
-        header: true,
-        fields: [
-            [{
-                key: 'username',
-                config: {
-                    label: 'Имя пользователя',
-                    validation: 'username',
-                    required: true,
-                    maxLength: 20,
-                }
-            }],
-            [{
-                key: 'firstname',
-                config: {
-                    label: 'Имя',
-                    validation: 'name',
-                    required: true,
-                    maxLength: 25,
-                }
-            },
-            {
-                key: 'lastname',
-                config: {
-                    label: 'Фамилия',
-                    validation: 'name',
-                    required: true,
-                    maxLength: 25,
-                }
-            },
-            {
-                key: 'birth_date',
-                config: {
-                    label: 'Дата рождения',
-                    validation: 'date',
-                    autocomplete: 'date',
-                    placeholder: 'дд.мм.гггг',
-                    required: true,
-                    maxLength: 10,
-                }
-            }],
-            [{
-                key: 'bio',
-                type: 'textarea',
-                config: {
-                    label: 'Краткая информация',
-                    placeholder: 'Расскажите о себе',
-                    maxLength: 256,
-                }
-            }]
-        ]
-    },
-    contacts: {
-        title: 'Контакты',
-        fields: [
-            [{
-                key: 'city',
-                config: {
-                    label: 'Город',
-                    maxLength: 25,
-                }
-            }],
-            [{
-                key: 'phone',
-                config: {
-                    label: 'Телефон',
-                    validation: 'phone',
-                }
-            },
-            {
-                key: 'email',
-                config: {
-                    label: 'Почта',
-                    validation: 'email',
-                    maxLength: 32,
-                }
-            }]
-        ]
-    },
-    education: {
-        title: 'Образование',
-        fields: [
-            [{
-                key: 'school_city',
-                config: {
-                    label: 'Город',
-                    maxLength: 25,
-                }
-            },
-            {
-                key: 'school_name',
-                config: {
-                    label: 'Школа',
-                    maxLength: 32,
-                }
-            }],
-            [{
-                key: 'univ_city',
-                config: {
-                    label: 'Город',
-                    maxLength: 25,
-                }
-            },
-            {
-                key: 'univ_name',
-                config: {
-                    label: 'Высшее учебное заведение',
-                    maxLength: 50,
-                }
-            },
-            {
-                key: 'faculty',
-                config: {
-                    label: 'Факультет',
-                    maxLength: 32,
-                }
-            },
-            {
-                key: 'grad_year',
-                config: {
-                    label: 'Год выпуска',
-                    max: 2050,
-                    min: 1925,
-                    validation: "year",
-                    type: "number",
-                }
-            }]
-        ]
-    }
-};
+import { forms } from './EditProfileFormConfig';
 
 
 class EditProfileView {
@@ -155,6 +23,8 @@ class EditProfileView {
     #section
     #userData
     #stateUpdaters
+    private submitButton: ButtonComponent;
+
     constructor() {
         this.#userData = null;
         this.#stateUpdaters = [];
@@ -280,7 +150,7 @@ class EditProfileView {
             }
         }
         
-        new ButtonComponent(form, {
+        this.submitButton = new ButtonComponent(form, {
             text: 'Сохранить',
             variant: 'primary',
             size: 'large',
@@ -294,6 +164,8 @@ class EditProfileView {
     }
 
     handleFormSubmit() {
+        this.submitButton.disable();
+
         const body: Record<string, any> = {};
 
         this.#stateUpdaters.forEach(({ name, value }) => {
