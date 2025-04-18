@@ -135,10 +135,7 @@ class Router {
 
     #renderPath(data: any) {
         const [pathname, queryString] = data.path.split('?');
-        console.log(pathname);
-
-        // const path = data.path;
-        // console.error(path);
+        if (pathname) null; // for linter
 
         const matchResult = this.#matchRoute(data.path);
         if (!matchResult) {

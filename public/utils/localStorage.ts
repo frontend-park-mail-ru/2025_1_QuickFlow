@@ -22,6 +22,6 @@ export function removeLsItem(key: string) {
     try {
         localStorage.removeItem(key);
     } catch {
-        console.log('removeLsItem exception');
+        console.error('removeLsItem exception');
     }
 }

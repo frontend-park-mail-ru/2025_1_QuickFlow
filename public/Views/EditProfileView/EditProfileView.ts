@@ -159,8 +159,6 @@ class EditProfileView {
             disabled: true,
             stateUpdaters: this.#stateUpdaters,
         });
-
-        console.log(this.#stateUpdaters);
     }
 
     handleFormSubmit() {
@@ -213,7 +211,6 @@ class EditProfileView {
         if (!body['cover']) body['cover'] = '';
         if (!body['avatar']) body['avatar'] = '';
 
-        console.log(body);
         const fd = convertToFormData(body);
 
         Ajax.post({
@@ -234,7 +231,6 @@ class EditProfileView {
     }
 
     postCbOk() {
-        console.log(router?.header);
         router?.header?.renderAvatarMenu();
         this.render(this.#section);
     }

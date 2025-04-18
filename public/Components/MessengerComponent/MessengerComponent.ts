@@ -21,9 +21,6 @@ export default class MessengerComponent {
             parent: this.#parent.container,
             classes: ['messenger'],
         });
-
-        console.log(this.#config.chat_id);
-        console.log(this.#config.receiver_username);
         
         const chatsPanel = new ChatsPanelComponent(messengerWrapper, {
             user: this.#config.user,

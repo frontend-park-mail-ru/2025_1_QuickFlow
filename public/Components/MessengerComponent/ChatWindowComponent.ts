@@ -119,7 +119,6 @@ export default class ChatWindowComponent {
         }
 
         ws.subscribe('message', (payload: any) => {
-            console.log(payload);
             removeLsItem(CHAT_MSG_PREFIX + `${this.#chatData?.id}`);
             if (!this.#chatData?.id && this.#chatData?.receiver_id) {
                 setLsItem('active-chat', `chat-${payload.chat_id}`);
@@ -190,8 +189,6 @@ export default class ChatWindowComponent {
     }
 
     renderHeader() {
-        console.log(this.#chatData);
-
         const chatHeader = createElement({
             parent: this.#container,
             classes: ['chat-window__header'],

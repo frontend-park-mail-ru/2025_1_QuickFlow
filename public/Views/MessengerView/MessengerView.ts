@@ -13,14 +13,6 @@ class MessengerView {
             type: 'messenger',
         });
 
-        console.log(params);
-
-        // const hasTargetChat = (
-        //     typeof params === 'object' &&
-        //     Object.keys(params).length &&
-        //     (params?.receiver_id || params?.chat_id)
-        // );
-
         Ajax.get({
             url: `/profiles/${getLsItem('username', '')}`,
             callback: (status: number, userData: any) => {

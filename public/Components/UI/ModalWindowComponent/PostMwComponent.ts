@@ -256,9 +256,6 @@ export default class PostMwComponent extends ModalWindowComponent {
             }
         }
 
-        console.log(this.fileInput.input.files);
-        console.log(formData.getAll('pics'));
-
         if (this.config.type === 'create-post') {
             Ajax.post({
                 url: '/post',
@@ -271,7 +268,6 @@ export default class PostMwComponent extends ModalWindowComponent {
                             this.close();
                             break;
                         case 413:
-                            console.log("File is too large");
                             alert('File is too large');
                             break;
                     }
@@ -289,7 +285,6 @@ export default class PostMwComponent extends ModalWindowComponent {
                             this.close();
                             break;
                         case 413:
-                            console.log("File is too large");
                             alert('File is too large');
                             break;
                     }
