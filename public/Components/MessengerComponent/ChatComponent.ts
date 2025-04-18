@@ -65,6 +65,7 @@ export default class ChatComponent {
                     chat_id: this.config?.chatData?.id,
                     message_id: (entry.target as HTMLElement).dataset.msgId,
                 });
+                console.log(entry.target);
                 // const status = entry.target.querySelector('.chat__msg-status');
                 // status.classList.remove('chat__msg-status_unread');
                 // status.classList.add('chat__msg-status_read');
@@ -122,6 +123,7 @@ export default class ChatComponent {
 
         ws.subscribe('message_read', (payload: any) => {
             const readMessage = this.scroll.querySelector(`[data-msg-id="${payload.message_id}"]`) as HTMLElement;
+            console.log(readMessage);
             const status = readMessage.querySelector('.chat__msg-status');
             status.classList.remove('chat__msg-status_unread');
             status.classList.add('chat__msg-status_read');
