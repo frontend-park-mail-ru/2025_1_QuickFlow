@@ -64,7 +64,7 @@ export default class ChatComponent {
                     chat_id: this.config?.chatData?.id,
                     message_id: (entry.target as HTMLElement).dataset.msgId,
                 });
-                const status = entry.target.querySelector('chat__msg-status');
+                const status = entry.target.querySelector('.chat__msg-status');
                 status.classList.remove('chat__msg-status_unread');
                 status.classList.add('chat__msg-status_read');
                 this.observer.unobserve(entry.target);
