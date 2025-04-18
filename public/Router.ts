@@ -32,6 +32,10 @@ class Router {
         return this.#menu;
     }
 
+    get header(): any {
+        return this.#header;
+    }
+
     register(view: any, config: any) {
         const { path, section }: Record<string, string> = config;
         this.#routes[path] = {
