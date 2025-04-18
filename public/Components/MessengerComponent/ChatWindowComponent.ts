@@ -103,8 +103,8 @@ export default class ChatWindowComponent {
                             };
 
                             this.renderHeader();
-                            this.renderChat();
                             this.renderMessageInput();
+                            this.renderChat();
 
                             break;
                         case 401:
@@ -159,8 +159,8 @@ export default class ChatWindowComponent {
         }, (status: number, chatMsgs: any) => {
             this.#msgs = chatMsgs.messages;
             this.renderHeader();
-            this.renderChat();
             this.renderMessageInput();
+            this.renderChat();
         });
     }
 
@@ -352,8 +352,8 @@ export default class ChatWindowComponent {
         if (!this.#chatElement || !this.#messageInput || !bottomWrapper || !this.#chatElement) return;
         this.#messageInput.style.height = 'auto';
         this.#messageInput.style.height = (this.#messageInput.scrollHeight) + 'px';
-        this.#chatElement.style.paddingBottom = bottomWrapper.scrollHeight + CHAT_DEFAULT_PADDING_BOTTOM + 'px';
-        (this.#chatElement.parentNode as HTMLElement).scrollTop = (this.#chatElement.parentNode as HTMLElement).scrollHeight;
+        // this.#chatElement.style.paddingBottom = bottomWrapper.scrollHeight + CHAT_DEFAULT_PADDING_BOTTOM + 'px';
+        // (this.#chatElement.parentNode as HTMLElement).scrollTop = (this.#chatElement.parentNode as HTMLElement).scrollHeight;
     }
 
     renderChat() {

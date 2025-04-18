@@ -3,6 +3,7 @@ import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import createElement from '@utils/createElement';
 import getTime from '@utils/getTime';
 import router from '@router';
+import ws from '@modules/WebSocketService';
 
 
 const MSG_AVATAR_SIZE = 'xs';
@@ -14,36 +15,68 @@ const OPEN_PROFILE_BTN_TEXT = 'Открыть профиль';
 // const ADD_TO_FRIENDS_BTN_TEXT = 'Заявка отправлена';
 
 
-export default class MessageComponent {
-    private parent;
-    private config;
+export default class ChatComponent {
+    private parent: HTMLElement;
+    private config: Record<string, any>;
     private container: HTMLElement | null = null;
     private observer: IntersectionObserver;
+
     scroll: HTMLElement | null = null;
+    private lastReadTime: number | null = null;
 
     constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
         this.config = config;
 
         this.observer = new IntersectionObserver(this.handleIntersect, {
-            root: null, // или this.scroll, если нужен только внутри контейнера
-            threshold: 0.5, // 50% элемента в зоне видимости
+            root: this.parent,
+            threshold: 0.5,
         });
 
         this.render();
     }
 
+    private scrollToTargetMsg() {
+        if (!this.scroll) return;
+      
+        const messages = Array.from(this.scroll.querySelectorAll<HTMLElement>('[data-msg-id]'));
+        if (!messages.length) return;
+
+        let target: HTMLElement | null = null;
+        for (const msg of messages) {
+            const msgMoment = new Date(msg.dataset.msgTs);
+            if (msgMoment.getTime() >= this.lastReadTime) {
+                target = msg;
+                break;
+            }
+        }
+        if (!target) return;
+
+        const headerHeight = this.parent.querySelector('.chat-window__header').clientHeight;
+        const value = target.offsetTop - headerHeight - this.container.clientHeight + target.clientHeight;
+        this.container.scrollTop = value;
+    }
+
     private handleIntersect = (entries: IntersectionObserverEntry[]) => {
         for (const entry of entries) {
             if (entry.isIntersecting) {
-                console.log('ап');
-                // можно также: console.log('ап:', entry.target.textContent);
-                this.observer.unobserve(entry.target); // опционально, если нужно 1 раз
+                ws.send('message_read', {
+                    chat_id: this.config?.chatData?.id,
+                    message_id: (entry.target as HTMLElement).dataset.msgId,
+                });
+                const status = entry.target.querySelector('chat__msg-status');
+                status.classList.remove('chat__msg-status_unread');
+                status.classList.add('chat__msg-status_read');
+                this.observer.unobserve(entry.target);
             }
         }
     };
 
     render() {
+        if (this.config?.chatData?.last_read) {
+            this.lastReadTime = new Date(this.config?.chatData?.last_read)?.getTime();
+        }
+        
         this.container = createElement({
             parent: this.parent,
             classes: ['chat'],
@@ -83,6 +116,8 @@ export default class MessageComponent {
             prevMsg = msg;
             prevDay = this.formatDateTitle(msg.created_at);
         }
+
+        this.scrollToTargetMsg();
     }
 
     renderEmptyState() {
@@ -121,21 +156,22 @@ export default class MessageComponent {
             size: EMPTY_STATE_BTN_SIZE,
             onClick: () => router.go({ path: `/profiles/${this.config.chatData.username}` }),
         });
-
-        // new ButtonComponent(btnsWrapper, {
-        //     text: ADD_TO_FRIENDS_BTN_TEXT,
-        //     variant: EMPTY_STATE_BTN_VARIANT,
-        //     size: EMPTY_STATE_BTN_SIZE,
-        // });
     }
 
     renderMsg(msgData: any, classes: Array<string>) {
         const msg = createElement({
             parent: this.scroll,
             classes: ['chat__msg', ...classes],
+            attrs: {
+                'data-msg-id': msgData.id.toString(),
+                'data-msg-ts': msgData.created_at
+            },
         });
 
-        this.observer.observe(msg); // отслеживаем появление
+        const msgTime = new Date(msgData.created_at).getTime();
+        if (msgTime >= this.lastReadTime) {
+            this.observer.observe(msg);
+        }
 
         new AvatarComponent(msg, {
             size: MSG_AVATAR_SIZE,
@@ -171,6 +207,10 @@ export default class MessageComponent {
                 msgData.is_read ? 'chat__msg-status_read' : null
             ],
         });
+
+        // ws.subscribe('message_read', (payload: any) => {
+            
+        // });
 
         createElement({
             parent: msgInfo,

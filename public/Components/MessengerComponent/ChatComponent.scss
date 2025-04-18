@@ -1,6 +1,6 @@
 .chat {
     width: 100%;
-    height: calc(100% - 50px);
+    height: calc(100% - 50px - 62px);
     overflow: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -25,7 +25,7 @@
     width: 100%;
     height: auto;
     padding-top: 16px;
-    padding-bottom: 78px;
+    padding-bottom: 16px;
     display: flex;
     flex-direction: column;
 }
