@@ -162,7 +162,7 @@ export default class ChatWindowComponent {
             chatId: this.#chatData?.id,
             count: 50,
         }, (status: number, chatMsgs: any) => {
-            this.#msgs = chatMsgs;
+            this.#msgs = chatMsgs.messages;
             this.renderHeader();
             this.renderChat();
             this.renderMessageInput();
