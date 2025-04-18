@@ -106,6 +106,8 @@ class Ajax {
             callback(response.status, data);
         } catch (error) {
             console.error('POST request failed:', error);
+            console.error(response);
+            console.error(response.status);
             callback(response?.status || 500, {});
         }
     }
