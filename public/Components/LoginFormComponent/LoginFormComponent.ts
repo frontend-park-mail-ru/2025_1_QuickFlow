@@ -39,24 +39,23 @@ export default class LoginFormComponent {
             classes: ['auth-form']
         }) as HTMLFormElement;
 
-        this.handleFormSubmission(this.form);
-
-        if (this.step === 1) {
-            this.renderUsernameStep(this.form);
-        } else if (this.step === 2) {
-            this.renderPasswordStep(this.form);
+        switch (this.step) {
+            case 1:
+                this.renderUsernameStep(this.form);
+                break;
+            case 2:
+                this.renderPasswordStep(this.form);
+                break;
         }
+
+        this.handleFormSubmission(this.form);
     }
 
     handleFormSubmission(form: HTMLFormElement) {
-        if (this.continueBtn.isDisabled) return;
-
         form.addEventListener('submit', (event: any) => {
             event.preventDefault();
-            if (this.step === 1) {
-                this.continueBtnOnClick();
-                return;
-            }
+            if (this.continueBtn.isDisabled) return;
+            if (this.step === 1) return this.continueBtnOnClick();
             if (this.passwordInput?.input?.classList.contains('invalid')) return;
             this.signinBtnOnClick(event);
         });
