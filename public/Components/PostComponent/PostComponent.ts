@@ -342,7 +342,7 @@ export default class PostComponent {
 
         if (
             this.#config.author.username === getLsItem('username', '') ||
-            ADMINS_USERNAMES.includes(this.#config.author.username)
+            ADMINS_USERNAMES.includes(getLsItem('username', ''))
         ) {
             data.edit = {
                 href: '/edit',
