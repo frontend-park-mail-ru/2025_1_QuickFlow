@@ -10,6 +10,7 @@ export default class FileInputComponent {
     private parent: HTMLElement;
     private config: Record<string, any>;
     private files: Array<File> = [];
+    private readyCallbacks: Array<() => void> = [];
 
     input: HTMLInputElement | null = null;
 
@@ -118,6 +119,7 @@ export default class FileInputComponent {
     async singleOnchange(event: any) {
         const imageDataUrl = await this.readImageFile(event.target.files[0]);
         this.config.preview.src = imageDataUrl;
+        this.triggerReady();
     }
 
     async readImageFile(file: File) {
@@ -190,7 +192,7 @@ export default class FileInputComponent {
 
 
 
-    private async resizeImage(file: File, maxSize: number = this.config.maxSize ?? 1920): Promise<File> {
+    private async resizeImage(file: File, maxSize: number = this.config.maxSize ?? 1680): Promise<File> {
         const imageBitmap = await createImageBitmap(file);
         const { width, height } = imageBitmap;
     
@@ -222,14 +224,13 @@ export default class FileInputComponent {
         const maxCount = this.config.maxCount ?? Infinity;
         const remainingSlots = maxCount - this.files.length;
         if (remainingSlots <= 0) return;
-    
-        let acceptedFiles = newFiles.slice(0, remainingSlots);
 
-        // if (this.config.compress) {
-        //     acceptedFiles = await Promise.all(
-        //         acceptedFiles.map(file => this.resizeImage(file))
-        //     );
-        // }
+        let acceptedFiles = newFiles.slice(0, remainingSlots);
+        if (this.config.compress) {
+            acceptedFiles = await Promise.all(
+                acceptedFiles.map(file => this.resizeImage(file))
+            );
+        }
 
         this.files.push(...acceptedFiles);
     
@@ -250,10 +251,8 @@ export default class FileInputComponent {
     
         this.updateInputFiles();
     
-        if (this.input) {
-            this.input.disabled = this.files.length >= maxCount;
-            // this.input.value = '';
-        }
+        this.input.disabled = this.files.length >= maxCount;
+        this.triggerReady();
     }
 
     async removeFile(fileToRemove: File, wrapper: HTMLElement) {
@@ -279,7 +278,9 @@ export default class FileInputComponent {
     
     addListener(listener: any) {
         if (!this.input) return;
-        this.input.addEventListener('change', listener);
+        this.input.addEventListener('change', () => {
+            this.onReady(listener);
+        });
     }
 
     getFiles() {
@@ -289,5 +290,13 @@ export default class FileInputComponent {
     isValid() {
         if (!this.required) return true;
         return this.files.length > 0;
+    }
+
+    onReady(callback: () => void) {
+        this.readyCallbacks.push(callback);
+    }
+
+    private triggerReady() {
+        this.readyCallbacks.forEach(cb => cb());
     }
 }
