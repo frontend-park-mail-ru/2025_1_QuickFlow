@@ -225,11 +225,11 @@ export default class FileInputComponent {
     
         let acceptedFiles = newFiles.slice(0, remainingSlots);
 
-        if (this.config.compress) {
-            acceptedFiles = await Promise.all(
-                acceptedFiles.map(file => this.resizeImage(file))
-            );
-        }
+        // if (this.config.compress) {
+        //     acceptedFiles = await Promise.all(
+        //         acceptedFiles.map(file => this.resizeImage(file))
+        //     );
+        // }
 
         this.files.push(...acceptedFiles);
     
