@@ -52,7 +52,7 @@ export default class ChatComponent {
         let target: HTMLElement | null = null;
         for (const msg of messages) {
             const msgMoment = new Date(msg.dataset.msgTs);
-            if (msgMoment.getTime() >= this.lastReadByMeTime) {
+            if (msgMoment.getTime() > this.lastReadByMeTime) {
                 target = msg;
                 break;
             }
