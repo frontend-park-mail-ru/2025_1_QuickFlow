@@ -7,19 +7,21 @@ const DEFAULT_ACCEPT_IMAGE = '.jpg, .jpeg, .png, .gif';
 
 
 export default class FileInputComponent {
-    #parent;
-    #config;
-    #files: Array<File> = [];
+    private parent: HTMLElement;
+    private config: Record<string, any>;
+    private files: Array<File> = [];
+
     input: HTMLInputElement | null = null;
-    constructor(parent: any, config: any) {
-        this.#config = config;
-        this.#parent = parent;
+
+    constructor(parent: HTMLElement, config: Record<string, any>) {
+        this.config = config;
+        this.parent = parent;
 
         this.render();
     }
 
     get name() {
-        return this.#config.name?.trim();
+        return this.config.name?.trim();
     }
 
     get value() {
@@ -36,7 +38,7 @@ export default class FileInputComponent {
     }
 
     get required() {
-        return this.#config.required;
+        return this.config.required;
     }
 
     isEmpty() {
@@ -50,58 +52,70 @@ export default class FileInputComponent {
 
     render() {
         this.input = createElement({
-            parent: this.#parent,
+            parent: this.parent,
             tag: 'input',
             attrs: {
                 type: DEFAULT_TYPE,
-                accept: this.#config.accept || DEFAULT_ACCEPT_IMAGE,
+                accept: this.config.accept || DEFAULT_ACCEPT_IMAGE,
                 name: this.name || DEFAULT_NAME,
-                id: this.#config.id || ''
+                id: this.config.id || ''
             },
-            classes: this.#config.classes,
+            classes: this.config.classes,
         }) as HTMLInputElement;
 
         if (this.required) {
             this.input.setAttribute('required', '');
         }
 
-        if (this.#config.multiple) {
+        if (this.config.multiple) {
             this.input.setAttribute('multiple', '');
         }
 
-        if (this.#config.imitator) {
+        if (this.config.imitator) {
             this.input.classList.add('hidden');
-            this.#config.imitator.addEventListener('click', () => {
+            this.config.imitator.addEventListener('click', () => {
                 if (!this.input) return;
                 this.input.click();
             });
         }
         
-        if (this.#config.preview) {
+        if (this.config.preview) {
             this.input.onchange = async (event) => {
                 try {
-                    await this.#config.multiple ? this.multipleOnchange(event) : this.singleOnchange(event);
-                    this.#config.onUpload ? this.#config.onUpload() : null;
+                    await this.config.multiple ? this.multipleOnchange(event) : this.singleOnchange(event);
+                    this.config.onUpload ? this.config.onUpload() : null;
                 } catch (error) {
                     console.error("Ошибка при чтении файла", error);
                 }
             };
         }
 
-        if (Array.isArray(this.#config.preloaded) && this.#config.preloaded.length > 0) {
-            this.loadPreloadedFiles(this.#config.preloaded);
+        if (Array.isArray(this.config.preloaded) && this.config.preloaded.length > 0) {
+            this.loadPreloadedFiles(this.config.preloaded);
         }
     }
     
     async multipleOnchange(event: any) {
         const newFiles: Array<File> = Array.from(event.target.files);
-        this.#files.push(...newFiles);
+        this.files.push(...newFiles);
 
         const imageDataUrls = await Promise.all(newFiles.map(this.readImageFile));
-        for (const imageDataUrl of imageDataUrls) {
-            const picWrapper = this.#config.preview.cloneNode(true);
+        // for (const imageDataUrl of imageDataUrls) {
+        //     const picWrapper = this.config.preview.cloneNode(true);
+        //     picWrapper.querySelector('img').src = imageDataUrl;
+        //     this.parent.insertBefore(picWrapper, this.config.imitator);
+        // }
+        for (let i = 0; i < imageDataUrls.length; i++) {
+            const imageDataUrl = imageDataUrls[i];
+            const file = newFiles[i];
+        
+            const picWrapper = this.config.preview.cloneNode(true);
             picWrapper.querySelector('img').src = imageDataUrl;
-            this.#parent.insertBefore(picWrapper, this.#config.imitator);
+        
+            const removeBtn = picWrapper.querySelector('.js-post-pic-delete');
+            removeBtn.addEventListener('click', () => this.removeFile(file, picWrapper));
+        
+            this.parent.insertBefore(picWrapper, this.config.imitator);
         }
         
         this.updateInputFiles();
@@ -109,7 +123,7 @@ export default class FileInputComponent {
 
     async singleOnchange(event: any) {
         const imageDataUrl = await this.readImageFile(event.target.files[0]);
-        this.#config.preview.src = imageDataUrl;
+        this.config.preview.src = imageDataUrl;
     }
 
     async readImageFile(file: File) {
@@ -130,7 +144,7 @@ export default class FileInputComponent {
 
         const dataTransfer = new DataTransfer();
 
-        for (const file of this.#files) {
+        for (const file of this.files) {
             dataTransfer.items.add(file);
         }
 
@@ -142,14 +156,27 @@ export default class FileInputComponent {
             srcList.map(this.fetchImageAsFile)
         );
 
-        this.#files.push(...preloadedFiles);
+        this.files.push(...preloadedFiles);
         this.updateInputFiles();
 
-        if (this.#config.preview) {
-            for (const src of srcList) {
-                const picWrapper = this.#config.preview.cloneNode(true);
-                picWrapper.querySelector('img').src = src;
-                this.#parent.insertBefore(picWrapper, this.#config.imitator);
+        if (this.config.preview) {
+            // for (const src of srcList) {
+            //     const picWrapper = this.config.preview.cloneNode(true);
+            //     picWrapper.querySelector('img').src = src;
+            //     this.parent.insertBefore(picWrapper, this.config.imitator);
+            // }
+
+            for (let i = 0; i < preloadedFiles.length; i++) {
+                const imageDataUrl = srcList[i];
+                const file = preloadedFiles[i];
+            
+                const picWrapper = this.config.preview.cloneNode(true);
+                picWrapper.querySelector('img').src = imageDataUrl;
+            
+                const removeBtn = picWrapper.querySelector('.js-post-pic-delete');
+                removeBtn.addEventListener('click', () => this.removeFile(file, picWrapper));
+            
+                this.parent.insertBefore(picWrapper, this.config.imitator);
             }
         }
     }
@@ -161,17 +188,24 @@ export default class FileInputComponent {
         return new File([blob], filename, { type: blob.type });
     }
 
+    async removeFile(fileToRemove: File, wrapper: HTMLElement) {
+        this.files = this.files.filter(file => file !== fileToRemove);
+        this.updateInputFiles();
+        wrapper.remove();
+    }
+    
+
     addListener(listener: any) {
         if (!this.input) return;
         this.input.addEventListener('change', listener);
     }
 
     getFiles() {
-        return this.#files;
+        return this.files;
     }
 
     isValid() {
         if (!this.required) return true;
-        return this.#files.length > 0;
+        return this.files.length > 0;
     }
 }

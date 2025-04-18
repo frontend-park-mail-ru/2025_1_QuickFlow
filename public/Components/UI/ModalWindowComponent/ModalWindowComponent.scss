@@ -115,6 +115,19 @@
     flex-direction: column;
 }
 
+.modal__pics-wrapper {
+    width: 100%;
+    height: 128px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    position: relative;
+    border-radius: 8px;
+}
+
 .modal__pics {
     width: 100%;
     height: 128px;
@@ -156,6 +169,43 @@
 .modal__pic {
     height: 100%;
     aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.modal__pic-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    min-width: 100%;
+    min-height: 100%;
+    opacity: 0;
+    transition: var(--trans-menu);
+    border-radius: 8px;
+}
+
+.modal__pic-overlay:hover {
+    opacity: 1;
+    background: var(--button-overlay);
+}
+
+.modal__pic-overlay:active {
+    background: var(--button-overlay-hover);
+    opacity: 1;
+}
+
+.modal__pic-delete {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    background: url('./../static/img/trash-white-icon.svg') no-repeat;
+    background-position: center;
+    background-size: contain;
 }
 
 .modal__img {
@@ -174,4 +224,35 @@
 .modal__pics_blank .modal__camera {
     width: 32px;
     height: 32px;
+}
+
+.modal__pics {
+    &-nav {
+        position: absolute;
+        background: var(--background-white);
+        align-self: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: var(--trans-menu);
+
+        filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+        -webkit-filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+        -webkit-filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+        -moz-filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+        -o-filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+        -ms-filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+
+        &_prev {
+            left: 8px;
+        }
+
+        &_next {
+            right: 8px;
+        }
+    }
 }

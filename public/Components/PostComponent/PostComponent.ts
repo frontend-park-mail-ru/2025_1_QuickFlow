@@ -1,6 +1,7 @@
 import ContextMenuComponent from '../ContextMenuComponent/ContextMenuComponent'
 import AvatarComponent from '../AvatarComponent/AvatarComponent';
-import ModalWindowComponent from '../UI/ModalWindowComponent/ModalWindowComponent';
+import PostMwComponent from '../UI/ModalWindowComponent/PostMwComponent';
+import DeleteMwComponent from '../UI/ModalWindowComponent/DeleteMwComponent';
 import getTimeDifference from '../../utils/getTimeDifference';
 import createElement from '../../utils/createElement';
 import { getLsItem } from '../../utils/localStorage';
@@ -54,9 +55,7 @@ export default class PostComponent {
     }
 
     renderPics() {
-        if (!this.#config.pics || this.#config.pics.length === 0) {
-            return;
-        }
+        if (!this.#config.pics || this.#config.pics.length === 0) return;
 
         const picsWrapper = createElement({
             parent: this.wrapper,
@@ -86,6 +85,10 @@ export default class PostComponent {
             });
         }
 
+        this.renderPaginator(picsWrapper, slider);
+    }
+
+    private renderPaginator(picsWrapper: HTMLElement, slider: HTMLElement) {
         let currentIndex = 0;
         const totalPics = this.#config.pics.length;
 
@@ -326,7 +329,7 @@ export default class PostComponent {
                 text: 'Редактировать',
                 icon: 'pencil-primary-icon',
                 onClick: () => {
-                    new ModalWindowComponent(this.#parent.parentNode, {
+                    new PostMwComponent(this.#parent.parentNode, {
                         type: 'edit-post',
                         data: this.#config,
                         onAjaxEditPost: (config: any) => this.onAjaxEditPost(config),
@@ -339,8 +342,7 @@ export default class PostComponent {
                 icon: 'trash-accent-icon',
                 isCritical: true,
                 onClick: () => {
-                    new ModalWindowComponent(this.#parent.parentNode, {
-                        type: 'delete-post',
+                    new DeleteMwComponent(this.#parent.parentNode, {
                         data: this.#config,
                         ajaxDeletePost: () => this.ajaxDeletePost(this.#config.id),
                     });

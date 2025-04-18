@@ -1,6 +1,6 @@
 import Ajax from '@modules/ajax';
 import PostComponent from '@components/PostComponent/PostComponent';
-import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
+import PostMwComponent from '@components/UI/ModalWindowComponent/PostMwComponent';
 import createElement from '@utils/createElement';
 import router from '@router';
 
@@ -90,7 +90,7 @@ export default class FeedComponent {
             text: 'Создать пост',
         });
         createPostBtn.addEventListener('click', () => {
-            new ModalWindowComponent(this.parent.parentNode, {
+            new PostMwComponent(this.parent.parentNode, {
                 type: 'create-post',
                 renderCreatedPost: (config: any) => this.renderPost(config, "top"),
             });

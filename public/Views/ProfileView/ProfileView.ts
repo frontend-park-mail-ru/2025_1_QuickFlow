@@ -2,7 +2,7 @@ import Ajax from '@modules/ajax';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import FeedComponent from '@components/FeedComponent/FeedComponent';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
-import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
+import ProfileInfoMwComponent from '@components/UI/ModalWindowComponent/ProfileInfoMwComponent';
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import createElement from '@utils/createElement';
 import { getLsItem } from '@utils/localStorage';
@@ -309,8 +309,7 @@ class ProfileView {
         moreInfo.classList.add('profile__detail_more');
 
         moreInfo.addEventListener('click', () => {
-            new ModalWindowComponent(this.#containerObj?.container, {
-                type: 'profile-full-info',
+            new ProfileInfoMwComponent(this.#containerObj?.container, {
                 data,
                 createInfoItem: this.createInfoItem,
                 createCountedItem: this.createCountedItem
