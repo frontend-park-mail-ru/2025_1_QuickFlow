@@ -10,7 +10,7 @@ import FileInputComponent from '@components/UI/FileInputComponent/FileInputCompo
 
 import createElement from '@utils/createElement';
 import TextareaComponent from '@components/UI/TextareaComponent/TextareaComponent';
-import { getLsItem } from '@utils/localStorage';
+import { getLsItem, setLsItem } from '@utils/localStorage';
 import convertDate from '@utils/convertDate';
 import convertToFormData from '@utils/convertToFormData';
 
@@ -210,6 +210,8 @@ class EditProfileView {
 
         if (!body['cover']) body['cover'] = '';
         if (!body['avatar']) body['avatar'] = '';
+
+        setLsItem('profile', body.profile.username);
 
         const fd = convertToFormData(body);
 
