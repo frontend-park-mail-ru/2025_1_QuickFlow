@@ -23,7 +23,8 @@ export default class ChatComponent {
     private observer: IntersectionObserver;
 
     scroll: HTMLElement | null = null;
-    private lastReadTime: number | null = null;
+    private lastReadByMeTime: number | null = null;
+    private lastReadByOtherTime: number | null = null;
 
     constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
@@ -46,7 +47,7 @@ export default class ChatComponent {
         let target: HTMLElement | null = null;
         for (const msg of messages) {
             const msgMoment = new Date(msg.dataset.msgTs);
-            if (msgMoment.getTime() >= this.lastReadTime) {
+            if (msgMoment.getTime() >= this.lastReadByMeTime) {
                 target = msg;
                 break;
             }
@@ -75,8 +76,12 @@ export default class ChatComponent {
     };
 
     render() {
-        if (this.config?.chatData?.last_read) {
-            this.lastReadTime = new Date(this.config?.chatData?.last_read)?.getTime();
+        if (this.config?.chatData?.last_read_by_me) {
+            this.lastReadByMeTime = new Date(this.config?.chatData?.last_read_by_me)?.getTime();
+        }
+
+        if (this.config?.chatData?.last_read_by_other) {
+            this.lastReadByOtherTime = new Date(this.config?.chatData?.last_read_by_other)?.getTime();
         }
         
         this.container = createElement({
@@ -180,7 +185,7 @@ export default class ChatComponent {
 
         if (msgData.sender.username !== getLsItem('username', null)) {
             const msgTime = new Date(msgData.created_at).getTime();
-            if (msgTime > this.lastReadTime) {
+            if (msgTime > this.lastReadByMeTime) {
                 this.observer.observe(msg);
             }
         }
@@ -218,7 +223,7 @@ export default class ChatComponent {
                 parent: msgInfo,
                 classes: [
                     'chat__msg-status',
-                    msgTime <= this.lastReadTime ? 'chat__msg-status_read' : 'chat__msg-status_unread'
+                    msgTime <= this.lastReadByOtherTime ? 'chat__msg-status_read' : 'chat__msg-status_unread'
                 ],
             });
         }

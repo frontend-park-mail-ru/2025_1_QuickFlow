@@ -349,11 +349,23 @@ export default class ChatWindowComponent {
     updateTextareaHeight(
         bottomWrapper = document.getElementById('chat-window__bottom')
     ) {
-        if (!this.#chatElement || !this.#messageInput || !bottomWrapper || !this.#chatElement) return;
+        if (!this.#chatElement || !this.#messageInput || !bottomWrapper) return;
+    
         this.#messageInput.style.height = 'auto';
-        this.#messageInput.style.height = (this.#messageInput.scrollHeight) + 'px';
-        // this.#chatElement.style.paddingBottom = bottomWrapper.scrollHeight + CHAT_DEFAULT_PADDING_BOTTOM + 'px';
-        // (this.#chatElement.parentNode as HTMLElement).scrollTop = (this.#chatElement.parentNode as HTMLElement).scrollHeight;
+        this.#messageInput.style.height = this.#messageInput.scrollHeight + 'px';
+    
+        const parent = this.#chatElement.parentNode as HTMLElement;
+        const scrollThreshold = 50; // если до конца меньше 50px, считаем "внизу"
+    
+        // обновляем паддинг у блока сообщений
+        const newPadding = bottomWrapper.clientHeight - 62 + CHAT_DEFAULT_PADDING_BOTTOM;
+        this.#chatElement.style.paddingBottom = `${newPadding}px`;
+    
+        // проверяем, близок ли скролл к самому низу
+        const scrollBottom = parent.scrollHeight - parent.scrollTop - parent.clientHeight;
+        if (scrollBottom <= scrollThreshold) {
+            parent.scrollTop = parent.scrollHeight;
+        }
     }
 
     renderChat() {
