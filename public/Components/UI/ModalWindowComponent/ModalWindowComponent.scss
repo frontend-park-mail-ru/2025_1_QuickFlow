@@ -57,8 +57,8 @@
 
 .modal__close {
     background: url('./../static/img/close-icon.svg');
-    width: 28px;
-    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
     background-position: center;
     border-radius: 50%;
     border: none;
