@@ -190,17 +190,47 @@ export default class FileInputComponent {
 
 
 
-
+    private async resizeImage(file: File, maxSize: number = this.config.maxSize ?? 1920): Promise<File> {
+        const imageBitmap = await createImageBitmap(file);
+        const { width, height } = imageBitmap;
+    
+        const scale = Math.min(maxSize / width, maxSize / height, 1);
+        const newWidth = Math.round(width * scale);
+        const newHeight = Math.round(height * scale);
+    
+        const canvas = document.createElement('canvas');
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+    
+        const ctx = canvas.getContext('2d');
+        if (!ctx) throw new Error('Cannot get canvas context');
+    
+        ctx.drawImage(imageBitmap, 0, 0, newWidth, newHeight);
+    
+        return new Promise((resolve) => {
+            canvas.toBlob(blob => {
+                if (!blob) throw new Error('Canvas toBlob failed');
+                const compressedFile = new File([blob], file.name, { type: file.type });
+                resolve(compressedFile);
+            }, file.type);
+        });
+    }    
 
     async multipleOnchange(event: any) {
         const newFiles: Array<File> = Array.from(event.target.files);
     
         const maxCount = this.config.maxCount ?? Infinity;
         const remainingSlots = maxCount - this.files.length;
-    
         if (remainingSlots <= 0) return;
     
-        const acceptedFiles = newFiles.slice(0, remainingSlots);
+        let acceptedFiles = newFiles.slice(0, remainingSlots);
+
+        if (this.config.compress) {
+            acceptedFiles = await Promise.all(
+                acceptedFiles.map(file => this.resizeImage(file))
+            );
+        }
+
         this.files.push(...acceptedFiles);
     
         const imageDataUrls = await Promise.all(acceptedFiles.map(this.readImageFile));

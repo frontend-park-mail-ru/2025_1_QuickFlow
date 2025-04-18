@@ -8,6 +8,7 @@ import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindo
 
 const POST_TEXT_MAX_LENGTH = 4000;
 const PICS_MAX_COUNT = 10;
+const PIC_MAX_RESOLUTION = 1680;
 
 
 export default class PostMwComponent extends ModalWindowComponent {
@@ -70,6 +71,8 @@ export default class PostMwComponent extends ModalWindowComponent {
             multiple: true,
             required: true,
             maxCount: PICS_MAX_COUNT,
+            compress: true,
+            maxSize: PIC_MAX_RESOLUTION,
         };
         
         if (hasPics) {
