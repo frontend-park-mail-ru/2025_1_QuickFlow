@@ -14,11 +14,19 @@ export default function createElement({
     const _classes =  Array.from(classes);
     if (_classes.length) element.classList.add(..._classes);
 
-    element.textContent = text;
+    if (text) {
+        element.textContent = decodeHTMLEntities(text);
+    }
 
     if (parent) {
         parent.appendChild(element);
     }
 
     return element;
+}
+
+function decodeHTMLEntities(str: string): string {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = str;
+    return txt.value;
 }
