@@ -52,7 +52,7 @@ export default class ChatComponent {
         let target: HTMLElement | null = null;
         for (const msg of messages) {
             const msgMoment = new Date(msg.dataset.msgTs);
-            if (msgMoment.getTime() > this.lastReadByMeTime) {
+            if (msgMoment.getTime() > this.lastReadByMeTime && msg.dataset.msgFrom !== getLsItem('username', null)) {
                 target = msg;
                 break;
             }
@@ -187,7 +187,8 @@ export default class ChatComponent {
             classes: ['chat__msg', ...classes],
             attrs: {
                 'data-msg-id': msgData.id.toString(),
-                'data-msg-ts': msgData.created_at
+                'data-msg-ts': msgData.created_at,
+                'data-msg-from': msgData.sender.username,
             },
         });
 
