@@ -114,6 +114,7 @@ export default class LoginFormComponent {
 
         this.continueBtn = new ButtonComponent(bottomWrapper, {
             text: this.step === 1 ? this.config.continueBtnText : this.config.signinBtnText,
+            type: "submit",
             variant: 'primary',
             onClick:
                 this.step === 1

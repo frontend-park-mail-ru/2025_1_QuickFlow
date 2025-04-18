@@ -128,6 +128,7 @@ export default class SignupFormComponent {
 
         this.continueBtn = new ButtonComponent(bottomWrapper, {
             text: CONTINUE_BTN_TEXT,
+            type: "submit",
             variant: 'primary',
             onClick:
                 this.step === 1
