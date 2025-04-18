@@ -40,6 +40,11 @@ export default class ChatComponent {
 
     private scrollToTargetMsg() {
         if (!this.scroll) return;
+
+        if (this.lastReadByMeTime > this.lastReadByOtherTime) {
+            this.container.scrollTop = this.container.scrollHeight;
+            return;
+        }
       
         const messages = Array.from(this.scroll.querySelectorAll<HTMLElement>('[data-msg-id]'));
         if (!messages.length) return;
