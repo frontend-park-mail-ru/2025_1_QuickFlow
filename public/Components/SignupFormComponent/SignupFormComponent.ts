@@ -283,6 +283,8 @@ export default class SignupFormComponent {
     }
 
     submitSignup() {
+        this.continueBtn.disable();
+        
         Ajax.post({
             url: '/signup',
             body: {

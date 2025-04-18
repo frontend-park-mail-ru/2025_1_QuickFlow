@@ -8,8 +8,8 @@ import { setLsItem, getLsItem, removeLsItem } from '@utils/localStorage';
 
 
 export default class LoginFormComponent {
-    #parent: HTMLElement;
-    #focusTimer: any = null;
+    private parent: HTMLElement;
+    private focusTimer: any = null;
     config: Record<string, string> = {
         usernameTitle: 'Вход в аккаунт',
         pwdTitle: 'Введите пароль',
@@ -24,9 +24,9 @@ export default class LoginFormComponent {
     usernameInput: InputComponent | null = null;
     continueBtn: ButtonComponent | null = null;
     form: HTMLFormElement | null = null;
-    constructor(parent: HTMLElement) {
-        this.#parent = parent;
 
+    constructor(parent: HTMLElement) {
+        this.parent = parent;
         this.render();
     }
 
@@ -35,7 +35,7 @@ export default class LoginFormComponent {
 
         this.form = createElement({
             tag: 'form',
-            parent: this.#parent,
+            parent: this.parent,
             classes: ['auth-form']
         }) as HTMLFormElement;
 
@@ -151,7 +151,7 @@ export default class LoginFormComponent {
             showRequired: false,
             value: getLsItem("username", ""),
         });
-        if (this.usernameInput.input) focusInput(this.usernameInput.input, this.#focusTimer);
+        if (this.usernameInput.input) focusInput(this.usernameInput.input, this.focusTimer);
 
         // const checkboxWrapper = createElement({
         //     parent: form,
@@ -195,7 +195,7 @@ export default class LoginFormComponent {
             required: true,
             showRequired: false
         });
-        if (this.passwordInput.input) focusInput(this.passwordInput.input, this.#focusTimer);
+        if (this.passwordInput.input) focusInput(this.passwordInput.input, this.focusTimer);
 
         this.renderBottomWrapper(form);
     }
@@ -215,6 +215,8 @@ export default class LoginFormComponent {
     }
 
     submitLogin(password: any) {
+        this.continueBtn.disable();
+
         const body = {
             username: this.usernameInput?.input?.value.trim(),
             password
