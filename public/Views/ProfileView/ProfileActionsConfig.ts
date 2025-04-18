@@ -108,7 +108,13 @@ export const ACTIONS_PROPERTIES = {
                 });
 
                 new DeleteMwComponent(this.containerObj?.container, {
-                    ajaxDeletePost: deleteFriend,
+                    data: {
+                        title: `Удаление из друзей`,
+                        text: `Вы уверены, что хотите удалить @${data.profile.username} из друзей?`,
+                        cancel: 'Отмена',
+                        confirm: 'Удалить',
+                    },
+                    delete: deleteFriend,
                 });
             },
         }],

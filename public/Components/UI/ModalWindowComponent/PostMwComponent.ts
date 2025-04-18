@@ -31,13 +31,6 @@ export default class PostMwComponent extends ModalWindowComponent {
         }
     }
 
-    close() {
-        if (!this.wrapper) return;
-
-        this.wrapper.remove();
-        document.body.style.overflow = 'auto';
-    }
-
     renderPicsUploader() {
         const hasPics = this.config?.data?.pics && this.config?.data?.pics.length > 0;
 

@@ -367,8 +367,13 @@ export default class PostComponent {
                 isCritical: true,
                 onClick: () => {
                     new DeleteMwComponent(this.#parent.parentNode, {
-                        data: this.#config,
-                        ajaxDeletePost: () => this.ajaxDeletePost(this.#config.id),
+                        data: {
+                            title: 'Вы уверены, что хотите удалить этот пост?',
+                            text: 'Пост будет удалён навсегда, это действие нельзя будет отменить',
+                            cancel: 'Отмена',
+                            confirm: 'Удалить',
+                        },
+                        delete: () => this.ajaxDeletePost(this.#config.id),
                     });
                 }
             };

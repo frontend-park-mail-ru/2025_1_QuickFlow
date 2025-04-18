@@ -15,13 +15,6 @@ export default class ProfileInfoMwComponent extends ModalWindowComponent {
         this.renderProfileInfoInner();
     }
 
-    close() {
-        if (!this.wrapper) return;
-
-        this.wrapper.remove();
-        document.body.style.overflow = 'auto';
-    }
-
     renderProfileInfoInner() {
         if (!this.modalWindow || !this.title) return;
 

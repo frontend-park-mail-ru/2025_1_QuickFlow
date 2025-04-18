@@ -14,22 +14,15 @@ export default class DeleteMwComponent extends ModalWindowComponent {
         this.renderDeletePostInner();
     }
 
-    close() {
-        if (!this.wrapper) return;
-
-        this.wrapper.remove();
-        document.body.style.overflow = 'auto';
-    }
-
     renderDeletePostInner() {
         if (!this.modalWindow || !this.title) return;
 
         this.modalWindow.classList.add('modal_post-delete');
-        this.title.textContent = 'Вы уверены, что хотите удалить этот пост?';
+        this.title.textContent = this.config.data.title;
 
         createElement({
             parent: this.modalWindow,
-            text: 'Пост будет удалён навсегда, это действие нельзя будет отменить',
+            text: this.config.data.text,
         });
 
         const buttons = createElement({
@@ -38,18 +31,18 @@ export default class DeleteMwComponent extends ModalWindowComponent {
         });
 
         new ButtonComponent(buttons, {
-            text: 'Отменить',
+            text: this.config.data.cancel,
             variant: 'secondary',
             size: 'small',
             onClick: () => this.close(),
         });
 
         new ButtonComponent(buttons, {
-            text: 'Удалить',
+            text: this.config.data.confirm,
             variant: 'primary',
             size: 'small',
             onClick: () => {
-                this.config.ajaxDeletePost();
+                this.config.delete();
                 this.close();
             },
         });
