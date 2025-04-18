@@ -232,8 +232,8 @@ class EditProfileView {
         });
     }
 
-    postCbOk(newUsername: string) {
-        setLsItem('username', newUsername);
+    postCbOk(newUsername: string | undefined) {
+        if (newUsername) setLsItem('username', newUsername);
         router?.menu?.renderProfileMenuItem();
         router?.header?.renderAvatarMenu();
         this.render(this.#section);
