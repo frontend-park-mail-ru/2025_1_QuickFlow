@@ -147,7 +147,7 @@ export default class LoginFormComponent {
 
         this.usernameInput = new InputComponent(fieldsetUsername, {
             type: 'text',
-            placeholder: 'Имя пользователя',
+            placeholder: 'Никнейм',
             autocomplete: 'username',
             required: true,
             showRequired: false,

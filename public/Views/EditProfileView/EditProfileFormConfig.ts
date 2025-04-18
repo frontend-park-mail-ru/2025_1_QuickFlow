@@ -5,7 +5,7 @@ export const forms = {
             [{
                 key: 'username',
                 config: {
-                    label: 'Имя пользователя',
+                    label: 'Никнейм',
                     validation: 'username',
                     required: true,
                     maxLength: 20,

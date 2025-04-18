@@ -352,9 +352,9 @@ export default class InputComponent {
         if (!username) {
             this.showError('Введите имя пользователя');
         } else if (!hasValidCharacters) {
-            this.showError('Имя пользователя может содержать только латинские буквы, цифры, "." и "_"');
+            this.showError('Никнейм может содержать только латинские буквы, цифры, "." и "_"');
         } else if (chars[0] === '.' || chars[0] === '_') {
-            this.showError('Имя пользователя не должно начинаться с "." или "_"');
+            this.showError('Никнейм не должен начинаться с "." или "_"');
         } else {
             this.hideError();
         }
@@ -378,7 +378,7 @@ export default class InputComponent {
         const hasUppercase = chars.some((char) => /[A-Z]/.test(char));
         const hasLowercase = chars.some((char) => /[a-z]/.test(char));
         const hasNumeric = chars.some((char) => !isNaN(Number(char)) && char !== ' ');
-        const hasSpecial = chars.some((char) => /[_/!@#$%^&*(),.?":{}|<>]/.test(char));
+        // const hasSpecial = chars.some((char) => /[_/!@#$%^&*(),.?":{}|<>]/.test(char));
 
         if (!password) {
             this.showError('Введите пароль');
@@ -390,9 +390,11 @@ export default class InputComponent {
             this.showError('Пароль должен содержать символы в верхнем и нижнем регистрах');
         } else if (!hasNumeric) {
             this.showError('Пароль должен содержать хотя бы одну цифру');
-        } else if (!hasSpecial) {
-            this.showError('Пароль должен содержать хотя бы один спецсимвол');
         } else this.hideError();
+        
+        // else if (!hasSpecial) {
+        //     this.showError('Пароль должен содержать хотя бы один спецсимвол');
+        // }
     }
 
     private validateDate(date: string) {

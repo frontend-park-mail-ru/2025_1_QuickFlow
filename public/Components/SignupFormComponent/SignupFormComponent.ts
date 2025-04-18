@@ -163,8 +163,8 @@ export default class SignupFormComponent {
         this.usernameInput = new InputComponent(fieldsetPersonalInfo, {
             type: 'text',
             name: 'username',
-            label: 'Имя пользователя',
-            placeholder: 'Имя пользователя',
+            label: 'Никнейм',
+            placeholder: 'Никнейм',
             autocomplete: 'username',
             maxLength: 20,
             validation: 'username',
