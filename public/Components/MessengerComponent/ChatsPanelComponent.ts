@@ -87,8 +87,6 @@ export default class ChatsPanelComponent {
             }
             const activeChatId = getLsItem('active-chat', null);
 
-            console.log(this.config.chat_id);
-            console.log(getLsItem('active-chat', null));
             for (const chatData of chatsData) {
                 const chatItem = this.renderChatItem(chatData);
                 this.chatItems.push(chatItem);

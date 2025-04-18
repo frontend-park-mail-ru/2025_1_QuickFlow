@@ -28,8 +28,6 @@ const ids = {};
 
 
 wss.on('connection', (ws) => {
-    console.log('[WS] Client connected');
-
     ws.on('message', (data) => {
         try {
             console.log(data);

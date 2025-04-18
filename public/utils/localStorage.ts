@@ -2,7 +2,7 @@ export function setLsItem(key: string, value: string) {
     try {
         localStorage.setItem(key, value);
     } catch {
-        console.log('setLsItem exception');
+        console.error('setLsItem exception');
     }
 }
 

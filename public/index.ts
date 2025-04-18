@@ -75,6 +75,6 @@ const config = {
 router.menu = new MenuComponent(container, config);
 router.header = new HeaderComponent(container);
 
-if (ws) console.log('OK: WS INITIALIZED');
+if (ws) null; // for linter
 
 router.start();

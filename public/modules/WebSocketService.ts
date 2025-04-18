@@ -21,9 +21,7 @@ class WebSocketService {
     #connect() {
         this.socket = new WebSocket(this.baseUrl);
 
-        this.socket.addEventListener('open', () => {
-            console.log('[WebSocket] Connected');
-        });
+        this.socket.addEventListener('open', () => {});
 
         this.socket.addEventListener('message', (event: any) => {
             try {

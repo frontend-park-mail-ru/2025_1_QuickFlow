@@ -85,8 +85,6 @@ export default class ChatWindowComponent {
 
         this.renderEmptyState();
 
-        console.log(this.#config?.chat_id, this.#config?.receiver_username);
-
         if (!this.#config?.chat_id && this.#config?.receiver_username) {
             removeLsItem('active-chat');
             Ajax.get({
@@ -103,8 +101,6 @@ export default class ChatWindowComponent {
                                 receiver_id: chatUser.id,
                                 username: this.#config?.receiver_username,
                             };
-
-                            console.log(this.#chatData);
 
                             this.renderHeader();
                             this.renderChat();
