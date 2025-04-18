@@ -235,7 +235,6 @@ export default class FileInputComponent {
         this.files.push(...acceptedFiles);
     
         const imageDataUrls = await Promise.all(acceptedFiles.map(this.readImageFile));
-    
         for (let i = 0; i < imageDataUrls.length; i++) {
             const imageDataUrl = imageDataUrls[i];
             const file = acceptedFiles[i];

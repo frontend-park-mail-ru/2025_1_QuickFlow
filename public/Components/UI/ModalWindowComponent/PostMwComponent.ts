@@ -256,6 +256,9 @@ export default class PostMwComponent extends ModalWindowComponent {
             }
         }
 
+        console.log(this.fileInput.input.files);
+        console.log(formData.getAll('pics'));
+
         if (this.config.type === 'create-post') {
             Ajax.post({
                 url: '/post',
