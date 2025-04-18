@@ -16,7 +16,6 @@ export default class FileInputComponent {
     constructor(parent: HTMLElement, config: Record<string, any>) {
         this.config = config;
         this.parent = parent;
-
         this.render();
     }
 
@@ -95,31 +94,26 @@ export default class FileInputComponent {
         }
     }
     
-    async multipleOnchange(event: any) {
-        const newFiles: Array<File> = Array.from(event.target.files);
-        this.files.push(...newFiles);
+    // async multipleOnchange(event: any) {
+    //     const newFiles: Array<File> = Array.from(event.target.files);
+    //     this.files.push(...newFiles);
 
-        const imageDataUrls = await Promise.all(newFiles.map(this.readImageFile));
-        // for (const imageDataUrl of imageDataUrls) {
-        //     const picWrapper = this.config.preview.cloneNode(true);
-        //     picWrapper.querySelector('img').src = imageDataUrl;
-        //     this.parent.insertBefore(picWrapper, this.config.imitator);
-        // }
-        for (let i = 0; i < imageDataUrls.length; i++) {
-            const imageDataUrl = imageDataUrls[i];
-            const file = newFiles[i];
+    //     const imageDataUrls = await Promise.all(newFiles.map(this.readImageFile));
+    //     for (let i = 0; i < imageDataUrls.length; i++) {
+    //         const imageDataUrl = imageDataUrls[i];
+    //         const file = newFiles[i];
         
-            const picWrapper = this.config.preview.cloneNode(true);
-            picWrapper.querySelector('img').src = imageDataUrl;
+    //         const picWrapper = this.config.preview.cloneNode(true);
+    //         picWrapper.querySelector('img').src = imageDataUrl;
         
-            const removeBtn = picWrapper.querySelector('.js-post-pic-delete');
-            removeBtn.addEventListener('click', () => this.removeFile(file, picWrapper));
+    //         const removeBtn = picWrapper.querySelector('.js-post-pic-delete');
+    //         removeBtn.addEventListener('click', () => this.removeFile(file, picWrapper));
         
-            this.parent.insertBefore(picWrapper, this.config.imitator);
-        }
+    //         this.parent.insertBefore(picWrapper, this.config.imitator);
+    //     }
         
-        this.updateInputFiles();
-    }
+    //     this.updateInputFiles();
+    // }
 
     async singleOnchange(event: any) {
         const imageDataUrl = await this.readImageFile(event.target.files[0]);
@@ -160,12 +154,6 @@ export default class FileInputComponent {
         this.updateInputFiles();
 
         if (this.config.preview) {
-            // for (const src of srcList) {
-            //     const picWrapper = this.config.preview.cloneNode(true);
-            //     picWrapper.querySelector('img').src = src;
-            //     this.parent.insertBefore(picWrapper, this.config.imitator);
-            // }
-
             for (let i = 0; i < preloadedFiles.length; i++) {
                 const imageDataUrl = srcList[i];
                 const file = preloadedFiles[i];
@@ -188,18 +176,77 @@ export default class FileInputComponent {
         return new File([blob], filename, { type: blob.type });
     }
 
+    // async removeFile(fileToRemove: File, wrapper: HTMLElement) {
+    //     this.files = this.files.filter(file => file !== fileToRemove);
+    //     this.updateInputFiles();
+    //     wrapper.remove();
+
+    //     if (!this.input) return;
+
+    //     const event = new Event('change', { bubbles: true });
+    //     this.input.dispatchEvent(event);
+    // }
+
+
+
+
+
+
+    async multipleOnchange(event: any) {
+        const newFiles: Array<File> = Array.from(event.target.files);
+    
+        const maxCount = this.config.maxCount ?? Infinity;
+        const remainingSlots = maxCount - this.files.length;
+    
+        if (remainingSlots <= 0) return;
+    
+        const acceptedFiles = newFiles.slice(0, remainingSlots);
+        this.files.push(...acceptedFiles);
+    
+        const imageDataUrls = await Promise.all(acceptedFiles.map(this.readImageFile));
+    
+        for (let i = 0; i < imageDataUrls.length; i++) {
+            const imageDataUrl = imageDataUrls[i];
+            const file = acceptedFiles[i];
+    
+            const picWrapper = this.config.preview.cloneNode(true);
+            picWrapper.querySelector('img').src = imageDataUrl;
+    
+            const removeBtn = picWrapper.querySelector('.js-post-pic-delete');
+            removeBtn.addEventListener('click', () => this.removeFile(file, picWrapper));
+    
+            this.parent.insertBefore(picWrapper, this.config.imitator);
+        }
+    
+        this.updateInputFiles();
+    
+        if (this.input) {
+            this.input.disabled = this.files.length >= maxCount;
+            this.input.value = '';
+        }
+    }
+
     async removeFile(fileToRemove: File, wrapper: HTMLElement) {
         this.files = this.files.filter(file => file !== fileToRemove);
         this.updateInputFiles();
         wrapper.remove();
-
+    
         if (!this.input) return;
+    
+        const maxCount = this.config.maxCount ?? Infinity;
+        this.input.disabled = this.files.length >= maxCount;
+    
+        this.input.value = '';
 
         const event = new Event('change', { bubbles: true });
         this.input.dispatchEvent(event);
     }
     
 
+
+
+
+    
     addListener(listener: any) {
         if (!this.input) return;
         this.input.addEventListener('change', listener);

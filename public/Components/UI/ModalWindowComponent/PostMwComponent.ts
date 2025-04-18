@@ -7,6 +7,7 @@ import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindo
 
 
 const POST_TEXT_MAX_LENGTH = 4000;
+const PICS_MAX_COUNT = 10;
 
 
 export default class PostMwComponent extends ModalWindowComponent {
@@ -68,6 +69,7 @@ export default class PostMwComponent extends ModalWindowComponent {
             onUpload: () => this.handlePicUpload(scrollWrapper),
             multiple: true,
             required: true,
+            maxCount: PICS_MAX_COUNT,
         };
         
         if (hasPics) {
@@ -75,6 +77,14 @@ export default class PostMwComponent extends ModalWindowComponent {
         }
 
         this.fileInput = new FileInputComponent(scrollWrapper, fileInputConfig);
+        this.fileInput.addListener(() => {
+            const filesCount = this.fileInput?.getFiles().length || 0;
+            addPicWrapper.style.display = filesCount >= PICS_MAX_COUNT ? 'none' : 'flex';
+        });
+
+        if (this.fileInput.getFiles().length >= PICS_MAX_COUNT) {
+            addPicWrapper.style.display = 'none';
+        }
 
         this.renderPaginator(picsWrapper, scrollWrapper);
     }
