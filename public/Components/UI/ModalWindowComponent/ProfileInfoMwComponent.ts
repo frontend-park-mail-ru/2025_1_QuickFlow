@@ -11,37 +11,7 @@ export default class ProfileInfoMwComponent extends ModalWindowComponent {
     }
 
     render() {
-        document.body.style.overflow = 'hidden';
-
-        this.wrapper = createElement({
-            parent: this.parent,
-            classes: ['modal__bg'],
-        });
-
-        this.modalWindow = createElement({
-            parent: this.wrapper,
-            classes: ['modal'],
-        });
-
-        const modalTop = createElement({
-            parent: this.modalWindow,
-            classes: ['modal__top'],
-        });
-
-        this.title = createElement({
-            parent: modalTop,
-            classes: ['modal__title']
-        });
-
-        createElement({
-            tag: 'button',
-            parent: modalTop,
-            classes: ['modal__close']
-        })
-        .addEventListener('click', () => {
-            this.close();
-        });
-
+        super.render();
         this.renderProfileInfoInner();
     }
 
