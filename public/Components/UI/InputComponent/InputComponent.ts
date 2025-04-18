@@ -280,6 +280,8 @@ export default class InputComponent {
     }
 
     private formatPhoneInput(phone: string): string {
+        if (!phone) return '';
+        
         const raw = phone.replace(/\D/g, '');
 
         // Ограничим 11 цифрами
