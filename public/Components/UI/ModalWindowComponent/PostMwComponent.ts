@@ -81,7 +81,7 @@ export default class PostMwComponent extends ModalWindowComponent {
             const filesCount = this.fileInput?.getFiles().length || 0;
             addPicWrapper.style.display = filesCount >= PICS_MAX_COUNT ? 'none' : 'flex';
         });
-        if (this.config.data.pics.length >= PICS_MAX_COUNT) {
+        if (this.config?.data?.pics?.length >= PICS_MAX_COUNT) {
             addPicWrapper.style.display = 'none';
         }
 
