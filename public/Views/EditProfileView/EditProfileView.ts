@@ -211,6 +211,9 @@ class EditProfileView {
         if (!body['cover']) body['cover'] = '';
         if (!body['avatar']) body['avatar'] = '';
 
+        console.log(body);
+        console.log(body.profile);
+        console.log(body.profile.username);
         setLsItem('profile', body.profile.username);
 
         const fd = convertToFormData(body);
