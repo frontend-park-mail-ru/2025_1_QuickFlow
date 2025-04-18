@@ -9,7 +9,6 @@ import { getLsItem, removeLsItem, setLsItem } from '@utils/localStorage';
 import router from '@router';
 
 
-const LOGO_SRC = '/static/img/logo-icon.svg';
 const DEFAULT_INPUT_VALUE = '';
 const CREATION_ERROR_MESSAGE = 'Не удалось создать аккаунт';
 const USER_INFO_TITLE = 'Информация о себе';
@@ -22,9 +21,9 @@ const FEMALE_VALUE = 2;
 
 
 export default class SignupFormComponent {
-    #parent;
-    #step: number = 1;
-    #focusTimer: any = null;
+    private parent: HTMLElement;
+    private step: number = 1;
+    private focusTimer: any = null;
     private form: HTMLFormElement;
 
     usernameInput: InputComponent | null = null;
@@ -37,8 +36,7 @@ export default class SignupFormComponent {
     continueBtn: ButtonComponent | null = null;
 
     constructor(parent: HTMLElement) {
-        this.#parent = parent;
-
+        this.parent = parent;
         this.render();
     }
 
@@ -47,15 +45,30 @@ export default class SignupFormComponent {
 
         this.form = createElement({
             tag: 'form',
-            parent: this.#parent,
+            parent: this.parent,
             classes: ['auth-form']
         }) as HTMLFormElement;
 
-        if (this.#step === 1) {
-            this.renderPersonalInfoStep(this.form);
-        } else if (this.#step === 2) {
-            this.renderCreatePasswordStep(this.form);
+        switch (this.step) {
+            case 1:
+                this.renderPersonalInfoStep(this.form);
+                break;
+            case 2:
+                this.renderCreatePasswordStep(this.form);
+                break;
         }
+
+        this.handleFormSubmission(this.form);
+    }
+
+    handleFormSubmission(form: HTMLFormElement) {
+        form.addEventListener('submit', (event: any) => {
+            event.preventDefault();
+            if (this.continueBtn.isDisabled) return;
+            if (this.step === 1) return this.continueBtnOnClick();
+            if (this.passwordInput?.input?.classList.contains('invalid')) return;
+            this.signupBtnOnClick(event);
+        });
     }
 
     renderTopWrapper(form: HTMLFormElement) {
@@ -70,7 +83,7 @@ export default class SignupFormComponent {
             classes: ['auth-form__back-btn']
         })
         .addEventListener('click', () => {
-            if (this.#step === 1) {
+            if (this.step === 1) {
                 removeLsItem(this.usernameInput?.name);
                 removeLsItem(this.firstnameInput?.name);
                 removeLsItem(this.lastnameInput?.name);
@@ -79,11 +92,11 @@ export default class SignupFormComponent {
                 router.go({ path: '/login' });
                 return;
             }
-            this.#step = 1;
+            this.step = 1;
             this.render();
         });
 
-        // if (this.#step === 2) {
+        // if (this.step === 2) {
         //     createElement({
         //         parent: topWrapper,
         //         classes: ['auth-form__logo'],
@@ -94,10 +107,10 @@ export default class SignupFormComponent {
         createElement({
             tag: 'h1',
             parent: topWrapper,
-            text: this.#step === 1 ? USER_INFO_TITLE : PWD_TITLE
+            text: this.step === 1 ? USER_INFO_TITLE : PWD_TITLE
         })
 
-        if (this.#step === 2) {
+        if (this.step === 2) {
             createElement({
                 tag: 'p',
                 parent: topWrapper,
@@ -117,12 +130,12 @@ export default class SignupFormComponent {
             text: CONTINUE_BTN_TEXT,
             variant: 'primary',
             onClick:
-                this.#step === 1
+                this.step === 1
                     ? this.continueBtnOnClick.bind(this)
                     : this.signupBtnOnClick.bind(this),
             disabled: true,
             stateUpdaters: 
-                this.#step === 1
+                this.step === 1
                 ? [
                     this.usernameInput,
                     this.firstnameInput,
@@ -158,7 +171,7 @@ export default class SignupFormComponent {
             showRequired: false,
             value: getLsItem("username", DEFAULT_INPUT_VALUE),
         });
-        if (this.usernameInput.input) focusInput(this.usernameInput.input, this.#focusTimer);
+        if (this.usernameInput.input) focusInput(this.usernameInput.input, this.focusTimer);
 
         const nameInputWrapper = createElement({
             parent: fieldsetPersonalInfo,
@@ -235,7 +248,7 @@ export default class SignupFormComponent {
             required: true,
             showRequired: false
         });
-        if (this.passwordInput.input) focusInput(this.passwordInput.input, this.#focusTimer);
+        if (this.passwordInput.input) focusInput(this.passwordInput.input, this.focusTimer);
 
         this.passwordConfirmationInput = new InputComponent(form, {
             type: 'password',
@@ -273,7 +286,7 @@ export default class SignupFormComponent {
         setLsItem(this.lastnameInput?.name, this.lastnameInput?.value ?? '');
         setLsItem(this.sexInput?.name, this.sexInput?.value ?? '');
         setLsItem(this.birthDateInput?.name, this.birthDateInput?.value ?? '');
-        this.#step = 2;
+        this.step = 2;
         this.render();
     }
 
