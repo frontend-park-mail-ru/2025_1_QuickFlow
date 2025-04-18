@@ -41,10 +41,10 @@ export default class ChatComponent {
     private scrollToTargetMsg() {
         if (!this.scroll) return;
 
-        if (this.lastReadByMeTime > this.lastReadByOtherTime) {
-            this.container.scrollTop = this.container.scrollHeight;
-            return;
-        }
+        // if (this.lastReadByMeTime > this.lastReadByOtherTime) {
+        //     this.container.scrollTop = this.container.scrollHeight;
+        //     return;
+        // }
       
         const messages = Array.from(this.scroll.querySelectorAll<HTMLElement>('[data-msg-id]'));
         if (!messages.length) return;
@@ -57,7 +57,10 @@ export default class ChatComponent {
                 break;
             }
         }
-        if (!target) return;
+        if (!target) {
+            this.container.scrollTop = this.container.scrollHeight;
+            return;
+        }
 
         const headerHeight = this.parent.querySelector('.chat-window__header').clientHeight;
         const value = target.offsetTop - headerHeight - this.container.clientHeight + target.clientHeight;
