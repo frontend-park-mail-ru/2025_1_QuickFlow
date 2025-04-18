@@ -18,14 +18,30 @@ export default class MessageComponent {
     private parent;
     private config;
     private container: HTMLElement | null = null;
+    private observer: IntersectionObserver;
     scroll: HTMLElement | null = null;
 
     constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
         this.config = config;
 
+        this.observer = new IntersectionObserver(this.handleIntersect, {
+            root: null, // или this.scroll, если нужен только внутри контейнера
+            threshold: 0.5, // 50% элемента в зоне видимости
+        });
+
         this.render();
     }
+
+    private handleIntersect = (entries: IntersectionObserverEntry[]) => {
+        for (const entry of entries) {
+            if (entry.isIntersecting) {
+                console.log('ап');
+                // можно также: console.log('ап:', entry.target.textContent);
+                this.observer.unobserve(entry.target); // опционально, если нужно 1 раз
+            }
+        }
+    };
 
     render() {
         this.container = createElement({
@@ -118,6 +134,8 @@ export default class MessageComponent {
             parent: this.scroll,
             classes: ['chat__msg', ...classes],
         });
+
+        this.observer.observe(msg); // отслеживаем появление
 
         new AvatarComponent(msg, {
             size: MSG_AVATAR_SIZE,

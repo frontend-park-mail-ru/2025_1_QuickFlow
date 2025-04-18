@@ -21,6 +21,10 @@ const DISPLAYED_ACTIONS = ['like', 'comment', 'repost'];
 const RELATION_STRANGER = "stranger";
 const RELATION_FOLLOWED_BY = "followed_by";
 const DISPLAYED_RELATIONS = [RELATION_STRANGER, RELATION_FOLLOWED_BY];
+const ADMINS_USERNAMES = [
+    "rvasutenko",
+    "Nikita"
+];
 
 
 export default class PostComponent {
@@ -43,8 +47,6 @@ export default class PostComponent {
             this.wrapper.remove();
         }
 
-        // if (this.wrapper) this.wrapper.remove();
-
         this.wrapper = createElement({
             classes: ['post'],
         });
@@ -64,13 +66,6 @@ export default class PostComponent {
                 this.#parent.appendChild(this.wrapper);
                 break;
         }
-        // if (this.#config?.position === "top") {
-        //     this.#parent.prepend(this.wrapper);
-        // } else if (this.#config?.position === "same") {
-        //     this.#parent.appendChild(this.wrapper);
-        // } else {
-        //     this.#parent.appendChild(this.wrapper);
-        // }
 
         this.renderTop();
         this.renderPics();
@@ -345,7 +340,10 @@ export default class PostComponent {
             },
         };
 
-        if (this.#config.author.username === getLsItem('username', '')) {
+        if (
+            this.#config.author.username === getLsItem('username', '') ||
+            ADMINS_USERNAMES.includes(this.#config.author.username)
+        ) {
             data.edit = {
                 href: '/edit',
                 text: 'Редактировать',

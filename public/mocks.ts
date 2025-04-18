@@ -243,7 +243,8 @@ export const chats = {
                 "attachment_urls": null,
                 "sender_id": "0e146b4b-b28e-44b8-8c59-f0c182459756",
                 "chat_id": "49dc794b-d8cf-404c-be69-4886bd78ada4"
-            }
+            },
+            last_read: "2025-04-10T19:11:36.19391+03:00",
         },
         {
             id: "13dc794b-d8cf-404c-be69-4886bd78ada4",
@@ -286,56 +287,443 @@ export const chats = {
 
 export const messages = {
     rvasutenko: {
-        "49dc794b-d8cf-404c-be69-4886bd78ada4": [
-            {
-                "id": "2ecd2a66-d5ad-4c09-8b43-0918ae59e38b",
-                "text": "Привет",
-                "created_at": "2025-04-10T19:00:36.19391+03:00",
-                "updated_at": "2025-04-10T19:00:36.19391+03:00",
-                "is_read": true,
-                "attachment_urls": null,
-                "sender": {
-                    "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
-                    "username": "Nikita2",
-                    "firstname": "Никита",
-                    "lastname": "Могилин",
-                    "avatar_url": "/avatars/avatar4.jpg",
+        "49dc794b-d8cf-404c-be69-4886bd78ada4": {
+            messages: [
+                {
+                    "id": "2ecd2a66-d5ad-4c09-8b43-0918ae59e38b",
+                    "text": "Привет",
+                    "created_at": "2025-04-10T19:00:36.19391+03:00",
+                    "updated_at": "2025-04-10T19:00:36.19391+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
                 },
-                "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
-            },
-            {
-                "id": "9a00f4b4-7914-4a3e-91be-c5a7b51bc607",
-                "text": "Как дела?",
-                "created_at": "2025-04-10T19:08:42.323841+03:00",
-                "updated_at": "2025-04-10T19:08:42.323841+03:00",
-                "is_read": true,
-                "attachment_urls": null,
-                "sender": {
-                    "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
-                    "username": "Nikita2",
-                    "firstname": "Никита",
-                    "lastname": "Могилин",
-                    "avatar_url": "/avatars/avatar4.jpg",
+                {
+                    "id": "9a00f4b4-7914-4a3e-91be-c5a7b51bc607",
+                    "text": "Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?",
+                    "created_at": "2025-04-10T19:08:42.323841+03:00",
+                    "updated_at": "2025-04-10T19:08:42.323841+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
                 },
-                "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
-            },
-            {
-                "id": "dcbe8d04-95c3-48c1-ac1f-2d4ab726733d",
-                "text": "Что у тебя нового за неделю произошло?",
-                "created_at": "2025-04-10T19:08:27.926906+03:00",
-                "updated_at": "2025-04-10T19:08:27.926906+03:00",
-                "is_read": true,
-                "attachment_urls": null,
-                "sender": {
-                    "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
-                    "username": "Nikita2",
-                    "firstname": "Никита",
-                    "lastname": "Могилин",
-                    "avatar_url": "/avatars/avatar4.jpg",
+                {
+                    "id": "dcbe8d04-95c3-48c1-ac1f-2d4ab726733d",
+                    "text": "Что у тебя нового за неделю произошло?",
+                    "created_at": "2025-04-10T19:08:43.926906+03:00",
+                    "updated_at": "2025-04-10T19:08:43.926906+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
                 },
-                "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
-            }
-        ]
+                {
+                    "id": "2ecd2a66-d5ad-4c09-8b43-0918ae59e38b",
+                    "text": "Привет",
+                    "created_at": "2025-04-10T19:00:44.19391+03:00",
+                    "updated_at": "2025-04-10T19:00:44.19391+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "9a00f4b4-7914-4a3e-91be-c5a7b51bc607",
+                    "text": "Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?",
+                    "created_at": "2025-04-10T19:08:45.323841+03:00",
+                    "updated_at": "2025-04-10T19:08:45.323841+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "dcbe8d04-95c3-48c1-ac1f-2d4ab726733d",
+                    "text": "Что у тебя нового за неделю произошло?",
+                    "created_at": "2025-04-10T19:08:46.926906+03:00",
+                    "updated_at": "2025-04-10T19:08:46.926906+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "2ecd2a66-d5ad-4c09-8b43-0918ae59e38b",
+                    "text": "Привет",
+                    "created_at": "2025-04-10T19:00:47.19391+03:00",
+                    "updated_at": "2025-04-10T19:00:47.19391+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "9a00f4b4-7914-4a3e-91be-c5a7b51bc607",
+                    "text": "Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?",
+                    "created_at": "2025-04-10T19:08:48.323841+03:00",
+                    "updated_at": "2025-04-10T19:08:48.323841+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "dcbe8d04-95c3-48c1-ac1f-2d4ab726733d",
+                    "text": "Что у тебя нового за неделю произошло?",
+                    "created_at": "2025-04-10T19:08:49.926906+03:00",
+                    "updated_at": "2025-04-10T19:08:49.926906+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "2ecd2a66-d5ad-4c09-8b43-0918ae59e38b",
+                    "text": "Привет",
+                    "created_at": "2025-04-10T19:00:50.19391+03:00",
+                    "updated_at": "2025-04-10T19:00:50.19391+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "9a00f4b4-7914-4a3e-91be-c5a7b51bc607",
+                    "text": "Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?",
+                    "created_at": "2025-04-10T19:08:51.323841+03:00",
+                    "updated_at": "2025-04-10T19:08:51.323841+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "dcbe8d04-95c3-48c1-ac1f-2d4ab726733d",
+                    "text": "Что у тебя нового за неделю произошло?",
+                    "created_at": "2025-04-10T19:08:52.926906+03:00",
+                    "updated_at": "2025-04-10T19:08:52.926906+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "2ecd2a66-d5ad-4c09-8b43-0918ae59e38b",
+                    "text": "Привет",
+                    "created_at": "2025-04-10T19:00:53.19391+03:00",
+                    "updated_at": "2025-04-10T19:00:53.19391+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "9a00f4b4-7914-4a3e-91be-c5a7b51bc607",
+                    "text": "Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?",
+                    "created_at": "2025-04-10T19:08:54.323841+03:00",
+                    "updated_at": "2025-04-10T19:08:54.323841+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "dcbe8d04-95c3-48c1-ac1f-2d4ab726733d",
+                    "text": "Что у тебя нового за неделю произошло?",
+                    "created_at": "2025-04-10T19:08:55.926906+03:00",
+                    "updated_at": "2025-04-10T19:08:55.926906+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "2ecd2a66-d5ad-4c09-8b43-0918ae59e38b",
+                    "text": "Привет",
+                    "created_at": "2025-04-10T19:00:56.19391+03:00",
+                    "updated_at": "2025-04-10T19:00:56.19391+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "9a00f4b4-7914-4a3e-91be-c5a7b51bc607",
+                    "text": "Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?",
+                    "created_at": "2025-04-10T19:08:57.323841+03:00",
+                    "updated_at": "2025-04-10T19:08:57.323841+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "dcbe8d04-95c3-48c1-ac1f-2d4ab726733d",
+                    "text": "Что у тебя нового за неделю произошло?",
+                    "created_at": "2025-04-10T19:08:58.926906+03:00",
+                    "updated_at": "2025-04-10T19:08:58.926906+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "2ecd2a66-d5ad-4c09-8b43-0918ae59e38b",
+                    "text": "Привет",
+                    "created_at": "2025-04-10T19:00:59.19391+03:00",
+                    "updated_at": "2025-04-10T19:00:59.19391+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "9a00f4b4-7914-4a3e-91be-c5a7b51bc607",
+                    "text": "Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?",
+                    "created_at": "2025-04-10T19:09:42.323841+03:00",
+                    "updated_at": "2025-04-10T19:09:42.323841+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "dcbe8d04-95c3-48c1-ac1f-2d4ab726733d",
+                    "text": "Что у тебя нового за неделю произошло?",
+                    "created_at": "2025-04-10T19:10:27.926906+03:00",
+                    "updated_at": "2025-04-10T19:10:27.926906+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "2ecd2a66-d5ad-4c09-8b43-0918ae59e38b",
+                    "text": "Привет",
+                    "created_at": "2025-04-10T19:11:36.19391+03:00",
+                    "updated_at": "2025-04-10T19:11:36.19391+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "9a00f4b4-7914-4a3e-91be-c5a7b51bc607",
+                    "text": "Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?",
+                    "created_at": "2025-04-10T19:12:42.323841+03:00",
+                    "updated_at": "2025-04-10T19:12:42.323841+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "dcbe8d04-95c3-48c1-ac1f-2d4ab726733d",
+                    "text": "Что у тебя нового за неделю произошло?",
+                    "created_at": "2025-04-10T19:13:27.926906+03:00",
+                    "updated_at": "2025-04-10T19:13:27.926906+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "2ecd2a66-d5ad-4c09-8b43-0918ae59e38b",
+                    "text": "Привет",
+                    "created_at": "2025-04-10T19:14:36.19391+03:00",
+                    "updated_at": "2025-04-10T19:14:36.19391+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "9a00f4b4-7914-4a3e-91be-c5a7b51bc607",
+                    "text": "Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?Как дела?",
+                    "created_at": "2025-04-10T19:15:42.323841+03:00",
+                    "updated_at": "2025-04-10T19:15:42.323841+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "dcbe8d04-95c3-48c1-ac1f-2d4ab726733d",
+                    "text": "Что у тебя нового за неделю произошло?",
+                    "created_at": "2025-04-10T19:16:27.926906+03:00",
+                    "updated_at": "2025-04-10T19:16:27.926906+03:00",
+                    "is_read": true,
+                    "attachment_urls": null,
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+            ],
+            last_read_ts: "2025-04-10T19:11:36.19391+03:00",
+        }
     }
 };
 
