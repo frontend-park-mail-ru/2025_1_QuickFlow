@@ -49,6 +49,8 @@ export default class LoginFormComponent {
     }
 
     handleFormSubmission(form: HTMLFormElement) {
+        if (this.continueBtn.isDisabled) return;
+
         form.addEventListener('submit', (event: any) => {
             event.preventDefault();
             if (this.step === 1) {

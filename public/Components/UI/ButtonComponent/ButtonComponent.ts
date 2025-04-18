@@ -67,6 +67,10 @@ export default class ButtonComponent {
         this.buttonElement.disabled = true;
     }
 
+    get isDisabled() {
+        return this.buttonElement.disabled;
+    }
+
     updateBtnState() {
         if (!this.buttonElement) return;
 
