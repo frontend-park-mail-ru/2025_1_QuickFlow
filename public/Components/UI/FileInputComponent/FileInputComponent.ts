@@ -222,7 +222,7 @@ export default class FileInputComponent {
     
         if (this.input) {
             this.input.disabled = this.files.length >= maxCount;
-            this.input.value = '';
+            // this.input.value = '';
         }
     }
 
@@ -236,7 +236,7 @@ export default class FileInputComponent {
         const maxCount = this.config.maxCount ?? Infinity;
         this.input.disabled = this.files.length >= maxCount;
     
-        this.input.value = '';
+        // this.input.value = '';
 
         const event = new Event('change', { bubbles: true });
         this.input.dispatchEvent(event);
