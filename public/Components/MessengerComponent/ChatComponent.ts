@@ -4,6 +4,7 @@ import createElement from '@utils/createElement';
 import getTime from '@utils/getTime';
 import router from '@router';
 import ws from '@modules/WebSocketService';
+import { getLsItem } from '@utils/localStorage';
 
 
 const MSG_AVATAR_SIZE = 'xs';
@@ -64,9 +65,9 @@ export default class ChatComponent {
                     chat_id: this.config?.chatData?.id,
                     message_id: (entry.target as HTMLElement).dataset.msgId,
                 });
-                const status = entry.target.querySelector('.chat__msg-status');
-                status.classList.remove('chat__msg-status_unread');
-                status.classList.add('chat__msg-status_read');
+                // const status = entry.target.querySelector('.chat__msg-status');
+                // status.classList.remove('chat__msg-status_unread');
+                // status.classList.add('chat__msg-status_read');
                 this.observer.unobserve(entry.target);
             }
         }
@@ -118,6 +119,13 @@ export default class ChatComponent {
         }
 
         this.scrollToTargetMsg();
+
+        ws.subscribe('message_read', (payload: any) => {
+            const readMessage = this.scroll.querySelector(`[data-msg-id="${payload.message_id}"]`) as HTMLElement;
+            const status = readMessage.querySelector('.chat__msg-status');
+            status.classList.remove('chat__msg-status_unread');
+            status.classList.add('chat__msg-status_read');
+        });
     }
 
     renderEmptyState() {
@@ -168,9 +176,11 @@ export default class ChatComponent {
             },
         });
 
-        const msgTime = new Date(msgData.created_at).getTime();
-        if (msgTime >= this.lastReadTime) {
-            this.observer.observe(msg);
+        if (msgData.sender.id !== getLsItem('username', null)) {
+            const msgTime = new Date(msgData.created_at).getTime();
+            if (msgTime >= this.lastReadTime) {
+                this.observer.observe(msg);
+            }
         }
 
         new AvatarComponent(msg, {
@@ -200,17 +210,15 @@ export default class ChatComponent {
             classes: ['chat__msg-info'],
         });
 
-        createElement({
-            parent: msgInfo,
-            classes: [
-                'chat__msg-status',
-                msgData.is_read ? 'chat__msg-status_read' : null
-            ],
-        });
-
-        // ws.subscribe('message_read', (payload: any) => {
-            
-        // });
+        if (msgData.sender.id === getLsItem('username', null)) {
+            createElement({
+                parent: msgInfo,
+                classes: [
+                    'chat__msg-status',
+                    msgData.is_read ? 'chat__msg-status_read' : null
+                ],
+            });
+        }
 
         createElement({
             parent: msgInfo,
