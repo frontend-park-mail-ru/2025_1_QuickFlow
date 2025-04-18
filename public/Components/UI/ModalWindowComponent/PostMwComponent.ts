@@ -265,6 +265,7 @@ export default class PostMwComponent extends ModalWindowComponent {
                             this.close();
                             break;
                         case 413:
+                            console.log("File is too large");
                             alert('File is too large');
                             break;
                     }
