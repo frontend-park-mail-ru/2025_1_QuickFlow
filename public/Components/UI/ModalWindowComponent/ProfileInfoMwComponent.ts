@@ -1,6 +1,6 @@
 import createElement from '@utils/createElement';
 import convertDate from '@utils/convertDate';
-import { profileDataLayout } from '@views/ProfileView/ProfileView';
+import { INFO_ITEMS_LAYOUT } from '@views/ProfileView/ProfileActionsConfig';
 import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
 
 
@@ -40,18 +40,18 @@ export default class ProfileInfoMwComponent extends ModalWindowComponent {
 
         this.config.createInfoItem(
             items,
-            profileDataLayout['username'].icon,
+            INFO_ITEMS_LAYOUT['username'].icon,
             this.config.data.profile.username,
         );
         this.config.createInfoItem(
             items,
-            profileDataLayout['birth_date'].icon,
+            INFO_ITEMS_LAYOUT['birth_date'].icon,
             convertDate(this.config.data.profile.birth_date),
         );
         if (this.config.data.profile.bio) {
             this.config.createInfoItem(
                 items,
-                profileDataLayout['bio'].icon,
+                INFO_ITEMS_LAYOUT['bio'].icon,
                 this.config.data.profile.bio,
             );    
         }
@@ -75,7 +75,7 @@ export default class ProfileInfoMwComponent extends ModalWindowComponent {
 
         // for (const key in this.config.data.countedData) {
         //     const value = this.config.data.countedData[key];
-        //     this.config.createCountedItem(countedItems, profileDataLayout[key].text, value);
+        //     this.config.createCountedItem(countedItems, INFO_ITEMS_LAYOUT[key].text, value);
         // }
     }
 
@@ -88,7 +88,7 @@ export default class ProfileInfoMwComponent extends ModalWindowComponent {
         }
         for (const key in blockData) {
             const value = blockData[key];
-            this.config.createInfoItem(parent, profileDataLayout[key].icon, value);
+            this.config.createInfoItem(parent, INFO_ITEMS_LAYOUT[key].icon, value);
         }
     }
 }

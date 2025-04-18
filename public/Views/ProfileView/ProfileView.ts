@@ -8,150 +8,17 @@ import createElement from '@utils/createElement';
 import { getLsItem } from '@utils/localStorage';
 import CoverComponent from '@components/CoverComponent/CoverComponent';
 import router from '@router';
-
-
-export const profileDataLayout = {
-    username: {icon: 'at'},
-    birth_date: {icon: 'gift'},
-    bio: {icon: 'profile-primary'},
-
-    city: {icon: 'location'},
-    email: {icon: 'envelope'},
-    phone: {icon: 'phone'},
-
-    school_city: {icon: "location"},
-    school_name: {icon: "diploma"},
-
-    univ_city: {icon: "location"},
-    univ_name: {icon: "diploma"},
-    faculty: {icon: "diploma"},
-    grad_year: {icon: "diploma"},
-
-    friends: {text: 'друзей'},
-    subscribers: {text: 'подписчиков'},
-    subscribes: {text: 'подписок'},
-
-    more: {
-        icon: 'info',
-        text: 'Подробнее',
-    }
-};
-
-const ACTIONS_PROPERTIES = {
-    stranger: [{
-            text: "Добавить в друзья",
-            variant: "primary",
-            onClick: function(data: any) {
-                Ajax.post({
-                    url: '/follow',
-                    body: { receiver_id: data.id },
-                    callback: (status: number) => {
-                        switch (status) {
-                            case 200:
-                                data.relation = "following";
-                                this.renderOtherActions(data)
-                                break;
-                        }
-                    },
-                });
-            },
-        },
-        {
-            icon: "/static/img/messenger-primary-icon.svg",
-            onClick: function(data: any) {
-                router.go({
-                    path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
-                });
-            },
-        }],
-    following: [{
-            text: "Вы подписаны",
-            variant: "secondary",
-            onClick: function(data: any) {
-                Ajax.delete({
-                    url: '/follow',
-                    body: { friend_id: data.id },
-                    callback: (status: number) => {
-                        switch (status) {
-                            case 200:
-                                data.relation = "stranger";
-                                this.renderOtherActions(data)
-                                break;
-                        }
-                    },
-                });
-            },
-        },
-        {
-            icon: "/static/img/messenger-primary-icon.svg",
-            onClick: function(data: any) {
-                router.go({
-                    path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
-                });
-            },
-        }],
-    followed_by: [{
-            text: "Подписан на вас",
-            variant: "primary",
-            onClick: function(data: any) {
-                Ajax.post({
-                    url: '/followers/accept',
-                    body: { receiver_id: data.id },
-                    callback: (status: number) => {
-                        switch (status) {
-                            case 200:
-                                data.relation = "friend";
-                                this.renderOtherActions(data)
-                                break;
-                        }
-                    },
-                });
-            },
-        },
-        {
-            icon: "/static/img/messenger-primary-icon.svg",
-            onClick: function(data: any) {
-                router.go({
-                    path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
-                });
-            },
-        }],
-    friend: [{
-            text: "Сообщение",
-            variant: "primary",
-            onClick: function(data: any) {
-                router.go({
-                    path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
-                });
-            },
-        },
-        {
-            icon: "/static/img/user-added-icon.svg",
-            onClick: function(data: any) {
-                Ajax.delete({
-                    url: '/friends',
-                    body: { friend_id: data.id },
-                    callback: (status: number) => {
-                        switch (status) {
-                            case 200:
-                                data.relation = "followed_by";
-                                this.renderOtherActions(data)
-                                break;
-                        }
-                    },
-                });
-            },
-        }],
-};
+import { ACTIONS_PROPERTIES, INFO_ITEMS_LAYOUT } from './ProfileActionsConfig';
 
 
 class ProfileView {
-    #containerObj: MainLayoutComponent | null = null;
-    #profileActions: HTMLElement | null = null;
+    private containerObj: MainLayoutComponent | null = null;
+    private profileActions: HTMLElement | null = null;
+    
     constructor() {}
 
     render(params: any) {
-        this.#containerObj = new MainLayoutComponent().render({
+        this.containerObj = new MainLayoutComponent().render({
             type: 'profile',
         });
 
@@ -174,7 +41,7 @@ class ProfileView {
             }
         });
 
-        return this.#containerObj.container;
+        return this.containerObj.container;
     }
 
     renderFriends(user_id: any) {
@@ -201,7 +68,7 @@ class ProfileView {
         if (!data.friends || data.friends.length === 0) return;
 
         const friendsWrapper = createElement({
-            parent: this.#containerObj?.right,
+            parent: this.containerObj?.right,
             classes: ['profile__friends'],
         });
 
@@ -251,7 +118,7 @@ class ProfileView {
 
     cbOk(data: any) {
         const profileHeader = createElement({
-            parent: this.#containerObj?.top,
+            parent: this.containerObj?.top,
             classes: ['profile']
         });
 
@@ -294,22 +161,22 @@ class ProfileView {
 
         this.createInfoItem(
             fullInfo,
-            profileDataLayout['username'].icon,
+            INFO_ITEMS_LAYOUT['username'].icon,
             data.profile.username,
             true
         );
 
         const moreInfo = this.createInfoItem(
             fullInfo,
-            profileDataLayout['more'].icon,
-            profileDataLayout['more'].text,
+            INFO_ITEMS_LAYOUT['more'].icon,
+            INFO_ITEMS_LAYOUT['more'].text,
             true
         );
         
         moreInfo.classList.add('profile__detail_more');
 
         moreInfo.addEventListener('click', () => {
-            new ProfileInfoMwComponent(this.#containerObj?.container, {
+            new ProfileInfoMwComponent(this.containerObj?.container, {
                 data,
                 createInfoItem: this.createInfoItem,
                 createCountedItem: this.createCountedItem
@@ -318,7 +185,7 @@ class ProfileView {
 
         this.renderActions(profileBottom, data);
 
-        new FeedComponent(this.#containerObj?.left, {
+        new FeedComponent(this.containerObj?.left, {
             getUrl: `/profiles/${data.profile.username}/posts`,
             hasCreateButton: data.relation === "self" ? true : false,
             emptyStateText: data.relation === "self" ? "Напишите свой первый пост" : "Пользователь пока не опубликовал ни одного поста",
@@ -328,18 +195,18 @@ class ProfileView {
     }
 
     renderActions(profileBottom: any, data: any) {
-        if (this.#profileActions) {
-            this.#profileActions.innerHTML = '';
-            profileBottom.appendChild(this.#profileActions);
+        if (this.profileActions) {
+            this.profileActions.innerHTML = '';
+            profileBottom.appendChild(this.profileActions);
         } else {
-            this.#profileActions = createElement({
+            this.profileActions = createElement({
                 parent: profileBottom,
                 classes: ['profile__actions']
             });
         }
 
         if (data.relation === "self") {
-            new ButtonComponent(this.#profileActions, {
+            new ButtonComponent(this.profileActions, {
                 text: 'Редактировать профиль',
                 variant: 'secondary',
                 size: 'small',
@@ -351,18 +218,18 @@ class ProfileView {
     }
 
     renderOtherActions(data: any) {
-        if (this.#profileActions) this.#profileActions.innerHTML = '';
+        if (this.profileActions) this.profileActions.innerHTML = '';
 
         const relation = data.relation as keyof typeof ACTIONS_PROPERTIES;
         const properties = ACTIONS_PROPERTIES[relation];
 
-        new ButtonComponent(this.#profileActions, {
+        new ButtonComponent(this.profileActions, {
             text: properties[0].text,
             variant: properties[0].variant,
             size: 'small',
             onClick: properties[0].onClick.bind(this, data),
         });
-        new ButtonComponent(this.#profileActions, {
+        new ButtonComponent(this.profileActions, {
             icon: properties[1].icon,
             variant: "secondary",
             size: 'small',
