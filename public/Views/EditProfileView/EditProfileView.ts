@@ -362,7 +362,7 @@ class EditProfileView {
     }
 
     postCbOk() {
-        router?.menu?.renderProfileMenuItem();
+        router?.header?.renderAvatarMenu();
         this.render(this.#section);
     }
 
