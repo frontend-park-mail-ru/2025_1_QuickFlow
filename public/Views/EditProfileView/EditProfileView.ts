@@ -5,6 +5,7 @@ import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutCompo
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import InputComponent from '@components/UI/InputComponent/InputComponent';
+import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import CoverComponent from '@components/CoverComponent/CoverComponent';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
 
@@ -19,24 +20,23 @@ import { forms } from './EditProfileFormConfig';
 
 
 class EditProfileView {
-    #containerObj
-    #section
-    #userData
-    #stateUpdaters
+    private containerObj: MainLayoutComponent;
+    private section: string;
+    private userData: Record<string, any>;
+    private stateUpdaters: Array<any> = [];
     private submitButton: ButtonComponent;
 
     constructor() {
-        this.#userData = null;
-        this.#stateUpdaters = [];
-        this.#section = null;
+        this.userData = null;
+        this.section = null;
     }
 
-    render(params, section = 'profile') {
-        this.#containerObj = new MainLayoutComponent().render({
+    render(params: any, section: string = 'profile') {
+        this.containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
 
-        new RadioMenuComponent(this.#containerObj.right, {
+        new RadioMenuComponent(this.containerObj.right, {
             items: {
                 profile: {
                     title: 'Профиль',
@@ -57,11 +57,11 @@ class EditProfileView {
         this.renderSection(section);
     }
 
-    renderSection(sectionName) {
-        this.#section = sectionName;
-        this.#stateUpdaters = [];
-        const sectionData = forms[this.#section];
-        this.#containerObj.left.innerHTML = '';
+    renderSection(sectionName: string) {
+        this.section = sectionName;
+        this.stateUpdaters = [];
+        const sectionData = forms[this.section];
+        this.containerObj.left.innerHTML = '';
 
         Ajax.get({
             url: `/profiles/${getLsItem('username', '')}`,
@@ -83,7 +83,7 @@ class EditProfileView {
     }
 
     getCbOk(userData, sectionData) {
-        this.#userData = userData;
+        this.userData = userData;
         if (sectionData.header) this.renderHeader();
         this.renderForm(sectionData);
     }
@@ -92,7 +92,7 @@ class EditProfileView {
         const fields = sectionData.fields;
 
         const form = createElement({
-            parent: this.#containerObj.left,
+            parent: this.containerObj.left,
             tag: 'form',
             classes: ['profile_edit__form']
         });
@@ -126,16 +126,16 @@ class EditProfileView {
                 field.config.name = field.key;
                 field.config.placeholder = field.config.placeholder || field.config.label;
                 field.config.value = 
-                    this.#userData?.profile?.[field.key] ?? 
-                    this.#userData?.contact_info?.[field.key] ??
-                    this.#userData?.school?.[field.key] ?? 
-                    this.#userData?.university?.[field.key];
+                    this.userData?.profile?.[field.key] ?? 
+                    this.userData?.contact_info?.[field.key] ??
+                    this.userData?.school?.[field.key] ?? 
+                    this.userData?.university?.[field.key];
 
                 if (field.config.name === 'birth_date') {
                     field.config.value = convertDate(field.config.value);
                 }
 
-                this.#stateUpdaters.push(
+                this.stateUpdaters.push(
                     field.type === 'textarea' ?
                     new TextareaComponent(fieldsetElement, field.config) :
                     new InputComponent(fieldsetElement, field.config)
@@ -157,7 +157,7 @@ class EditProfileView {
             classes: ['profile_edit__btn'],
             onClick: () => this.handleFormSubmit(),
             disabled: true,
-            stateUpdaters: this.#stateUpdaters,
+            stateUpdaters: this.stateUpdaters,
         });
     }
 
@@ -166,7 +166,7 @@ class EditProfileView {
 
         const body: Record<string, any> = {};
 
-        this.#stateUpdaters.forEach(({ name, value }) => {
+        this.stateUpdaters.forEach(({ name, value }) => {
             if (name === 'birth_date') value = convertDate(value, 'ts');
             const sections = {
                 profile: () => {
@@ -187,25 +187,25 @@ class EditProfileView {
                     body[key][name] = name === 'grad_year' ? Number(value) : value;
                 }
             };
-            sections[this.#section]?.();
+            sections[this.section]?.();
         })
 
         const newUsername = body?.profile?.username;
 
         if (body.profile) {
-            body.profile['sex'] = this.#userData.profile.sex;
+            body.profile['sex'] = this.userData.profile.sex;
             body.profile = JSON.stringify(body.profile);
         }
         if (body.contact_info) body.contact_info = JSON.stringify(body.contact_info);
         if (body.school) body.school = JSON.stringify(body.school);
         if (body.university) body.university = JSON.stringify(body.university);
 
-        for (const key in this.#userData) {
+        for (const key in this.userData) {
             if (!body[key] || body[key].length === 0) {
-                if (typeof this.#userData[key] === 'object') {
-                    body[key] = JSON.stringify(this.#userData[key]);
+                if (typeof this.userData[key] === 'object') {
+                    body[key] = JSON.stringify(this.userData[key]);
                 } else {
-                    body[key] = this.#userData[key];
+                    body[key] = this.userData[key];
                 }
             }
         }
@@ -215,20 +215,35 @@ class EditProfileView {
 
         const fd = convertToFormData(body);
 
-        Ajax.post({
-            url: '/profile',
-            body: fd,
-            isFormData: true,
-            callback: (status) => {
-                switch (status) {
-                    case 200:
-                        this.postCbOk(newUsername);
-                        break;
-                    case 401:
-                        this.cbUnauthorized();
-                        break;
+        try {
+            Ajax.post({
+                url: '/profile',
+                body: fd,
+                isFormData: true,
+                callback: (status: number) => {
+                    switch (status) {
+                        case 200:
+                            this.postCbOk(newUsername);
+                            break;
+                        case 401:
+                            this.cbUnauthorized();
+                            break;
+                        default:
+                            this.cbDefault();
+                            break;
+                    }
                 }
-            }
+            });
+        } finally {
+            this.cbDefault();
+        }
+    }
+
+    cbDefault() {
+        new PopUpComponent(this.containerObj?.container, {
+            text: 'Не удалось сохранить изменеия',
+            size: "large",
+            isError: true,
         });
     }
 
@@ -236,30 +251,35 @@ class EditProfileView {
         if (newUsername) setLsItem('username', newUsername);
         router?.menu?.renderProfileMenuItem();
         router?.header?.renderAvatarMenu();
-        this.render(this.#section);
+        this.render(null, this.section);
+        new PopUpComponent(this.containerObj?.container, {
+            text: 'Изменения сохранены',
+            icon: "check-icon",
+            size: "large",
+        });
     }
 
     renderHeader() {
         const profileHeader = createElement({
-            parent: this.#containerObj.left,
+            parent: this.containerObj.left,
             classes: ['profile', 'profile_edit']
         });
 
         const cover = new CoverComponent(profileHeader, {
-            src: this.#userData.profile.cover_url,
+            src: this.userData.profile.cover_url,
             type: 'edit',
         });
 
-        this.#stateUpdaters.push(cover.fileInput);
+        this.stateUpdaters.push(cover.fileInput);
 
         const avatar = new AvatarComponent(profileHeader, {
             size: 'xxl',
-            src: this.#userData.profile.avatar_url,
+            src: this.userData.profile.avatar_url,
             type: 'edit'
         });
 
-        this.#stateUpdaters.push(
-            new FileInputComponent(this.#containerObj.left, {
+        this.stateUpdaters.push(
+            new FileInputComponent(this.containerObj.left, {
                 imitator: avatar.wrapper,
                 preview: avatar.avatar,
                 id: 'profile-avatar-upload',

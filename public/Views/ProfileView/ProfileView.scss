@@ -64,6 +64,7 @@
     bottom: 0;
     left: 20px;
     border: 4px solid var(--stroke-white);
+    background-color: var(--background-white);
 }
 
 .profile__actions {
@@ -158,7 +159,7 @@
 
 .profile__detail_more {
     cursor: pointer;
-
+    user-select: none;
     transition: var(--trans-btn);
 }
 

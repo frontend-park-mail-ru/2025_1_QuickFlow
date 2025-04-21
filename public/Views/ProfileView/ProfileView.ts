@@ -9,12 +9,13 @@ import { getLsItem } from '@utils/localStorage';
 import CoverComponent from '@components/CoverComponent/CoverComponent';
 import router from '@router';
 import { ACTIONS_PROPERTIES, INFO_ITEMS_LAYOUT } from './ProfileActionsConfig';
+import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 
 
 class ProfileView {
     private containerObj: MainLayoutComponent | null = null;
     private profileActions: HTMLElement | null = null;
-    
+
     constructor() {}
 
     render(params: any) {
@@ -151,7 +152,7 @@ class ProfileView {
         createElement({
             parent: profileInfo,
             text: `${data.profile.firstname} ${data.profile.lastname}`,
-            classes: ['profile__name']
+            classes: ['profile__name'],
         });
 
         const fullInfo = createElement({
@@ -159,12 +160,26 @@ class ProfileView {
             classes: ['profile__details']
         });
 
-        this.createInfoItem(
+        const usernameItem = this.createInfoItem(
             fullInfo,
             INFO_ITEMS_LAYOUT['username'].icon,
             data.profile.username,
             true
         );
+        usernameItem.classList.add('profile__detail_more');
+
+        usernameItem.addEventListener("click", () => {
+            navigator.clipboard.writeText(data.profile.username)
+            .then(() => {
+                new PopUpComponent(this.containerObj?.container, {
+                    text: 'Текст скопирован в буфер обмена',
+                    icon: "copy-green-icon",
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
 
         const moreInfo = this.createInfoItem(
             fullInfo,
@@ -172,7 +187,6 @@ class ProfileView {
             INFO_ITEMS_LAYOUT['more'].text,
             true
         );
-        
         moreInfo.classList.add('profile__detail_more');
 
         moreInfo.addEventListener('click', () => {
