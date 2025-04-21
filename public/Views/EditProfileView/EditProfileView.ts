@@ -234,7 +234,7 @@ class EditProfileView {
                     }
                 }
             });
-        } finally {
+        } catch {
             this.cbDefault();
         }
     }
