@@ -3,7 +3,7 @@
     right: 0;
     position: absolute;
     width: 300px;
-    box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.16);
+    box-shadow: var(--shadow-context-menu);
     background: var(--background-white);
     border-bottom: 1px solid var(--stroke-primary);
     border-left: 1px solid var(--stroke-primary);
@@ -94,6 +94,7 @@
     font-size: var(--font-size-l);
     line-height: 100%;
     color: var(--text-primary);
+    position: relative;
 }
 
 .profile-menu__item:hover {
@@ -102,4 +103,16 @@
 
 .profile-menu__item:active {
     background: var(--button-secondary-active);
+}
+
+.profile-menu__icon {
+    width: 16px;
+    height: 16px;
+    color: var(--icon-accent);
+}
+
+.profile-menu__dropdown {
+    position: absolute;
+    right: 0;
+    top: 36px;
 }

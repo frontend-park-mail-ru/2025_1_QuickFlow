@@ -26,7 +26,7 @@ html {
 }
 
 body {
-    background-color: #fff;
+    background: var(--background-white);
 }
 
 .side-menu {
@@ -63,6 +63,7 @@ main {
     top: 56px;
     width: calc(100% - 220px);
     align-items: center;
+    background: var(--background-white);
 }
 
 a {
@@ -145,4 +146,9 @@ p {
 
 .hidden {
     display: none !important;
+}
+
+.theme-switcher {
+    z-index: 10;
+    position: relative;
 }

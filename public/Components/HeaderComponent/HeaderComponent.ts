@@ -185,26 +185,6 @@ export default class HeaderComponent {
 
             new ProfileMenuComponent(this.rightWrapper, {
                 userData,
-                menuItems: {
-                    settings: {
-                        href: '/settings',
-                        text: 'Настройки',
-                        icon: 'settings-icon',
-                        render: () => router.go({ path: '/profile/edit' }),
-                    },
-                    // help: {
-                    //     href: '/help',
-                    //     text: 'Помощь',
-                    //     icon: 'help-icon',
-                    //     render: () => {},
-                    // },
-                    logout: {
-                        href: '/logout',
-                        text: 'Выйти',
-                        icon: 'logout-icon',
-                        render: () => router.go({ path: '/logout' }),
-                    },
-                },
             });
         }
     }

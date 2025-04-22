@@ -16,8 +16,14 @@ import ws from '@modules/WebSocketService';
 import './index.scss';
 import { getLsItem } from '@utils/localStorage';
 
+import ThemeManager from '@modules/ThemeManager';
+
 
 const root = document.getElementById('root');
+
+document.addEventListener('DOMContentLoaded', () => {
+    ThemeManager.applyStoredTheme();
+});
 
 const container = createElement({
     parent: root,

@@ -1,4 +1,5 @@
 import createElement from '@utils/createElement';
+import insertIcon from '@utils/insertIcon';
 
 
 const DEFAULT_IS_CRITICAL = false;
@@ -35,7 +36,12 @@ export default class ContextMenuComponent {
 
             const menuOption = createElement({
                 parent: this.wrapper,
-                classes: ['context-menu__option'],
+                classes: [
+                    'context-menu__option',
+                    (isCritical || DEFAULT_IS_CRITICAL) ?
+                        'context-menu__option_critical' :
+                        'context-menu__option'
+                ],
                 attrs: {'data-href': href}
             });
 
@@ -46,19 +52,20 @@ export default class ContextMenuComponent {
                 })
             }
 
-            createElement({
-                parent: menuOption,
+            // createElement({
+            //     parent: menuOption,
+            //     classes: ['context-menu__icon'],
+            //     attrs: {src: `/static/img/${icon}.svg`}
+            // });
+
+            insertIcon(menuOption, {
+                name: icon,
                 classes: ['context-menu__icon'],
-                attrs: {src: `/static/img/${icon}.svg`}
             });
 
             createElement({
                 parent: menuOption,
-                classes: [
-                    (isCritical || DEFAULT_IS_CRITICAL) ?
-                    'context-menu__text_critical' :
-                    'context-menu__text'
-                ],
+                classes: ['context-menu__text'],
                 text
             });
         });

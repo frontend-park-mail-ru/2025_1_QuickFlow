@@ -1,4 +1,5 @@
-import createElement from "../../../utils/createElement";
+import createElement from "@utils/createElement";
+import insertIcon from "@utils/insertIcon";
 
 
 const TIME_VISIBLE = 2 * 1000;
@@ -23,7 +24,7 @@ export default class PopUpComponent {
         this.render();
     }
 
-    async render() {
+    render() {
         this.popup = createElement({
             parent: this.parent,
             classes: [
@@ -32,7 +33,14 @@ export default class PopUpComponent {
             ],
         })
 
-        await this.insertIcon();
+        insertIcon(this.popup, {
+            name: this.config.icon,
+            classes: [
+                'popup__icon',
+                this.config?.isError ? 'popup__icon_error' : 'popup__icon',
+                `popup__icon_${this.config?.size || DEFAULT_SIZE}`
+            ],
+        });
 
         createElement({
             parent: this.popup,
@@ -80,31 +88,5 @@ export default class PopUpComponent {
         setTimeout(() => {
             this.popup.remove();
         }, 300);
-    }
-
-    private async insertIcon() {
-        if (!this.config.icon) return;
-    
-        const res = await fetch(`/static/img/${this.config.icon}.svg`);
-        const svgHTML = await res.text();
-    
-        const icon = createElement({
-            parent: this.popup,
-            classes: [
-                'popup__icon',
-                this.config?.isError ? 'popup__icon_error' : 'popup__icon',
-                `popup__icon_${this.config?.size || DEFAULT_SIZE}`
-            ],
-        });
-    
-        icon.innerHTML = svgHTML;
-    
-        const svg = icon.querySelector('svg');
-        if (svg) {
-            svg.setAttribute('fill', 'currentColor');
-            svg.querySelectorAll('[fill]').forEach(element => {
-                element.removeAttribute('fill');
-            });
-        }
     }
 }

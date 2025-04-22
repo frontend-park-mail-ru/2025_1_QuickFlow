@@ -233,7 +233,7 @@ export default class ChatWindowComponent {
 
     renderDropdown(parent: HTMLElement) {
         const dropdown = createElement({
-            classes: ['dropdown', 'chat-window__dropdown'],
+            classes: ['js-dropdown', 'dropdown', 'chat-window__dropdown'],
             parent,
         });
 
@@ -265,7 +265,7 @@ export default class ChatWindowComponent {
         });
 
         const dropdown = createElement({
-            classes: ['dropdown', 'chat-window__media-dropdown'],
+            classes: ['js-dropdown', 'dropdown', 'chat-window__media-dropdown'],
             parent: bottomBar,
         });
 

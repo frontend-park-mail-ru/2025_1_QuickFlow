@@ -46,6 +46,64 @@
     --button-overlay: rgba(0, 0, 0, 0.5);
     --button-overlay-hover: rgba(0, 0, 0, 0.65);
     --button-overlay-active: rgba(0, 0, 0, 0.8);
+    --button-white: #fff;
+
+    --shadow-context-menu: 0 4px 32px 0 rgba(0, 0, 0, 0.16);
+    --shadow-nav: 0 0 8px 0 rgba(0, 0, 0, 0.3);
+}
+
+html.theme_dark {
+    --icon-primary: #a3a7ad;
+    --icon-primary-hover: #b8bec6;
+    --icon-primary-disabled: #dce1e5;
+    --icon-accent: #5e7fff;
+    --icon-white: #fff;
+    --icon-green: #26bf26;
+    --icon-red: #ff3b2f;
+    --icon-black-transparent: rgba(0, 0, 0, 0.5);
+
+    --background-white: #212121;
+    --background-gray: #292929;
+    --background-gray-hover: #292929;
+    --background-light-gray: #2e2e2e;
+    --background-white-transparent: rgba(255, 255, 255, 0.5);
+    --background-white-transparent-hover: rgba(255, 255, 255, 0.8);
+    --background-black-transparent: rgba(0, 0, 0, 0.5);
+    --background-error: #371a18;
+
+    --text-primary: #ffffff;
+    --text-secondary: #aaaeb2;
+    --text-secondary-hover: #afb3b8;
+    --text-secondary-disabled: #bcc3cc;
+    --text-white: #fff;
+    --text-accent: #5e7fff;
+    --text-accent-hover: #4369fc;
+    --text-error: #ff3b2f;
+
+    --stroke-primary: #4d4d4d;
+    --stroke-primary-hover: #575859;
+    --stroke-primary-focus: #646566;
+    --stroke-white-transp: rgba(255, 255, 255, 0.25);
+    --stroke-white-transp-hover: rgba(255, 255, 255, 0.4);
+    --stroke-white-transp-active: rgba(255, 255, 255, 0.55);
+    --stroke-checkbox: #99a2ad;
+    --stroke-error: #ff3b2f;
+    --stroke-white: #212121;
+
+    --button-primary: #4369fc;
+    --button-primary-hover: #3b60ed;
+    --button-primary-active: #3155e0;
+    --button-primary-disabled: #384a8d;
+    --button-secondary: #212121;
+    --button-secondary-hover: #333333;
+    --button-secondary-active: #292929;
+    --button-overlay: rgba(0, 0, 0, 0.5);
+    --button-overlay-hover: rgba(0, 0, 0, 0.65);
+    --button-overlay-active: rgba(0, 0, 0, 0.8);
+    --button-white: #fff;
+
+    --shadow-context-menu: 0 4px 32px 0 rgba(0, 0, 0, 0.56);
+    --shadow-nav: 0 0 8px 0 rgba(0, 0, 0, 0.3);
 }
 
 :root {

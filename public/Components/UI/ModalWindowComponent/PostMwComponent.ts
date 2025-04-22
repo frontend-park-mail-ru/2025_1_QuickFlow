@@ -1,6 +1,7 @@
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import TextareaComponent from '@components/UI/TextareaComponent/TextareaComponent';
 import createElement from '@utils/createElement';
+import insertIcon from '@utils/insertIcon';
 import Ajax from '@modules/ajax';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
 import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
@@ -97,9 +98,9 @@ export default class PostMwComponent extends ModalWindowComponent {
             classes: ['modal__pics-nav', 'modal__pics-nav_prev'],
         });
 
-        createElement({
-            parent: leftArrow,
-            attrs: { src: '/static/img/prev-arrow-icon.svg' }
+        insertIcon(leftArrow, {
+            name: 'prev-arrow-icon',
+            classes: ['modal__nav-icon'],
         });
 
         const rightArrow = createElement({
@@ -107,9 +108,9 @@ export default class PostMwComponent extends ModalWindowComponent {
             classes: ['modal__pics-nav', 'modal__pics-nav_next'],
         });
 
-        createElement({
-            parent: rightArrow,
-            attrs: { src: '/static/img/next-arrow-icon.svg' }
+        insertIcon(rightArrow, {
+            name: 'next-arrow-icon',
+            classes: ['modal__nav-icon'],
         });
 
         leftArrow.addEventListener('click', () => {

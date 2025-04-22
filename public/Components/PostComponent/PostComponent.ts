@@ -318,7 +318,7 @@ export default class PostComponent {
         }
 
         const dropdown = createElement({
-            classes: ['dropdown'],
+            classes: ['js-dropdown', 'dropdown'],
             parent: topWrapper,
         });
 

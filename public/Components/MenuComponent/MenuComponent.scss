@@ -19,6 +19,9 @@
     width: fit-content;
     align-self: start;
     cursor: pointer;
+    color: var(--icon-accent);
+    height: 41px;
+    width: 175px;
 }
 
 .menu__item {
@@ -50,6 +53,7 @@
 .menu__icon {
     width: 16px;
     height: 16px;
+    color: var(--icon-accent);
 }
 
 .menu__item_active {

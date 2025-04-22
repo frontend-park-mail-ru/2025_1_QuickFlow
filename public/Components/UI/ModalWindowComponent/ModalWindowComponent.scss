@@ -240,12 +240,13 @@
         align-items: center;
         transition: var(--trans-menu);
 
-        filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
-        -webkit-filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
-        -webkit-filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
-        -moz-filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
-        -o-filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
-        -ms-filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+        box-shadow: var(--shadow-nav);
+        // filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+        // -webkit-filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+        // -webkit-filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+        // -moz-filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+        // -o-filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+        // -ms-filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
 
         &_prev {
             left: 8px;
@@ -255,4 +256,10 @@
             right: 8px;
         }
     }
+}
+
+.modal__nav-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--text-primary);
 }

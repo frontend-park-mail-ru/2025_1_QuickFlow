@@ -253,12 +253,6 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
-
-
-// app.listen(port, function () {
-//     console.log(`Server listening port ${port}`);
-// });
-
-server.listen(port, function () {
+server.listen(port, '0.0.0.0', null, function () {
     console.log(`Server listening port ${port}`);
 });

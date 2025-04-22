@@ -3,6 +3,7 @@ import PostComponent from '@components/PostComponent/PostComponent';
 import PostMwComponent from '@components/UI/ModalWindowComponent/PostMwComponent';
 import createElement from '@utils/createElement';
 import router from '@router';
+import insertIcon from '@utils/insertIcon';
 
 
 const POSTS_COUNT = 10;
@@ -15,8 +16,8 @@ export default class FeedComponent {
     private posts: HTMLElement | null = null;
     private isLoading: Boolean = false;
     private endOfFeed: Boolean = false;
-    #lastTs: string | null = null;
-    sentinel: HTMLElement | null = null;
+    private lastTs: string | null = null;
+    private sentinel: HTMLElement | null = null;
     private emptyWrapper: HTMLElement;
 
     constructor(parent: HTMLElement, config: Record<string, any>) {
@@ -25,7 +26,7 @@ export default class FeedComponent {
         this.render();
     }
 
-    render() {
+    private render() {
         this.renderCreateButton();
 
         this.posts = createElement({
@@ -80,11 +81,15 @@ export default class FeedComponent {
             tag: 'button',
             classes: ['button_feed']
         });
-        createElement({
-            parent: createPostBtn,
-            tag: 'div',
+        insertIcon(createPostBtn, {
+            name: 'add-icon',
             classes: ['button_feed__icon']
         });
+        // createElement({
+        //     parent: createPostBtn,
+        //     tag: 'div',
+        //     classes: ['button_feed__icon']
+        // });
         createElement({
             parent: createPostBtn,
             text: 'Создать пост',
@@ -97,19 +102,19 @@ export default class FeedComponent {
         });
     }
 
-    cbUnauthorized() {
+    private cbUnauthorized() {
         router.go({ path: '/login' });
     }
 
-    renderPost(config: any, position: string | null = null) {
+    private renderPost(config: any, position: string | null = null) {
         if (position) config.position = "top";
         new PostComponent(this.posts, config);
     }
 
-    cbOk(feedData: any) {
+    private cbOk(feedData: any) {
         feedData?.forEach((config: Record<string, any>) => {
             this.renderPost(config);
-            this.#lastTs = config.created_at;
+            this.lastTs = config.created_at;
         });
 
         this.sentinel = createElement({
@@ -117,10 +122,10 @@ export default class FeedComponent {
             classes: ['feed__bottom-sentinel'],
         });
 
-        this.#createIntersectionObserver();
+        this.createIntersectionObserver();
     }
 
-    renderEmptyState() {
+    private renderEmptyState() {
         this.emptyWrapper = createElement({
             parent: this.posts,
             classes: ['feed__empty'],
@@ -137,12 +142,12 @@ export default class FeedComponent {
         });
     }
 
-    #createIntersectionObserver() {
+    private createIntersectionObserver() {
         if (!this.sentinel) return;
 
         const observer = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting && !this.isLoading && !this.endOfFeed) {
-                this.#loadMorePosts();
+                this.loadMorePosts();
             }
         }, {
             rootMargin: `${OBSERVER_MARGIN}px`,
@@ -151,8 +156,8 @@ export default class FeedComponent {
         observer.observe(this.sentinel);
     }
     
-    #loadMorePosts() {
-        if (!this.#lastTs) return;
+    private loadMorePosts() {
+        if (!this.lastTs) return;
 
         this.isLoading = true;
     
@@ -160,7 +165,7 @@ export default class FeedComponent {
             url: this.config.getUrl,
             params: {
                 posts_count: POSTS_COUNT,
-                ts: this.#lastTs,
+                ts: this.lastTs,
             },
             callback: (status: number, feedData: any) => {
                 this.isLoading = false;
@@ -178,13 +183,13 @@ export default class FeedComponent {
         });
     }    
 
-    extraLoadCbOk(feedData: any) {
+    private extraLoadCbOk(feedData: any) {
         if (!this.posts || !this.sentinel) return;
 
         if (Array.isArray(feedData) && feedData.length > 0) {
             feedData.forEach((config) => {
                 this.renderPost(config);
-                this.#lastTs = config.created_at;
+                this.lastTs = config.created_at;
             });
             this.posts.appendChild(this.sentinel);
             return;

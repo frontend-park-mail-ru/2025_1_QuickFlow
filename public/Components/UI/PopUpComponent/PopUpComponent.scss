@@ -4,7 +4,7 @@
     padding: 12px 16px;
     position: fixed;
     z-index: 3;
-    box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.16);
+    box-shadow: var(--shadow-context-menu);
     border-radius: 12px;
 
     display: flex;

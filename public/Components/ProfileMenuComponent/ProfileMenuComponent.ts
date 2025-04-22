@@ -1,19 +1,39 @@
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
 import createElement from '@utils/createElement';
+import router from '@router';
+import ThemeManager from '@modules/ThemeManager';
+import ContextMenuComponent from '@components/ContextMenuComponent/ContextMenuComponent';
+import insertIcon from '@utils/insertIcon';
 
 
 const AVATAR_SIZE = 'xl';
 const USERNAME_PREFIX = '@';
 
+const MENU_ITEMS = {
+    settings: {
+        href: '/settings',
+        text: 'Настройки',
+        icon: 'settings-icon',
+        render: () => router.go({ path: '/profile/edit' }),
+    },
+    theme: {},
+    logout: {
+        href: '/logout',
+        text: 'Выйти',
+        icon: 'logout-icon',
+        render: () => router.go({ path: '/logout' }),
+    },
+};
+
 
 export default class ProfileMenuComponent {
-    #parent
-    #config
+    #parent;
+    #config;
+    private menuItems: HTMLElement;
     wrapper: HTMLElement | null = null;
     constructor(parent: any, config: any) {
         this.#config = config;
         this.#parent = parent;
-        
         this.render();
     }
 
@@ -50,24 +70,27 @@ export default class ProfileMenuComponent {
             text: `${USERNAME_PREFIX}${this.#config.userData.profile.username}`
         });
 
-        const menuItems = createElement({
+        this.menuItems = createElement({
             parent: this.wrapper,
             classes: ['profile-menu__items'],
         });
 
-        Object.entries(this.#config.menuItems).forEach(([key, option]: [string, any]) => {
+        Object.entries(MENU_ITEMS).forEach(([key, option]: [string, any]) => {
+            if (key === 'theme') return this.renderThemeSwitcher();
             const { href, text, icon } = option;
 
             const menuItem = createElement({
                 tag: 'a',
-                parent: menuItems,
+                parent: this.menuItems,
                 classes: ['profile-menu__item'],
                 attrs: {href}
             });
-            createElement({
-                parent: menuItem,
-                attrs: {src: `/static/img/${icon}.svg`}
+
+            insertIcon(menuItem, {
+                name: icon,
+                classes: ['profile-menu__icon'],
             });
+
             createElement({
                 parent: menuItem,
                 text
@@ -75,8 +98,98 @@ export default class ProfileMenuComponent {
 
             menuItem.addEventListener('click', (event: any) => {
                 event.preventDefault();
-                this.#config.menuItems[key].render();
+                MENU_ITEMS[key].render();
             });
+        });
+    }
+
+    private renderThemeSwitcher() {
+        const menuItem = createElement({
+            tag: 'a',
+            parent: this.menuItems,
+            classes: ['profile-menu__item', 'js-dropdown'],
+        });
+
+        insertIcon(menuItem, {
+            name: "palette-icon",
+            classes: ['profile-menu__icon'],
+        });
+
+        const text = createElement({
+            parent: menuItem,
+            text: `Тема: ${ThemeManager.theme}`,
+        });
+
+        const dropdown = createElement({
+            parent: menuItem,
+            classes: ['profile-menu__dropdown'],
+        });
+
+        new ContextMenuComponent(dropdown, {
+            size: 'auto',
+            data: {
+                system: {
+                    text: 'Системная',
+                    onClick: () => {
+                        ThemeManager.resetToAuto();
+                        text.innerText = `Тема: ${ThemeManager.theme}`;
+                    },
+                },
+                light: {
+                    text: 'Светлая',
+                    onClick: () => {
+                        ThemeManager.setTheme('light');
+                        text.innerText = `Тема: ${ThemeManager.theme}`;
+                    },
+                },
+                dark: {
+                    text: 'Тёмная',
+                    onClick: () => {
+                        ThemeManager.setTheme('dark');
+                        text.innerText = `Тема: ${ThemeManager.theme}`;
+                    },
+                },
+            },
+        });
+        // .wrapper.classList.add('js-dropdown');
+
+        menuItem.addEventListener('mouseenter', (event: any) => {
+        });
+
+        // createElement({
+        //     tag: 'button',
+        //     parent: this.menuItems,
+        //     classes: ['theme-switcher'],
+        //     attrs: { id: 'theme-light' },
+        //     text: 'Светлая',
+        // });
+        
+        // createElement({
+        //     tag: 'button',
+        //     parent: this.menuItems,
+        //     classes: ['theme-switcher'],
+        //     attrs: { id: 'theme-dark' },
+        //     text: 'Тёмная',
+        // });
+        
+        // createElement({
+        //     tag: 'button',
+        //     parent: this.menuItems,
+        //     classes: ['theme-switcher'],
+        //     attrs: { id: 'theme-auto' },
+        //     text: 'Авто',
+        // });
+        
+        document.getElementById('theme-light')?.addEventListener('click', () => {
+            ThemeManager.setTheme('light');
+        });
+        
+        document.getElementById('theme-dark')?.addEventListener('click', () => {
+            ThemeManager.setTheme('dark');
+        });
+        
+        document.getElementById('theme-auto')?.addEventListener('click', () => {
+            ThemeManager.resetToAuto();
         });
     }
 }

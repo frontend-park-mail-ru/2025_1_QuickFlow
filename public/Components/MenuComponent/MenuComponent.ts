@@ -1,9 +1,11 @@
 import createElement from '@utils/createElement';
+import insertIcon from '@utils/insertIcon';
 import { getLsItem } from '@utils/localStorage';
 import router from '@router';
 
 
 const LOGO_SRC = '/static/img/annotated-logo.svg';
+const LOGO = 'annotated-logo';
 
 
 export default class MenuComponent {
@@ -25,15 +27,20 @@ export default class MenuComponent {
         MenuComponent.__instance = this;
     }
 
-    renderLogo() {
-        const logo = createElement({
-            parent: this.#container,
-            classes: ['menu__logo'],
-        });
+    async renderLogo() {
+        // const logo = createElement({
+        //     parent: this.#container,
+        //     classes: ['logo'],
+        // });
 
-        createElement({
-            parent: logo,
-            attrs: {src: LOGO_SRC}
+        // createElement({
+        //     parent: logo,
+        //     attrs: {src: LOGO_SRC}
+        // });
+
+        const logo = await insertIcon(this.#container, {
+            name: LOGO,
+            classes: ['menu__logo'],
         });
 
         logo.addEventListener('click', () => this.goToPage(this.menuElements.feed));
@@ -61,11 +68,17 @@ export default class MenuComponent {
                 attrs: {href, 'data-section': key}
             });
 
-            createElement({
-                parent: menuElement,
+
+            insertIcon(menuElement, {
+                name: icon,
                 classes: ['menu__icon'],
-                attrs: {src: `/static/img/${icon}.svg`}
             });
+
+            // createElement({
+            //     parent: menuElement,
+            //     classes: ['menu__icon'],
+            //     attrs: {src: `/static/img/${icon}.svg`}
+            // });
 
             createElement({
                 parent: menuElement,
