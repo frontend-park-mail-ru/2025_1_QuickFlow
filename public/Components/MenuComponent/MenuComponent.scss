@@ -64,10 +64,11 @@
 @media screen and (max-width: 480px) {
     .menu {
         width: 100vw;
-        height: 56px;
+        height: 80px;
         border-right: none;
         border-top: 1px solid var(--stroke-primary);
         flex-direction: row;
+        padding: 4px 4px 28px 4px;
     }
 
     .menu__logo {
@@ -75,13 +76,16 @@
     }
 
     .menu__text {
-        display: none;
+        // display: none;
+        font-size: 12px;
     }
 
     .menu__item {
-        gap: 0;
         padding: 2px;
         justify-content: center;
+        flex-direction: column;
+        gap: 4px;
+        height: 100%;
     }
 
     .menu__icon {
