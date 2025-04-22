@@ -33,7 +33,6 @@
     font-size: 14px;
     line-height: 130%;
     color: var(--text-secondary);
-    text-align: center;
     gap: 4px;
 }
 
@@ -264,7 +263,6 @@
     color: var(--text-primary);
 }
 
-// p
 @media screen and (max-width: 480px) {
     .modal__bg {
         width: 100vw;
