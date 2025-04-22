@@ -1,7 +1,7 @@
 {
     "name": "QuickFlow",
     "short_name": "QuickFlow",
-    "start_url": "/?source=pwa",
+    "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#ffffff",

@@ -22,8 +22,6 @@ import LsStandaloneBridge from '@modules/LsStandaloneBridge';
 
 LsStandaloneBridge.init();
 
-
-
 const root = document.getElementById('root');
 
 document.addEventListener('DOMContentLoaded', () => {
