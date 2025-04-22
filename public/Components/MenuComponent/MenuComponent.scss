@@ -61,6 +61,35 @@
     color: var(--text-accent);
 }
 
+@media screen and (max-width: 480px) {
+    .menu {
+        width: 100vw;
+        height: 56px;
+        border-right: none;
+        border-top: 1px solid var(--stroke-primary);
+        flex-direction: row;
+    }
+
+    .menu__logo {
+        display: none;
+    }
+
+    .menu__text {
+        display: none;
+    }
+
+    .menu__item {
+        gap: 0;
+        padding: 2px;
+        justify-content: center;
+    }
+
+    .menu__icon {
+        width: 20px;
+        height: 20px;
+    }
+}
+
 // .container_auth .header,
 // .container_auth .menu {
 //     display: none;

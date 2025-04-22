@@ -82,7 +82,8 @@ export default class MenuComponent {
 
             createElement({
                 parent: menuElement,
-                text
+                text,
+                classes: ['menu__text'],
             });
 
             if (index === 0) {

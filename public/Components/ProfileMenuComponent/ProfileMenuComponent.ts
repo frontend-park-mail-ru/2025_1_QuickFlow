@@ -126,7 +126,7 @@ export default class ProfileMenuComponent {
         });
 
         new ContextMenuComponent(dropdown, {
-            size: 'auto',
+            size: 'mini',
             data: {
                 system: {
                     text: 'Системная',

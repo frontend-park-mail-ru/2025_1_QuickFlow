@@ -15,6 +15,12 @@
     justify-content: center;
 }
 
+@media screen and (max-width: 480px) {
+    .button_feed {
+        width: 100%;
+    }
+}
+
 .button_feed:hover {
     background: var(--background-light-gray);
 }

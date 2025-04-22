@@ -263,3 +263,10 @@
     height: 24px;
     color: var(--text-primary);
 }
+
+@media screen and (max-width: 480px) {
+    .modal__bg {
+        width: 100vw;
+        padding: 15px;
+    }
+}

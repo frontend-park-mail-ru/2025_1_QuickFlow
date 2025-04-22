@@ -66,6 +66,15 @@ main {
     background: var(--background-white);
 }
 
+@media screen and (max-width: 480px) {
+    main {
+        width: 100vw;
+        padding: 15px 15px;
+        left: 0;
+        top: 0;
+    }
+}
+
 a {
     display: block;
     color: var(--text-accent);

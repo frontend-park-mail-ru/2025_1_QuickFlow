@@ -265,6 +265,25 @@
     }
 }
 
+@media screen and (max-width: 480px) {
+    .post {
+        width: 100%;
+    }
+
+    .post__pics {
+        width: 100%;
+        aspect-ratio: 4 / 5;
+    }
+
+    .post__slide {
+        width: unset;
+    }
+
+    .post__pic {
+        width: 100%;
+    }
+}
+
 .hidden {
     display: none;
     pointer-events: none;

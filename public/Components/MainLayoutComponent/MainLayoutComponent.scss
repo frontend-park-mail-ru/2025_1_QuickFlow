@@ -79,6 +79,12 @@
     min-width: 553px;
 }
 
+@media screen and (max-width: 480px) {
+    .container__column_left {
+        min-width: 100%;
+    }
+}
+
 .container__column_right {
     align-items: center;
 }
