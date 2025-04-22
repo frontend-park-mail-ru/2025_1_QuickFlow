@@ -83,6 +83,11 @@
     .container__column_left {
         min-width: 100%;
     }
+
+    .container {
+        flex-direction: column;
+        width: 100%;
+    }
 }
 
 .container__column_right {
