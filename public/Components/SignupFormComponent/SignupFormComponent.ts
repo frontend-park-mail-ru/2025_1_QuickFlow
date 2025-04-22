@@ -311,6 +311,7 @@ export default class SignupFormComponent {
             },
             callback: (status: number) => {
                 if (status === 200) {
+                    document.cookie = `username=${encodeURIComponent(this.usernameInput?.value)}; path=/`;
                     router.menu.renderProfileMenuItem();
                     router.go({ path: '/feed' });
                     return;

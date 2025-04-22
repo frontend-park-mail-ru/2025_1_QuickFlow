@@ -17,6 +17,11 @@ import './index.scss';
 import { getLsItem } from '@utils/localStorage';
 
 import ThemeManager from '@modules/ThemeManager';
+import LsStandaloneBridge from '@modules/LsStandaloneBridge';
+
+
+LsStandaloneBridge.init();
+
 
 
 const root = document.getElementById('root');
