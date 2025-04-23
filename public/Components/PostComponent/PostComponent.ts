@@ -188,14 +188,13 @@ export default class PostComponent {
             const pointerUp = () => {
                 if (!isDragging) return;
                 isDragging = false;
-                const movedBy = currentTranslate - (-currentIndex * this.picWidth);
-
+                const movedBy = currentTranslate - prevTranslate;
+            
                 if (movedBy < -50 && currentIndex < totalPics - 1) currentIndex++;
-                else if (movedBy > 50 && currentIndex > 0) currentIndex--;
-
-                updateSlider();
-                prevTranslate = -currentIndex * this.picWidth;
+                if (movedBy > 50 && currentIndex > 0) currentIndex--;
+            
                 slider.style.transition = 'transform 0.3s ease';
+                updateSlider(); // prevTranslate обновится внутри
             };
 
             // Mouse
@@ -206,7 +205,10 @@ export default class PostComponent {
 
             // Touch
             slider.addEventListener('touchstart', (e) => pointerDown(e.touches[0].clientX));
-            slider.addEventListener('touchmove', (e) => pointerMove(e.touches[0].clientX));
+            slider.addEventListener('touchmove', (e) => {
+                pointerMove(e.touches[0].clientX);
+                e.preventDefault(); // <-- Добавь это
+            }, { passive: false }); // <-- Обязательно явно отключить "passive"
             slider.addEventListener('touchend', pointerUp);
 
             // Disable image dragging
