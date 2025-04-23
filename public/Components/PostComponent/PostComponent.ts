@@ -140,34 +140,78 @@ export default class PostComponent {
                 attrs: {src: '/static/img/next-arrow-icon.svg'}
             });
 
+            const updateSlider = () => {
+                slider.style.transform = `translateX(-${currentIndex * this.picWidth}px)`;
+                paginator.innerText = `${currentIndex + 1}/${totalPics}`;
+                prevBtn.classList.toggle('hidden', currentIndex === 0);
+                nextBtn.classList.toggle('hidden', currentIndex === totalPics - 1);
+                
+                prevTranslate = -currentIndex * this.picWidth; // <-- добавлено
+            };
+            
+
             prevBtn.addEventListener('click', () => {
                 if (currentIndex > 0) {
                     currentIndex--;
-                    slider.style.transform = `translateX(-${currentIndex * this.picWidth}px)`;
-                    paginator.innerText = `${currentIndex + 1}/${totalPics}`;
-
-                    if (currentIndex === 0) {
-                        prevBtn.classList.add('hidden');
-                    }
-                    if (currentIndex < totalPics - 1) {
-                        nextBtn.classList.remove('hidden');
-                    }
+                    updateSlider();
                 }
             });
     
             nextBtn.addEventListener('click', () => {
                 if (currentIndex < totalPics - 1) {
                     currentIndex++;
-                    slider.style.transform = `translateX(-${currentIndex * this.picWidth}px)`;
-                    paginator.innerText = `${currentIndex + 1}/${totalPics}`;
-
-                    if (currentIndex > 0) {
-                        prevBtn.classList.remove('hidden');
-                    }
-                    if (currentIndex === totalPics - 1) {
-                        nextBtn.classList.add('hidden');
-                    }
+                    updateSlider();
                 }
+            });
+
+            // --- SWIPE / DRAG HANDLING ---
+            let startX = 0;
+            let currentTranslate = 0;
+            let prevTranslate = 0;
+            let isDragging = false;
+
+            const pointerDown = (x: number) => {
+                startX = x;
+                isDragging = true;
+                currentTranslate = prevTranslate; // <-- добавлено
+                slider.style.transition = 'none';
+            };
+            
+
+            const pointerMove = (x: number) => {
+                if (!isDragging) return;
+                const delta = x - startX;
+                currentTranslate = prevTranslate + delta;
+                slider.style.transform = `translateX(${currentTranslate}px)`;
+            };
+
+            const pointerUp = () => {
+                if (!isDragging) return;
+                isDragging = false;
+                const movedBy = currentTranslate - (-currentIndex * this.picWidth);
+
+                if (movedBy < -50 && currentIndex < totalPics - 1) currentIndex++;
+                else if (movedBy > 50 && currentIndex > 0) currentIndex--;
+
+                updateSlider();
+                prevTranslate = -currentIndex * this.picWidth;
+                slider.style.transition = 'transform 0.3s ease';
+            };
+
+            // Mouse
+            slider.addEventListener('mousedown', (e) => pointerDown(e.clientX));
+            slider.addEventListener('mousemove', (e) => pointerMove(e.clientX));
+            slider.addEventListener('mouseup', pointerUp);
+            slider.addEventListener('mouseleave', pointerUp);
+
+            // Touch
+            slider.addEventListener('touchstart', (e) => pointerDown(e.touches[0].clientX));
+            slider.addEventListener('touchmove', (e) => pointerMove(e.touches[0].clientX));
+            slider.addEventListener('touchend', pointerUp);
+
+            // Disable image dragging
+            slider.querySelectorAll('img').forEach(img => {
+                img.setAttribute('draggable', 'false');
             });
         }
     }
