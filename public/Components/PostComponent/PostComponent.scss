@@ -275,12 +275,18 @@
         aspect-ratio: 4 / 5;
     }
 
+    .post__slider {
+        width: 100%;
+    }
+
     .post__slide {
         width: 100%;
+        flex-shrink: 0;
     }
 
     .post__pic {
         width: 100%;
+        height: auto;
     }
 }
 
