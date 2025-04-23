@@ -30,6 +30,7 @@ const ADMINS_USERNAMES = [
 export default class PostComponent {
     #parent
     #config
+    private picWidth: number;
     wrapper: HTMLElement | null
     constructor(parent: any, config: any) {
         this.#parent = parent;
@@ -110,6 +111,7 @@ export default class PostComponent {
     private renderPaginator(picsWrapper: HTMLElement, slider: HTMLElement) {
         let currentIndex = 0;
         const totalPics = this.#config.pics.length;
+        this.picWidth = picsWrapper.clientWidth;
 
         if (totalPics > 1) {
             const paginator = createElement({
@@ -141,7 +143,7 @@ export default class PostComponent {
             prevBtn.addEventListener('click', () => {
                 if (currentIndex > 0) {
                     currentIndex--;
-                    slider.style.transform = `translateX(-${currentIndex * PICTURE_WIDTH}px)`;
+                    slider.style.transform = `translateX(-${currentIndex * this.picWidth}px)`;
                     paginator.innerText = `${currentIndex + 1}/${totalPics}`;
 
                     if (currentIndex === 0) {
@@ -156,7 +158,7 @@ export default class PostComponent {
             nextBtn.addEventListener('click', () => {
                 if (currentIndex < totalPics - 1) {
                     currentIndex++;
-                    slider.style.transform = `translateX(-${currentIndex * PICTURE_WIDTH}px)`;
+                    slider.style.transform = `translateX(-${currentIndex * this.picWidth}px)`;
                     paginator.innerText = `${currentIndex + 1}/${totalPics}`;
 
                     if (currentIndex > 0) {
