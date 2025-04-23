@@ -271,8 +271,13 @@
     }
 
     .post__pics {
-        width: 100%;
+        // width: 100%;
+        // aspect-ratio: 4 / 5;
+
+        width: 100vw;
         aspect-ratio: 4 / 5;
+        align-self: center;
+        border-radius: 0;
     }
 
     .post__slider {
@@ -285,8 +290,13 @@
     }
 
     .post__pic {
+        // width: 100%;
+        // height: auto;
+
         width: 100%;
         height: auto;
+        border: none;
+        border-radius: 0;
     }
 
     .post__nav {

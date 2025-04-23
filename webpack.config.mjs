@@ -52,6 +52,13 @@ export default {
 				  	filename: 'assets/fonts/[name][ext]',
 				},
 			},
+			{
+				test: /\.woff2$/i,
+				type: 'asset/resource',
+				generator: {
+				  	filename: 'assets/fonts/[name][ext]',
+				},
+			},
 		],
 	},
 	plugins: [
