@@ -140,13 +140,19 @@ export default class PostComponent {
                 attrs: {src: '/static/img/next-arrow-icon.svg'}
             });
 
+            // const updateSlider = () => {
+            //     slider.style.transform = `translateX(-${currentIndex * this.picWidth}px)`;
+            //     paginator.innerText = `${currentIndex + 1}/${totalPics}`;
+            //     prevBtn.classList.toggle('hidden', currentIndex === 0);
+            //     nextBtn.classList.toggle('hidden', currentIndex === totalPics - 1);
+            //     prevTranslate = -currentIndex * this.picWidth; // <-- добавлено
+            // };
             const updateSlider = () => {
-                slider.style.transform = `translateX(-${currentIndex * this.picWidth}px)`;
+                prevTranslate = -currentIndex * this.picWidth;
+                slider.style.transform = `translateX(${prevTranslate}px)`;
                 paginator.innerText = `${currentIndex + 1}/${totalPics}`;
                 prevBtn.classList.toggle('hidden', currentIndex === 0);
                 nextBtn.classList.toggle('hidden', currentIndex === totalPics - 1);
-                
-                prevTranslate = -currentIndex * this.picWidth; // <-- добавлено
             };
             
 
