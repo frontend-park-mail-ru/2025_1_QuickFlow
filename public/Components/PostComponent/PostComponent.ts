@@ -140,19 +140,13 @@ export default class PostComponent {
                 attrs: {src: '/static/img/next-arrow-icon.svg'}
             });
 
-            // const updateSlider = () => {
-            //     slider.style.transform = `translateX(-${currentIndex * this.picWidth}px)`;
-            //     paginator.innerText = `${currentIndex + 1}/${totalPics}`;
-            //     prevBtn.classList.toggle('hidden', currentIndex === 0);
-            //     nextBtn.classList.toggle('hidden', currentIndex === totalPics - 1);
-            //     prevTranslate = -currentIndex * this.picWidth; // <-- добавлено
-            // };
             const updateSlider = () => {
-                prevTranslate = -currentIndex * this.picWidth;
-                slider.style.transform = `translateX(${prevTranslate}px)`;
+                slider.style.transform = `translateX(-${currentIndex * this.picWidth}px)`;
                 paginator.innerText = `${currentIndex + 1}/${totalPics}`;
                 prevBtn.classList.toggle('hidden', currentIndex === 0);
                 nextBtn.classList.toggle('hidden', currentIndex === totalPics - 1);
+                
+                prevTranslate = -currentIndex * this.picWidth; // <-- добавлено
             };
             
 
@@ -211,19 +205,13 @@ export default class PostComponent {
 
             // Touch
             slider.addEventListener('touchstart', (e) => {
-                if (e.touches.length !== 1) return; // игнор мультитач
                 pointerDown(e.touches[0].clientX);
-            }, { passive: true });
-            
-            slider.addEventListener('touchmove', (e) => {
-                if (!isDragging || e.touches.length !== 1) return;
-                pointerMove(e.touches[0].clientX);
-                e.preventDefault(); // важно — блокируем скролл!
-            }, { passive: false }); // обязательно!
-            
-            slider.addEventListener('touchend', (e) => {
-                pointerUp();
-            });
+                // Это отключает вертикальный скролл во время свайпа
+                e.preventDefault();
+            }, { passive: false });
+            slider.addEventListener('touchmove', (e) => pointerMove(e.touches[0].clientX));
+            slider.addEventListener('touchend', pointerUp);
+            slider.addEventListener('touchcancel', pointerUp); // <-- вот это добавь обязательно
 
             // Disable image dragging
             slider.querySelectorAll('img').forEach(img => {
