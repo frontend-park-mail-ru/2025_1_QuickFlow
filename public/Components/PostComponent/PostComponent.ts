@@ -112,44 +112,44 @@ export default class PostComponent {
         let currentIndex = 0;
         const totalPics = this.#config.pics.length;
         this.picWidth = picsWrapper.clientWidth;
-    
+
         if (totalPics > 1) {
             const paginator = createElement({
                 parent: picsWrapper,
                 classes: ['post__paginator'],
                 text: `${currentIndex + 1}/${totalPics}`
             });
-    
+
             const prevBtn = createElement({
                 parent: picsWrapper,
                 classes: ['post__nav', 'post__nav_prev', 'hidden'],
             });
-    
+
             createElement({
                 parent: prevBtn,
                 attrs: {src: '/static/img/prev-arrow-icon.svg'}
             });
-    
+
             const nextBtn = createElement({
                 parent: picsWrapper,
                 classes: ['post__nav', 'post__nav_next'],
             });
-    
+
             createElement({
                 parent: nextBtn,
                 attrs: {src: '/static/img/next-arrow-icon.svg'}
             });
-    
+
             const updateSlider = () => {
-                this.picWidth = picsWrapper.clientWidth;
-                slider.style.transition = 'transform 0.3s ease';
                 slider.style.transform = `translateX(-${currentIndex * this.picWidth}px)`;
                 paginator.innerText = `${currentIndex + 1}/${totalPics}`;
                 prevBtn.classList.toggle('hidden', currentIndex === 0);
                 nextBtn.classList.toggle('hidden', currentIndex === totalPics - 1);
-                prevTranslate = -currentIndex * this.picWidth;
+                
+                prevTranslate = -currentIndex * this.picWidth; // <-- добавлено
             };
-    
+            
+
             prevBtn.addEventListener('click', () => {
                 if (currentIndex > 0) {
                     currentIndex--;
@@ -163,68 +163,68 @@ export default class PostComponent {
                     updateSlider();
                 }
             });
-    
-            // --- SWIPE ---
+
+            // --- SWIPE / DRAG HANDLING ---
             let startX = 0;
             let currentTranslate = 0;
             let prevTranslate = 0;
             let isDragging = false;
-    
-            const getX = (e: TouchEvent | MouseEvent): number => {
-                return e instanceof TouchEvent ? e.touches[0].clientX : (e as MouseEvent).clientX;
-            };
-    
+
             const pointerDown = (x: number) => {
-                this.picWidth = picsWrapper.clientWidth;
                 startX = x;
                 isDragging = true;
-                currentTranslate = prevTranslate;
+                currentTranslate = prevTranslate; // <-- добавлено
                 slider.style.transition = 'none';
             };
-    
+            
+
             const pointerMove = (x: number) => {
                 if (!isDragging) return;
                 const delta = x - startX;
                 currentTranslate = prevTranslate + delta;
                 slider.style.transform = `translateX(${currentTranslate}px)`;
             };
-    
+
             const pointerUp = () => {
                 if (!isDragging) return;
                 isDragging = false;
-    
                 const movedBy = currentTranslate - prevTranslate;
-    
-                if (movedBy < -50 && currentIndex < totalPics - 1) {
-                    currentIndex++;
-                } else if (movedBy > 50 && currentIndex > 0) {
-                    currentIndex--;
-                }
-    
-                updateSlider();
+            
+                if (movedBy < -50 && currentIndex < totalPics - 1) currentIndex++;
+                if (movedBy > 50 && currentIndex > 0) currentIndex--;
+            
+                slider.style.transition = 'transform 0.3s ease';
+                updateSlider(); // prevTranslate обновится внутри
             };
-    
+
             // Mouse
             slider.addEventListener('mousedown', (e) => pointerDown(e.clientX));
             slider.addEventListener('mousemove', (e) => pointerMove(e.clientX));
             slider.addEventListener('mouseup', pointerUp);
             slider.addEventListener('mouseleave', pointerUp);
-    
+
             // Touch
-            slider.addEventListener('touchstart', (e) => pointerDown(getX(e)));
+            slider.addEventListener('touchstart', (e) => {
+                if (e.touches.length !== 1) return; // игнор мультитач
+                pointerDown(e.touches[0].clientX);
+            }, { passive: true });
+            
             slider.addEventListener('touchmove', (e) => {
-                pointerMove(getX(e));
-                e.preventDefault();
-            }, { passive: false });
-            slider.addEventListener('touchend', pointerUp);
-    
+                if (!isDragging || e.touches.length !== 1) return;
+                pointerMove(e.touches[0].clientX);
+                e.preventDefault(); // важно — блокируем скролл!
+            }, { passive: false }); // обязательно!
+            
+            slider.addEventListener('touchend', (e) => {
+                pointerUp();
+            });
+
             // Disable image dragging
             slider.querySelectorAll('img').forEach(img => {
                 img.setAttribute('draggable', 'false');
             });
         }
     }
-    
 
     renderActions() {
         const actionsWrapper = createElement({
