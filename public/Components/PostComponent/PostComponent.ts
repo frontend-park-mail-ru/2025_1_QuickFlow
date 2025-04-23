@@ -141,6 +141,7 @@ export default class PostComponent {
             });
 
             const updateSlider = () => {
+                this.picWidth = picsWrapper.clientWidth; // <- обновляем каждый раз
                 slider.style.transform = `translateX(-${currentIndex * this.picWidth}px)`;
                 paginator.innerText = `${currentIndex + 1}/${totalPics}`;
                 prevBtn.classList.toggle('hidden', currentIndex === 0);
