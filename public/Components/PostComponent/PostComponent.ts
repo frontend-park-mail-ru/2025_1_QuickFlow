@@ -195,6 +195,7 @@ export default class PostComponent {
             
                 slider.style.transition = 'transform 0.3s ease';
                 updateSlider(); // prevTranslate обновится внутри
+                prevTranslate = -currentIndex * this.picWidth; // Обновляем prevTranslate
             };
 
             // Mouse
