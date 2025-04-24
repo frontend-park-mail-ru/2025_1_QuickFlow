@@ -278,6 +278,7 @@
         aspect-ratio: 4 / 5;
         align-self: center;
         border-radius: 0;
+        touch-action: pan-y;
     }
 
     .post__slider {

@@ -226,7 +226,7 @@ export default class PostComponent {
             // Touch
             picsWrapper.addEventListener('touchstart', (e) => {
                 pointerDown(e.touches[0].clientX, e.touches[0].clientY);
-                // e.preventDefault();
+                e.preventDefault();
             }, { passive: false });
             
             picsWrapper.addEventListener('touchmove', (e) => {
