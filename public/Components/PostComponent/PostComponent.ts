@@ -205,7 +205,7 @@ export default class PostComponent {
             slider.addEventListener('mouseleave', pointerUp);
 
             // Touch
-            slider.addEventListener('touchstart', (e) => {
+            picsWrapper.addEventListener('touchstart', (e) => {
                 createElement({
                     tag: 'div',
                     parent: slider.parentNode.parentNode,
@@ -219,7 +219,7 @@ export default class PostComponent {
                     text: 'touchstart end',
                 });
             });
-            slider.addEventListener('touchmove', (e) => {
+            picsWrapper.addEventListener('touchmove', (e) => {
                 createElement({
                     tag: 'div',
                     parent: slider.parentNode.parentNode,
@@ -232,7 +232,7 @@ export default class PostComponent {
                     text: 'touchmove end',
                 });
             });
-            slider.addEventListener('touchend', () => {
+            picsWrapper.addEventListener('touchend', () => {
                 createElement({
                     tag: 'div',
                     parent: slider.parentNode.parentNode,
@@ -245,7 +245,7 @@ export default class PostComponent {
                     text: 'touchend end',
                 });
             });
-            slider.addEventListener('touchcancel', () => {
+            picsWrapper.addEventListener('touchcancel', () => {
                 createElement({
                     tag: 'div',
                     parent: slider.parentNode.parentNode,
