@@ -10,7 +10,7 @@ import router from '@router';
 
 
 const AUTHOR_AVATAR_SIZE = 's';
-const PICTURE_WIDTH = 553;
+// const PICTURE_WIDTH = 553;
 const READ_MORE_BTN_TEXT = 'Показать ещё';
 const READ_LESS_BTN_TEXT = 'Скрыть';
 const ADD_TO_FRIENDS_BTN_TEXT = 'Добавить в друзья';
@@ -20,6 +20,7 @@ const DEAFULT_IMG_ALT = 'post image';
 const DISPLAYED_ACTIONS = ['like', 'comment', 'repost'];
 const RELATION_STRANGER = "stranger";
 const RELATION_FOLLOWED_BY = "followed_by";
+const SLIDER_RESPONSIVITY = 50;
 const DISPLAYED_RELATIONS = [RELATION_STRANGER, RELATION_FOLLOWED_BY];
 const ADMINS_USERNAMES = [
     "rvasutenko",
@@ -146,7 +147,7 @@ export default class PostComponent {
                 prevBtn.classList.toggle('hidden', currentIndex === 0);
                 nextBtn.classList.toggle('hidden', currentIndex === totalPics - 1);
                 
-                prevTranslate = -currentIndex * this.picWidth; // <-- добавлено
+                prevTranslate = -currentIndex * this.picWidth;
             };
             
 
@@ -166,98 +167,74 @@ export default class PostComponent {
 
             // --- SWIPE / DRAG HANDLING ---
             let startX = 0;
+            let startY = 0;
             let currentTranslate = 0;
             let prevTranslate = 0;
             let isDragging = false;
+            let isHorizontalSwipe = false;
 
-            const pointerDown = (x: number) => {
+            const pointerDown = (x: number, y: number) => {
                 startX = x;
+                startY = y;
                 isDragging = true;
-                currentTranslate = prevTranslate; // <-- добавлено
+                isHorizontalSwipe = false;
+                currentTranslate = prevTranslate;
                 slider.style.transition = 'none';
             };
             
 
-            const pointerMove = (x: number) => {
+            const pointerMove = (x: number, y: number) => {
                 if (!isDragging) return;
-                const delta = x - startX;
-                currentTranslate = prevTranslate + delta;
+            
+                const dx = x - startX;
+                const dy = y - startY;
+            
+                // Определяем направление свайпа
+                if (!isHorizontalSwipe && Math.abs(dx) > 5) {
+                    isHorizontalSwipe = Math.abs(dx) > Math.abs(dy);
+                }
+            
+                // Если свайп вертикальный — ничего не делаем
+                if (!isHorizontalSwipe) return;
+            
+                currentTranslate = prevTranslate + dx;
                 slider.style.transform = `translateX(${currentTranslate}px)`;
             };
 
             const pointerUp = () => {
                 if (!isDragging) return;
                 isDragging = false;
+            
+                if (!isHorizontalSwipe) return;
+            
                 const movedBy = currentTranslate - prevTranslate;
             
-                if (movedBy < -50 && currentIndex < totalPics - 1) currentIndex++;
-                if (movedBy > 50 && currentIndex > 0) currentIndex--;
+                if (movedBy < -SLIDER_RESPONSIVITY && currentIndex < totalPics - 1) currentIndex++;
+                if (movedBy > SLIDER_RESPONSIVITY && currentIndex > 0) currentIndex--;
             
                 slider.style.transition = 'transform 0.3s ease';
-                updateSlider(); // prevTranslate обновится внутри
-                prevTranslate = -currentIndex * this.picWidth; // Обновляем prevTranslate
+                updateSlider();
+                prevTranslate = -currentIndex * this.picWidth;
             };
 
             // Mouse
-            slider.addEventListener('mousedown', (e) => pointerDown(e.clientX));
-            slider.addEventListener('mousemove', (e) => pointerMove(e.clientX));
+            slider.addEventListener('mousedown', (e) => pointerDown(e.clientX, e.clientY));
+            slider.addEventListener('mousemove', (e) => pointerMove(e.clientX, e.clientY));
             slider.addEventListener('mouseup', pointerUp);
             slider.addEventListener('mouseleave', pointerUp);
 
             // Touch
             picsWrapper.addEventListener('touchstart', (e) => {
-                createElement({
-                    tag: 'div',
-                    parent: slider.parentNode.parentNode,
-                    text: 'touchstart',
-                });
-                pointerDown(e.touches[0].clientX);
+                pointerDown(e.touches[0].clientX, e.touches[0].clientY);
                 e.preventDefault();
-                createElement({
-                    tag: 'div',
-                    parent: slider.parentNode.parentNode,
-                    text: 'touchstart end',
-                });
-            });
+            }, { passive: false });
+            
             picsWrapper.addEventListener('touchmove', (e) => {
-                createElement({
-                    tag: 'div',
-                    parent: slider.parentNode.parentNode,
-                    text: 'touchmove',
-                });
-                pointerMove(e.touches[0].clientX);
-                createElement({
-                    tag: 'div',
-                    parent: slider.parentNode.parentNode,
-                    text: 'touchmove end',
-                });
+                pointerMove(e.touches[0].clientX, e.touches[0].clientY);
             });
-            picsWrapper.addEventListener('touchend', () => {
-                createElement({
-                    tag: 'div',
-                    parent: slider.parentNode.parentNode,
-                    text: 'touchend',
-                });
-                pointerUp();
-                createElement({
-                    tag: 'div',
-                    parent: slider.parentNode.parentNode,
-                    text: 'touchend end',
-                });
-            });
-            picsWrapper.addEventListener('touchcancel', () => {
-                createElement({
-                    tag: 'div',
-                    parent: slider.parentNode.parentNode,
-                    text: 'touchcancel',
-                });
-                pointerUp();
-                createElement({
-                    tag: 'div',
-                    parent: slider.parentNode.parentNode,
-                    text: 'touchcancel end',
-                });
-            }); // <-- вот это добавь обязательно
+            
+            picsWrapper.addEventListener('touchend', () => pointerUp());
+            picsWrapper.addEventListener('touchcancel', () => pointerUp());
 
             // Disable image dragging
             slider.querySelectorAll('img').forEach(img => {
