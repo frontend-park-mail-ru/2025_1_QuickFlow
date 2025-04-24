@@ -24,3 +24,32 @@
     flex-direction: column;
     gap: 8px;
 }
+
+@media screen and (max-width: 545px) {
+    .auth__wrapper {
+        width: 100%;
+        flex-direction: column;
+        max-width: 360px;
+    }
+
+    .auth__info {
+        gap: 4px;
+        align-items: center;
+        white-space: normal;
+        text-align: center;
+    }
+
+    .auth__info-header {
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .auth-form {
+        width: 100%;
+    }
+
+    .auth-form__logo {
+        width: 28px;
+    }
+}

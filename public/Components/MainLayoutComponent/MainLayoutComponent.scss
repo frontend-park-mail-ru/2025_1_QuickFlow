@@ -19,7 +19,7 @@
 
 .container_auth {
     max-width: 100%;
-    padding: 24px 64px;
+    padding: 15px 64px;
     position: absolute;
     left: 0;
     top: 0;
@@ -87,6 +87,11 @@
     .container {
         flex-direction: column;
         width: 100%;
+    }
+
+    .container_auth {
+        padding: 15px;
+        padding-bottom: 128px;
     }
 }
 

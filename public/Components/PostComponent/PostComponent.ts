@@ -224,17 +224,18 @@ export default class PostComponent {
             slider.addEventListener('mouseleave', pointerUp);
 
             // Touch
-            picsWrapper.addEventListener('touchstart', (e) => {
-                pointerDown(e.touches[0].clientX, e.touches[0].clientY);
-                // e.preventDefault();
-            }, { passive: false });
-            
-            picsWrapper.addEventListener('touchmove', (e) => {
-                pointerMove(e.touches[0].clientX, e.touches[0].clientY);
+            picsWrapper.addEventListener('touchstart', (e) => 
+                pointerDown(e.touches[0].clientX, e.touches[0].clientY),
+            {
+                passive: false
             });
             
-            picsWrapper.addEventListener('touchend', () => pointerUp());
-            picsWrapper.addEventListener('touchcancel', () => pointerUp());
+            picsWrapper.addEventListener('touchmove', (e) => 
+                pointerMove(e.touches[0].clientX, e.touches[0].clientY)
+            );
+            
+            picsWrapper.addEventListener('touchend', pointerUp);
+            picsWrapper.addEventListener('touchcancel', pointerUp);
 
             // Disable image dragging
             slider.querySelectorAll('img').forEach(img => {
