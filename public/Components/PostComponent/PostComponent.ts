@@ -206,13 +206,58 @@ export default class PostComponent {
 
             // Touch
             slider.addEventListener('touchstart', (e) => {
+                createElement({
+                    tag: 'div',
+                    parent: slider.parentNode.parentNode,
+                    text: 'touchstart',
+                });
                 pointerDown(e.touches[0].clientX);
-                // Это отключает вертикальный скролл во время свайпа
                 e.preventDefault();
-            }, { passive: false });
-            slider.addEventListener('touchmove', (e) => pointerMove(e.touches[0].clientX));
-            slider.addEventListener('touchend', pointerUp);
-            slider.addEventListener('touchcancel', pointerUp); // <-- вот это добавь обязательно
+                createElement({
+                    tag: 'div',
+                    parent: slider.parentNode.parentNode,
+                    text: 'touchstart end',
+                });
+            });
+            slider.addEventListener('touchmove', (e) => {
+                createElement({
+                    tag: 'div',
+                    parent: slider.parentNode.parentNode,
+                    text: 'touchmove',
+                });
+                pointerMove(e.touches[0].clientX);
+                createElement({
+                    tag: 'div',
+                    parent: slider.parentNode.parentNode,
+                    text: 'touchmove end',
+                });
+            });
+            slider.addEventListener('touchend', () => {
+                createElement({
+                    tag: 'div',
+                    parent: slider.parentNode.parentNode,
+                    text: 'touchend',
+                });
+                pointerUp();
+                createElement({
+                    tag: 'div',
+                    parent: slider.parentNode.parentNode,
+                    text: 'touchend end',
+                });
+            });
+            slider.addEventListener('touchcancel', () => {
+                createElement({
+                    tag: 'div',
+                    parent: slider.parentNode.parentNode,
+                    text: 'touchcancel',
+                });
+                pointerUp();
+                createElement({
+                    tag: 'div',
+                    parent: slider.parentNode.parentNode,
+                    text: 'touchcancel end',
+                });
+            }); // <-- вот это добавь обязательно
 
             // Disable image dragging
             slider.querySelectorAll('img').forEach(img => {
