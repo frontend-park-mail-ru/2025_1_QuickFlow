@@ -37,6 +37,7 @@
         align-items: center;
         white-space: normal;
         text-align: center;
+        padding: 20px 24px;
     }
 
     .auth__info-header {
@@ -47,9 +48,14 @@
 
     .auth-form {
         width: 100%;
+        padding: 24px;
+    }
+
+    .auth-form__personal-info {
+        gap: 16px;
     }
 
     .auth-form__logo {
-        width: 28px;
+        width: 24px;
     }
 }

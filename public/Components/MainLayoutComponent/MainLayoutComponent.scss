@@ -79,7 +79,7 @@
     min-width: 553px;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 545px) {
     .container__column_left {
         min-width: 100%;
     }
@@ -91,7 +91,7 @@
 
     .container_auth {
         padding: 15px;
-        padding-bottom: 128px;
+        padding-bottom: 56px;
     }
 }
 
