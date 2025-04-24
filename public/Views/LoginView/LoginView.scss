@@ -26,10 +26,16 @@
 }
 
 @media screen and (max-width: 545px) {
+    .container_auth {
+        padding: 15px;
+        padding-bottom: 48px;
+    }
+
     .auth__wrapper {
         width: 100%;
         flex-direction: column;
         max-width: 360px;
+        max-height: 100%;
     }
 
     .auth__info {

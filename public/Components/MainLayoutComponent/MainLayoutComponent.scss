@@ -79,7 +79,7 @@
     min-width: 553px;
 }
 
-@media screen and (max-width: 545px) {
+@media screen and (max-width: 480px) {
     .container__column_left {
         min-width: 100%;
     }
@@ -87,11 +87,6 @@
     .container {
         flex-direction: column;
         width: 100%;
-    }
-
-    .container_auth {
-        padding: 15px;
-        padding-bottom: 56px;
     }
 }
 
