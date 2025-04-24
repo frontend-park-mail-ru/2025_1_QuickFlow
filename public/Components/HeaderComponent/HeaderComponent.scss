@@ -14,12 +14,6 @@
     justify-content: center;
 }
 
-@media screen and (max-width: 480px) {
-    .header {
-        display: none;
-    }
-}
-
 .header__inner {
     display: flex;
     width: 100%;
@@ -123,4 +117,24 @@ a {
     height: 10px;
     background: url(./static/img/show-dropdown-arrow.svg) 0 0 no-repeat;
     cursor: pointer;
+}
+
+@media screen and (max-width: 480px) {
+    .header {
+        width: 100%;
+        padding: 0 15px;
+        border: none;
+    }
+
+    .header__left {
+        display: none;
+    }
+
+    .header__right {
+        padding: 0;
+    }
+
+    .header__dropdown-icon {
+        display: none;
+    }
 }

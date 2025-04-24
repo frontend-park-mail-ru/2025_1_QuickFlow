@@ -179,3 +179,13 @@
     -webkit-line-clamp: 2;
     line-clamp: 2;
 }
+
+@media screen and (max-width: 480px) {
+    .container_profile {
+        padding-top: 56px;
+    }
+
+    .profile__avatar {
+        left: 12px;
+    }
+}
