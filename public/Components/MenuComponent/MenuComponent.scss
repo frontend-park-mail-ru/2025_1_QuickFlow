@@ -68,7 +68,8 @@
         border-right: none;
         border-top: 1px solid var(--stroke-primary);
         flex-direction: row;
-        padding: 4px 4px 28px 4px;
+        padding: 0px 0 28px 0;
+        gap: 0;
     }
 
     .menu__logo {

@@ -10,6 +10,8 @@ import CoverComponent from '@components/CoverComponent/CoverComponent';
 import router from '@router';
 import { ACTIONS_PROPERTIES, INFO_ITEMS_LAYOUT } from './ProfileActionsConfig';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
+import ProfileMenuComponent from '@components/ProfileMenuComponent/ProfileMenuComponent';
+import insertIcon from '@utils/insertIcon';
 
 
 class ProfileView {
@@ -127,6 +129,30 @@ class ProfileView {
             src: data.profile.cover_url,
             type: 'profile',
         });
+
+        const profileMenu = createElement({
+            parent: profileHeader,
+            classes: ['js-profile-menu'],
+        });
+
+        const profileMenuBtn = createElement({
+            parent: profileMenu,
+            classes: ['profile__menu-btn'],
+        });
+
+        insertIcon(profileMenuBtn, {
+            name: 'options-icon',
+            classes: ['profile__menu-icon'],
+        });
+
+        new ProfileMenuComponent(profileMenu, {
+            userData: data,
+        });
+
+        // createElement({
+        //     parent: profileMenu,
+        //     classes: ['profile__menu-btn'],
+        // });
 
         new AvatarComponent(profileHeader, {
             size: 'xxxl',

@@ -77,6 +77,18 @@ const config = {
             text: 'Мессенджер',
             icon: 'messenger-icon',
         },
+        // menu: {
+        //     // href: '/menu',
+        //     text: 'Меню',
+        //     icon: 'menu-burger-icon',
+        //     onClick: () => {
+        //         createElement({
+        //             parent: container,
+        //             classes: ['menu'],
+        //             attrs: {id: 'menu'},
+        //         });
+        //     },
+        // },
     },
     isAuthorized: true,
 };

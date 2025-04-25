@@ -56,7 +56,7 @@ export default class MenuComponent {
         this.renderLogo();
 
         Object.entries(this.#config.menu).forEach(([key, option], index) => {
-            const { href, text, icon } = option as { href: string; text: string; icon?: string };
+            const { href, text, icon, onClick } = option as { href?: string; text: string; icon?: string; onClick?: any };
             
             const menuElement = createElement({
                 tag: 'a',
@@ -65,20 +65,15 @@ export default class MenuComponent {
                     'menu__item',
                     key === 'profiles' ? 'js-profile-menu-item' : 'menu__item'
                 ],
-                attrs: {href, 'data-section': key}
+                attrs: {'data-section': key}
             });
 
+            if (href) menuElement.setAttribute('href', href);
 
             insertIcon(menuElement, {
                 name: icon,
                 classes: ['menu__icon'],
             });
-
-            // createElement({
-            //     parent: menuElement,
-            //     classes: ['menu__icon'],
-            //     attrs: {src: `/static/img/${icon}.svg`}
-            // });
 
             createElement({
                 parent: menuElement,
@@ -89,6 +84,13 @@ export default class MenuComponent {
             if (index === 0) {
                 menuElement.classList.add('menu__item_active');
                 this.activePageLink = menuElement;
+            }
+
+            if (onClick) {
+                menuElement.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    onClick();
+                });
             }
 
             this.menuElements[key] = menuElement;
@@ -131,9 +133,15 @@ export default class MenuComponent {
     }
 
     goToPage(menuElement: HTMLElement) {
-        if (menuElement.dataset.section === router.path.slice(1)) return;
+        if (
+            menuElement.getAttribute('href') === router.path &&
+            // menuElement.dataset.section === router.path.slice(1) &&
+            this.activePageLink.getAttribute('href')
+        ) return;
 
         this.setActive(menuElement.dataset.section);
+        if (!menuElement.getAttribute('href')) return;
+        
         router.go({ path: menuElement.getAttribute('href') });
     }
 }
