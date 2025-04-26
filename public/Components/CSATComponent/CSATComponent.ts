@@ -175,6 +175,7 @@ export default class CSATComponent {
     feedbackPost() {
         const body = {
             type: this.config.type,
+            text: '',
             rating: this.selectedRating,
         };
 
