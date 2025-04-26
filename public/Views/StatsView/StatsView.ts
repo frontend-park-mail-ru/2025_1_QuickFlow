@@ -54,7 +54,7 @@ class StatsView {
             variant: 'secondary',
             size: 'small',
             text: 'NPS',
-            onClick: () => router.go({ path: '/stats?type=recommendations' }),
+            onClick: () => router.go({ path: '/stats?type=recommendation' }),
         });
         new ButtonComponent(this.containerObj.container, {
             variant: 'secondary',
