@@ -84,9 +84,11 @@ class StatsView {
     }
 
     cbOk(feedbackData: any) {
+        let rounded = (num, decimals) => Number(num.toFixed(decimals))
+
         createElement({
             parent: this.containerObj.container,
-            text: `Средннее: ${feedbackData.payload.average}`,
+            text: `Средннее: ${rounded(feedbackData.payload.average, 2)}`,
             tag: 'h1',
         });
 
