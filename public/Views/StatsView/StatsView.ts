@@ -39,11 +39,9 @@ class StatsView {
     }
 
     cbOk(feedbackData: any) {
-        console.log(feedbackData);
-
         createElement({
             parent: this.containerObj.container,
-            text: feedbackData.payload.average,
+            text: `Средннее: ${feedbackData.payload.average}`,
             tag: 'h1',
         });
 
