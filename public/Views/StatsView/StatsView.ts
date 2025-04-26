@@ -21,7 +21,7 @@ class StatsView {
             url: `/feedback`,
             params: {
                 type: params.type,
-                feedback_count: 25,
+                feedback_count: 50,
             },
             callback: (status: number, feedbackData: any) => {
                 switch (status) {
@@ -44,6 +44,7 @@ class StatsView {
         createElement({
             parent: this.containerObj.container,
             text: feedbackData.payload.average,
+            tag: 'h1',
         });
 
         const feedbacks = createElement({
