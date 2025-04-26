@@ -50,9 +50,16 @@ export default class MainLayoutComponent {
             case 'not-found': 
                 this.renderNotFound();
                 break;
+            case 'stats': 
+                this.renderStats();
+                break;
         }
 
         return this;
+    }
+
+    renderStats() {
+
     }
 
     renderScores() {

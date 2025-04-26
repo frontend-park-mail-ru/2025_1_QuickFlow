@@ -3,14 +3,18 @@ import MessengerComponent from '@components/MessengerComponent/MessengerComponen
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import { getLsItem } from '@utils/localStorage';
 import router from '@router';
+import createElement from '@utils/createElement';
+import insertIcon from '@utils/insertIcon';
 
 
 class StatsView {
+    private containerObj: MainLayoutComponent;
+
     constructor() {}
 
     render(params: any) {
-        const containerObj = new MainLayoutComponent().render({
-            type: 'messenger',
+        this.containerObj = new MainLayoutComponent().render({
+            type: 'stats',
         });
 
         Ajax.get({
@@ -31,11 +35,45 @@ class StatsView {
             }
         });
 
-        return containerObj.container;
+        return this.containerObj.container;
     }
 
     cbOk(feedbackData: any) {
         console.log(feedbackData);
+
+        createElement({
+            parent: this.containerObj.container,
+            text: feedbackData.payload.average,
+        });
+
+        const feedbacks = createElement({
+            parent: this.containerObj.container,
+            classes: ['feedbacks'],
+        });
+
+        for (const [index, fbData] of feedbackData.payload.feedbacks.entries()) {
+            const feedback = createElement({
+                parent: feedbacks,
+                classes: ['feedback'],
+            });
+
+            createElement({
+                parent: feedback,
+                text: `${index + 1}. ${fbData.firstname} ${fbData.lastname}`,
+            });
+
+            const feedbackRating = createElement({
+                parent: feedback,
+                classes: ['feedback__rating'],
+            });
+
+            for (let i = 0; i < fbData.rating; i++) {
+                insertIcon(feedbackRating, {
+                    name: 'star-fill-icon',
+                    classes: ['csat__rate-icon', 'csat__rate-icon_selected'],
+                })
+            }
+        }
     }
 }
 

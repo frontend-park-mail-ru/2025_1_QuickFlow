@@ -247,6 +247,46 @@ app.post('/api/messages/:username', (req, res) => {
     });
 });
 
+app.get('/api/feedback', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const username = ids[id];
+    if (!username || !users[username]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).json({
+        "payload": {
+            "average": 4.666666666666667,
+            "feedbacks": [
+                {
+                    "type": "auth",
+                    "text": "",
+                    "rating": 5,
+                    "username": "rvasutenko",
+                    "firstname": "Роман",
+                    "lastname": "Васютенко"
+                },
+                {
+                    "type": "auth",
+                    "text": "",
+                    "rating": 4,
+                    "username": "Timex",
+                    "firstname": "Матвей",
+                    "lastname": "Митрофанов"
+                },
+                {
+                    "type": "auth",
+                    "text": "",
+                    "rating": 5,
+                    "username": "olala",
+                    "firstname": "adsf",
+                    "lastname": "adsfasdf"
+                }
+            ]
+        }
+    });
+});
+
 app.post('/api/feedback', (req, res) => {
     const id = req.cookies['podvorot'];
     const username = ids[id];

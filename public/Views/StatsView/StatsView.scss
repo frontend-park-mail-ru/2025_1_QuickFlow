@@ -1,0 +1,25 @@
+.container_stats {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.feedbacks {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.feedback {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 15px;
+    gap: 4px;
+}
+
+.feedback__rating {
+    display: flex;
+    flex-direction: row;
+}
