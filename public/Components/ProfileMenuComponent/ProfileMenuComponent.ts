@@ -16,41 +16,11 @@ const MENU_ITEMS = {
         icon: 'settings-icon',
         render: () => router.go({ path: '/profile/edit' }),
     },
-    stats1: {
-        href: '/stats?type=general',
-        text: 'Статистика CSAT',
+    stats: {
+        href: '/stats',
+        text: 'Статистика',
         icon: 'stats-icon',
-        render: () => router.go({ path: '/stats?type=general' }),
-    },
-    stats2: {
-        href: '/stats?type=recommendation',
-        text: 'Статистика NPS',
-        icon: 'stats-icon',
-        render: () => router.go({ path: '/stats?type=recommendation' }),
-    },
-    stats3: {
-        href: '/stats?type=auth',
-        text: 'Статистика: регистрация',
-        icon: 'stats-icon',
-        render: () => router.go({ path: '/stats?type=auth' }),
-    },
-    stats4: {
-        href: '/stats?type=post',
-        text: 'Статистика: пост',
-        icon: 'stats-icon',
-        render: () => router.go({ path: '/stats?type=post' }),
-    },
-    stats5: {
-        href: '/stats?type=messenger',
-        text: 'Статистика: мессенджер',
-        icon: 'stats-icon',
-        render: () => router.go({ path: '/stats?type=messenger' }),
-    },
-    stats6: {
-        href: '/stats?type=profile',
-        text: 'Статистика: профиль',
-        icon: 'stats-icon',
-        render: () => router.go({ path: '/stats?type=profile' }),
+        render: () => router.go({ path: '/stats' }),
     },
     theme: {},
     logout: {

@@ -5,6 +5,7 @@ import { getLsItem } from '@utils/localStorage';
 import router from '@router';
 import createElement from '@utils/createElement';
 import insertIcon from '@utils/insertIcon';
+import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 
 
 class StatsView {
@@ -17,25 +18,69 @@ class StatsView {
             type: 'stats',
         });
 
-        Ajax.get({
-            url: `/feedback`,
-            params: {
-                type: params.type,
-                feedback_count: 50,
-            },
-            callback: (status: number, feedbackData: any) => {
-                switch (status) {
-                    case 200:
-                        this.cbOk(feedbackData);
-                        break;
-                    case 401:
-                        router.go({ path: '/login' });
-                        break;
+        if (Object.keys(params).length === 0) {
+            this.renderStatsMenu();
+        } else {
+            Ajax.get({
+                url: `/feedback`,
+                params: {
+                    type: params.type,
+                    feedback_count: 50,
+                },
+                callback: (status: number, feedbackData: any) => {
+                    switch (status) {
+                        case 200:
+                            this.cbOk(feedbackData);
+                            break;
+                        case 401:
+                            router.go({ path: '/login' });
+                            break;
+                    }
                 }
-            }
-        });
+            });
+        }
 
         return this.containerObj.container;
+    }
+
+    renderStatsMenu() {
+        new ButtonComponent(this.containerObj.container, {
+            variant: 'secondary',
+            text: 'CSAT',
+            size: 'small',
+            onClick: () => router.go({ path: '/stats?type=general' }),
+        });
+        new ButtonComponent(this.containerObj.container, {
+            variant: 'secondary',
+            size: 'small',
+            text: 'NPS',
+            onClick: () => router.go({ path: '/stats?type=recommendations' }),
+        });
+        new ButtonComponent(this.containerObj.container, {
+            variant: 'secondary',
+            text: 'Регистрация',
+            size: 'small',
+            onClick: () => router.go({ path: '/stats?type=auth' }),
+        });
+        new ButtonComponent(this.containerObj.container, {
+            variant: 'secondary',
+            text: 'Создание поста',
+            size: 'small',
+            onClick: () => router.go({ path: '/stats?type=post' }),
+        });
+        new ButtonComponent(this.containerObj.container, {
+            variant: 'secondary',
+            text: 'Мессенджер',
+            size: 'small',
+            onClick: () => router.go({ path: '/stats?type=messenger' }),
+        });
+        new ButtonComponent(this.containerObj.container, {
+            variant: 'secondary',
+            text: 'Профиль',
+            size: 'small',
+            onClick: () => router.go({ path: '/stats?type=profile' }),
+        });
+
     }
 
     cbOk(feedbackData: any) {
