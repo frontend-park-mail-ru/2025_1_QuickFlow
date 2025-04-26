@@ -198,7 +198,7 @@ export default class CSATComponent {
 
         const body = {
             type: this.config.type,
-            text: this.textarea.value,
+            text: this.textarea?.value || '',
             rating: this.selectedRating,
         };
 
