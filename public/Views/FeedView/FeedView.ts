@@ -71,13 +71,13 @@ class FeedView {
             getLsItem('is-auth-feedback-given', 'false') === 'true'
         ) {
             new IFrameComponent(this.containerObj.container, {
-                src: 'http://localhost:3000/scores?type=general',
+                src: '/scores?type=general',
             });
         }
 
         if (getLsItem('is-auth-feedback-given', 'false') === 'false') {
             new IFrameComponent(this.containerObj.container, {
-                src: 'http://localhost:3000/scores?type=auth',
+                src: '/scores?type=auth',
             });
         }
 
@@ -87,7 +87,7 @@ class FeedView {
             getLsItem('is-auth-feedback-given', 'false') === 'true'
         ) {
             new IFrameComponent(this.containerObj.container, {
-                src: 'http://localhost:3000/scores?type=recommendation',
+                src: '/scores?type=recommendation',
             });
         }
     }
