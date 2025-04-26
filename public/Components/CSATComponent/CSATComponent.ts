@@ -1,4 +1,5 @@
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
+import TextareaComponent from '@components/UI/TextareaComponent/TextareaComponent';
 import createElement from '@utils/createElement';
 import insertIcon from '@utils/insertIcon';
 import { setLsItem, getLsItem } from '@utils/localStorage';
@@ -14,6 +15,7 @@ export default class CSATComponent {
 
     container: HTMLElement;
     private selectedRating: number = 0;
+    private textarea: TextareaComponent | null = null;
     private stars: HTMLElement[] = [];
 
     constructor(parent: HTMLElement, config: Record<string, any>) {
@@ -115,9 +117,9 @@ export default class CSATComponent {
         this.renderSubmitBtn();
     }
 
-    private renderSubmitBtn() {
+    private renderSubmitBtn(text = 'Продолжить') {
         new ButtonComponent(this.container, {
-            text: 'Далее',
+            text,
             type: "submit",
             variant: 'primary',
             size: 'small',
@@ -173,9 +175,30 @@ export default class CSATComponent {
     }
 
     feedbackPost() {
+        if (!this.textarea && this.selectedRating < 5) {
+            this.container.innerHTML = '';
+
+            this.header = createElement({
+                parent: this.container,
+                classes: ['csat__header'],
+            });
+
+            createElement({
+                parent: this.header,
+                classes: ['csat__title'],
+                text: 'Расскажите, что можно было бы улучшить?'
+            });
+
+            this.renderCloseBtn();
+            this.textarea = new TextareaComponent(this.container, {});
+            this.renderSubmitBtn('Отправить');
+
+            return;
+        }
+
         const body = {
             type: this.config.type,
-            text: '',
+            text: this.textarea.value,
             rating: this.selectedRating,
         };
 
