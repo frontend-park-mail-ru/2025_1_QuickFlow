@@ -16,6 +16,12 @@ const MENU_ITEMS = {
         icon: 'settings-icon',
         render: () => router.go({ path: '/profile/edit' }),
     },
+    stats: {
+        href: '/stats',
+        text: 'Статистика',
+        icon: 'stats-icon',
+        render: () => router.go({ path: '/stats' }),
+    },
     theme: {},
     logout: {
         href: '/logout',

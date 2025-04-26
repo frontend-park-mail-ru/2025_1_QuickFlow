@@ -23,6 +23,8 @@
 @use './Components/MessengerComponent/ChatComponent';
 @use './Components/ResizerComponent/ResizerComponent';
 @use './Components/FeedComponent/FeedComponent';
+@use './Components/CSATComponent/CSATComponent';
+@use './Components/UI/IFrameComponent/IFrameComponent';
 
 @use './Views/FeedView/FeedView';
 @use './Views/ProfileView/ProfileView';
@@ -30,3 +32,4 @@
 @use './Views/MessengerView/MessengerView';
 @use './Views/NotFoundView/NotFoundView';
 @use './Views/LoginView/LoginView';
+@use './Views/CSATView/CSATView';

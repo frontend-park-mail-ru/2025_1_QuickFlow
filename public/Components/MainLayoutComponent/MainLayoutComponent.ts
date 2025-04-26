@@ -38,11 +38,14 @@ export default class MainLayoutComponent {
             case 'profile': 
                 this.renderProfile();
                 break;
-            case 'messenger': 
+            case 'messenger':
                 this.renderMessenger();
                 break;
             case 'auth': 
                 this.renderAuth();
+                break;
+            case 'scores': 
+                this.renderScores();
                 break;
             case 'not-found': 
                 this.renderNotFound();
@@ -50,6 +53,13 @@ export default class MainLayoutComponent {
         }
 
         return this;
+    }
+
+    renderScores() {
+        if (!this.parent || !this.main) return;
+
+        this.parent.classList.add('parent_hidden-ui');
+        this.main.classList.add('main_clear');
     }
 
     resetClasses() {

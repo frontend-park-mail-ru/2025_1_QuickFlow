@@ -14,6 +14,7 @@ import TextareaComponent from '@components/UI/TextareaComponent/TextareaComponen
 import { getLsItem, setLsItem } from '@utils/localStorage';
 import convertDate from '@utils/convertDate';
 import convertToFormData from '@utils/convertToFormData';
+import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 
 import router from '@router';
 import { forms } from './EditProfileFormConfig';
@@ -257,6 +258,12 @@ class EditProfileView {
             icon: "check-icon",
             size: "large",
         });
+
+        if (getLsItem('is-profile-feedback-given', 'false') === 'false') {
+            new IFrameComponent(this.containerObj?.container, {
+                src: 'http://localhost:3000/scores?type=profile',
+            });
+        }
     }
 
     renderHeader() {

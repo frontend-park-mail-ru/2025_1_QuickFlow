@@ -4,6 +4,10 @@ import PostMwComponent from '@components/UI/ModalWindowComponent/PostMwComponent
 import createElement from '@utils/createElement';
 import router from '@router';
 import insertIcon from '@utils/insertIcon';
+import { setLsItem, getLsItem } from '@utils/localStorage'
+
+import CSATComponent from '@components/CSATComponent/CSATComponent';
+import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 
 
 const POSTS_COUNT = 10;
@@ -97,7 +101,15 @@ export default class FeedComponent {
         createPostBtn.addEventListener('click', () => {
             new PostMwComponent(this.parent.parentNode, {
                 type: 'create-post',
-                renderCreatedPost: (config: any) => this.renderPost(config, "top"),
+                renderCreatedPost: (config: any) => {
+                    this.renderPost(config, "top");
+
+                    if (getLsItem('is-post-feedback-given', 'false') === 'false') {
+                        new IFrameComponent(this.parent.parentNode as HTMLElement, {
+                            src: 'http://localhost:3000/scores?type=post',
+                        });
+                    }
+                },
             });
         });
     }

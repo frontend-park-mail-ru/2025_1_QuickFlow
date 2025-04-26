@@ -230,6 +230,7 @@ export default class LoginFormComponent {
                 if (status === 200) {
                     document.cookie = `username=${encodeURIComponent(body.username)}; path=/`;
                     router?.menu?.renderProfileMenuItem();
+                    setLsItem('is-general-feedback-ready', 'true');
                     router.go({ path: '/feed' });
                     return;
                 }

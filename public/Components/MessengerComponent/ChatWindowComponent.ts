@@ -9,6 +9,7 @@ import ws from '@modules/WebSocketService';
 import Ajax from '@modules/ajax';
 import router from '@router';
 import ChatsPanelComponent from './ChatsPanelComponent';
+import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 
 
 const TEXTAREA_PLACEHOLDER = 'Напишите сообщение...';
@@ -119,6 +120,13 @@ export default class ChatWindowComponent {
         }
 
         ws.subscribe('message', (payload: any) => {
+
+            if (getLsItem('is-messenger-feedback-given', 'false') === 'false') {
+                new IFrameComponent(this.#parent.parentNode as HTMLElement, {
+                    src: 'http://localhost:3000/scores?type=messenger',
+                });
+            }
+
             removeLsItem(CHAT_MSG_PREFIX + `${this.#chatData?.id}`);
             if (!this.#chatData?.id && this.#chatData?.receiver_id) {
                 setLsItem('active-chat', `chat-${payload.chat_id}`);

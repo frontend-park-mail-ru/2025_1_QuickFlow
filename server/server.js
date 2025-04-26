@@ -247,6 +247,16 @@ app.post('/api/messages/:username', (req, res) => {
     });
 });
 
+app.post('/api/feedback', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const username = ids[id];
+    if (!username || !users[username]) {
+        return res.status(401).end();
+    }
+
+    return res.status(200).end();
+});
+
 const port = process.env.PORT || 3000;
 
 app.get('*', (req, res) => {

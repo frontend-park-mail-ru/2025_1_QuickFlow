@@ -313,6 +313,9 @@ export default class SignupFormComponent {
                 if (status === 200) {
                     document.cookie = `username=${encodeURIComponent(this.usernameInput?.value)}; path=/`;
                     router.menu.renderProfileMenuItem();
+                    // setLsItem(`is-general-feedback-given`, 'false');
+                    // setLsItem(`is-general-feedback-ready`, 'false');
+                    // setLsItem(`is-auth-feedback-given`, 'false');
                     router.go({ path: '/feed' });
                     return;
                 }

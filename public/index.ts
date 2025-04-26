@@ -18,6 +18,8 @@ import { getLsItem } from '@utils/localStorage';
 
 import ThemeManager from '@modules/ThemeManager';
 import LsStandaloneBridge from '@modules/LsStandaloneBridge';
+import CSATView from '@views/CSATView/CSATView';
+import StatsView from '@views/StatsView/StatsView';
 
 
 LsStandaloneBridge.init();
@@ -49,6 +51,9 @@ router.register(MessengerView, { path: '/messenger/{username}', section: '/messe
 router.register(EditProfileView, { path: '/profile/edit', section: '/profiles' });
 router.register(MessengerView, { path: '/messenger', section: '/messenger' });
 router.register(NotFoundView, { path: '/not-found', section: null });
+
+router.register(CSATView, { path: '/scores', section: null });
+router.register(StatsView, { path: '/stats', section: null });
 
 const config = {
     menu: {

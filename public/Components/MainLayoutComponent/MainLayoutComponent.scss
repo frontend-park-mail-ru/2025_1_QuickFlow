@@ -11,6 +11,15 @@
     position: fixed;
 }
 
+.main_clear {
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    position: fixed;
+    padding: 0;
+}
+
 .container {
     width: 100%;
     display: flex;

@@ -1,26 +1,32 @@
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import RadioMenuComponent from '@components/RadioMenuComponent/RadioMenuComponent';
 import FeedComponent from '@components/FeedComponent/FeedComponent';
+import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
+import { getLsItem, setLsItem } from '@utils/localStorage';
 
 
 const HAS_CREATE_BUTTON = true;
 
 
 class FeedView {
+    private containerObj: MainLayoutComponent;
+
     constructor() {}
 
     render() {
-        const containerObj = new MainLayoutComponent().render({
+        this.containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
 
-        new RadioMenuComponent(containerObj.right, {
+        this.renderFeedbacks();
+
+        new RadioMenuComponent(this.containerObj.right, {
             items: {
                 feed: {
                     title: 'Лента',
                     onClick: () => {
-                        containerObj.left.innerHTML = '';
-                        new FeedComponent(containerObj.left, {
+                        this.containerObj.left.innerHTML = '';
+                        new FeedComponent(this.containerObj.left, {
                             getUrl: "/feed",
                             hasCreateButton: HAS_CREATE_BUTTON,
                             emptyStateText: "Ваша лента пока пуста",
@@ -30,8 +36,8 @@ class FeedView {
                 recommendations: {
                     title: 'Рекомендации',
                     onClick: () => {
-                        containerObj.left.innerHTML = '';
-                        new FeedComponent(containerObj.left, {
+                        this.containerObj.left.innerHTML = '';
+                        new FeedComponent(this.containerObj.left, {
                             getUrl: "/recommendations",
                             hasCreateButton: HAS_CREATE_BUTTON,
                             emptyStateText: "Ваши рекомендации пока пусты",
@@ -49,13 +55,41 @@ class FeedView {
             }
         });
 
-        new FeedComponent(containerObj.left, {
+        new FeedComponent(this.containerObj.left, {
             getUrl: "/feed",
             hasCreateButton: HAS_CREATE_BUTTON,
             emptyStateText: "Ваша лента пока пуста",
         });
 
-        return containerObj.container;
+        return this.containerObj.container;
+    }
+
+    renderFeedbacks() {
+        if (
+            getLsItem('is-general-feedback-given', 'false') === 'false' &&
+            getLsItem('is-general-feedback-ready', 'false') === 'true' &&
+            getLsItem('is-auth-feedback-given', 'false') === 'true'
+        ) {
+            new IFrameComponent(this.containerObj.container, {
+                src: 'http://localhost:3000/scores?type=general',
+            });
+        }
+
+        if (getLsItem('is-auth-feedback-given', 'false') === 'false') {
+            new IFrameComponent(this.containerObj.container, {
+                src: 'http://localhost:3000/scores?type=auth',
+            });
+        }
+
+        if (
+            getLsItem('is-recommendation-feedback-given', 'false') === 'false' &&
+            getLsItem('is-general-feedback-given', 'false') === 'true' &&
+            getLsItem('is-auth-feedback-given', 'false') === 'true'
+        ) {
+            new IFrameComponent(this.containerObj.container, {
+                src: 'http://localhost:3000/scores?type=recommendation',
+            });
+        }
     }
 }
 
