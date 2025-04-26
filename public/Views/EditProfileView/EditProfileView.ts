@@ -261,7 +261,7 @@ class EditProfileView {
 
         if (getLsItem('is-profile-feedback-given', 'false') === 'false') {
             new IFrameComponent(this.containerObj?.container, {
-                src: 'http://localhost:3000/scores?type=profile',
+                src: '/scores?type=profile',
             });
         }
     }

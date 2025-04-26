@@ -106,7 +106,7 @@ export default class FeedComponent {
 
                     if (getLsItem('is-post-feedback-given', 'false') === 'false') {
                         new IFrameComponent(this.parent.parentNode as HTMLElement, {
-                            src: 'http://localhost:3000/scores?type=post',
+                            src: '/scores?type=post',
                         });
                     }
                 },
