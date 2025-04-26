@@ -260,7 +260,7 @@ app.get('/api/feedback', (req, res) => {
             "feedbacks": [
                 {
                     "type": "auth",
-                    "text": "",
+                    "text": "ijeg df g dfg  dfgfdgijdfigjd fgiudfgindfig frg",
                     "rating": 5,
                     "username": "rvasutenko",
                     "firstname": "Роман",
@@ -268,7 +268,7 @@ app.get('/api/feedback', (req, res) => {
                 },
                 {
                     "type": "auth",
-                    "text": "",
+                    "text": "ijeg df g dfg  dfgfdgijdfigjd fgiudfgindfig frg",
                     "rating": 4,
                     "username": "Timex",
                     "firstname": "Матвей",
@@ -276,7 +276,7 @@ app.get('/api/feedback', (req, res) => {
                 },
                 {
                     "type": "auth",
-                    "text": "",
+                    "text": "ijeg df g dfg  dfgfdgijdfigjd fgiudfgindfig frg",
                     "rating": 5,
                     "username": "olala",
                     "firstname": "adsf",

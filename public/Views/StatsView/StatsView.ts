@@ -63,6 +63,12 @@ class StatsView {
                 text: `${index + 1}. ${fbData.firstname} ${fbData.lastname}`,
             });
 
+            createElement({
+                parent: feedback,
+                text: fbData.text,
+                classes: ['feedback__text'],
+            });
+
             const feedbackRating = createElement({
                 parent: feedback,
                 classes: ['feedback__rating'],
