@@ -37,7 +37,7 @@
     align-items: center;
     justify-content: center;
     padding-bottom: 128px;
-    background: radial-gradient(331.49% 141.42% at 0% 0%, #ced8ff 0%, #4369fc 100%);
+    background: var(--background-grad);
     flex-direction: row;
 }
 
@@ -88,6 +88,10 @@
     min-width: 553px;
 }
 
+.container__column_right {
+    align-items: center;
+}
+
 @media screen and (max-width: 480px) {
     .container__column_left {
         min-width: 100%;
@@ -97,8 +101,16 @@
         flex-direction: column;
         width: 100%;
     }
-}
 
-.container__column_right {
-    align-items: center;
+    .container__row {
+        flex-direction: column;
+    }
+
+    .container__column_right {
+        order: 1;
+    }
+
+    .container__column_left {
+        order: 2;
+    }
 }

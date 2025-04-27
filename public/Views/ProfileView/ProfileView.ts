@@ -14,6 +14,10 @@ import ProfileMenuComponent from '@components/ProfileMenuComponent/ProfileMenuCo
 import insertIcon from '@utils/insertIcon';
 
 
+const MOBILE_MAX_WIDTH = 480;
+const MOBILE_MAX_DISPLAYED_FRIENDS_COUNT = 3;
+
+
 class ProfileView {
     private containerObj: MainLayoutComponent | null = null;
     private profileActions: HTMLElement | null = null;
@@ -67,7 +71,7 @@ class ProfileView {
         });
     }
 
-    friendsCbOk(data: any) {
+    friendsCbOk(data: Record<string, any>) {
         if (!data.friends || data.friends.length === 0) return;
 
         const friendsWrapper = createElement({
@@ -96,9 +100,9 @@ class ProfileView {
             classes: ['profile__friends-inner'],
         });
 
-        data.friends.forEach((
-            { username, firstname, avatar_url }: {username: string, firstname: string, avatar_url: string}
-        ) => {
+        for (const friendData of data.friends) {
+            const { username, firstname, avatar_url } = friendData;
+
             const friend = createElement({
                 tag: 'a',
                 parent: profileFriends,
@@ -108,6 +112,7 @@ class ProfileView {
 
             new AvatarComponent(friend, {
                 size: 'xl',
+                class: 'profile__friend-avatar',
                 src: avatar_url,
             });
 
@@ -116,7 +121,12 @@ class ProfileView {
                 text: firstname,
                 classes: ['profile__friend-name']
             });
-        });
+
+            if (
+                window.innerWidth <= MOBILE_MAX_WIDTH &&
+                profileFriends.children.length === MOBILE_MAX_DISPLAYED_FRIENDS_COUNT
+            ) break;
+        }
     }
 
     cbOk(data: any) {

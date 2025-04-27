@@ -14,6 +14,9 @@ export default class IFrameComponent {
     }
 
     render() {
+        const currentIframe = this.parent.querySelector('iframe');
+        if (currentIframe?.getAttribute('src') === this.config.src) return;
+
         this.iframe = createElement({
             tag: 'iframe',
             classes: ['iframe'],

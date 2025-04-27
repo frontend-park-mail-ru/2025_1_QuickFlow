@@ -124,6 +124,7 @@ export default class ChatWindowComponent {
             if (getLsItem('is-messenger-feedback-given', 'false') === 'false') {
                 new IFrameComponent(this.#parent.parentNode as HTMLElement, {
                     src: '/scores?type=messenger',
+                    deleteOther: true,
                 });
             }
 

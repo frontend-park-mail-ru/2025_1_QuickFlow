@@ -283,4 +283,34 @@
         z-index: 0;
         pointer-events: auto;
     }
+
+    .profile__friends {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+    }
+
+    .profile__friends-inner {
+        gap: 0;
+        justify-content: normal;
+    }
+
+    .profile__friend {
+        width: auto;
+        margin-left: -8px;
+        border: 2px white solid;
+        border-radius: 100px;
+    }
+
+    .profile__friend-name {
+        display: none;
+    }
+
+    .profile__friend-avatar {
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        min-height: 24px;
+    }
 }

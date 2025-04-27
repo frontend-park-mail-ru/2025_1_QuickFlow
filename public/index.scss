@@ -66,15 +66,6 @@ main {
     background: var(--background-white);
 }
 
-@media screen and (max-width: 480px) {
-    main {
-        width: 100vw;
-        padding: 15px 15px;
-        left: 0;
-        top: 0;
-    }
-}
-
 a {
     display: block;
     color: var(--text-accent);
@@ -160,4 +151,14 @@ p {
 .theme-switcher {
     z-index: 10;
     position: relative;
+}
+
+@media screen and (max-width: 480px) {
+    main {
+        width: 100vw;
+        padding: 15px 15px;
+        padding-bottom: 95px;
+        left: 0;
+        top: 0;
+    }
 }
