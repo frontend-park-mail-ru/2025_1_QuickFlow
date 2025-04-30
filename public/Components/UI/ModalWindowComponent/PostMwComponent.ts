@@ -5,6 +5,7 @@ import insertIcon from '@utils/insertIcon';
 import Ajax from '@modules/ajax';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
 import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
+import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 
 
 const POST_TEXT_MAX_LENGTH = 4000;
@@ -271,6 +272,8 @@ export default class PostMwComponent extends ModalWindowComponent {
                         case 413:
                             alert('File is too large');
                             break;
+                        default:
+                            this.cbFailed();
                     }
                 }
             });
@@ -288,9 +291,19 @@ export default class PostMwComponent extends ModalWindowComponent {
                         case 413:
                             alert('File is too large');
                             break;
+                        default:
+                            this.cbFailed();
                     }
                 }
             });
         }
+    }
+
+    cbFailed() {
+        new PopUpComponent(this.parent, {
+            text: 'Не удалось сохранить изменения',
+            size: "large",
+            isError: true,
+        });
     }
 }

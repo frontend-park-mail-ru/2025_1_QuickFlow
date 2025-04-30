@@ -1,8 +1,9 @@
 {
     "compilerOptions": {
+        "lib": ["ES2020", "DOM", "DOM.Iterable", "WebWorker"],
         "checkJs": false, 
         "target": "es6",
-        "module": "esnext",
+        "module": "es6",
         "strict": false,
         "esModuleInterop": true,
         "skipLibCheck": true,
@@ -18,7 +19,8 @@
             "@assets/*": ["assets/*"],
             "@constants": ["constants.scss"],
             "@router": ["Router.ts"]
-        }
+        },
+        "allowImportingTsExtensions": true,
     },
     "include": ["public/**/*"],
     "exclude": ["node_modules"]

@@ -6,9 +6,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default {
-	entry: './public/index.ts',
+	// entry: './public/index.ts',
+	entry: {
+		main: './public/index.ts',
+		sw: './public/sw.ts',
+	},
 	output: {
-		filename: 'bundle.js',
+		// filename: 'bundle.js',
+		filename: (pathData) => {
+			return pathData.chunk.name === 'sw' ? '[name].js' : 'bundle.js';
+		},
 		path: path.resolve(__dirname, 'public'),
 	},
   	mode: 'development',
