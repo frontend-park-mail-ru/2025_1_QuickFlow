@@ -42,8 +42,8 @@ self.addEventListener('activate', (event) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
                     if (
-                        cacheName.includes('CACHE') &&
-                        !cacheName.includes(VERSION)
+                        cacheName.includes('CACHE')
+                        // !cacheName.includes(VERSION)
                     ) {
                         console.log('Deleting old cache:', cacheName);
                         return caches.delete(cacheName);
