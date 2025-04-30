@@ -75,7 +75,7 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(handleRequestFirst(event.request));
     } else if (event.request.method === 'GET' && (url.pathname.startsWith('/static/') || (url.pathname.startsWith('/assets/')))) {
         event.respondWith(handleStaticFetch(event.request));
-    } else if (event.request.method === 'GET' && url.origin === 'quickflowapp.ru') {
+    } else if (event.request.method === 'GET' && url.pathname.startsWith('/minio/')) {
         event.respondWith(handleMediaFetch(event.request));
     } else if (event.request.method === 'GET' && url.pathname.startsWith('/api/')) {
         event.respondWith(handleApiFetch(event.request));
