@@ -7,6 +7,7 @@ import focusInput from '@utils/focusInput';
 import convertDate from '@utils/convertDate';
 import { getLsItem, removeLsItem, setLsItem } from '@utils/localStorage';
 import router from '@router';
+import API from '@utils/api';
 
 
 const DEFAULT_INPUT_VALUE = '';
@@ -313,6 +314,12 @@ export default class SignupFormComponent {
                 if (status === 200) {
                     document.cookie = `username=${encodeURIComponent(this.usernameInput?.value)}; path=/`;
                     router.menu.renderProfileMenuItem();
+
+                    (async () => {
+                        const [status, data] = await API.getProfile(getLsItem('username', null));
+                        if (status === 200) setLsItem('user_id', data.id);
+                    })();
+
                     // setLsItem(`is-general-feedback-given`, 'false');
                     // setLsItem(`is-general-feedback-ready`, 'false');
                     // setLsItem(`is-auth-feedback-given`, 'false');

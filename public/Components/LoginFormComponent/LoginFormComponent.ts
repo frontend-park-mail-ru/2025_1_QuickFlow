@@ -5,6 +5,7 @@ import createElement from '@utils/createElement';
 import focusInput from '@utils/focusInput';
 import router from '@router';
 import { setLsItem, getLsItem, removeLsItem } from '@utils/localStorage';
+import API from '@utils/api';
 
 
 export default class LoginFormComponent {
@@ -231,6 +232,12 @@ export default class LoginFormComponent {
                     document.cookie = `username=${encodeURIComponent(body.username)}; path=/`;
                     router?.menu?.renderProfileMenuItem();
                     setLsItem('is-general-feedback-ready', 'true');
+
+                    (async () => {
+                        const [status, data] = await API.getProfile(getLsItem('username', null));
+                        if (status === 200) setLsItem('user_id', data.id);
+                    })();
+
                     router.go({ path: '/feed' });
                     return;
                 }

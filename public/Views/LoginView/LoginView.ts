@@ -19,11 +19,6 @@ class LoginView {
         });
         this.renderServiceInfo(wrapper);
         new LoginFormComponent(wrapper);
-
-        (async () => {
-            const [status, data] = await API.getProfile(getLsItem('username', null));
-            if (status === 200) setLsItem('user_id', data.id);
-        })();
      
         return containerObj.container;
     }
