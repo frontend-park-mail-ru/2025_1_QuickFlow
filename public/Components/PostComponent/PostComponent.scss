@@ -4,6 +4,7 @@
     align-items: flex-start;
     max-width: 553px;
     width: 553px;
+    gap: 16px;
 
     &__content {
         display: flex;
@@ -155,7 +156,6 @@
         display: flex;
         align-items: center;
         flex-direction: row;
-        padding: 16px 0;
         justify-content: space-between;
         width: 100%;
 
