@@ -26,6 +26,7 @@ export default class FriendComponent {
         new AvatarComponent(friend, {
             size: 'l',
             src: this.config.data.avatar_url,
+            href: `/profiles/${this.config.data.username}`,
         });
 
         const friendRight = createElement({
@@ -39,9 +40,11 @@ export default class FriendComponent {
         });
 
         createElement({
+            tag: 'a',
             parent: friendInfo,
             classes: ['friend__name'],
             text: `${this.config.data.firstname} ${this.config.data.lastname}`,
+            attrs: { href: `/profiles/${this.config.data.username}` },
         });
 
         const action = createElement({

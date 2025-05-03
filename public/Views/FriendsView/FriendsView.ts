@@ -5,6 +5,7 @@ import API from '@utils/api';
 import FriendComponent from '@components/FriendComponent/FriendComponent';
 import { getLsItem } from '@utils/localStorage';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
+import InputComponent from '@components/UI/InputComponent/InputComponent';
 
 
 const enum Section {
@@ -23,6 +24,12 @@ class FriendsView {
     render() {
         this.containerObj = new MainLayoutComponent().render({
             type: 'feed',
+        });
+
+        new InputComponent(this.containerObj.left, {
+            type: 'search',
+            placeholder: 'Введите запрос',
+            classes: ['input_wide'],
         });
 
         this.friends = createElement({

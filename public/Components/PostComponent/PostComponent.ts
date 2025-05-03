@@ -10,14 +10,17 @@ import router from '@router';
 
 
 const AUTHOR_AVATAR_SIZE = 's';
-// const PICTURE_WIDTH = 553;
 const READ_MORE_BTN_TEXT = 'Показать ещё';
 const READ_LESS_BTN_TEXT = 'Скрыть';
 const ADD_TO_FRIENDS_BTN_TEXT = 'Добавить в друзья';
 const ACCEPT_BTN_TEXT = "Принять заявку";
 const AUTHOR_NAME_DATE_DIVIDER = '•';
 const DEAFULT_IMG_ALT = 'post image';
-const DISPLAYED_ACTIONS = ['like', 'comment', 'repost'];
+const DISPLAYED_ACTIONS = [
+    'like',
+    'comment',
+    'repost'
+];
 const RELATION_STRANGER = "stranger";
 const RELATION_FOLLOWED_BY = "followed_by";
 const SLIDER_RESPONSIVITY = 50;
@@ -33,13 +36,11 @@ export default class PostComponent {
     private config: Record<string, any>;
     private picWidth: number;
 
-    wrapper: HTMLElement | null
+    wrapper: HTMLElement | null = null;
 
     constructor(parent: any, config: any) {
         this.parent = parent;
         this.config = config;
-        
-        this.wrapper = null;
         this.render();
     }
 
@@ -72,13 +73,17 @@ export default class PostComponent {
         }
 
         this.renderTop();
-        this.renderPics();
-        this.renderActions();
-        this.renderText();
+        if (this.renderPics()) {
+            this.renderActions();
+            this.renderText();
+        } else {
+            this.renderText();
+            this.renderActions();
+        }
     }
 
-    renderPics() {
-        if (!this.config.pics || this.config.pics.length === 0) return;
+    renderPics(): boolean {
+        if (!this.config.pics || this.config.pics.length === 0) return false;
 
         const picsWrapper = createElement({
             parent: this.wrapper,
@@ -109,6 +114,8 @@ export default class PostComponent {
         }
 
         this.renderPaginator(picsWrapper, slider);
+
+        return true;
     }
 
     private renderPaginator(picsWrapper: HTMLElement, slider: HTMLElement) {
@@ -269,8 +276,9 @@ export default class PostComponent {
             createElement({
                 parent: actionWrapper,
                 classes: ['post__counter'],
-                text: this.config[`${key}_count`]
+                text: this.config[`${key}_count`].toString(),
             });
+            console.log(`${key}_count`);
         }
 
         createElement({
