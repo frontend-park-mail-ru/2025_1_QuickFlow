@@ -84,7 +84,8 @@ export default {
 			'@utils': path.resolve('public/utils'),
 			'@assets': path.resolve('public/assets'),
 			'@constants': path.resolve('public/constants.scss'),
-			'@router': path.resolve('public/Router.ts')
+			'@router': path.resolve('public/Router.ts'),
+			'@config': path.resolve('public/config.ts')
 		}
 	},
 	devtool: 'source-map',

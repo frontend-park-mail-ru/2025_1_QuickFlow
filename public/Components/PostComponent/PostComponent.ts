@@ -29,13 +29,15 @@ const ADMINS_USERNAMES = [
 
 
 export default class PostComponent {
-    #parent
-    #config
+    private parent: HTMLElement;
+    private config: Record<string, any>;
     private picWidth: number;
+
     wrapper: HTMLElement | null
+
     constructor(parent: any, config: any) {
-        this.#parent = parent;
-        this.#config = config;
+        this.parent = parent;
+        this.config = config;
         
         this.wrapper = null;
         this.render();
@@ -53,30 +55,30 @@ export default class PostComponent {
             classes: ['post'],
         });
 
-        switch (this.#config?.position) {
+        switch (this.config?.position) {
             case "top":
-                this.#parent.prepend(this.wrapper);
+                this.parent.prepend(this.wrapper);
                 break;
             case "same":
                 if (referenceNode) {
-                    this.#parent.insertBefore(this.wrapper, referenceNode);
+                    this.parent.insertBefore(this.wrapper, referenceNode);
                 } else {
-                    this.#parent.appendChild(this.wrapper);
+                    this.parent.appendChild(this.wrapper);
                 }
                 break;
             default:
-                this.#parent.appendChild(this.wrapper);
+                this.parent.appendChild(this.wrapper);
                 break;
         }
 
         this.renderTop();
         this.renderPics();
-        // this.renderActions();
+        this.renderActions();
         this.renderText();
     }
 
     renderPics() {
-        if (!this.#config.pics || this.#config.pics.length === 0) return;
+        if (!this.config.pics || this.config.pics.length === 0) return;
 
         const picsWrapper = createElement({
             parent: this.wrapper,
@@ -88,8 +90,8 @@ export default class PostComponent {
             classes: ['post__slider'],
         });
 
-        if (this.#config.pics && this.#config.pics.length > 0) {
-            this.#config.pics.forEach((pic: any) => {
+        if (this.config.pics && this.config.pics.length > 0) {
+            this.config.pics.forEach((pic: any) => {
                 const slide = createElement({
                     parent: slider,
                     classes: ['post__slide'],
@@ -111,7 +113,7 @@ export default class PostComponent {
 
     private renderPaginator(picsWrapper: HTMLElement, slider: HTMLElement) {
         let currentIndex = 0;
-        const totalPics = this.#config.pics.length;
+        const totalPics = this.config.pics.length;
         this.picWidth = picsWrapper.clientWidth;
 
         if (totalPics > 1) {
@@ -267,7 +269,7 @@ export default class PostComponent {
             createElement({
                 parent: actionWrapper,
                 classes: ['post__counter'],
-                text: this.#config[`${key}_count`]
+                text: this.config[`${key}_count`]
             });
         }
 
@@ -287,7 +289,7 @@ export default class PostComponent {
             tag: 'p',
             parent: textWrapper,
             classes: ['post__text'],
-            text: this.#config.text,
+            text: this.config.text,
         });
 
         const readMore = createElement({
@@ -330,8 +332,8 @@ export default class PostComponent {
 
         new AvatarComponent(authorWrapper, {
             size: AUTHOR_AVATAR_SIZE,
-            src: this.#config.author.avatar_url,
-            href: `/profiles/${this.#config.author.username}`,
+            src: this.config.author.avatar_url,
+            href: `/profiles/${this.config.author.username}`,
         });
 
         const topRightWrapper = createElement({
@@ -348,8 +350,8 @@ export default class PostComponent {
             tag: 'a',
             parent: nameDateWrapper,
             classes: ['post__name'],
-            attrs: { href: `/profiles/${this.#config.author.username}` },
-            text: `${this.#config.author.firstname} ${this.#config.author.lastname}`,
+            attrs: { href: `/profiles/${this.config.author.username}` },
+            text: `${this.config.author.firstname} ${this.config.author.lastname}`,
         });
 
         createElement({
@@ -361,17 +363,17 @@ export default class PostComponent {
         createElement({
             classes: ['post__date', 'p1'],
             parent: nameDateWrapper,
-            text: `${getTimeDifference(this.#config.created_at)}`,
+            text: `${getTimeDifference(this.config.created_at)}`,
         });
 
-        if (DISPLAYED_RELATIONS.includes(this.#config?.author?.relation)) {
-            const isStranger = this.#config?.author?.relation === RELATION_STRANGER;
+        if (DISPLAYED_RELATIONS.includes(this.config?.author?.relation)) {
+            const isStranger = this.config?.author?.relation === RELATION_STRANGER;
             const actionBtn = createElement({
                 tag: 'a',
                 classes: [
                     'h3',
                     'post__add-to-friends',
-                    `js-post-action-${this.#config?.author?.username}`,
+                    `js-post-action-${this.config?.author?.username}`,
                 ],
                 parent: topRightWrapper,
                 text: isStranger ? ADD_TO_FRIENDS_BTN_TEXT : ACCEPT_BTN_TEXT,
@@ -379,7 +381,7 @@ export default class PostComponent {
             actionBtn.addEventListener('click', () => {
                 Ajax.post({
                     url: isStranger ? '/follow' : '/followers/accept',
-                    body: { receiver_id: this.#config?.author?.id },
+                    body: { receiver_id: this.config?.author?.id },
                     callback: (status: number) => {
                         switch (status) {
                             case 200:
@@ -415,7 +417,7 @@ export default class PostComponent {
         };
 
         if (
-            this.#config.author.username === getLsItem('username', '') ||
+            this.config.author.username === getLsItem('username', '') ||
             ADMINS_USERNAMES.includes(getLsItem('username', ''))
         ) {
             data.edit = {
@@ -423,9 +425,9 @@ export default class PostComponent {
                 text: 'Редактировать',
                 icon: 'pencil-primary-icon',
                 onClick: () => {
-                    new PostMwComponent(this.#parent.parentNode, {
+                    new PostMwComponent(this.parent.parentNode, {
                         type: 'edit-post',
-                        data: this.#config,
+                        data: this.config,
                         onAjaxEditPost: (config: any) => this.onAjaxEditPost(config),
                     });
                 },
@@ -436,14 +438,14 @@ export default class PostComponent {
                 icon: 'trash-accent-icon',
                 isCritical: true,
                 onClick: () => {
-                    new DeleteMwComponent(this.#parent.parentNode, {
+                    new DeleteMwComponent(this.parent.parentNode, {
                         data: {
                             title: 'Вы уверены, что хотите удалить этот пост?',
                             text: 'Пост будет удалён навсегда, это действие нельзя будет отменить',
                             cancel: 'Отмена',
                             confirm: 'Удалить',
                         },
-                        delete: () => this.ajaxDeletePost(this.#config.id),
+                        delete: () => this.ajaxDeletePost(this.config.id),
                     });
                 }
             };
@@ -471,7 +473,7 @@ export default class PostComponent {
 
     actionCbOk() {
         const actions = Array.from(
-            document.getElementsByClassName(`js-post-action-${this.#config?.author?.username}`)
+            document.getElementsByClassName(`js-post-action-${this.config?.author?.username}`)
         );
         for (const action of actions) {
             action.remove()
@@ -497,8 +499,8 @@ export default class PostComponent {
     }
 
     onAjaxEditPost(config: any) {
-        this.#config = config;
-        this.#config.position = "same";
+        this.config = config;
+        this.config.position = "same";
         this.render();
     }
 }

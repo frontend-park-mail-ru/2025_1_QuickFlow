@@ -18,7 +18,8 @@
             "@utils/*": ["utils/*"],
             "@assets/*": ["assets/*"],
             "@constants": ["constants.scss"],
-            "@router": ["Router.ts"]
+            "@router": ["Router.ts"],
+            "@config": ["config.ts"]
         },
         "allowImportingTsExtensions": true,
     },

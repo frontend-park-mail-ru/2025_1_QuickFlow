@@ -4,6 +4,7 @@ import InputComponent from '@components/UI/InputComponent/InputComponent';
 import createElement from '@utils/createElement';
 import {setLsItem, getLsItem, removeLsItem} from '@utils/localStorage';
 import getTimeDifference from '@utils/getTimeDifference';
+import { MOBILE_MAX_WIDTH } from '@config';
 
 
 const DEFAULT_WIDTH = 300;
@@ -44,14 +45,9 @@ export default class ChatsPanelComponent {
             classes: ['chats-panel'],
         });
 
-        new ResizerComponent(this.container, {
-            classMini: CLASS_SIZE_MINI,
-            toDefaultWidth: RESIZER_TO_DEFAULT_WIDTH,
-            toMiniWidth: RESIZER_TO_MINI_WIDTH,
-            onResized: (width: any) => {
-                setLsItem('chats-panel-size', width);
-            },
-        });
+        if (window.innerWidth > MOBILE_MAX_WIDTH) {
+            this.createResizer();
+        }
 
         const chatsPanelSize = getLsItem('chats-panel-size', `${DEFAULT_WIDTH}px`);
         if (chatsPanelSize === CLASS_SIZE_MINI) {
@@ -62,6 +58,17 @@ export default class ChatsPanelComponent {
 
         this.renderSearchBar();
         this.renderChatList();
+    }
+
+    createResizer() {
+        new ResizerComponent(this.container, {
+            classMini: CLASS_SIZE_MINI,
+            toDefaultWidth: RESIZER_TO_DEFAULT_WIDTH,
+            toMiniWidth: RESIZER_TO_MINI_WIDTH,
+            onResized: (width: any) => {
+                setLsItem('chats-panel-size', width);
+            },
+        });
     }
 
     set chatWindow(chatWindow: any) {

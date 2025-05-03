@@ -4,41 +4,30 @@ import { getLsItem } from '@utils/localStorage';
 import router from '@router';
 
 
-const LOGO_SRC = '/static/img/annotated-logo.svg';
 const LOGO = 'annotated-logo';
 
 
 export default class MenuComponent {
     static __instance: MenuComponent;
-    #config
-    #parent
-    #container: HTMLElement | null = null;
+    private config: Record<string, any>;
+    private parent: HTMLElement;
+    private container: HTMLElement | null = null;
     menuElements: Record<string, any> = {};
     activePageLink: any = null;
-    constructor(parent: HTMLElement, config: any) {
+    constructor(parent: HTMLElement, config: Record<string, any>) {
         if (MenuComponent.__instance) {
             return MenuComponent.__instance;
         }
 
-        this.#parent = parent;
-        this.#config = config;
+        this.parent = parent;
+        this.config = config;
         this.render();
 
         MenuComponent.__instance = this;
     }
 
     async renderLogo() {
-        // const logo = createElement({
-        //     parent: this.#container,
-        //     classes: ['logo'],
-        // });
-
-        // createElement({
-        //     parent: logo,
-        //     attrs: {src: LOGO_SRC}
-        // });
-
-        const logo = await insertIcon(this.#container, {
+        const logo = await insertIcon(this.container, {
             name: LOGO,
             classes: ['menu__logo'],
         });
@@ -47,20 +36,20 @@ export default class MenuComponent {
     }
 
     render() {
-        this.#container = createElement({
+        this.container = createElement({
             tag: 'aside',
-            parent: this.#parent,
+            parent: this.parent,
             classes: ['menu'],
         });
 
         this.renderLogo();
 
-        Object.entries(this.#config.menu).forEach(([key, option], index) => {
+        Object.entries(this.config.menu).forEach(([key, option], index) => {
             const { href, text, icon, onClick } = option as { href?: string; text: string; icon?: string; onClick?: any };
             
             const menuElement = createElement({
                 tag: 'a',
-                parent: this.#container,
+                parent: this.container,
                 classes: [
                     'menu__item',
                     key === 'profiles' ? 'js-profile-menu-item' : 'menu__item'
@@ -98,7 +87,7 @@ export default class MenuComponent {
 
         this.updateMenuVisibility();
 
-        this.#container?.addEventListener('click', (event: any) => {
+        this.container?.addEventListener('click', (event: any) => {
             if (event?.target?.closest('a')) {
                 event.preventDefault();
                 this.goToPage(event.target.closest('a'));
@@ -107,14 +96,14 @@ export default class MenuComponent {
     }
 
     renderProfileMenuItem() {
-        const profileMenuItem = this.#container?.getElementsByClassName('js-profile-menu-item')[0] as HTMLAnchorElement | undefined;
+        const profileMenuItem = this.container?.getElementsByClassName('js-profile-menu-item')[0] as HTMLAnchorElement | undefined;
         if (profileMenuItem) {
             profileMenuItem.href = `/profiles/${getLsItem('username', '')}`;
         }
     }
 
     updateMenuVisibility() {
-        if (this.#config.isAuthorized) {
+        if (this.config.isAuthorized) {
             this.menuElements.login.classList.add('hidden');
             this.menuElements.signup.classList.add('hidden');
             return;

@@ -1,6 +1,8 @@
 import LoginFormComponent from '@components/LoginFormComponent/LoginFormComponent';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
+import API from '@utils/api';
 import createElement from '@utils/createElement';
+import { getLsItem, setLsItem } from '@utils/localStorage';
 
 
 class LoginView {
@@ -18,6 +20,11 @@ class LoginView {
         this.renderServiceInfo(wrapper);
         new LoginFormComponent(wrapper);
 
+        (async () => {
+            const [status, data] = await API.getProfile(getLsItem('username', null));
+            if (status === 200) setLsItem('user_id', data.id);
+        })();
+     
         return containerObj.container;
     }
 

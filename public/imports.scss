@@ -25,6 +25,8 @@
 @use './Components/FeedComponent/FeedComponent';
 @use './Components/CSATComponent/CSATComponent';
 @use './Components/UI/IFrameComponent/IFrameComponent';
+@use './Components/FriendComponent/FriendComponent';
+@use './Components/EmptyStateComponent/EmptyStateComponent';
 
 @use './Views/FeedView/FeedView';
 @use './Views/ProfileView/ProfileView';
@@ -34,3 +36,4 @@
 @use './Views/LoginView/LoginView';
 @use './Views/CSATView/CSATView';
 @use './Views/StatsView/StatsView';
+@use './Views/FriendsView/FriendsView';

@@ -1,12 +1,3 @@
-import LoginView from '@views/LoginView/LoginView';
-import SignupView from '@views/SignupView/SignupView';
-import FeedView from '@views/FeedView/FeedView';
-import MessengerView from '@views/MessengerView/MessengerView';
-import ProfileView from '@views/ProfileView/ProfileView';
-import LogoutView from '@views/LogoutView/LogoutView';
-import EditProfileView from '@views/EditProfileView/EditProfileView';
-import NotFoundView from '@views/NotFoundView/NotFoundView';
-
 import HeaderComponent from '@components/HeaderComponent/HeaderComponent';
 import MenuComponent from '@components/MenuComponent/MenuComponent';
 import createElement from '@utils/createElement';
@@ -18,47 +9,11 @@ import { getLsItem } from '@utils/localStorage';
 
 import ThemeManager from '@modules/ThemeManager';
 import LsStandaloneBridge from '@modules/LsStandaloneBridge';
-import CSATView from '@views/CSATView/CSATView';
-import StatsView from '@views/StatsView/StatsView';
+import registerSW from '@utils/registerSW';
+import registerRoutes from './registerRoutes';
 
 
-// if (navigator.serviceWorker) {
-//     // window.addEventListener('load', () => {
-//         navigator.serviceWorker.register('/sw.js', { scope: '/' })
-//             .then(registration => {
-//                 console.log('Service Worker registered:', registration);
-//             })
-//             .catch(error => {
-//                 console.error('Service Worker registration failed:', error);
-//             });
-//     // });
-// }
-
-async function registerServiceWorker() {
-    if ('serviceWorker' in navigator) {
-        try {
-            const registration = await navigator.serviceWorker.register(
-                '/sw.js',
-                {
-                    scope: '/',
-                }
-            );
-            if (registration.installing) {
-                console.log('Service worker installing');
-            } else if (registration.waiting) {
-                console.log('Service worker installed');
-            } else if (registration.active) {
-                console.log('Service worker active');
-            }
-        } catch (error) {
-            console.error(`Registration failed with ${error}`);
-        }
-    }
-}
-
-registerServiceWorker();
-
-
+registerSW();
 LsStandaloneBridge.init();
 
 const root = document.getElementById('root');
@@ -79,18 +34,7 @@ createElement({
     classes: ['main']
 });
 
-router.register(LoginView, { path: '/login', section: null });
-router.register(SignupView, { path: '/signup', section: null });
-router.register(LogoutView, { path: '/logout', section: null });
-router.register(FeedView, { path: '/feed' });
-router.register(ProfileView, { path: '/profiles/{username}', section: '/profiles' });
-router.register(MessengerView, { path: '/messenger/{username}', section: '/messenger' });
-router.register(EditProfileView, { path: '/profile/edit', section: '/profiles' });
-router.register(MessengerView, { path: '/messenger', section: '/messenger' });
-router.register(NotFoundView, { path: '/not-found', section: null });
-
-router.register(CSATView, { path: '/scores', section: null });
-router.register(StatsView, { path: '/stats', section: null });
+registerRoutes();
 
 const config = {
     menu: {
@@ -119,18 +63,16 @@ const config = {
             text: 'Мессенджер',
             icon: 'messenger-icon',
         },
-        // menu: {
-        //     // href: '/menu',
-        //     text: 'Меню',
-        //     icon: 'menu-burger-icon',
-        //     onClick: () => {
-        //         createElement({
-        //             parent: container,
-        //             classes: ['menu'],
-        //             attrs: {id: 'menu'},
-        //         });
-        //     },
-        // },
+        friends: {
+            href: '/friends',
+            text: 'Друзья',
+            icon: 'friends-icon',
+        },
+        communities: {
+            href: '/communities',
+            text: 'Сообщества',
+            icon: 'communities-icon',
+        },
     },
     isAuthorized: true,
 };

@@ -1,0 +1,99 @@
+.friend {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.friend__right {
+    position: relative;
+    width: 100%;
+    height: 56px;
+    display: flex;
+    align-items: center;
+}
+
+.friend__info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-right: 48px;
+}
+
+.friend__name {
+    color: var(--text-primary);
+    font-size: var(--font-size-l);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-m);
+
+    word-break: break-all;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+}
+
+.friend__dropdown {
+    display: flex;
+    position: absolute;
+    top: 12px;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+
+    &:hover .post__options {
+        background: var(--background-light-gray);
+    }
+
+    &:active .post__options {
+        background: var(--background-gray);
+    }
+}
+
+.friend__action {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.friend__msg-redirect {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 8px;
+    transition: var(--trans-menu);
+}
+
+.friend__msg-redirect:hover {
+    color: var(--text-accent-hover);
+}
+
+.friend__msg-icon {
+    width: 16px;
+    height: 16px;
+    color: inherit;
+    display: flex;
+}
+
+.friend__action-text {
+    font-size: var(--font-size-s);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-m);
+    color: var(--text-accent);
+    cursor: pointer;
+    transition: var(--trans-menu);
+
+    &:hover {
+        color: var(--text-accent-hover);
+    }
+}
+
+.friend__text {
+    color: var(--text-secondary);
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-m);
+}

@@ -1,27 +1,27 @@
 import createElement from '@utils/createElement';
 
 export default class RadioMenuComponent {
-    #config
-    #parent
+    private config: Record<string, any>;
+    private parent: HTMLElement;
 
     wrapper: HTMLElement | null = null;
     pages: Record<string, any> = {};
     activePage: any = null;
 
     constructor(parent: HTMLElement, config: Record<string, any>) {
-        this.#parent = parent;
-        this.#config = config;
+        this.parent = parent;
+        this.config = config;
 
         this.render();
     }
 
     render() {
         this.wrapper = createElement({
-            parent: this.#parent,
+            parent: this.parent,
             classes: ['radio-menu']
         });
 
-        Object.entries(this.#config.items).forEach(([key, option], index) => {
+        Object.entries(this.config.items).forEach(([key, option], index) => {
             const { title } = option as { title: string };
             const menuItem = createElement({
                 parent: this.wrapper,
@@ -31,8 +31,8 @@ export default class RadioMenuComponent {
             });
 
             if (
-                key === this.#config.active ||
-                (!this.#config.active && index === 0)
+                key === this.config.active ||
+                (!this.config.active && index === 0)
             ) {
                 menuItem.classList.add('radio-menu__item_active');
                 this.activePage = menuItem;
@@ -55,8 +55,8 @@ export default class RadioMenuComponent {
         this.activePage = menuItem;
 
         const section = menuItem.dataset.section;
-        if (this.#config.items[section as string].onClick) {
-            this.#config.items[section as string].onClick();
+        if (this.config.items[section as string].onClick) {
+            this.config.items[section as string].onClick();
         }
     }
 }

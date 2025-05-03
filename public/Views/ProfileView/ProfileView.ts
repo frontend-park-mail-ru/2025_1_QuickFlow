@@ -12,9 +12,9 @@ import { ACTIONS_PROPERTIES, INFO_ITEMS_LAYOUT } from './ProfileActionsConfig';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import ProfileMenuComponent from '@components/ProfileMenuComponent/ProfileMenuComponent';
 import insertIcon from '@utils/insertIcon';
+import { MOBILE_MAX_WIDTH } from '@config';
 
 
-const MOBILE_MAX_WIDTH = 480;
 const MOBILE_MAX_DISPLAYED_FRIENDS_COUNT = 3;
 
 
