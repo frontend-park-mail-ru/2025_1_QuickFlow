@@ -1,4 +1,5 @@
 import ajax from '@modules/ajax';
+import convertToFormData from './convertToFormData';
 
 
 export default class API {
@@ -48,7 +49,7 @@ export default class API {
         return new Promise((resolve) => {
             ajax.post({
                 url: `/community`,
-                body,
+                body: convertToFormData(body),
                 isFormData: true,
                 callback: (status: number, data: any) => resolve([status, data]),
             });

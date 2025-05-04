@@ -106,7 +106,7 @@ class CommunitiesView {
         const username = getLsItem('username', null);
 
         const [communitiesStatus, data] = await API.getUserCommunities(username, COMMUNITIES_COUNT);
-        const communitiesData = data.body.friends;
+        const communitiesData = data.body.communities;
         // const communitiesData = [];
 
         if (!communitiesData || !communitiesData.length) {

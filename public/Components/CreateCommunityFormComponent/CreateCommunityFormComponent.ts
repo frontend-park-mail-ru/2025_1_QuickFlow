@@ -1,4 +1,3 @@
-import Ajax from '@modules/ajax';
 import InputComponent from '@components/UI/InputComponent/InputComponent';
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import createElement from '@utils/createElement';
@@ -106,7 +105,7 @@ export default class CreateCommunityFormComponent {
         const [status, communityData] = await API.createCommunity(name);
         switch (status) {
             case 200:
-                router.go({ path: '/communities/new-community' });
+                router.go({ path: `/communities/${communityData.id}` });
                 break;
             default:
                 this.nameInput.showError('Не удалось создать сообщество');
