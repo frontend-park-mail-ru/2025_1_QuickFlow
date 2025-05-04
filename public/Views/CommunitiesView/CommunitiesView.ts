@@ -30,21 +30,33 @@ class CommunitiesView {
             type: 'feed',
         });
 
-        new SearchComponent(this.containerObj.left, {
-            placeholder: 'Введите запрос',
-            classes: ['search_wide'],
-            inputClasses: ['input_wide', 'input_search-small'],
+        const results = createElement({
+            parent: this.containerObj.left,
+            classes: [
+                'communities',
+                'communities__search-results',
+                'hidden',
+            ],
         });
-
-        // new InputComponent(this.containerObj.left, {
-        //     type: 'search',
-        //     placeholder: 'Введите запрос',
-        //     classes: ['input_wide', 'input_search-small'],
-        // });
 
         this.communities = createElement({
             parent: this.containerObj.left,
             classes: ['communities'],
+        });
+
+        new SearchComponent(this.containerObj.left, {
+            placeholder: 'Введите запрос',
+            classes: ['search_wide'],
+            inputClasses: [
+                'input_wide',
+                'input_search-small',
+                'communities__search',
+            ],
+            results,
+            searchResults: API.searchFriends,
+            title: 'Результаты поиска',
+            renderResult: this.renderCommunity,
+            elementToHide: this.communities,
         });
 
         new ButtonComponent(this.containerObj.right, {
@@ -104,11 +116,14 @@ class CommunitiesView {
         }
 
         for (const communityData of communitiesData) {
-            new CommunityComponent(this.communities, {
-                container: this.containerObj.container,
-                data: communityData,
-            });
+            this.renderCommunity(this.communities, communityData);
         }
+    }
+
+    private renderCommunity(parent: HTMLElement, friendData: Record<string, any>) {
+        new CommunityComponent(parent, {
+            data: friendData,
+        });
     }
 }
 

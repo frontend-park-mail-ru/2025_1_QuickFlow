@@ -1,10 +1,3 @@
-.communities {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-}
-
 .input_search-small input {
     height: 32px;
     background: var(--background-gray);
@@ -20,4 +13,20 @@
 
 .button_wide {
     width: 100%;
+}
+
+.communities {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    order: 3;
+}
+
+.communities__search-results {
+    order: 2;
+}
+
+.communities__search {
+    order: 1;
 }
