@@ -29,26 +29,31 @@ class FriendsView {
 
         const results = createElement({
             parent: this.containerObj.left,
+            classes: [
+                'friends',
+                'friends__search-results',
+                'hidden',
+            ],
+        });
+
+        this.friends = createElement({
+            parent: this.containerObj.left,
             classes: ['friends'],
         });
 
         new SearchComponent(this.containerObj.left, {
             placeholder: 'Введите запрос',
             classes: ['search_wide'],
-            inputClasses: ['input_wide', 'input_search-small'],
+            inputClasses: [
+                'input_wide',
+                'input_search-small',
+                'friends__search',
+            ],
             results,
+            searchResults: API.searchFriends,
+            title: 'Результаты поиска',
             renderResult: this.renderFriend,
-        });
-
-        // new InputComponent(this.containerObj.left, {
-        //     type: 'search',
-        //     placeholder: 'Введите запрос',
-        //     classes: ['input_wide', 'input_search-small'],
-        // });
-
-        this.friends = createElement({
-            parent: this.containerObj.left,
-            classes: ['friends'],
+            elementToHide: this.friends,
         });
 
         new RadioMenuComponent(this.containerObj.right, {

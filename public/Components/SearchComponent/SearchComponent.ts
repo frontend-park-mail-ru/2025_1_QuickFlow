@@ -1,11 +1,10 @@
-import Ajax from '@modules/ajax';
+import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
 import InputComponent from '@components/UI/InputComponent/InputComponent';
 import createElement from '@utils/createElement';
-import API from '@utils/api';
 
 
 const DEBOUNCE_DELAY = 500;
-const REQUEST_USERS_COUNT = 10;
+const RESULTS_ITEMS_COUNT = 25;
 
 
 export default class SearchComponent {
@@ -27,7 +26,6 @@ export default class SearchComponent {
                 ...this.config?.classes
             ]
         });
-        // if (this.config.classes) this.search.classList.add(...this.config.classes);
 
         const input = new InputComponent(this.search, {
             type: 'search',
@@ -36,56 +34,53 @@ export default class SearchComponent {
             classes: [...this.config?.inputClasses],
         });
 
-        // input.input.onfocus = () => {
-        //     this.config.results.classList.remove('hidden');
-        // }
-
-        // document.addEventListener('mouseup', (event) => {
-        //     if (!this.search.contains(event.target as Node)) {
-        //         this.config.results.classList.add('hidden');
-        //     }
-        // });
-
         input.addListener(() => this.handleSearch(input), DEBOUNCE_DELAY);
     }
 
     private async handleSearch(input: InputComponent) {
-        if (!input.value) this.config.results.classList.add('hidden');
+        if (!input.value) {
+            this.config.elementToHide.classList.remove('hidden');
+            return this.config.results.classList.add('hidden');
+        }
+        this.config.elementToHide.classList.add('hidden');
         this.config.results.classList.remove('hidden');
-        // if (!input.value) return this.showNotFound();
 
-        const [status, friendsData] = await API.searchFriends(input.value, REQUEST_USERS_COUNT);
+        const [status, resultsData] = await this.config.searchResults(input.value, RESULTS_ITEMS_COUNT);
         
         switch (status) {
             case 200:
-                this.cdOk(friendsData);
+                this.renderResults(resultsData);
                 break;
         }
     }
 
     showNotFound() {
-        if (!this.config.results) return;
-
         this.config.results.innerHTML = '';
-        createElement({
-            parent: this.config.results,
-            text: 'Ничего не найдено',
-            classes: ['header__result_empty'],
+        new EmptyStateComponent(this.config.results, {
+            icon: 'friends-icon',
+            text: 'Пользователи не найдены',
         });
     }
 
-    cdOk(users: any) {
-        if (!this.config.results) return;
-
+    renderResults(resultsData: any) {
         if (
-            !users ||
-            !users.payload ||
-            users.payload.length === 0
+            !resultsData ||
+            !resultsData.payload ||
+            resultsData.payload.length === 0
         ) return this.showNotFound();
 
         this.config.results.innerHTML = '';
+
+        if (this.config.title) {
+            createElement({
+                tag: 'h2',
+                parent: this.config.results,
+                classes: ['search__title'],
+                text: this.config.title,
+            });
+        }
         
-        for (const user of users.payload) {
+        for (const user of resultsData.payload) {
             this.config.renderResult(this.config.results, user);
         }
     }
