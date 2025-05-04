@@ -20,6 +20,9 @@ import router from '@router';
 import { forms } from './EditProfileFormConfig';
 
 
+const AVATAR_MAX_RESOLUTION = 1680;
+
+
 class EditProfileView {
     private containerObj: MainLayoutComponent;
     private section: string;
@@ -291,6 +294,8 @@ class EditProfileView {
                 preview: avatar.avatar,
                 id: 'profile-avatar-upload',
                 name: 'avatar',
+                compress: true,
+                maxSize: AVATAR_MAX_RESOLUTION,
             })
         );
     }

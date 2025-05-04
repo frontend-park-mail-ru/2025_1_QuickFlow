@@ -94,31 +94,17 @@ export default class FileInputComponent {
             this.loadPreloadedFiles(this.config.preloaded);
         }
     }
-    
-    // async multipleOnchange(event: any) {
-    //     const newFiles: Array<File> = Array.from(event.target.files);
-    //     this.files.push(...newFiles);
-
-    //     const imageDataUrls = await Promise.all(newFiles.map(this.readImageFile));
-    //     for (let i = 0; i < imageDataUrls.length; i++) {
-    //         const imageDataUrl = imageDataUrls[i];
-    //         const file = newFiles[i];
-        
-    //         const picWrapper = this.config.preview.cloneNode(true);
-    //         picWrapper.querySelector('img').src = imageDataUrl;
-        
-    //         const removeBtn = picWrapper.querySelector('.js-post-pic-delete');
-    //         removeBtn.addEventListener('click', () => this.removeFile(file, picWrapper));
-        
-    //         this.parent.insertBefore(picWrapper, this.config.imitator);
-    //     }
-        
-    //     this.updateInputFiles();
-    // }
 
     async singleOnchange(event: any) {
-        const imageDataUrl = await this.readImageFile(event.target.files[0]);
+        let file = event.target.files[0];
+        if (this.config.compress) {
+            file = await this.resizeImage(file);
+        }
+        this.files.push(file);
+
+        const imageDataUrl = await this.readImageFile(file);
         this.config.preview.src = imageDataUrl;
+        
         this.triggerReady();
     }
 
@@ -177,20 +163,6 @@ export default class FileInputComponent {
         const filename = src.split('/').pop().split('?')[0] || 'image.jpg';
         return new File([blob], filename, { type: blob.type });
     }
-
-    // async removeFile(fileToRemove: File, wrapper: HTMLElement) {
-    //     this.files = this.files.filter(file => file !== fileToRemove);
-    //     this.updateInputFiles();
-    //     wrapper.remove();
-
-    //     if (!this.input) return;
-
-    //     const event = new Event('change', { bubbles: true });
-    //     this.input.dispatchEvent(event);
-    // }
-
-
-
 
     private async resizeImage(file: File, maxSize: number = this.config.maxSize ?? 1680): Promise<File> {
         const imageBitmap = await createImageBitmap(file);

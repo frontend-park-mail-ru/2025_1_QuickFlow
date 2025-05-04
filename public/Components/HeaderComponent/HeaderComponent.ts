@@ -59,7 +59,7 @@ export default class HeaderComponent {
         });
 
         new SearchComponent(this.left, {
-            placeholder: 'Введите запрос',
+            placeholder: 'Поиск',
             classes: ['header__search-wrapper'],
             inputClasses: ['header__search'],
             results,

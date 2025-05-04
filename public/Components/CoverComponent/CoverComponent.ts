@@ -4,6 +4,7 @@ import createElement from '@utils/createElement';
 
 
 const DEFAULT_SRC = '/static/img/default-cover.jpg';
+const COVER_MAX_RESOLUTION = 1680;
 
 
 export default class CoverComponent {
@@ -59,6 +60,8 @@ export default class CoverComponent {
             preview: this.cover,
             id: 'profile-cover-upload',
             name: 'cover',
+            compress: true,
+            maxSize: COVER_MAX_RESOLUTION,
         })
     }
 }
