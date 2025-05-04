@@ -10,7 +10,7 @@ import crypto from 'crypto';
 import http from 'http';
 import { WebSocketServer } from 'ws';
 
-import { users, posts, chats, messages, search } from '../public/mocks.ts';
+import { users, posts, chats, messages, search } from '../public/mocks.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
