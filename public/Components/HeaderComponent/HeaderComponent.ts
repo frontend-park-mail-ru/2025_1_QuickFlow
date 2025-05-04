@@ -143,7 +143,7 @@ export default class HeaderComponent {
         });
 
         new AvatarComponent(result, {
-            src: userData?.profile?.avatar_url,
+            src: userData?.avatar_url,
             size: 'xs',
         });
 
