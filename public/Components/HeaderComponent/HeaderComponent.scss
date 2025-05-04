@@ -100,12 +100,9 @@
 }
 
 .header__result_empty {
-    background: var(--background-white);
     width: 100%;
-    border-radius: 8px;
-    line-height: 130%;
-    padding: 40px 0;
-    text-align: center;
+    line-height: var(--line-height-m);
+    padding: 8px;
     color: var(--text-secondary);
     cursor: default;
 }

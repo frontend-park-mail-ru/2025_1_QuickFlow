@@ -50,10 +50,6 @@ export default class HeaderComponent {
             classes: ['header__left']
         });
 
-
-
-
-
         const results = createElement({
             parent: this.left,
             classes: [
@@ -74,57 +70,6 @@ export default class HeaderComponent {
             renderTitle: this.renderTitle,
             renderResult: this.renderResult,
         });
-
-
-
-
-        // this.search = createElement({
-        //     parent: this.left,
-        //     classes: ['header__search-wrapper']
-        // });
-
-        // const input = new InputComponent(this.search, {
-        //     type: 'search',
-        //     placeholder: 'Поиск',
-        //     showRequired: false,
-        //     classes: ['header__search']
-        // });
-
-        // input.addListener(() => {
-        //     if (input.value === '') return this.showNotFound();
-
-        //     if (input.input) {
-        //         input.input.onfocus = () => {
-        //             if (!this.searchResults) return;
-        //             this.searchResults.classList.remove('hidden');
-        //         }
-        //     }
-
-        //     document.addEventListener('mouseup', (event) => {
-        //         if (!this.search || !this.searchResults) return;
-
-        //         const target = event.target as Node;
-
-        //         if (!this.search.contains(target)) {
-        //             this.searchResults.classList.add('hidden');
-        //         }
-        //     });
-
-        //     Ajax.get({
-        //         url: '/users/search',
-        //         params: {
-        //             string: input.value,
-        //             users_count: REQUEST_USERS_COUNT,
-        //         },
-        //         callback: (status: number, users: any) => {
-        //             switch (status) {
-        //                 case 200:
-        //                     this.cdOk(users);
-        //                     break;
-        //             }
-        //         }
-        //     });
-        // }, DEBOUNCE_DELAY);
     }
 
     private renderTitle(parent: HTMLElement) {
@@ -164,11 +109,16 @@ export default class HeaderComponent {
         resultsList.appendChild(result);
     }
 
-    private renderEmptyState() {
-        this.searchResults.innerHTML = '';
+    private renderEmptyState(parent: HTMLElement) {
         createElement({
-            parent: this.searchResults,
-            text: 'Ничего не найдено',
+            parent,
+            classes: ['header__results-title'],
+            text: 'Люди'
+        });
+
+        createElement({
+            parent,
+            text: 'Пользователи не найдены',
             classes: ['header__result_empty'],
         });
     }

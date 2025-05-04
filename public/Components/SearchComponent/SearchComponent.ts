@@ -52,6 +52,8 @@ export default class SearchComponent {
 
         const [status, resultsData] = await this.config.searchResults(input.value, this.config.resultsCount || RESULTS_ITEMS_COUNT);
         
+        // const [status, resultsData] = [200, []];
+
         switch (status) {
             case 200:
                 this.renderResults(resultsData);
