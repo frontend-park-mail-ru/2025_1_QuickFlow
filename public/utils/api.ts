@@ -2,41 +2,41 @@ import ajax from '@modules/ajax';
 
 
 export default class API {
-    static async searchUsers(string: string, users_count: number): Promise<[number, Record<string, any>]> {
+    static async searchUsers(string: string, count: number): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.get({
                 url: '/users/search',
-                params: { string, users_count },
+                params: { string, count },
                 callback: (status: number, data: any) => resolve([status, data]),
             });
         });
     }
 
-    static async searchFriends(string: string, users_count: number): Promise<[number, Record<string, any>]> {
+    static async searchFriends(string: string, count: number): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.get({
                 url: '/users/search',
-                params: { string, users_count },
+                params: { string, count },
                 callback: (status: number, data: any) => resolve([status, data]),
             });
         });
     }
 
-    static async searchCommunities(string: string, users_count: number): Promise<[number, Record<string, any>]> {
+    static async searchCommunities(string: string, count: number): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.get({
                 url: '/users/search',
-                params: { string, users_count },
+                params: { string, count },
                 callback: (status: number, data: any) => resolve([status, data]),
             });
         });
     }
 
-    static async searchMyCommunities(string: string, users_count: number): Promise<[number, Record<string, any>]> {
+    static async searchMyCommunities(string: string, count: number): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.get({
                 url: '/users/search',
-                params: { string, users_count },
+                params: { string, count },
                 callback: (status: number, data: any) => resolve([status, data]),
             });
         });

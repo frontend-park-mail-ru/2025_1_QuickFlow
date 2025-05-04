@@ -99,12 +99,6 @@ class CommunitiesView {
             case Section.Communities:
                 this.renderCommunities();
                 break;
-            // case Section.Incoming:
-            //     this.renderIncoming();
-            //     break;
-            // case Section.Outcoming:
-            //     this.renderOutcoming();
-            //     break;
         }
     }
 
