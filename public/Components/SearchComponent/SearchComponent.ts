@@ -27,6 +27,11 @@ export default class SearchComponent {
             ]
         });
 
+        if (this.config?.isResultsChild) {
+            this.config.results.remove();
+            this.search.appendChild(this.config.results);
+        }
+
         const input = new InputComponent(this.search, {
             type: 'search',
             placeholder: this.config.placeholder || 'Поиск',
@@ -39,13 +44,13 @@ export default class SearchComponent {
 
     private async handleSearch(input: InputComponent) {
         if (!input.value) {
-            this.config.elementToHide.classList.remove('hidden');
+            this.config?.elementToHide?.classList?.remove('hidden');
             return this.config.results.classList.add('hidden');
         }
-        this.config.elementToHide.classList.add('hidden');
+        this.config?.elementToHide?.classList?.add('hidden');
         this.config.results.classList.remove('hidden');
 
-        const [status, resultsData] = await this.config.searchResults(input.value, RESULTS_ITEMS_COUNT);
+        const [status, resultsData] = await this.config.searchResults(input.value, this.config.resultsCount || RESULTS_ITEMS_COUNT);
         
         switch (status) {
             case 200:
@@ -68,7 +73,9 @@ export default class SearchComponent {
 
         this.config.results.innerHTML = '';
 
-        if (this.config.title) {
+        if (this.config.renderTitle) {
+            this.config.renderTitle(this.config.results);
+        } else {
             createElement({
                 tag: 'h2',
                 parent: this.config.results,

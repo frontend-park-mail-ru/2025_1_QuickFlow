@@ -5,6 +5,8 @@ import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
 import router from '@router';
 import createElement from '@utils/createElement';
 import { getLsItem } from '@utils/localStorage';
+import SearchComponent from '@components/SearchComponent/SearchComponent';
+import API from '@utils/api';
 
 
 const DEBOUNCE_DELAY = 500;
@@ -12,14 +14,16 @@ const REQUEST_USERS_COUNT = 10;
 
 
 export default class HeaderComponent {
-    #parent;
-    #left: HTMLElement | null = null;
-    #search: HTMLElement | null = null;
-    #searchResults: HTMLElement | null = null;
+    private parent: HTMLElement;
+    private left: HTMLElement | null = null;
+    private search: HTMLElement | null = null;
+    private searchResults: HTMLElement | null = null;
+
     wrapper: HTMLElement | null = null;
     rightWrapper: HTMLElement | null = null;
+
     constructor(parent: any) {
-        this.#parent = parent;
+        this.parent = parent;
 
         this.render();
     }
@@ -27,7 +31,7 @@ export default class HeaderComponent {
     render() {
         const header = createElement({
             tag: 'header',
-            parent: this.#parent,
+            parent: this.parent,
             classes: ['header']
         });
 
@@ -41,92 +45,148 @@ export default class HeaderComponent {
     }
 
     renderActions() {
-        this.#left = createElement({
+        this.left = createElement({
             parent: this.wrapper,
             classes: ['header__left']
         });
 
-        this.#search = createElement({
-            parent: this.#left,
-            classes: ['header__search-wrapper']
+
+
+
+
+        const results = createElement({
+            parent: this.left,
+            classes: [
+                'header__results',
+                'hidden'
+            ],
         });
 
-        const input = new InputComponent(this.#search, {
-            type: 'search',
-            placeholder: 'Поиск',
-            showRequired: false,
-            classes: ['header__search']
+        new SearchComponent(this.left, {
+            placeholder: 'Введите запрос',
+            classes: ['header__search-wrapper'],
+            inputClasses: ['header__search'],
+            results,
+            isResultsChild: true,
+            searchResults: API.searchFriends,
+            resultsCount: 3,
+            renderEmptyState: this.renderEmptyState,
+            renderTitle: this.renderTitle,
+            renderResult: this.renderResult,
         });
 
-        input.addListener(() => {
-            if (input.value === '') return this.showNotFound();
 
-            if (input.input) {
-                input.input.onfocus = () => {
-                    if (!this.#searchResults) return;
-                    this.#searchResults.classList.remove('hidden');
-                }
-            }
 
-            document.addEventListener('mouseup', (event) => {
-                if (!this.#search || !this.#searchResults) return;
 
-                const target = event.target as Node;
+        // this.search = createElement({
+        //     parent: this.left,
+        //     classes: ['header__search-wrapper']
+        // });
 
-                if (!this.#search.contains(target)) {
-                    this.#searchResults.classList.add('hidden');
-                }
+        // const input = new InputComponent(this.search, {
+        //     type: 'search',
+        //     placeholder: 'Поиск',
+        //     showRequired: false,
+        //     classes: ['header__search']
+        // });
+
+        // input.addListener(() => {
+        //     if (input.value === '') return this.showNotFound();
+
+        //     if (input.input) {
+        //         input.input.onfocus = () => {
+        //             if (!this.searchResults) return;
+        //             this.searchResults.classList.remove('hidden');
+        //         }
+        //     }
+
+        //     document.addEventListener('mouseup', (event) => {
+        //         if (!this.search || !this.searchResults) return;
+
+        //         const target = event.target as Node;
+
+        //         if (!this.search.contains(target)) {
+        //             this.searchResults.classList.add('hidden');
+        //         }
+        //     });
+
+        //     Ajax.get({
+        //         url: '/users/search',
+        //         params: {
+        //             string: input.value,
+        //             users_count: REQUEST_USERS_COUNT,
+        //         },
+        //         callback: (status: number, users: any) => {
+        //             switch (status) {
+        //                 case 200:
+        //                     this.cdOk(users);
+        //                     break;
+        //             }
+        //         }
+        //     });
+        // }, DEBOUNCE_DELAY);
+    }
+
+    private renderTitle(parent: HTMLElement) {
+        createElement({
+            parent,
+            classes: ['header__results-title'],
+            text: 'Люди'
+        });
+    }
+
+    private renderResult(parent: HTMLElement, userData: Record<string, any>) {
+        const result = createElement({
+            tag: 'a',
+            classes: ['header__result'],
+            attrs: { href: `/profiles/${userData.username}` },
+        });
+
+        new AvatarComponent(result, {
+            src: userData?.profile?.avatar_url,
+            size: 'xs',
+        });
+
+        createElement({
+            parent: result,
+            text: `${userData.firstname} ${userData.lastname}`,
+        });
+
+        let resultsList = parent.querySelector('.header__results-items');
+        if (!resultsList) {
+            resultsList = createElement({
+                parent,
+                classes: ['header__results-items'],
             });
+        }
 
-            Ajax.get({
-                url: '/users/search',
-                params: {
-                    string: input.value,
-                    users_count: REQUEST_USERS_COUNT,
-                },
-                callback: (status: number, users: any) => {
-                    switch (status) {
-                        case 200:
-                            this.cdOk(users);
-                            break;
-                    }
-                }
-            });
-        }, DEBOUNCE_DELAY);
+        resultsList.appendChild(result);
+    }
 
-        // const notificationsWrapper = document.createElement('a');
-        // notificationsWrapper.classList.add('icon-wrapper');
-        // const musicWrapper = document.createElement('a');
-        // musicWrapper.classList.add('icon-wrapper');
-
-        // const notificationsIcon = document.createElement('img');
-        // notificationsIcon.src = '/static/img/notice-icon.svg';
-
-        // const musicIcon = document.createElement('img');
-        // musicIcon.src = '/static/img/music-icon-top.svg';
-        
-        // notificationsWrapper.appendChild(notificationsIcon);
-        // musicWrapper.appendChild(musicIcon);
-
-        // wrapper.appendChild(notificationsWrapper);
-        // wrapper.appendChild(musicWrapper);
+    private renderEmptyState() {
+        this.searchResults.innerHTML = '';
+        createElement({
+            parent: this.searchResults,
+            text: 'Ничего не найдено',
+            classes: ['header__result_empty'],
+        });
     }
 
     showNotFound() {
-        if (!this.#searchResults) return;
+        if (!this.searchResults) return;
 
-        this.#searchResults.innerHTML = '';
+        this.searchResults.innerHTML = '';
         createElement({
-            parent: this.#searchResults,
+            parent: this.searchResults,
             text: 'Ничего не найдено',
             classes: ['header__result_empty'],
         });
     }
 
     cdOk(users: any) {
-        if (!this.#searchResults) {
-            this.#searchResults = createElement({
-                parent: this.#search,
+        if (!this.searchResults) {
+            this.searchResults = createElement({
+                parent: this.search,
                 classes: ['header__results'],
             });
         }
@@ -137,12 +197,12 @@ export default class HeaderComponent {
             users.payload.length === 0
         ) return this.showNotFound();
 
-        if (this.#searchResults) this.#searchResults.innerHTML = '';
+        if (this.searchResults) this.searchResults.innerHTML = '';
         
         for (const user of users.payload) {
             createElement({
                 tag: 'a',
-                parent: this.#searchResults,
+                parent: this.searchResults,
                 text: `${user.firstname} ${user.lastname}`,
                 classes: ['header__result'],
                 attrs: { href: `/profiles/${user.username}` },
