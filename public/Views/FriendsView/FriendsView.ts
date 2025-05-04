@@ -6,6 +6,7 @@ import FriendComponent from '@components/FriendComponent/FriendComponent';
 import { getLsItem } from '@utils/localStorage';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
 import InputComponent from '@components/UI/InputComponent/InputComponent';
+import SearchComponent from '@components/SearchComponent/SearchComponent';
 
 
 const enum Section {
@@ -26,11 +27,17 @@ class FriendsView {
             type: 'feed',
         });
 
-        new InputComponent(this.containerObj.left, {
-            type: 'search',
+        new SearchComponent(this.containerObj.left, {
             placeholder: 'Введите запрос',
-            classes: ['input_wide', 'input_search-small'],
+            classes: ['search_wide'],
+            inputClasses: ['input_wide', 'input_search-small'],
         });
+
+        // new InputComponent(this.containerObj.left, {
+        //     type: 'search',
+        //     placeholder: 'Введите запрос',
+        //     classes: ['input_wide', 'input_search-small'],
+        // });
 
         this.friends = createElement({
             parent: this.containerObj.left,

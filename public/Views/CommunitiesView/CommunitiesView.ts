@@ -8,6 +8,7 @@ import InputComponent from '@components/UI/InputComponent/InputComponent';
 import CommunityComponent from '@components/CommunityComponent/CommunityComponent';
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import CreateCommunityMwComponent from '@components/UI/ModalWindowComponent/CreateCommunityMwComponent';
+import SearchComponent from '@components/SearchComponent/SearchComponent';
 
 
 const enum Section {
@@ -29,11 +30,13 @@ class CommunitiesView {
             type: 'feed',
         });
 
-        new InputComponent(this.containerObj.left, {
-            type: 'search',
-            placeholder: 'Введите запрос',
-            classes: ['input_wide', 'input_search-small'],
-        });
+        new SearchComponent(this.containerObj.left, {});
+
+        // new InputComponent(this.containerObj.left, {
+        //     type: 'search',
+        //     placeholder: 'Введите запрос',
+        //     classes: ['input_wide', 'input_search-small'],
+        // });
 
         this.communities = createElement({
             parent: this.containerObj.left,
