@@ -210,7 +210,7 @@ app.post('/api/posts/:post_id/like', (req, res) => {
         return res.status(401).end();
     }
     
-    res.status(200).end();
+    res.status(204).end();
 });
 
 app.delete('/api/posts/:post_id/like', (req, res) => {
@@ -220,7 +220,7 @@ app.delete('/api/posts/:post_id/like', (req, res) => {
         return res.status(401).end();
     }
     
-    res.status(200).end();
+    res.status(204).end();
 });
 
 app.get('/api/friends', (req, res) => {

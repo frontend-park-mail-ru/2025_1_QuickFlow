@@ -9,6 +9,7 @@ import Ajax from '@modules/ajax';
 import router from '@router';
 import insertIcon from '@utils/insertIcon';
 import API from '@utils/api';
+import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 
 
 const AUTHOR_AVATAR_SIZE = 's';
@@ -321,19 +322,21 @@ export default class PostComponent {
         if (this.isLiked) {
             status = await API.removeLike(this.config.id)
             switch (status) {
-                case 200:
+                case 204:
                     this.isLiked = false;
                     break;
                 default:
+                    this.renderNetworkErrorPopUp();
                     break;
             }
         } else {
             status = await API.putLike(this.config.id);
             switch (status) {
-                case 200:
+                case 204:
                     this.isLiked = true;
                     break;
                 default:
+                    this.renderNetworkErrorPopUp();
                     break;
             }
         }
@@ -341,9 +344,21 @@ export default class PostComponent {
         this.toggleLike(like);
     }
 
+    private renderNetworkErrorPopUp() {
+        new PopUpComponent({
+            icon: 'close-icon',
+            size: 'large',
+            text: 'Проверьте подключение к интернету',
+            isError: true,
+        });
+    }
+
     private async toggleLike(like: HTMLElement) {
         const icon: HTMLElement = like.querySelector('.js-post-action-icon-like');
         icon.remove();
+
+        like.classList.toggle('post__action');
+        like.classList.toggle('post__action_liked');
 
         const newIcon: HTMLElement = await insertIcon(like, {
             name: this.isLiked ? 'like-fill-icon' : 'like-icon',
@@ -353,7 +368,15 @@ export default class PostComponent {
             ],
         });
 
-        if (this.isLiked) newIcon.classList.add('post__action-icon_liked');
+        if (this.isLiked) {
+            newIcon.classList.add('post__action-icon_liked');
+            
+            newIcon.classList.add('post__action-icon_like-animating');
+
+            newIcon.addEventListener('animationend', () => {
+                newIcon.classList.remove('post__action-icon_like-animating');
+            }, { once: true });
+        }
 
         const counter: HTMLElement = like.querySelector('.js-post-action-counter-like');
         counter.innerText = this.isLiked ?

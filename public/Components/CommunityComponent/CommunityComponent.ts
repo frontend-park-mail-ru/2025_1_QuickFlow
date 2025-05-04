@@ -98,7 +98,7 @@ export default class CommunityComponent {
                 onClick: async () => {
                     navigator.clipboard.writeText(`${window.origin}/communities/${this.config.data.username}`)
                     .then(() => {
-                        new PopUpComponent(this.parent, {
+                        new PopUpComponent({
                             text: 'Текст скопирован в буфер обмена',
                             icon: "copy-green-icon",
                         });
@@ -120,7 +120,7 @@ export default class CommunityComponent {
                             this.renderDeletedCommunity(community, friendData);
                             break;
                         default:
-                            new PopUpComponent(this.config.container, {
+                            new PopUpComponent({
                                 text: "Не удалось отписаться от сообщества",
                                 isError: true,
                                 icon: "close-icon",
@@ -165,7 +165,7 @@ export default class CommunityComponent {
                     this.renderDropdown(parent.parentNode.parentNode.parentNode as HTMLElement, friendData);
                     break;
                 default:
-                    new PopUpComponent(this.config.container, {
+                    new PopUpComponent({
                         text: "Не удалось отменить действие",
                         isError: true,
                         icon: "close-icon",

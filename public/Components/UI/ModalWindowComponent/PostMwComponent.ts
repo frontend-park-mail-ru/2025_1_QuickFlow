@@ -300,7 +300,7 @@ export default class PostMwComponent extends ModalWindowComponent {
     }
 
     cbFailed() {
-        new PopUpComponent(this.parent, {
+        new PopUpComponent({
             text: 'Не удалось сохранить изменения',
             size: "large",
             isError: true,

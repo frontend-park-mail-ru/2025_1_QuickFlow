@@ -122,7 +122,7 @@ export default class FriendComponent {
                             this.renderDeletedFriend(friend, friendData);
                             break;
                         default:
-                            new PopUpComponent(this.config.container, {
+                            new PopUpComponent({
                                 text: "Не удалось удалить пользователя из друзей",
                                 isError: true,
                             });
@@ -165,7 +165,7 @@ export default class FriendComponent {
                     this.renderDropdown(parent.parentNode.parentNode.parentNode as HTMLElement, friendData);
                     break;
                 default:
-                    new PopUpComponent(this.config.container, {
+                    new PopUpComponent({
                         text: "Не удалось отменить действие",
                         isError: true,
                     });

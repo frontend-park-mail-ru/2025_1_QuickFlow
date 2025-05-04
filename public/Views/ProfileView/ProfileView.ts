@@ -207,7 +207,7 @@ class ProfileView {
         usernameItem.addEventListener("click", () => {
             navigator.clipboard.writeText(data.profile.username)
             .then(() => {
-                new PopUpComponent(this.containerObj?.container, {
+                new PopUpComponent({
                     text: 'Текст скопирован в буфер обмена',
                     icon: "copy-green-icon",
                 });

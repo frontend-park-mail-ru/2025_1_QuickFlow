@@ -18,8 +18,8 @@ export default class PopUpComponent {
     private hideTimeout: number | null = null;
     private hover: boolean = false;
 
-    constructor(parent: HTMLElement, config: Record<string, any>) {
-        this.parent = parent;
+    constructor(config: Record<string, any>) {
+        this.parent = document.querySelector('#parent');
         this.config = config;
         this.render();
     }

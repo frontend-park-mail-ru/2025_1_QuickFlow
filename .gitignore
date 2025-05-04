@@ -10,3 +10,4 @@ public/sw.js.map
 
 public/assets/
 public/styles/
+# public/mocks.ts

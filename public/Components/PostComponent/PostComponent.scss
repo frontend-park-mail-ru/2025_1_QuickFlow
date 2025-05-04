@@ -182,6 +182,22 @@
         flex-direction: row;
         align-items: center;
         cursor: pointer;
+
+        &:hover .post__counter {
+            color: var(--text-secondary-hover);
+        }
+
+        &:hover .post__action-icon {
+            color: var(--icon-primary-hover);
+        }
+    }
+
+    &__action_liked {
+        display: flex;
+        gap: 6px;
+        flex-direction: row;
+        align-items: center;
+        cursor: pointer;
     }
 
     &__like,
@@ -199,6 +215,7 @@
         height: 20px;
         color: var(--icon-primary);
         order: 1;
+        transition: var(--trans-menu);
     }
 
     &__action-icon_liked {
@@ -211,6 +228,7 @@
         line-height: var(--line-height-m);
         color: var(--text-secondary);
         order: 2;
+        transition: var(--trans-menu);
     }
 
     &__nav {
@@ -312,4 +330,20 @@
 .hidden {
     display: none;
     pointer-events: none;
+}
+
+@keyframes like-pulse {
+    0% {
+        transform: scale(1);
+    }
+    30% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.post__action-icon_like-animating {
+    animation: like-pulse 0.5s ease;
 }
