@@ -241,7 +241,7 @@ class EditProfileView {
     }
 
     cbDefault() {
-        new PopUpComponent(this.containerObj?.container, {
+        new PopUpComponent({
             text: 'Не удалось сохранить изменеия',
             size: "large",
             isError: true,
@@ -253,7 +253,7 @@ class EditProfileView {
         router?.menu?.renderProfileMenuItem();
         router?.header?.renderAvatarMenu();
         this.render(null, this.section);
-        new PopUpComponent(this.containerObj?.container, {
+        new PopUpComponent({
             text: 'Изменения сохранены',
             icon: "check-icon",
             size: "large",
