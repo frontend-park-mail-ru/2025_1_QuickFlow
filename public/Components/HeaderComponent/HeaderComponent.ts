@@ -149,6 +149,7 @@ export default class HeaderComponent {
 
         createElement({
             parent: result,
+            classes: ['header__result-name'],
             text: `${userData.firstname} ${userData.lastname}`,
         });
 
