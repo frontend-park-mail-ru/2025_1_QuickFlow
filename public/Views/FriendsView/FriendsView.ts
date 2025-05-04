@@ -99,8 +99,7 @@ class FriendsView {
         const userId = getLsItem('user_id', null);
 
         const [friendsStatus, data] = await API.getFriends(userId, 100);
-        const friendsData = data.body.friends;
-        // const friendsData = [];
+        const friendsData = data?.payload?.friends;
 
         if (!friendsData || !friendsData.length) {
             return new EmptyStateComponent(this.friends, {
