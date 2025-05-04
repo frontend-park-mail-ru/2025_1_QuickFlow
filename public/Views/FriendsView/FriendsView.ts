@@ -29,7 +29,7 @@ class FriendsView {
         new InputComponent(this.containerObj.left, {
             type: 'search',
             placeholder: 'Введите запрос',
-            classes: ['input_wide'],
+            classes: ['input_wide', 'input_search-small'],
         });
 
         this.friends = createElement({

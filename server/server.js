@@ -203,6 +203,26 @@ app.get('/api/chats', (req, res) => {
     res.status(200).json(chats[username]);
 });
 
+app.post('/api/posts/:post_id/like', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const username = ids[id];
+    if (!username || !users[username]) {
+        return res.status(401).end();
+    }
+    
+    res.status(200).end();
+});
+
+app.delete('/api/posts/:post_id/like', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const username = ids[id];
+    if (!username || !users[username]) {
+        return res.status(401).end();
+    }
+    
+    res.status(200).end();
+});
+
 app.get('/api/friends', (req, res) => {
     const id = req.cookies['podvorot'];
     const username = ids[id];

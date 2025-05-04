@@ -5,8 +5,6 @@ import createElement from '@utils/createElement';
 import router from '@router';
 import insertIcon from '@utils/insertIcon';
 import { setLsItem, getLsItem } from '@utils/localStorage'
-
-import CSATComponent from '@components/CSATComponent/CSATComponent';
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 
 

@@ -11,14 +11,18 @@ import NotFoundView from '@views/NotFoundView/NotFoundView';
 import CSATView from '@views/CSATView/CSATView';
 import StatsView from '@views/StatsView/StatsView';
 import FriendsView from '@views/FriendsView/FriendsView';
+import CommunityView from '@views/CommunityView/CommunityView';
+import CommunitiesView from '@views/CommunitiesView/CommunitiesView';
 
 
 export default function registerRoutes() {
+    router.register(FriendsView, { path: '/friends', section: '/friends' });
     router.register(ProfileView, { path: '/profiles/{username}', section: '/profiles' });
     router.register(FeedView, { path: '/feed' });
     router.register(MessengerView, { path: '/messenger', section: '/messenger' });
     router.register(MessengerView, { path: '/messenger/{username}', section: '/messenger' });
-    router.register(FriendsView, { path: '/friends', section: '/friends' });
+    router.register(CommunitiesView, { path: '/communities', section: '/communities' });
+    router.register(CommunityView, { path: '/communities/{name}', section: '/communities' });
 
     router.register(LoginView, { path: '/login', section: null });
     router.register(SignupView, { path: '/signup', section: null });

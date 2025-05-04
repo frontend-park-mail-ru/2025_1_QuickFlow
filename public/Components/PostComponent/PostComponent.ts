@@ -2,11 +2,13 @@ import ContextMenuComponent from '../ContextMenuComponent/ContextMenuComponent'
 import AvatarComponent from '../AvatarComponent/AvatarComponent';
 import PostMwComponent from '../UI/ModalWindowComponent/PostMwComponent';
 import DeleteMwComponent from '../UI/ModalWindowComponent/DeleteMwComponent';
-import getTimeDifference from '../../utils/getTimeDifference';
-import createElement from '../../utils/createElement';
-import { getLsItem } from '../../utils/localStorage';
-import Ajax from '../../modules/ajax';
+import getTimeDifference from '@utils/getTimeDifference';
+import createElement from '@utils/createElement';
+import { getLsItem } from '@utils/localStorage';
+import Ajax from '@modules/ajax';
 import router from '@router';
+import insertIcon from '@utils/insertIcon';
+import API from '@utils/api';
 
 
 const AUTHOR_AVATAR_SIZE = 's';
@@ -18,8 +20,8 @@ const AUTHOR_NAME_DATE_DIVIDER = '•';
 const DEAFULT_IMG_ALT = 'post image';
 const DISPLAYED_ACTIONS = [
     'like',
-    'comment',
-    'repost'
+    // 'comment',
+    // 'repost'
 ];
 const RELATION_STRANGER = "stranger";
 const RELATION_FOLLOWED_BY = "followed_by";
@@ -35,12 +37,14 @@ export default class PostComponent {
     private parent: HTMLElement;
     private config: Record<string, any>;
     private picWidth: number;
+    private isLiked: boolean;
 
     wrapper: HTMLElement | null = null;
 
     constructor(parent: any, config: any) {
         this.parent = parent;
         this.config = config;
+        this.isLiked = this.config.is_liked;
         this.render();
     }
 
@@ -267,24 +271,94 @@ export default class PostComponent {
         for (const key of DISPLAYED_ACTIONS) {
             const actionWrapper = createElement({
                 parent: countedActions,
-                classes: ['post__action'],
+                classes: [
+                    'post__action',
+                    `js-post-action-${key}`,
+                ],
             });
+
+            insertIcon(actionWrapper, {
+                name: `${key}-icon`,
+                classes: [
+                    'post__action-icon',
+                    `js-post-action-icon-${key}`,
+                ],
+            });
+
             createElement({
                 parent: actionWrapper,
-                classes: [`post__${key}`],
-            });
-            createElement({
-                parent: actionWrapper,
-                classes: ['post__counter'],
+                classes: [
+                    'post__counter',
+                    `js-post-action-counter-${key}`,
+                ],
                 text: this.config[`${key}_count`].toString(),
             });
-            console.log(`${key}_count`);
         }
 
-        createElement({
-            parent: actionsWrapper,
-            classes: ['post__bookmark'],
+        // insertIcon(actionsWrapper, {
+        //     name: 'bookmark-icon',
+        //     classes: [
+        //         'post__action-icon',
+        //         'js-post-action-bookmark',
+        //     ],
+        // });
+
+        this.addActionsListeners(actionsWrapper);
+    }
+
+    private addActionsListeners(actionsWrapper: HTMLElement) {
+        const like = actionsWrapper.querySelector('.js-post-action-like') as HTMLElement;
+        // const comment = actionsWrapper.querySelector('.js-post-action-comment');
+        // const repost = actionsWrapper.querySelector('.js-post-action-repost');
+        // const bookmark = actionsWrapper.querySelector('.js-post-action-bookmark');
+
+        like.addEventListener('click', () => this.handleLike(like));
+    }
+
+    private async handleLike(like: HTMLElement) {
+        let status: number;
+
+        if (this.isLiked) {
+            status = await API.removeLike(this.config.id)
+            switch (status) {
+                case 200:
+                    this.isLiked = false;
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            status = await API.putLike(this.config.id);
+            switch (status) {
+                case 200:
+                    this.isLiked = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        this.toggleLike(like);
+    }
+
+    private async toggleLike(like: HTMLElement) {
+        const icon: HTMLElement = like.querySelector('.js-post-action-icon-like');
+        icon.remove();
+
+        const newIcon: HTMLElement = await insertIcon(like, {
+            name: this.isLiked ? 'like-fill-icon' : 'like-icon',
+            classes: [
+                'post__action-icon',
+                'js-post-action-icon-like',
+            ],
         });
+
+        if (this.isLiked) newIcon.classList.add('post__action-icon_liked');
+
+        const counter: HTMLElement = like.querySelector('.js-post-action-counter-like');
+        counter.innerText = this.isLiked ?
+            this.config.like_count + 1 :
+            this.config.like_count;
     }
 
     renderText() {

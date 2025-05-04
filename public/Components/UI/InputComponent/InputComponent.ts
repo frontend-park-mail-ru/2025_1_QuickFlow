@@ -18,7 +18,7 @@ const DEFAULT_MIN_BIRTH_YEAR = 1900;
 
 
 export default class InputComponent {
-    #parent;
+    private parent: HTMLElement;
     #config;
 
     input: HTMLInputElement | null = null;
@@ -28,8 +28,7 @@ export default class InputComponent {
 
     constructor(parent: any, config: any) {
         this.#config = config;
-        this.#parent = parent;
-
+        this.parent = parent;
         this.render();
     }
 
@@ -57,9 +56,14 @@ export default class InputComponent {
 
     render() {
         this.wrapper = createElement({
-            parent: this.#parent,
-            classes: [this.#config.classes, 'input'],
+            parent: this.parent,
+            classes: ['input'],
         });
+
+        if (this.#config.classes) {
+            const _classes: Array<string> = Array.from(this.#config.classes);
+            if (_classes.length) this.wrapper.classList.add(..._classes);
+        }
 
         this.renderHeader();
         

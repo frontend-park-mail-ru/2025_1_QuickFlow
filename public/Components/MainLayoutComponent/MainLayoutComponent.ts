@@ -100,7 +100,6 @@ export default class MainLayoutComponent {
 
     renderMessenger() {
         if (!this.main) return;
-
         this.main.style.position = 'fixed';
     }
 

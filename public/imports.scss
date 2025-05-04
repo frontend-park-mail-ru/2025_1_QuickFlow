@@ -6,6 +6,7 @@
 @use './Components/UI/ModalWindowComponent/ModalWindowComponent';
 @use './Components/UI/TextareaComponent/TextareaComponent';
 @use './Components/UI/PopUpComponent/PopUpComponent';
+@use './Components/UI/IFrameComponent/IFrameComponent';
 
 @use './Components/PostComponent/PostComponent';
 @use './Components/MenuComponent/MenuComponent';
@@ -24,7 +25,6 @@
 @use './Components/ResizerComponent/ResizerComponent';
 @use './Components/FeedComponent/FeedComponent';
 @use './Components/CSATComponent/CSATComponent';
-@use './Components/UI/IFrameComponent/IFrameComponent';
 @use './Components/FriendComponent/FriendComponent';
 @use './Components/EmptyStateComponent/EmptyStateComponent';
 
@@ -37,3 +37,4 @@
 @use './Views/CSATView/CSATView';
 @use './Views/StatsView/StatsView';
 @use './Views/FriendsView/FriendsView';
+@use './Views/CommunitiesView/CommunitiesView';

@@ -11,7 +11,7 @@ export default function createElement({
         element.setAttribute(attr, attrs[attr]);
     }
 
-    const _classes =  Array.from(classes);
+    const _classes = Array.from(classes);
     if (_classes.length) element.classList.add(..._classes);
 
     if (text) {

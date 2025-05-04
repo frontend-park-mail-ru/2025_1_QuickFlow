@@ -1,4 +1,4 @@
-.friend {
+.search-item {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -6,7 +6,7 @@
     width: 100%;
 }
 
-.friend__right {
+.search-item__right {
     position: relative;
     width: 100%;
     height: 56px;
@@ -14,14 +14,14 @@
     align-items: center;
 }
 
-.friend__info {
+.search-item__info {
     display: flex;
     flex-direction: column;
     gap: 8px;
     padding-right: 48px;
 }
 
-.friend__name {
+.search-item__name {
     color: var(--text-primary);
     font-size: var(--font-size-l);
     font-weight: var(--font-weight-bold);
@@ -35,7 +35,7 @@
     line-clamp: 1;
 }
 
-.friend__dropdown {
+.search-item__dropdown {
     display: flex;
     position: absolute;
     top: 12px;
@@ -53,14 +53,14 @@
     }
 }
 
-.friend__action {
+.search-item__action {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 8px;
 }
 
-.friend__msg-redirect {
+.search-item__msg-redirect {
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -68,18 +68,18 @@
     transition: var(--trans-menu);
 }
 
-.friend__msg-redirect:hover {
+.search-item__msg-redirect:hover {
     color: var(--text-accent-hover);
 }
 
-.friend__msg-icon {
+.search-item__msg-icon {
     width: 16px;
     height: 16px;
     color: inherit;
     display: flex;
 }
 
-.friend__action-text {
+.search-item__action-text {
     font-size: var(--font-size-s);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-m);
@@ -92,7 +92,7 @@
     }
 }
 
-.friend__text {
+.search-item__text {
     color: var(--text-secondary);
     font-size: var(--font-size-s);
     line-height: var(--line-height-m);

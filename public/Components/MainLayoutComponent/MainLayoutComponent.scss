@@ -85,11 +85,16 @@
     align-items: flex-start;
     gap: 24px;
     max-width: 553px;
-    min-width: 553px;
+    // min-width: 553px;
+
+    width: 100%;
 }
 
 .container__column_right {
     align-items: center;
+    gap: 12px;
+
+    width: 272px;
 }
 
 @media screen and (max-width: 480px) {
