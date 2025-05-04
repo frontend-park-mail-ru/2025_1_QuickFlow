@@ -4,7 +4,6 @@ import createElement from '@utils/createElement';
 import API from '@utils/api';
 import { getLsItem } from '@utils/localStorage';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
-import InputComponent from '@components/UI/InputComponent/InputComponent';
 import CommunityComponent from '@components/CommunityComponent/CommunityComponent';
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import CreateCommunityMwComponent from '@components/UI/ModalWindowComponent/CreateCommunityMwComponent';
@@ -119,7 +118,7 @@ class CommunitiesView {
         if (!communitiesData || !communitiesData.length) {
             return new EmptyStateComponent(this.communities, {
                 icon: 'communities-icon',
-                text: 'Пока нет ни одного сообщества',
+                text: 'Вы пока не подписаны ни на одно сообщество',
             });
         }
 

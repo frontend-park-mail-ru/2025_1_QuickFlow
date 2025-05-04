@@ -104,8 +104,8 @@ class FriendsView {
 
         if (!friendsData || !friendsData.length) {
             return new EmptyStateComponent(this.friends, {
-                icon: 'profile-icon',
-                text: 'Пользователи не найдены',
+                icon: 'friends-icon',
+                text: 'У вас пока нет друзей',
             });
         }
 
