@@ -2,6 +2,18 @@ import ajax from '@modules/ajax';
 
 
 export default class API {
+    static async searchFriends(string: string, users_count: number): Promise<[number, Record<string, any>]> {
+        return new Promise((resolve) => {
+            ajax.get({
+                url: '/users/search',
+                params: { string, users_count },
+                callback: (status: number, data: any) => resolve([status, data]),
+            });
+        });
+    }
+
+
+
     static async createCommunity(body: Record<string, any>): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.post({

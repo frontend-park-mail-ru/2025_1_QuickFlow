@@ -30,7 +30,11 @@ class CommunitiesView {
             type: 'feed',
         });
 
-        new SearchComponent(this.containerObj.left, {});
+        new SearchComponent(this.containerObj.left, {
+            placeholder: 'Введите запрос',
+            classes: ['search_wide'],
+            inputClasses: ['input_wide', 'input_search-small'],
+        });
 
         // new InputComponent(this.containerObj.left, {
         //     type: 'search',

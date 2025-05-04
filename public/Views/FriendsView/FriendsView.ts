@@ -27,10 +27,17 @@ class FriendsView {
             type: 'feed',
         });
 
+        const results = createElement({
+            parent: this.containerObj.left,
+            classes: ['friends'],
+        });
+
         new SearchComponent(this.containerObj.left, {
             placeholder: 'Введите запрос',
             classes: ['search_wide'],
             inputClasses: ['input_wide', 'input_search-small'],
+            results,
+            renderResult: this.renderFriend,
         });
 
         // new InputComponent(this.containerObj.left, {
@@ -97,11 +104,14 @@ class FriendsView {
         }
 
         for (const friendData of friendsData) {
-            new FriendComponent(this.friends, {
-                container: this.containerObj.container,
-                data: friendData,
-            });
+            this.renderFriend(this.friends, friendData);
         }
+    }
+
+    private renderFriend(parent: HTMLElement, friendData: Record<string, any>) {
+        new FriendComponent(parent, {
+            data: friendData,
+        });
     }
 }
 

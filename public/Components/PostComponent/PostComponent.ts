@@ -319,13 +319,20 @@ export default class PostComponent {
     private async handleLike(like: HTMLElement) {
         let status: number;
 
-        if (this.isLiked) {
+        const oldIsLiked = this.isLiked;
+
+        this.isLiked = !this.isLiked;
+        this.toggleLike(like);
+
+        if (oldIsLiked) {
             status = await API.removeLike(this.config.id)
             switch (status) {
                 case 204:
-                    this.isLiked = false;
+                    // this.isLiked = false;
                     break;
                 default:
+                    this.isLiked = true;
+                    this.toggleLike(like);
                     this.renderNetworkErrorPopUp();
                     break;
             }
@@ -333,15 +340,15 @@ export default class PostComponent {
             status = await API.putLike(this.config.id);
             switch (status) {
                 case 204:
-                    this.isLiked = true;
+                    // this.isLiked = true;
                     break;
                 default:
+                    this.isLiked = false;
+                    this.toggleLike(like);
                     this.renderNetworkErrorPopUp();
                     break;
             }
         }
-
-        this.toggleLike(like);
     }
 
     private renderNetworkErrorPopUp() {

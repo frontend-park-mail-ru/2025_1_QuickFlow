@@ -1,6 +1,7 @@
 import Ajax from '@modules/ajax';
 import InputComponent from '@components/UI/InputComponent/InputComponent';
 import createElement from '@utils/createElement';
+import API from '@utils/api';
 
 
 const DEBOUNCE_DELAY = 500;
@@ -11,7 +12,6 @@ export default class SearchComponent {
     private parent: HTMLElement;
     private config: Record<string, any>;
     private search: HTMLElement | null = null;
-    private results: HTMLElement | null = null;
 
     constructor(parent: any, config: Record<string, any>) {
         this.parent = parent;
@@ -24,70 +24,58 @@ export default class SearchComponent {
             parent: this.parent,
             classes: [
                 'header__search-wrapper',
-                ...this.config.classes
+                ...this.config?.classes
             ]
         });
+        // if (this.config.classes) this.search.classList.add(...this.config.classes);
 
         const input = new InputComponent(this.search, {
             type: 'search',
             placeholder: this.config.placeholder || 'Поиск',
             showRequired: false,
-            classes: [...this.config.inputClasses],
+            classes: [...this.config?.inputClasses],
         });
 
-        input.addListener(() => {
-            if (input.value === '') return this.showNotFound();
+        // input.input.onfocus = () => {
+        //     this.config.results.classList.remove('hidden');
+        // }
 
-            input.input.onfocus = () => {
-                if (!this.results) return;
-                this.results.classList.remove('hidden');
-            }
+        // document.addEventListener('mouseup', (event) => {
+        //     if (!this.search.contains(event.target as Node)) {
+        //         this.config.results.classList.add('hidden');
+        //     }
+        // });
 
-            document.addEventListener('mouseup', (event) => {
-                if (!this.search || !this.results) return;
+        input.addListener(() => this.handleSearch(input), DEBOUNCE_DELAY);
+    }
 
-                const target = event.target as Node;
+    private async handleSearch(input: InputComponent) {
+        if (!input.value) this.config.results.classList.add('hidden');
+        this.config.results.classList.remove('hidden');
+        // if (!input.value) return this.showNotFound();
 
-                if (!this.search.contains(target)) {
-                    this.results.classList.add('hidden');
-                }
-            });
-
-            Ajax.get({
-                url: '/users/search',
-                params: {
-                    string: input.value,
-                    users_count: REQUEST_USERS_COUNT,
-                },
-                callback: (status: number, users: any) => {
-                    switch (status) {
-                        case 200:
-                            this.cdOk(users);
-                            break;
-                    }
-                }
-            });
-        }, DEBOUNCE_DELAY);
+        const [status, friendsData] = await API.searchFriends(input.value, REQUEST_USERS_COUNT);
+        
+        switch (status) {
+            case 200:
+                this.cdOk(friendsData);
+                break;
+        }
     }
 
     showNotFound() {
-        if (!this.results) return;
+        if (!this.config.results) return;
 
-        this.results.innerHTML = '';
+        this.config.results.innerHTML = '';
         createElement({
-            parent: this.results,
+            parent: this.config.results,
             text: 'Ничего не найдено',
             classes: ['header__result_empty'],
         });
     }
 
     cdOk(users: any) {
-        if (!this.results) {
-            this.results = createElement({
-                parent: this.search,
-                classes: ['header__results'],
-            });
-        }
+        if (!this.config.results) return;
 
         if (
             !users ||
@@ -95,16 +83,10 @@ export default class SearchComponent {
             users.payload.length === 0
         ) return this.showNotFound();
 
-        if (this.results) this.results.innerHTML = '';
+        this.config.results.innerHTML = '';
         
         for (const user of users.payload) {
-            createElement({
-                tag: 'a',
-                parent: this.results,
-                text: `${user.firstname} ${user.lastname}`,
-                classes: ['header__result'],
-                attrs: { href: `/profiles/${user.username}` },
-            });
+            this.config.renderResult(this.config.results, user);
         }
     }
 }
