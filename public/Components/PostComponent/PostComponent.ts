@@ -270,17 +270,20 @@ export default class PostComponent {
         });
 
         for (const key of DISPLAYED_ACTIONS) {
+            const isLiked = key === 'like' && this.isLiked;
+
             const actionWrapper = createElement({
                 parent: countedActions,
                 classes: [
-                    'post__action',
+                    isLiked ? 'post__action_liked' : 'post__action',
                     `js-post-action-${key}`,
                 ],
             });
 
             insertIcon(actionWrapper, {
-                name: `${key}-icon`,
+                name: isLiked ? `${key}-fill-icon` : `${key}-icon`,
                 classes: [
+                    isLiked ? 'post__action-icon_liked' : 'post__action-icon',
                     'post__action-icon',
                     `js-post-action-icon-${key}`,
                 ],
@@ -386,9 +389,16 @@ export default class PostComponent {
         }
 
         const counter: HTMLElement = like.querySelector('.js-post-action-counter-like');
-        counter.innerText = this.isLiked ?
-            this.config.like_count + 1 :
-            this.config.like_count;
+
+        if (!this.config.is_liked) {
+            counter.innerText = this.isLiked ?
+                this.config.like_count + 1 :
+                this.config.like_count;
+        } else {
+            counter.innerText = this.isLiked ?
+                this.config.like_count :
+                this.config.like_count - 1;
+        }
     }
 
     renderText() {

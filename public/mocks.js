@@ -19,10 +19,11 @@ export const posts = [
             "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
         ],
         created_at: "2005-05-02",
-        like_count: 0,
+        like_count: 1,
         repost_count: 0,
         comment_count: 0,
         is_repost: true,
+        is_liked: true,
     },
     {
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
