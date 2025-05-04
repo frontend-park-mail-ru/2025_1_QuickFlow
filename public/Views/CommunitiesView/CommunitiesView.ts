@@ -55,6 +55,7 @@ class CommunitiesView {
             results,
             searchResults: API.searchFriends,
             title: 'Результаты поиска',
+            renderEmptyState: this.renderEmptyState,
             renderResult: this.renderCommunity,
             elementToHide: this.communities,
         });
@@ -83,6 +84,13 @@ class CommunitiesView {
         this.renderSection(Section.Communities);
 
         return this.containerObj.container;
+    }
+
+    private renderEmptyState(parent: HTMLElement) {
+        new EmptyStateComponent(parent, {
+            icon: 'communities-icon',
+            text: 'Сообщества не найдены',
+        });
     }
 
     async renderSection(section = Section.Communities) {

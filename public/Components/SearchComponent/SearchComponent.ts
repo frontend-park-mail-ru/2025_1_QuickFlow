@@ -56,10 +56,7 @@ export default class SearchComponent {
 
     showNotFound() {
         this.config.results.innerHTML = '';
-        new EmptyStateComponent(this.config.results, {
-            icon: 'friends-icon',
-            text: 'Пользователи не найдены',
-        });
+        this.config.renderEmptyState(this.config.results);
     }
 
     renderResults(resultsData: any) {

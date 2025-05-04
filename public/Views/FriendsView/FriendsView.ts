@@ -51,6 +51,7 @@ class FriendsView {
             ],
             results,
             searchResults: API.searchFriends,
+            renderEmptyState: this.renderEmptyState,
             title: 'Результаты поиска',
             renderResult: this.renderFriend,
             elementToHide: this.friends,
@@ -111,6 +112,13 @@ class FriendsView {
         for (const friendData of friendsData) {
             this.renderFriend(this.friends, friendData);
         }
+    }
+
+    private renderEmptyState(parent: HTMLElement) {
+        new EmptyStateComponent(parent, {
+            icon: 'friends-icon',
+            text: 'Пользователи не найдены',
+        });
     }
 
     private renderFriend(parent: HTMLElement, friendData: Record<string, any>) {
