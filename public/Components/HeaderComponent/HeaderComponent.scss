@@ -138,6 +138,12 @@ a {
     padding: 0 8px;
 }
 
+.header__results-items {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
 @media screen and (max-width: 480px) {
     .header {
         // width: 100%;
