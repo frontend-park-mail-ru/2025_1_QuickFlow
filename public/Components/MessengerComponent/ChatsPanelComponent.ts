@@ -148,17 +148,16 @@ export default class ChatsPanelComponent {
             attrs: {id: CHAT_PREFIX + chatData.id},
         });
 
-        chat.addEventListener('click', (e) => {
-            e.preventDefault();
+        const handleChatItemClick = () => {
             if (chat === this.activeChatItem) return;
             this.close();
             chat.classList.add('chats-panel__chat_active');
             setLsItem('active-chat', CHAT_PREFIX + chatData.id);
             this.activeChatItem = chat;
             this._chatWindow.renderActiveChat(chatData);
-        }, {
-            passive: false
-        });
+        };
+
+        chat.addEventListener('pointerup', () => handleChatItemClick());
 
         new AvatarComponent(chat, {
             size: CHAT_ITEM_AVATAR_SIZE,

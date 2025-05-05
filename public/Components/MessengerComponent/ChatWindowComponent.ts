@@ -85,8 +85,12 @@ export default class ChatWindowComponent {
     render() {
         this.container = createElement({
             parent: this.parent,
-            classes: ['chat-window', 'hidden'],
+            classes: ['chat-window'],
         });
+
+        if (this.isMobile) {
+            this.container.classList.add('hidden');
+        }
 
         this.renderEmptyState();
 
