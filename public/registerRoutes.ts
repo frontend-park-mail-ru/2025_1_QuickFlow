@@ -22,7 +22,7 @@ export default function registerRoutes() {
     router.register(MessengerView, { path: '/messenger', section: '/messenger' });
     router.register(MessengerView, { path: '/messenger/{username}', section: '/messenger' });
     router.register(CommunitiesView, { path: '/communities', section: '/communities' });
-    router.register(CommunityView, { path: '/communities/{name}', section: '/communities' });
+    router.register(CommunityView, { path: '/communities/{address}', section: '/communities' });
 
     router.register(LoginView, { path: '/login', section: null });
     router.register(SignupView, { path: '/signup', section: null });

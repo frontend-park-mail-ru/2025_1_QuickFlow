@@ -32,7 +32,7 @@ class CommunityView {
 
         console.log(params);
 
-        const address = params?.username || getLsItem('username', '');
+        const address = params?.address;
 
         (async () => {
             const [status, communityData] = await API.getCommunity(address);
