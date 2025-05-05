@@ -223,8 +223,6 @@ class CommunityView {
             });
         }
 
-        data.payload.role = null;
-
         if (data?.payload?.role === "owner") {
             new ButtonComponent(this.profileActions, {
                 text: 'Настроить',
