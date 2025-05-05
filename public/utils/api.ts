@@ -69,7 +69,7 @@ export default class API {
         return new Promise((resolve) => {
             ajax.put({
                 url: `/communities/${id}`,
-                body,
+                body: convertToFormData(body),
                 isFormData: true,
                 callback: (status: number, data: any) => resolve([status, data]),
             });

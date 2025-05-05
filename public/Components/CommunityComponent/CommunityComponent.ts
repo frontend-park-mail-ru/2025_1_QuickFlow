@@ -1,7 +1,6 @@
 import createElement from '@utils/createElement';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
 import ContextMenuComponent from '@components/ContextMenuComponent/ContextMenuComponent';
-import insertIcon from '@utils/insertIcon';
 import API from '@utils/api';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 

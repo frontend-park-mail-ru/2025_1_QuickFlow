@@ -169,79 +169,39 @@ class CommunityEditView {
         });
     }
 
-    handleFormSubmit() {
+    async handleFormSubmit() {
         this.submitButton.disable();
 
         const body: Record<string, any> = {};
 
         this.stateUpdaters.forEach(({ name, value }) => {
-            if (name === 'birth_date') value = convertDate(value, 'ts');
             const sections = {
-                profile: () => {
-                    body.profile ??= {};
+                settings: () => {
                     if (name === 'avatar' || name === 'cover') {
                         body[name] = value instanceof File || (value instanceof FileList && value.length > 0) ? value : '';
                         return;
                     }
-                    body.profile[name] = value;
-                },
-                contacts: () => {
-                    body.contact_info ??= {};
-                    body.contact_info[name] = value;
-                },
-                education: () => {
-                    const key = name.startsWith('school') ? 'school' : 'university';
-                    body[key] ??= {};
-                    body[key][name] = name === 'grad_year' ? Number(value) : value;
+                    body[name] = value;
                 }
             };
             sections[this.section]?.();
         })
 
-        const newUsername = body?.profile?.username;
-
-        if (body.profile) {
-            body.profile['sex'] = this.communityData.profile.sex;
-            body.profile = JSON.stringify(body.profile);
-        }
-        if (body.contact_info) body.contact_info = JSON.stringify(body.contact_info);
-        if (body.school) body.school = JSON.stringify(body.school);
-        if (body.university) body.university = JSON.stringify(body.university);
-
-        for (const key in this.communityData) {
-            if (!body[key] || body[key].length === 0) {
-                if (typeof this.communityData[key] === 'object') {
-                    body[key] = JSON.stringify(this.communityData[key]);
-                } else {
-                    body[key] = this.communityData[key];
-                }
-            }
-        }
-
-        if (!body['cover']) body['cover'] = '';
-        if (!body['avatar']) body['avatar'] = '';
-
-        const fd = convertToFormData(body);
+        const newNickname = body?.nickname;
 
         try {
-            Ajax.post({
-                url: '/profile',
-                body: fd,
-                isFormData: true,
-                callback: (status: number) => {
-                    switch (status) {
-                        case 200:
-                            this.postCbOk(newUsername);
-                            break;
-                        case 401:
-                            router.go({ path: '/login' });
-                            break;
-                        default:
-                            this.cbDefault();
-                            break;
-                    }
-                }
-            });
+            const [status, communityData] = await API.editCommunity(this.communityData?.payload?.id, body);
+            switch (status) {
+                case 200:
+                    this.postCbOk(newNickname);
+                    break;
+                case 401:
+                    router.go({ path: '/login' });
+                    break;
+                default:
+                    this.cbDefault();
+                    break;
+            }
         } catch {
             this.cbDefault();
         }
@@ -255,22 +215,13 @@ class CommunityEditView {
         });
     }
 
-    postCbOk(newUsername: string | undefined) {
-        if (newUsername) setLsItem('username', newUsername);
-        router?.menu?.renderProfileMenuItem();
-        router?.header?.renderAvatarMenu();
-        this.render(null, this.section);
+    postCbOk(newNickname: string | undefined) {
+        router.go({ path: `/communities/${newNickname}/edit` });
         new PopUpComponent({
             text: 'Изменения сохранены',
             icon: "check-icon",
             size: "large",
         });
-
-        if (getLsItem('is-profile-feedback-given', 'false') === 'false') {
-            new IFrameComponent(this.containerObj?.container, {
-                src: '/scores?type=profile',
-            });
-        }
     }
 
     renderHeader() {
