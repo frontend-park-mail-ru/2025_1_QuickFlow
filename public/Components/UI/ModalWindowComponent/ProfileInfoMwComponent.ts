@@ -2,6 +2,42 @@ import createElement from '@utils/createElement';
 import convertDate from '@utils/convertDate';
 import { INFO_ITEMS_LAYOUT } from '@views/ProfileView/ProfileActionsConfig';
 import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
+import API from '@utils/api';
+import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
+
+
+const COMMUNITY_INFO_ITEMS_LAYOUT = {
+    nickname: {icon: 'at'},
+    link: {icon: 'globe'},
+    description: {icon: 'align-left-text'},
+    created_at: {icon: 'gift'},
+
+
+
+
+    bio: {icon: 'profile-primary'},
+
+    city: {icon: 'location'},
+    email: {icon: 'envelope'},
+    phone: {icon: 'phone'},
+
+    school_city: {icon: "location"},
+    school_name: {icon: "diploma"},
+
+    univ_city: {icon: "location"},
+    univ_name: {icon: "diploma"},
+    faculty: {icon: "diploma"},
+    grad_year: {icon: "diploma"},
+
+    // friends: {text: 'друзей'},
+    // subscribers: {text: 'подписчиков'},
+    // subscribes: {text: 'подписок'},
+
+    // more: {
+    //     icon: 'info',
+    //     text: 'Подробнее',
+    // }
+};
 
 
 export default class ProfileInfoMwComponent extends ModalWindowComponent {
@@ -31,6 +67,103 @@ export default class ProfileInfoMwComponent extends ModalWindowComponent {
             classes: ['modal__items'],
         });
 
+        switch (this.config.type) {
+            case 'community':
+                this.renderCommunity(items);
+                break;
+            default:
+                this.renderProfile(items);
+                break;
+        }
+    }
+
+    private renderCommunity(items: HTMLElement) {
+        const data = this.config.data.payload;
+
+        this.config.createInfoItem(
+            items,
+            COMMUNITY_INFO_ITEMS_LAYOUT['nickname'].icon,
+            data.community.nickname,
+        );
+
+        // this.config.createInfoItem(
+        //     items,
+        //     INFO_ITEMS_LAYOUT['globe'].icon,
+        //     `https://www.quickflowapp.ru/communities/${data.nickname}`,
+        // );
+
+        if (data.community.description) {
+            this.config.createInfoItem(
+                items,
+                COMMUNITY_INFO_ITEMS_LAYOUT['description'].icon,
+                data.community.description,
+            );    
+        }
+
+        this.config.createInfoItem(
+            items,
+            COMMUNITY_INFO_ITEMS_LAYOUT['created_at'].icon,
+            'Сообщество создано ' + convertDate(data.created_at.slice(0, 10)),
+        );
+        
+        this.renderContactsInfoBlock(items, data.owner_id);
+    }
+
+    private async renderContactsInfoBlock(parent: HTMLElement, ownerId: any) {
+        // const [status, profileData] = await API.getProfile(ownerId);
+
+        const [status, profileData] = [200, {
+            profile: {
+                avatar_url: 'https://i.pravatar.cc/150',
+                firstname: 'Иван',
+                lastname: 'Иванов',
+                username: 'rvasutenko'
+            }
+        }];
+        switch (status) {
+            case 200:
+                createElement({
+                    parent,
+                    classes: ['modal__divider'],
+                });
+
+                createElement({
+                    parent,
+                    classes: ['modal__title'],
+                    text: 'Контакты',
+                });
+
+                const contact = createElement({
+                    tag: 'a',
+                    parent,
+                    classes: ['modal__contact'],
+                    attrs: { href: `/profiles/${profileData.profile.username}` },
+                });
+                new AvatarComponent(contact, {
+                    src: profileData.profile.avatar_url,
+                    size: 's',
+                })
+                const contactInfo = createElement({
+                    parent: contact,
+                    classes: ['modal__contact-info'],
+                });
+                createElement({
+                    tag: 'h3',
+                    parent: contactInfo,
+                    text: `${profileData.profile.firstname} ${profileData.profile.lastname}`,
+                });
+                createElement({
+                    parent: contactInfo,
+                    classes: ['modal__contact-description'],
+                    text: 'Владелец',
+                });
+                break;
+            default:
+                break;
+        }
+    }
+
+    private renderProfile(items: HTMLElement) {
         this.config.createInfoItem(
             items,
             INFO_ITEMS_LAYOUT['username'].icon,

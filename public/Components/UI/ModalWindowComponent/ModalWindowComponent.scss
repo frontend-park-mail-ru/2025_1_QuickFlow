@@ -275,6 +275,24 @@
     width: auto;
 }
 
+.modal__contact {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-direction: row;
+}
+
+.modal__contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.modal__contact-description {
+    font-size: var(--font-size-s);
+    color: var(--text-secondary);
+}
+
 @media screen and (max-width: 480px) {
     .modal__bg {
         width: 100vw;

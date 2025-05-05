@@ -13,6 +13,7 @@ import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import ProfileMenuComponent from '@components/ProfileMenuComponent/ProfileMenuComponent';
 import insertIcon from '@utils/insertIcon';
 import { MOBILE_MAX_WIDTH } from '@config';
+import API from '@utils/api';
 
 
 const MOBILE_MAX_DISPLAYED_FRIENDS_COUNT = 3;
@@ -29,24 +30,22 @@ class CommunityView {
             type: 'profile',
         });
 
-        const username = params?.username || getLsItem('username', '');
+        const address = params?.username || getLsItem('username', '');
 
-        Ajax.get({
-            url: `/profiles/${username}`,
-            callback: (status: number, userData: any) => {
-                switch (status) {
-                    case 200:
-                        this.cbOk(userData);
-                        break;
-                    case 401:
-                        router.go({ path: '/login' });
-                        break;
-                    case 404:
-                        router.go({ path: '/not-found' });
-                        break;
-                }
+        (async () => {
+            const [status, communityData] = await API.getCommunity(address);
+            switch (status) {
+                case 200:
+                    this.cbOk(communityData);
+                    break;
+                case 401:
+                    router.go({ path: '/login' });
+                    break;
+                case 404:
+                    router.go({ path: '/not-found' });
+                    break;
             }
-        });
+        })();
 
         return this.containerObj.container;
     }
@@ -136,7 +135,7 @@ class CommunityView {
         });
 
         new CoverComponent(profileHeader, {
-            src: data.profile.cover_url,
+            src: data.payload.community.cover_url,
             type: 'profile',
         });
 
@@ -155,24 +154,10 @@ class CommunityView {
             classes: ['profile__menu-icon'],
         });
 
-        new ProfileMenuComponent(profileMenu, {
-            userData: data,
-        });
-
-        // createElement({
-        //     parent: profileMenu,
-        //     classes: ['profile__menu-btn'],
-        // });
-
         new AvatarComponent(profileHeader, {
             size: 'xxxl',
             class: 'profile__avatar',
-            type: 'status',
-            status: {
-                online: data.relation === "self" ? true : data.online,
-                lastSeen: data.last_seen,
-            },
-            src: data.profile.avatar_url,
+            src: data.payload.community.avatar_url,
         });
 
         const profileBottom = createElement({
@@ -187,7 +172,7 @@ class CommunityView {
 
         createElement({
             parent: profileInfo,
-            text: `${data.profile.firstname} ${data.profile.lastname}`,
+            text: data.payload.community.name,
             classes: ['profile__name'],
         });
 
@@ -229,7 +214,8 @@ class CommunityView {
             new ProfileInfoMwComponent(this.containerObj?.container, {
                 data,
                 createInfoItem: this.createInfoItem,
-                createCountedItem: this.createCountedItem
+                createCountedItem: this.createCountedItem,
+                type: 'community',
             })
         });
 

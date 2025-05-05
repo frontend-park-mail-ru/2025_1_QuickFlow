@@ -763,3 +763,19 @@ export const search = {
         }
     ]
 }
+
+export const community = {
+    payload: {
+        "id": "790a0e7f-54a8-4574-8a55-7b47b182800c",
+        "owner_id": "ada65c04-fc5a-4d1e-a0f1-867ebdd08a8e",
+        "created_at": "2025-05-04T22:24:23Z",
+        "role": "owner",
+        "community": {
+            "nickname": "romaruka",
+            "name": "Romarukaa!",
+            "description": "New community!!!!",
+            "avatar_url": "https://quickflowapp.ru/minio/posts/c9244b9b-3404-4844-9807-b1d9066c380b.jpg",
+            "cover_url": "https://quickflowapp.ru/minio/posts/ed2cc61c-b3b4-460a-9ac0-10d7f66a8e52.png"
+        }
+    },
+}
