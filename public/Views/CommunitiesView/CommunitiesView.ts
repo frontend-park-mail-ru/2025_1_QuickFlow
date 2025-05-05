@@ -52,7 +52,7 @@ class CommunitiesView {
                 'communities__search',
             ],
             results,
-            searchResults: API.searchFriends,
+            searchResults: API.searchCommunities,
             title: 'Результаты поиска',
             renderEmptyState: this.renderEmptyState,
             renderResult: this.renderCommunity,

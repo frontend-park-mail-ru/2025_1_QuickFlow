@@ -473,7 +473,9 @@ export default class PostComponent {
             parent: nameDateWrapper,
             classes: ['post__name'],
             attrs: { href: `/profiles/${this.config.author.username}` },
-            text: `${this.config.author.firstname} ${this.config.author.lastname}`,
+            text: this.config?.author_type === 'community' ?
+                `${this.config.author.firstname} ${this.config.author.lastname}` :
+                this.config.author.community.name,
         });
 
         createElement({
