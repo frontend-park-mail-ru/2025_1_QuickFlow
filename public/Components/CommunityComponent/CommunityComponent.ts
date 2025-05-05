@@ -107,8 +107,11 @@ export default class CommunityComponent {
                         console.error('Error:', error);
                     });
                 },
-            },
-            deleteCommunity: {
+            }
+        };
+
+        if (communityData?.role !== 'owner') {
+            contextMenuData.deleteCommunity = {
                 text: 'Отписаться',
                 icon: 'minus-icon',
                 isCritical: true,
@@ -128,8 +131,8 @@ export default class CommunityComponent {
                             break;
                     }
                 },
-            },
-        };
+            }
+        }
 
         new ContextMenuComponent(dropdown, { data: contextMenuData });
     }
