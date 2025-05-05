@@ -22,8 +22,6 @@ export default class CommunityComponent {
             classes: ['search-item'],
         });
 
-        // console.log(this.config.data);
-
         new AvatarComponent(community, {
             size: 'l',
             src: this.config.data.community.avatar_url,
@@ -53,19 +51,19 @@ export default class CommunityComponent {
             classes: ['search-item__action'],
         });
 
-        this.renderMsgAction(action);
+        this.renderMembersCount(action);
         this.renderDropdown(community, this.config.data);
     }
 
-    private renderDeletedCommunity(community: HTMLElement, friendData: Record<string, any>) {
+    private renderDeletedCommunity(community: HTMLElement, communityData: Record<string, any>) {
         const action: HTMLElement = community.querySelector('.search-item__action');
         const dropdown = community.querySelector('.js-dropdown');
 
-        this.renderUndoAction(action, friendData);
+        this.renderUndoAction(action, communityData);
         dropdown.remove();
     }
 
-    private renderMsgAction(parent: HTMLElement) {
+    private renderMembersCount(parent: HTMLElement) {
         parent.innerHTML = '';
 
         createElement({
@@ -75,7 +73,7 @@ export default class CommunityComponent {
         });
     }
 
-    private renderDropdown(community: HTMLElement, friendData: Record<string, any>) {
+    private renderDropdown(community: HTMLElement, communityData: Record<string, any>) {
         const communityRight = community.querySelector('.search-item__right');
 
         const dropdown = createElement({
@@ -115,11 +113,10 @@ export default class CommunityComponent {
                 icon: 'minus-icon',
                 isCritical: true,
                 onClick: async () => {
-                    const status = await API.deleteFriend(friendData.id);
-                    // const status: number = 200;
+                    const status = await API.leaveCommunity(communityData.payload.id);
                     switch (status) {
                         case 200:
-                            this.renderDeletedCommunity(community, friendData);
+                            this.renderDeletedCommunity(community, communityData);
                             break;
                         default:
                             new PopUpComponent({
@@ -137,7 +134,7 @@ export default class CommunityComponent {
         new ContextMenuComponent(dropdown, { data: contextMenuData });
     }
 
-    private renderUndoAction(parent: HTMLElement, friendData: Record<string, any>) {
+    private renderUndoAction(parent: HTMLElement, communityData: Record<string, any>) {
         parent.innerHTML = '';
 
         createElement({
@@ -159,12 +156,11 @@ export default class CommunityComponent {
         });
 
         undoBtn.addEventListener('click', async () => {
-            const status = await API.acceptFriendRequest(friendData.id);
-            // const status: number = 200;
+            const status = await API.joinCommunity(communityData.payload.id);
             switch (status) {
                 case 200:
-                    this.renderMsgAction(parent);
-                    this.renderDropdown(parent.parentNode.parentNode.parentNode as HTMLElement, friendData);
+                    this.renderMembersCount(parent);
+                    this.renderDropdown(parent.parentNode.parentNode.parentNode as HTMLElement, communityData);
                     break;
                 default:
                     new PopUpComponent({
