@@ -66,6 +66,7 @@
     flex-direction: row;
     gap: 8px;
     transition: var(--trans-menu);
+    color: var(--text-accent);
 }
 
 .search-item__msg-redirect:hover {
