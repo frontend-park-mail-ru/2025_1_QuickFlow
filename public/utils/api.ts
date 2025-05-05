@@ -45,11 +45,11 @@ export default class API {
 
 
 
-    static async createCommunity(body: Record<string, any>): Promise<[number, Record<string, any>]> {
+    static async createCommunity(nickname: string, name: string): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.post({
                 url: `/community`,
-                body: convertToFormData(body),
+                body: convertToFormData({ nickname, name }),
                 isFormData: true,
                 callback: (status: number, data: any) => resolve([status, data]),
             });

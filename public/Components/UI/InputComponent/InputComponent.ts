@@ -354,11 +354,22 @@ export default class InputComponent {
         const hasValidCharacters = chars.every((char) => /^[a-zA-Z0-9._]+$/.test(char));
 
         if (!username) {
-            this.showError('Введите имя пользователя');
+            this.showError(
+                'Введите '
+                + (this.config?.entity?.toLowerCase() || 'имя пользователя')
+            );
         } else if (!hasValidCharacters) {
-            this.showError('Никнейм может содержать только латинские буквы, цифры, "." и "_"');
+            this.showError(
+                (this.config?.entity || 'Имя пользователя')
+                + ' может содержать только латинские буквы, цифры, "." и "_"'
+            );
         } else if (chars[0] === '.' || chars[0] === '_') {
-            this.showError('Никнейм не должен начинаться с "." или "_"');
+            this.showError(
+                (this.config?.entity ?
+                    (this.config?.entity + ' не должен') :
+                    'Имя пользователя не должно')
+                + ' начинаться с "." или "_"'
+            );
         } else {
             this.hideError();
         }

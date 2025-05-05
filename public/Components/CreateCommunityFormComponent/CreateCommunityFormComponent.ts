@@ -1,3 +1,4 @@
+import Ajax from '@modules/ajax';
 import InputComponent from '@components/UI/InputComponent/InputComponent';
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import createElement from '@utils/createElement';
@@ -10,6 +11,16 @@ import API from '@utils/api';
 export default class CreateCommunityFormComponent {
     private parent: HTMLElement;
     private focusTimer: any = null;
+    private config: Record<string, string> = {
+        nameTitle: 'Придумайте название',
+        addressTitle: 'Выберите адрес',
+        nameDescription: 'Используйте слова, которые передают идею сообщества. Выбранное название можно изменить позже.',
+        addressDescription: 'Адрес будет использоваться в ссылках на ваше собщество. Выбранный адрес можно изменить позже.',
+        continueBtnText: 'Продолжить',
+        submitBtnText: 'Создать сообщество'
+    };
+    private step: number = 1;
+    private addressInput: InputComponent | null = null;
     private nameInput: InputComponent | null = null;
     private submitBtn: ButtonComponent | null = null;
     private form: HTMLFormElement | null = null;
@@ -19,7 +30,7 @@ export default class CreateCommunityFormComponent {
         this.render();
     }
 
-    render() {
+    private render() {
         if (this.form) this.form.remove();
 
         this.form = createElement({
@@ -28,81 +39,156 @@ export default class CreateCommunityFormComponent {
             classes: ['auth-form']
         }) as HTMLFormElement;
 
-        this.renderUsernameStep(this.form);
+        switch (this.step) {
+            case 1:
+                this.renderNameStep(this.form);
+                break;
+            case 2:
+                this.renderAddressStep(this.form);
+                break;
+        }
+
         this.handleFormSubmission(this.form);
     }
 
-    handleFormSubmission(form: HTMLFormElement) {
+    private handleFormSubmission(form: HTMLFormElement) {
         form.addEventListener('submit', (event: any) => {
             event.preventDefault();
             if (this.submitBtn.isDisabled) return;
-            if (this.nameInput?.input?.classList.contains('invalid')) return;
+            if (this.step === 1) return this.continueBtnOnClick();
+            if (this.addressInput?.input?.classList.contains('invalid')) return;
             this.submitBtnOnClick(event);
         });
     }
 
-    renderTopWrapper(form: HTMLFormElement) {
+    private renderTopWrapper(form: HTMLFormElement) {
         const topWrapper = createElement({
             parent: form,
             classes: ['auth-form__top']
         });
 
+        if (this.step === 2) {
+            createElement({
+                tag: 'a',
+                parent: topWrapper,
+                classes: ['auth-form__back-btn']
+            })
+            .addEventListener('click', () => {
+                if (this.step === 2) {
+                    this.step = 1;
+                    this.render();
+                }
+            });
+        }
+
         createElement({
             tag: 'h1',
-            text: 'Придумайте название',
+            text: this.step === 1 ? this.config.nameTitle : this.config.addressTitle,
             parent: topWrapper,
         })
 
         createElement({
             tag: 'p',
             classes: ['p1'],
-            text: 'Используйте слова, которые передают идею сообщества. Выбранное название можно изменить позже.',
+            text: this.step === 1 ?
+                this.config.nameDescription :
+                this.config.addressDescription,
             parent: topWrapper,
         })
     }
 
-    renderBottomWrapper(form: HTMLFormElement) {
-        this.submitBtn = new ButtonComponent(form, {
-            text: 'Создать сообщество',
+    private renderBottomWrapper(form: HTMLFormElement) {
+        const bottomWrapper = createElement({
+            parent: form,
+            classes: ['auth-form__bottom'],
+        })
+
+        this.submitBtn = new ButtonComponent(bottomWrapper, {
+            text: this.step === 1 ? this.config.continueBtnText : this.config.submitBtnText,
             type: "submit",
             variant: 'primary',
-            onClick: this.submitBtnOnClick.bind(this),
-            disabled: true,
-            stateUpdaters: [this.nameInput],
+            onClick:
+                this.step === 1
+                    ? this.continueBtnOnClick.bind(this)
+                    : this.submitBtnOnClick.bind(this),
+            disabled: this.step === 1,
+            stateUpdaters:
+                this.step === 1
+                ? [this.nameInput]
+                : [this.addressInput]
         });
     }
 
-    renderUsernameStep(form: HTMLFormElement) {
+    private renderNameStep(form: HTMLFormElement) {
         this.renderTopWrapper(form);
 
-        this.nameInput = new InputComponent(form, {
+        const fieldsetUsername = createElement({
+            tag: 'fieldset',
+            parent: form,
+            classes: ['auth-form__username'],
+        })
+
+        this.nameInput = new InputComponent(fieldsetUsername, {
             type: 'text',
             placeholder: 'Введите название',
             required: true,
             showRequired: false,
+            value: getLsItem("new-community-name", ""),
         });
         if (this.nameInput.input) focusInput(this.nameInput.input, this.focusTimer);
 
         this.renderBottomWrapper(form);
     }
 
-    updateBtnState() {
-        this.submitBtn.buttonElement.disabled = 
-            this.nameInput?.input?.classList.contains('invalid') ||
-            this.nameInput?.input?.value === '';
+    private updateBtnState() {
+        let disabled;
+        if (this.step === 1) {
+            disabled = this.nameInput?.input?.classList.contains('invalid') || this.nameInput?.input?.value === '';
+        } else {
+            disabled = this.addressInput?.input?.classList.contains('invalid') || this.addressInput?.input?.value === '';
+        }
+        if (this.submitBtn?.buttonElement) this.submitBtn.buttonElement.disabled = disabled;
     }
 
-    submitBtnOnClick(event: any) {
+    private renderAddressStep(form: HTMLFormElement) {
+        this.renderTopWrapper(form);
+
+        this.addressInput = new InputComponent(form, {
+            type: 'username',
+            placeholder: 'Введите адрес',
+            label: 'https://quickflowapp.ru/communities/',
+            required: true,
+            showRequired: false,
+            validation: 'username',
+            entity: 'Адрес',
+        });
+        if (this.addressInput.input) focusInput(this.addressInput.input, this.focusTimer);
+
+        this.renderBottomWrapper(form);
+    }
+
+    private continueBtnOnClick() {
+        if (!this.nameInput?.input?.value.trim()) return;
+        setLsItem("new-community-name", this.nameInput.value),
+        this.step = 2;
+        this.render();
+    }
+
+    private submitBtnOnClick(event: any) {
         event.preventDefault();
-        const name = this.nameInput?.input?.value?.trim();
-        if (!name) return;
-        this.submit(name);
+        if (!this.addressInput?.input?.value.trim()) return;
+        // const password = this.addressInput.input.value.trim();
+        this.submit();
     }
 
-    async submit(name: any) {
+    private async submit() {
         this.submitBtn.disable();
 
-        const [status, communityData] = await API.createCommunity(name);
+        const [status, communityData] = await API.createCommunity(
+            this.addressInput?.input?.value?.trim(),
+            this.nameInput?.input?.value?.trim()
+        );
+
         switch (status) {
             case 200:
                 router.go({ path: `/communities/${communityData.id}` });

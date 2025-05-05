@@ -8,14 +8,16 @@ const COVER_MAX_RESOLUTION = 1680;
 
 
 export default class CoverComponent {
-    #parent
-    #config
+    private parent: HTMLElement;
+    private config: Record<string, any>;
+
     coverWrapper: HTMLElement | null;
     cover: HTMLElement | null;
     fileInput: FileInputComponent | null;
+
     constructor(parent: any, config: any) {
-        this.#parent = parent;
-        this.#config = config;
+        this.parent = parent;
+        this.config = config;
 
         this.coverWrapper = null;
         this.cover = null;
@@ -26,17 +28,17 @@ export default class CoverComponent {
 
     render() {
         this.coverWrapper = createElement({
-            parent: this.#parent,
+            parent: this.parent,
             classes: ['cover']
         });
 
         this.cover = createElement({
             parent: this.coverWrapper,
             classes: ['cover__img'],
-            attrs: {src: this.#config.src || DEFAULT_SRC}
+            attrs: {src: this.config.src || DEFAULT_SRC}
         });
 
-        switch (this.#config.type) {
+        switch (this.config.type) {
             case 'edit':
                 this.renderEdit();
                 break;
@@ -55,7 +57,7 @@ export default class CoverComponent {
             classes: ['cover__btn'],
         });
         
-        this.fileInput = new FileInputComponent(this.#parent.parentNode, {
+        this.fileInput = new FileInputComponent(this.parent.parentNode as HTMLElement, {
             imitator: coverUploadBtn.buttonElement,
             preview: this.cover,
             id: 'profile-cover-upload',
