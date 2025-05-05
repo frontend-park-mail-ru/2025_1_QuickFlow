@@ -10,8 +10,10 @@ import API from '@utils/api';
 
 export default class CreateCommunityFormComponent {
     private parent: HTMLElement;
+    private config: Record<string, any>;
+
     private focusTimer: any = null;
-    private config: Record<string, string> = {
+    private staticConfig: Record<string, string> = {
         nameTitle: 'Придумайте название',
         addressTitle: 'Выберите адрес',
         nameDescription: 'Используйте слова, которые передают идею сообщества. Выбранное название можно изменить позже.',
@@ -25,8 +27,9 @@ export default class CreateCommunityFormComponent {
     private submitBtn: ButtonComponent | null = null;
     private form: HTMLFormElement | null = null;
 
-    constructor(parent: HTMLElement) {
+    constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
+        this.config = config;
         this.render();
     }
 
@@ -83,7 +86,7 @@ export default class CreateCommunityFormComponent {
 
         createElement({
             tag: 'h1',
-            text: this.step === 1 ? this.config.nameTitle : this.config.addressTitle,
+            text: this.step === 1 ? this.staticConfig.nameTitle : this.staticConfig.addressTitle,
             parent: topWrapper,
         })
 
@@ -91,8 +94,8 @@ export default class CreateCommunityFormComponent {
             tag: 'p',
             classes: ['p1'],
             text: this.step === 1 ?
-                this.config.nameDescription :
-                this.config.addressDescription,
+                this.staticConfig.nameDescription :
+                this.staticConfig.addressDescription,
             parent: topWrapper,
         })
     }
@@ -104,7 +107,7 @@ export default class CreateCommunityFormComponent {
         })
 
         this.submitBtn = new ButtonComponent(bottomWrapper, {
-            text: this.step === 1 ? this.config.continueBtnText : this.config.submitBtnText,
+            text: this.step === 1 ? this.staticConfig.continueBtnText : this.staticConfig.submitBtnText,
             type: "submit",
             variant: 'primary',
             onClick:
@@ -191,6 +194,7 @@ export default class CreateCommunityFormComponent {
 
         switch (status) {
             case 200:
+                this.config.close();
                 router.go({ path: `/communities/${communityData.payload.community.nickname}` });
                 break;
             default:
