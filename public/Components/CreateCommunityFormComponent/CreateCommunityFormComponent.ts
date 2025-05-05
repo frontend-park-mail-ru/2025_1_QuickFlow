@@ -191,7 +191,7 @@ export default class CreateCommunityFormComponent {
 
         switch (status) {
             case 200:
-                router.go({ path: `/communities/${communityData.id}` });
+                router.go({ path: `/communities/${communityData.payload.community.nickname}` });
                 break;
             default:
                 this.nameInput.showError('Не удалось создать сообщество');
