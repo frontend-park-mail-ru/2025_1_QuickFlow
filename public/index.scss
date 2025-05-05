@@ -153,6 +153,13 @@ p {
     position: relative;
 }
 
+@media screen and (max-width: 750px) {
+    main {
+        left: 96px;
+        width: calc(100% - 96px);
+    }
+}
+
 @media screen and (max-width: 480px) {
     main {
         width: 100vw;

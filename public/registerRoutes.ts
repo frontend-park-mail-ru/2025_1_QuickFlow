@@ -13,6 +13,7 @@ import StatsView from '@views/StatsView/StatsView';
 import FriendsView from '@views/FriendsView/FriendsView';
 import CommunityView from '@views/CommunityView/CommunityView';
 import CommunitiesView from '@views/CommunitiesView/CommunitiesView';
+import CommunityEditView from '@views/CommunityEditView/CommunityEditView';
 
 
 export default function registerRoutes() {
@@ -23,6 +24,7 @@ export default function registerRoutes() {
     router.register(MessengerView, { path: '/messenger/{username}', section: '/messenger' });
     router.register(CommunitiesView, { path: '/communities', section: '/communities' });
     router.register(CommunityView, { path: '/communities/{address}', section: '/communities' });
+    router.register(CommunityEditView, { path: '/communities/{address}/edit', section: '/communities' });
 
     router.register(LoginView, { path: '/login', section: null });
     router.register(SignupView, { path: '/signup', section: null });

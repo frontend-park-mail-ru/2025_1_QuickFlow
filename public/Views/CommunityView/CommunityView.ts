@@ -181,27 +181,6 @@ class CommunityView {
             classes: ['profile__details']
         });
 
-        // const usernameItem = this.createInfoItem(
-        //     fullInfo,
-        //     INFO_ITEMS_LAYOUT['username'].icon,
-        //     data.profile.username,
-        //     true
-        // );
-        // usernameItem.classList.add('profile__detail_more');
-
-        // usernameItem.addEventListener("click", () => {
-        //     navigator.clipboard.writeText(data.profile.username)
-        //     .then(() => {
-        //         new PopUpComponent(this.containerObj?.container, {
-        //             text: 'Текст скопирован в буфер обмена',
-        //             icon: "copy-green-icon",
-        //         });
-        //     })
-        //     .catch((error) => {
-        //         console.error('Error:', error);
-        //     });
-        // });
-
         const moreInfo = this.createInfoItem(
             fullInfo,
             INFO_ITEMS_LAYOUT['more'].icon,
@@ -219,7 +198,7 @@ class CommunityView {
             })
         });
 
-        // this.renderActions(profileBottom, data);
+        this.renderActions(profileBottom, data);
 
         new FeedComponent(this.containerObj?.left, {
             getUrl: `/communities/${data.payload.community.nickname}/posts`,
@@ -244,14 +223,16 @@ class CommunityView {
             });
         }
 
-        if (data.relation === "self") {
+        data.payload.role = null;
+
+        if (data?.payload?.role === "owner") {
             new ButtonComponent(this.profileActions, {
-                text: 'Редактировать профиль',
+                text: 'Настроить',
                 variant: 'secondary',
                 size: 'small',
-                onClick: () => router.go({ path: '/profile/edit' }),
+                onClick: () => router.go({ path: `/communities/${data?.payload?.community?.nickname}/edit` }),
             });
-        } else if (Object.keys(ACTIONS_PROPERTIES).includes(data.relation)) {
+        } else {
             this.renderOtherActions(data);
         }
     }
@@ -259,8 +240,11 @@ class CommunityView {
     renderOtherActions(data: any) {
         if (this.profileActions) this.profileActions.innerHTML = '';
 
-        const relation = data.relation as keyof typeof ACTIONS_PROPERTIES;
-        const properties = ACTIONS_PROPERTIES[relation];
+        let role = data?.payload?.role;
+        if (!role) role = 'not_member';
+
+        const properties = ACTIONS_PROPERTIES[role];
+        console.log(role);
 
         new ButtonComponent(this.profileActions, {
             text: properties[0].text,
@@ -268,12 +252,12 @@ class CommunityView {
             size: 'small',
             onClick: properties[0].onClick.bind(this, data),
         });
-        new ButtonComponent(this.profileActions, {
-            icon: properties[1].icon,
-            variant: "secondary",
-            size: 'small',
-            onClick: properties[1].onClick.bind(this, data),
-        });
+        // new ButtonComponent(this.profileActions, {
+        //     icon: properties[1].icon,
+        //     variant: "secondary",
+        //     size: 'small',
+        //     onClick: properties[1].onClick.bind(this, data),
+        // });
     }
 
     createCountedItem(parent: HTMLElement, title: string, value: any) {

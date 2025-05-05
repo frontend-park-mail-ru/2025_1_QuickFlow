@@ -152,6 +152,13 @@ a {
     width: 100%;
 }
 
+@media screen and (max-width: 750px) {
+    .header {
+        left: 96px;
+        width: calc(100% - 96px);
+    }
+}
+
 @media screen and (max-width: 480px) {
     .header {
         // width: 100%;
