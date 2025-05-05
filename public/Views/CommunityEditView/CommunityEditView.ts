@@ -187,8 +187,8 @@ class CommunityEditView {
             sections[this.section]?.();
         })
 
-        if (!body['cover']) body['cover'] = '';
-        if (!body['avatar']) body['avatar'] = '';
+        // if (!body['cover']) body['cover'] = '';
+        // if (!body['avatar']) body['avatar'] = '';
         
         const newNickname = body?.nickname;
 
