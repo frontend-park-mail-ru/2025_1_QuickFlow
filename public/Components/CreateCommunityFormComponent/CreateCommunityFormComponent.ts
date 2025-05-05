@@ -194,7 +194,7 @@ export default class CreateCommunityFormComponent {
 
         switch (status) {
             case 200:
-                this.config.close();
+                this.config.closeModal();
                 router.go({ path: `/communities/${communityData.payload.community.nickname}` });
                 break;
             default:
