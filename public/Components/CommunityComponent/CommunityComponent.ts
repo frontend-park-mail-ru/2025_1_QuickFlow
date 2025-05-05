@@ -96,7 +96,7 @@ export default class CommunityComponent {
                 text: 'Скопировать ссылку',
                 icon: 'copy-icon',
                 onClick: async () => {
-                    navigator.clipboard.writeText(`${window.origin}/communities/${this.config.data.username}`)
+                    navigator.clipboard.writeText(`${window.origin}/communities/${communityData.community.nickname}`)
                     .then(() => {
                         new PopUpComponent({
                             text: 'Текст скопирован в буфер обмена',
