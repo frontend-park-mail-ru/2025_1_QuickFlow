@@ -114,6 +114,16 @@ export default class API {
         });
     }
 
+    static async getManagedCommunities(username: string, count: number): Promise<[number, Record<string, any>]> {
+        return new Promise((resolve) => {
+            ajax.get({
+                url: `/profiles/${username}/controlled`,
+                params: { count },
+                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+            });
+        });
+    }
+
     static async deleteCommunity(id: string): Promise<number> {
         return new Promise((resolve) => {
             ajax.delete({

@@ -97,15 +97,18 @@ class CommunitiesView {
 
         switch (section) {
             case Section.Communities:
-                this.renderCommunities();
+                this.renderCommunities(API.getUserCommunities);
+                break;
+            case Section.Managed:
+                this.renderCommunities(API.getManagedCommunities);
                 break;
         }
     }
 
-    async renderCommunities() {
+    async renderCommunities(getMethod: Function) {
         const username = getLsItem('username', null);
 
-        const [communitiesStatus, data] = await API.getUserCommunities(username, COMMUNITIES_COUNT);
+        const [communitiesStatus, data] = await getMethod(username, COMMUNITIES_COUNT);
         const communitiesData = data?.payload;
 
         if (!communitiesData || !communitiesData.length) {
