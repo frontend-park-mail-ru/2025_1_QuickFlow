@@ -213,4 +213,14 @@ export default class API {
             });
         });
     }
+
+    static async cancelFriendRequest(friend_id: any): Promise<number> {
+        return new Promise((resolve) => {
+            ajax.delete({
+                url: '/follow',
+                body: { friend_id },
+                callback: (status: number) => resolve(status),
+            });
+        });
+    }
 };

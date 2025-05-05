@@ -9,28 +9,28 @@ import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 export default class FriendComponent {
     private parent: HTMLElement;
     private config: Record<string, any>;
+    private element: HTMLElement;
 
     constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
         this.config = config;
-
         this.render();
     }
 
     render() {        
-        const friend = createElement({
+        this.element = createElement({
             parent: this.parent,
             classes: ['search-item'],
         });
 
-        new AvatarComponent(friend, {
+        new AvatarComponent(this.element, {
             size: 'l',
             src: this.config.data.avatar_url,
             href: `/profiles/${this.config.data.username}`,
         });
 
         const friendRight = createElement({
-            parent: friend,
+            parent: this.element,
             classes: ['search-item__right'],
         });
 
@@ -52,8 +52,8 @@ export default class FriendComponent {
             classes: ['search-item__action'],
         });
 
-        this.renderMsgAction(action, this.config.data.username);
-        this.renderDropdown(friend, this.config.data);
+        this.renderAction(action, this.config.data.username);
+        this.renderDropdown(this.element, this.config.data);
     }
 
     private renderDeletedFriend(friend: HTMLElement, friendData: Record<string, any>) {
@@ -64,30 +64,96 @@ export default class FriendComponent {
         dropdown.remove();
     }
 
-    private renderMsgAction(parent: HTMLElement, username: string) {
+    private renderAction(parent: HTMLElement, username: string) {
         parent.innerHTML = '';
 
-        const msgRedirect = createElement({
-            tag: 'a',
-            parent,
-            attrs: { href: `/messenger/${username}` },
-            classes: ['search-item__msg-redirect'],
-        });
+        let action: HTMLElement;
 
-        // router.go({
-        //     path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
-        // });
+        switch (this.config.section) {
+            case 'all':
+                action = createElement({
+                    tag: 'a',
+                    parent,
+                    attrs: { href: `/messenger/${username}` },
+                    classes: ['search-item__msg-redirect'],
+                });
+        
+                insertIcon(action, {
+                    name: 'messenger-icon',
+                    classes: ['search-item__msg-icon'],
+                });
+        
+                createElement({
+                    parent: action,
+                    text: 'Написать сообщение',
+                    classes: ['search-item__action-text'],
+                });
+                break;
 
-        insertIcon(msgRedirect, {
-            name: 'messenger-icon',
-            classes: ['search-item__msg-icon'],
-        });
+            case 'incoming':
+                action = createElement({
+                    parent,
+                    classes: ['search-item__msg-redirect'],
+                });
+        
+                insertIcon(action, {
+                    name: 'user-add-icon',
+                    classes: ['search-item__msg-icon'],
+                });
+        
+                createElement({
+                    parent: action,
+                    text: 'Принять заявку',
+                    classes: ['search-item__action-text'],
+                });
 
-        createElement({
-            parent: msgRedirect,
-            text: 'Написать сообщение',
-            classes: ['search-item__action-text'],
-        });
+                action.addEventListener('click', async () => {
+                    const status = await API.acceptFriendRequest(this.config.data.id);
+                    switch (status) {
+                        case 200:
+                            this.element.remove();
+                            break;
+                        default:
+                            new PopUpComponent({
+                                text: "Не удалось добавить пользователя в друзья",
+                                isError: true,
+                            });
+                    }
+                });
+                break;
+
+            case 'outcoming':
+                action = createElement({
+                    parent,
+                    classes: ['search-item__msg-redirect'],
+                });
+        
+                insertIcon(action, {
+                    name: 'user-remove-icon',
+                    classes: ['search-item__msg-icon'],
+                });
+        
+                createElement({
+                    parent: action,
+                    text: 'Отменить заявку',
+                    classes: ['search-item__action-text'],
+                });
+
+                action.addEventListener('click', async () => {
+                    const status = await API.cancelFriendRequest(this.config.data.id);
+                    switch (status) {
+                        case 200:
+                            this.element.remove();
+                            break;
+                        default:
+                            new PopUpComponent({
+                                text: "Не удалось отменить заявку в друзья",
+                                isError: true,
+                            });
+                    }
+                });
+                break;
+        }
     }
 
     private renderDropdown(friend: HTMLElement, friendData: Record<string, any>) {
@@ -116,7 +182,7 @@ export default class FriendComponent {
                 isCritical: true,
                 onClick: async () => {
                     const status = await API.deleteFriend(friendData.id);
-                    // const status = 200;
+
                     switch (status) {
                         case 200:
                             this.renderDeletedFriend(friend, friendData);
@@ -158,10 +224,10 @@ export default class FriendComponent {
 
         undoBtn.addEventListener('click', async () => {
             const status = await API.acceptFriendRequest(friendData.id);
-            // const status = 200;
+
             switch (status) {
                 case 200:
-                    this.renderMsgAction(parent, friendData.username);
+                    this.renderAction(parent, friendData.username);
                     this.renderDropdown(parent.parentNode.parentNode.parentNode as HTMLElement, friendData);
                     break;
                 default:

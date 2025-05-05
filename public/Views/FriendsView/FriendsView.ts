@@ -109,7 +109,7 @@ class FriendsView {
         }
 
         for (const friendData of friendsData) {
-            this.renderFriend(this.friends, friendData);
+            this.renderFriend(this.friends, friendData, section);
         }
     }
 
@@ -120,9 +120,10 @@ class FriendsView {
         });
     }
 
-    private renderFriend(parent: HTMLElement, friendData: Record<string, any>) {
+    private renderFriend(parent: HTMLElement, friendData: Record<string, any>, section?: string) {
         new FriendComponent(parent, {
             data: friendData,
+            section: section || 'all',
         });
     }
 }
