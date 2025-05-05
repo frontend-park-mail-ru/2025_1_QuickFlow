@@ -10,6 +10,7 @@ import Ajax from '@modules/ajax';
 import router from '@router';
 import ChatsPanelComponent from './ChatsPanelComponent';
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
+import { MOBILE_MAX_WIDTH } from '@config';
 
 
 const TEXTAREA_PLACEHOLDER = 'Напишите сообщение...';
@@ -60,47 +61,50 @@ const MEDIA_CONTEXT_MENU_DATA = {
 
 
 export default class ChatWindowComponent {
-    #parent: HTMLElement | null = null;
-    #config: Record<string, any> | null = null;;
-    #msgs: Array<any> | null = null;
-    #chat: ChatComponent | null = null;
-    #chatElement: HTMLElement | null = null;
-    #chatData: Record<string, any> | null = null;
-    #container: HTMLElement | null = null;
-    #chatsPanel: ChatsPanelComponent | null = null;
-    #focusTimer: any = null;
-    #messageInput: HTMLTextAreaElement | null = null;
+    private parent: HTMLElement | null = null;
+    private config: Record<string, any> | null = null;
+    
+    private isMobile: boolean;
+
+    private msgs: Array<any> | null = null;
+    private chat: ChatComponent | null = null;
+    private chatElement: HTMLElement | null = null;
+    private _chatData: Record<string, any> | null = null;
+    private container: HTMLElement | null = null;
+    private _chatsPanel: ChatsPanelComponent | null = null;
+    private focusTimer: any = null;
+    private messageInput: HTMLTextAreaElement | null = null;
 
     constructor(parent: any, config: any) {
-        this.#parent = parent;
-        this.#config = config;
-
+        this.parent = parent;
+        this.config = config;
+        this.isMobile = window.innerWidth <= MOBILE_MAX_WIDTH;
         this.render();
     }
 
     render() {
-        this.#container = createElement({
-            parent: this.#parent,
-            classes: ['chat-window'],
+        this.container = createElement({
+            parent: this.parent,
+            classes: ['chat-window', 'hidden'],
         });
 
         this.renderEmptyState();
 
-        if (!this.#config?.chat_id && this.#config?.receiver_username) {
+        if (!this.config?.chat_id && this.config?.receiver_username) {
             removeLsItem('active-chat');
             Ajax.get({
-                url: `/profiles/${this.#config.receiver_username}`,
+                url: `/profiles/${this.config.receiver_username}`,
                 callback: (status: number, chatUser: any) => {
                     switch (status) {
                         case 200:
-                            if (this.#container) this.#container.innerHTML = '';
+                            if (this.container) this.container.innerHTML = '';
 
-                            this.#chatData = {
+                            this._chatData = {
                                 name: `${chatUser.profile.firstname} ${chatUser.profile.lastname}`,
                                 online: chatUser.online,
                                 avatar_url: chatUser.profile.avatar_url,
                                 receiver_id: chatUser.id,
-                                username: this.#config?.receiver_username,
+                                username: this.config?.receiver_username,
                             };
 
                             this.renderHeader();
@@ -122,23 +126,23 @@ export default class ChatWindowComponent {
         ws.subscribe('message', (payload: any) => {
 
             if (getLsItem('is-messenger-feedback-given', 'false') === 'false') {
-                new IFrameComponent(this.#parent.parentNode as HTMLElement, {
+                new IFrameComponent(this.parent.parentNode as HTMLElement, {
                     src: '/scores?type=messenger',
                     deleteOther: true,
                 });
             }
 
-            removeLsItem(CHAT_MSG_PREFIX + `${this.#chatData?.id}`);
-            if (!this.#chatData?.id && this.#chatData?.receiver_id) {
+            removeLsItem(CHAT_MSG_PREFIX + `${this._chatData?.id}`);
+            if (!this._chatData?.id && this._chatData?.receiver_id) {
                 setLsItem('active-chat', `chat-${payload.chat_id}`);
-                this.#chatsPanel?.renderChatList();
+                this._chatsPanel?.renderChatList();
             } else {
-                if (`chat-${payload.chat_id}` === getLsItem('active-chat', null)) { // payload.chat_id === this.#chatData?.id
-                    this.#msgs?.push(payload);
-                    this.#chat?.renderMsg(payload, []);
+                if (`chat-${payload.chat_id}` === getLsItem('active-chat', null)) { // payload.chat_id === this._chatData?.id
+                    this.msgs?.push(payload);
+                    this.chat?.renderMsg(payload, []);
                     this.updateTextareaHeight();
                 }
-                this.#chatsPanel?.renderLastMsg({
+                this._chatsPanel?.renderLastMsg({
                     id: payload.chat_id,
                     last_message: {
                         text: payload.text,
@@ -146,27 +150,32 @@ export default class ChatWindowComponent {
                     }
                 });
             }
-            if (this.#messageInput) focusInput(this.#messageInput, this.#focusTimer);
+            if (this.messageInput) focusInput(this.messageInput, this.focusTimer);
         });
     }
 
     get chatData() {
-        return this.#chatData;
+        return this._chatData;
     }
 
     set chatsPanel(chatsPanel: ChatsPanelComponent) {
-        this.#chatsPanel = chatsPanel;
+        this._chatsPanel = chatsPanel;
     }
 
     renderActiveChat(chatData: any) {
-        this.#chatData = chatData;
-        if (this.#container) this.#container.innerHTML = '';
+        this._chatData = chatData;
+        if (this.container) this.container.innerHTML = '';
 
-        this.#config?.messenger.ajaxGetMessages({
-            chatId: this.#chatData?.id,
+        if (this.isMobile) {
+            this._chatsPanel.container.classList.add('hidden');
+            this.container.classList.remove('hidden');
+        }
+
+        this.config?.messenger.ajaxGetMessages({
+            chatId: this._chatData?.id,
             count: 50,
         }, (status: number, chatMsgs: any) => {
-            this.#msgs = chatMsgs.messages;
+            this.msgs = chatMsgs.messages;
             this.renderHeader();
             this.renderMessageInput();
             this.renderChat();
@@ -174,15 +183,19 @@ export default class ChatWindowComponent {
     }
 
     close() {
-        this.#chatsPanel?.close();
+        this._chatsPanel?.close();
+        if (this.isMobile) {
+            this._chatsPanel.container.classList.remove('hidden');
+            this.container.classList.add('hidden');
+        }
         this.renderEmptyState();
     }
 
     renderEmptyState() {
-        if (this.#container) this.#container.innerHTML = '';
+        if (this.container) this.container.innerHTML = '';
 
         const wrapper = createElement({
-            parent: this.#container,
+            parent: this.container,
             classes: ['chat-window__empty'],
         });
 
@@ -199,7 +212,7 @@ export default class ChatWindowComponent {
 
     renderHeader() {
         const chatHeader = createElement({
-            parent: this.#container,
+            parent: this.container,
             classes: ['chat-window__header'],
         });
 
@@ -214,8 +227,8 @@ export default class ChatWindowComponent {
 
         new AvatarComponent(chatHeader, {
             size: HEADER_AVATAR_SIZE,
-            src: this.#chatData?.avatar_url,
-            href: `/profiles/${this.#chatData?.username}`,
+            src: this._chatData?.avatar_url,
+            href: `/profiles/${this._chatData?.username}`,
         });
 
         const chatInfo = createElement({
@@ -227,14 +240,14 @@ export default class ChatWindowComponent {
             tag: 'a',
             parent: chatInfo,
             classes: ['chat-window__title'],
-            text: this.#chatData?.name,
-            attrs: { href: `/profiles/${this.#chatData?.username}` },
+            text: this._chatData?.name,
+            attrs: { href: `/profiles/${this._chatData?.username}` },
         });
 
         createElement({
             parent: chatInfo,
             classes: ['chat-window__status'],
-            text: this.#chatData?.online ? "в сети" : `заходил ${getTimeDifference(this.#chatData?.last_seen, { mode: "long" })}`,
+            text: this._chatData?.online ? "в сети" : `заходил ${getTimeDifference(this._chatData?.last_seen, { mode: "long" })}`,
         });
 
         this.renderDropdown(chatHeader);
@@ -264,7 +277,7 @@ export default class ChatWindowComponent {
     renderMessageInput() {
         const bottomWrapper = createElement({
             classes: ['chat-window__bottom'],
-            parent: this.#container,
+            parent: this.container,
             attrs: { id: 'chat-window__bottom' },
         });
 
@@ -290,11 +303,11 @@ export default class ChatWindowComponent {
         });
 
         const value = getLsItem(
-            CHAT_MSG_PREFIX + `${this.#chatData?.id}`,
+            CHAT_MSG_PREFIX + `${this._chatData?.id}`,
             ''
         );
 
-        this.#messageInput = createElement({
+        this.messageInput = createElement({
             tag: 'textarea',
             parent: bottomBar,
             classes: ['chat-window__msg'],
@@ -305,33 +318,33 @@ export default class ChatWindowComponent {
             },
             text: value
         }) as HTMLTextAreaElement;
-        if (this.#messageInput) focusInput(this.#messageInput, this.#focusTimer);
+        if (this.messageInput) focusInput(this.messageInput, this.focusTimer);
 
         const sendBtn = createElement({
             classes: [
                 'chat-window__send',
-                this.#messageInput?.value.trim() === '' ? 'chat-window__send_disabled' : null
+                this.messageInput?.value.trim() === '' ? 'chat-window__send_disabled' : null
             ],
             parent: bottomBar,
         });
 
         sendBtn.addEventListener('click', () => this.sendMessage(sendBtn));
 
-        this.#messageInput?.addEventListener("input", () => {
-            if (this.#messageInput?.value.trim() !== '') {
+        this.messageInput?.addEventListener("input", () => {
+            if (this.messageInput?.value.trim() !== '') {
                 sendBtn.classList.remove('chat-window__send_disabled');
-                if (this.#messageInput) setLsItem(
-                    CHAT_MSG_PREFIX + `${this.#chatData?.id}`,
-                    this.#messageInput.value.trim()
+                if (this.messageInput) setLsItem(
+                    CHAT_MSG_PREFIX + `${this._chatData?.id}`,
+                    this.messageInput.value.trim()
                 );
                 return;
             }
-            removeLsItem(CHAT_MSG_PREFIX + `${this.#chatData?.id}`);
-            this.#chatsPanel?.renderLastMsg(this.#chatData);
+            removeLsItem(CHAT_MSG_PREFIX + `${this._chatData?.id}`);
+            this._chatsPanel?.renderLastMsg(this._chatData);
             sendBtn.classList.add('chat-window__send_disabled');
         });
 
-        this.#messageInput?.addEventListener('keypress', (event) => {
+        this.messageInput?.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
                 event.preventDefault();
                 this.sendMessage(sendBtn);
@@ -339,36 +352,36 @@ export default class ChatWindowComponent {
         });
 
         this.updateTextareaHeight(bottomWrapper);
-        this.#messageInput?.addEventListener("input", () => this.updateTextareaHeight(bottomWrapper));
+        this.messageInput?.addEventListener("input", () => this.updateTextareaHeight(bottomWrapper));
     }
 
     sendMessage(sendBtn: any) {
         if (sendBtn.classList.contains('chat-window__send_disabled')) return;
 
         ws.send('message', {
-            chat_id: this.#chatData?.id,
-            receiver_id: this.#chatData?.receiver_id,
-            text: this.#messageInput?.value.trim(),
+            chat_id: this._chatData?.id,
+            receiver_id: this._chatData?.receiver_id,
+            text: this.messageInput?.value.trim(),
         });
 
-        if (this.#messageInput) this.#messageInput.value = '';
+        if (this.messageInput) this.messageInput.value = '';
         sendBtn.classList.add('chat-window__send_disabled');
     }
 
     updateTextareaHeight(
         bottomWrapper = document.getElementById('chat-window__bottom')
     ) {
-        if (!this.#chatElement || !this.#messageInput || !bottomWrapper) return;
+        if (!this.chatElement || !this.messageInput || !bottomWrapper) return;
     
-        this.#messageInput.style.height = 'auto';
-        this.#messageInput.style.height = this.#messageInput.scrollHeight + 'px';
+        this.messageInput.style.height = 'auto';
+        this.messageInput.style.height = this.messageInput.scrollHeight + 'px';
     
-        const parent = this.#chatElement.parentNode as HTMLElement;
+        const parent = this.chatElement.parentNode as HTMLElement;
         const scrollThreshold = 50; // если до конца меньше 50px, считаем "внизу"
     
         // обновляем паддинг у блока сообщений
         const newPadding = bottomWrapper.clientHeight - 62 + CHAT_DEFAULT_PADDING_BOTTOM;
-        this.#chatElement.style.paddingBottom = `${newPadding}px`;
+        this.chatElement.style.paddingBottom = `${newPadding}px`;
     
         // проверяем, близок ли скролл к самому низу
         const scrollBottom = parent.scrollHeight - parent.scrollTop - parent.clientHeight;
@@ -378,14 +391,14 @@ export default class ChatWindowComponent {
     }
 
     renderChat() {
-        if (!this.#container) return;
+        if (!this.container) return;
 
-        this.#chat = new ChatComponent(this.#container, {
-            chatData: this.#chatData,
-            messages: this.#msgs,
-            user: this.#config?.user,
+        this.chat = new ChatComponent(this.container, {
+            chatData: this._chatData,
+            messages: this.msgs,
+            user: this.config?.user,
         });
 
-        this.#chatElement = this.#chat.scroll;
+        this.chatElement = this.chat.scroll;
     }
 }

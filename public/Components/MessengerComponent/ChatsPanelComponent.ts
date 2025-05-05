@@ -24,9 +24,11 @@ const EMPTY_CHATS_LIST_TEXT = "Начните общаться с друзьям
 
 export default class ChatsPanelComponent {
     private parent: HTMLElement;
-    private chats: any = null;
     private config: Record<string, any>;
-    #chatWindow: any = null;
+
+    private chats: any = null;
+    private _chatWindow: any = null;
+    private isMobile: boolean;
 
     container: HTMLElement | null = null;
     activeChatItem: HTMLElement | null = null;
@@ -35,7 +37,7 @@ export default class ChatsPanelComponent {
     constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
         this.config = config;
-        
+        this.isMobile = window.innerWidth <= MOBILE_MAX_WIDTH;
         this.render();
     }
 
@@ -45,7 +47,7 @@ export default class ChatsPanelComponent {
             classes: ['chats-panel'],
         });
 
-        if (window.innerWidth > MOBILE_MAX_WIDTH) {
+        if (!this.isMobile) {
             this.createResizer();
         }
 
@@ -72,7 +74,7 @@ export default class ChatsPanelComponent {
     }
 
     set chatWindow(chatWindow: any) {
-        this.#chatWindow = chatWindow;
+        this._chatWindow = chatWindow;
     }
 
     renderChatList() {
@@ -92,7 +94,11 @@ export default class ChatsPanelComponent {
             if (this.config.chat_id) {
                 setLsItem('active-chat', `chat-${this.config.chat_id}`);
             }
-            const activeChatId = getLsItem('active-chat', null);
+
+            let activeChatId: string | null = null;
+            if (!this.isMobile) {
+                activeChatId = getLsItem('active-chat', null);
+            }
 
             for (const chatData of chatsData) {
                 const chatItem = this.renderChatItem(chatData);
@@ -100,7 +106,7 @@ export default class ChatsPanelComponent {
                 if (chatItem.id === activeChatId) {
                     this.activeChatItem = chatItem;
                     this.activeChatItem?.classList.add('chats-panel__chat_active');
-                    this.#chatWindow.renderActiveChat(chatData);
+                    this._chatWindow.renderActiveChat(chatData);
                 }
             }
         });
@@ -131,7 +137,7 @@ export default class ChatsPanelComponent {
         this.activeChatItem.classList.remove('chats-panel__chat_active');
         this.activeChatItem = null;
         this.renderDraftMessage();
-        // this.renderLastMsg(this.#chatWindow.chatData);
+        // this.renderLastMsg(this._chatWindow.chatData);
         removeLsItem('active-chat');
     }
 
@@ -148,7 +154,7 @@ export default class ChatsPanelComponent {
             chat.classList.add('chats-panel__chat_active');
             setLsItem('active-chat', CHAT_PREFIX + chatData.id);
             this.activeChatItem = chat;
-            this.#chatWindow.renderActiveChat(chatData);
+            this._chatWindow.renderActiveChat(chatData);
         });
 
         new AvatarComponent(chat, {
@@ -210,8 +216,8 @@ export default class ChatsPanelComponent {
     }
 
     renderDraftMessage(
-        lastMsgWrapper = document.getElementById(CHAT_INFO_PREFIX + this.#chatWindow.chatData.id),
-        draftValue = getLsItem(CHAT_MSG_PREFIX + `${this.#chatWindow.chatData.id}`, null)
+        lastMsgWrapper = document.getElementById(CHAT_INFO_PREFIX + this._chatWindow.chatData.id),
+        draftValue = getLsItem(CHAT_MSG_PREFIX + `${this._chatWindow.chatData.id}`, null)
     ) {
         if (!draftValue) return;
 
