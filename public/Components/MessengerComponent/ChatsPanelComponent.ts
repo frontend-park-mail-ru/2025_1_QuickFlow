@@ -156,6 +156,8 @@ export default class ChatsPanelComponent {
             setLsItem('active-chat', CHAT_PREFIX + chatData.id);
             this.activeChatItem = chat;
             this._chatWindow.renderActiveChat(chatData);
+        }, {
+            passive: false
         });
 
         new AvatarComponent(chat, {
