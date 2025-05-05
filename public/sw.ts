@@ -62,7 +62,6 @@ self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
 
     if (event.request.mode === 'navigate') {
-        console.log('nav');
         event.respondWith(
             fetch(event.request).catch(() =>
                 caches.match('/index.html')

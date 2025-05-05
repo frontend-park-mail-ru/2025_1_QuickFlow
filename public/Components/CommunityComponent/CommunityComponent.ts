@@ -51,7 +51,7 @@ export default class CommunityComponent {
             classes: ['search-item__action'],
         });
 
-        this.renderMembersCount(action);
+        // this.renderMembersCount(action);
         this.renderDropdown(community, this.config.data);
     }
 
@@ -159,7 +159,7 @@ export default class CommunityComponent {
             const status = await API.joinCommunity(communityData.id);
             switch (status) {
                 case 200:
-                    this.renderMembersCount(parent);
+                    // this.renderMembersCount(parent);
                     this.renderDropdown(parent.parentNode.parentNode.parentNode as HTMLElement, communityData);
                     break;
                 default:
