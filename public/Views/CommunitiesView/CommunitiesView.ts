@@ -106,7 +106,7 @@ class CommunitiesView {
         const username = getLsItem('username', null);
 
         const [communitiesStatus, data] = await API.getUserCommunities(username, COMMUNITIES_COUNT);
-        const communitiesData = data?.payload?.communities;
+        const communitiesData = data?.payload;
 
         if (!communitiesData || !communitiesData.length) {
             return new EmptyStateComponent(this.communities, {
