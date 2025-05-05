@@ -148,7 +148,7 @@ export default class ChatsPanelComponent {
             attrs: {id: CHAT_PREFIX + chatData.id},
         });
 
-        chat.addEventListener('pointerdown', () => {
+        chat.addEventListener('pointerup', () => {
             if (chat === this.activeChatItem) return;
             this.close();
             chat.classList.add('chats-panel__chat_active');
