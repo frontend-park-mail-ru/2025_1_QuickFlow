@@ -1,14 +1,20 @@
 import SignupFormComponent from '@components/SignupFormComponent/SignupFormComponent';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import createElement from '@utils/createElement';
-import { getLsItem, setLsItem } from '@utils/localStorage';
+import { getLsItem } from '@utils/localStorage';
 import API from '@utils/api';
+import router from '@router';
 
 
 class SignupView {
     constructor() {}
 
-    render() {
+    async render() {
+        const [status, profileData] = await API.getProfile(getLsItem('username', ""));
+        if (status === 200) {
+            router.go({ path: '/feed' });
+        }
+
         const containerObj = new MainLayoutComponent().render({
             type: 'auth',
         });
