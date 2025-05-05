@@ -10,7 +10,7 @@ const WORKER_HEADER = 'Worker-Cached-At';
 
 const FIRST_ROUTES = [
     '^/$',
-    // '^/static/bundle.js$',
+    '^/static/bundle.js$',
     '\.css$'
 ];
 
