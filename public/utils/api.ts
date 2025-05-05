@@ -184,7 +184,7 @@ export default class API {
         });
     }
 
-    static async getFriends(user_id: string, count: number = 25, offset: number = 0, section: string = 'friends'): Promise<[number, Record<string, any>]> {
+    static async getFriends(user_id: string, count: number = 25, offset: number = 0, section: string = 'all'): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.get({
                 url: '/friends',
