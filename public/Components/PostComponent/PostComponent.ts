@@ -456,8 +456,8 @@ export default class PostComponent {
             size: AUTHOR_AVATAR_SIZE,
             src: this.config.author.avatar_url,
             href: this.config?.author_type === 'community' ?
-                `/communities/${this.config.author.community.nickname}` :
-                `/profiles/${this.config.author.username}`,
+                `/communities/${this.config?.author?.community?.nickname}` :
+                `/profiles/${this.config?.author?.username}`,
         });
 
         const topRightWrapper = createElement({
@@ -478,12 +478,12 @@ export default class PostComponent {
             classes: ['post__name'],
             attrs: {
                 href: this.config?.author_type === 'community' ?
-                    `/communities/${this.config.author.community.nickname}` :
-                    `/profiles/${this.config.author.username}`,
+                    `/communities/${this.config?.author?.community?.nickname}` :
+                    `/profiles/${this.config?.author?.username}`,
             },
             text: this.config?.author_type === 'community' ?
-                this.config.author.community.name :
-                `${this.config.author.firstname} ${this.config.author.lastname}`,
+                this.config?.author?.community?.name :
+                `${this.config?.author?.firstname} ${this.config?.author?.lastname}`,
         });
 
         createElement({
@@ -495,7 +495,7 @@ export default class PostComponent {
         createElement({
             classes: ['post__date', 'p1'],
             parent: nameDateWrapper,
-            text: `${getTimeDifference(this.config.created_at)}`,
+            text: `${getTimeDifference(this.config?.created_at)}`,
         });
 
         if (DISPLAYED_RELATIONS.includes(this.config?.author?.relation)) {
@@ -578,7 +578,7 @@ export default class PostComponent {
                             cancel: 'Отмена',
                             confirm: 'Удалить',
                         },
-                        delete: () => this.ajaxDeletePost(this.config.id),
+                        delete: () => this.ajaxDeletePost(this.config?.id),
                     });
                 }
             };
