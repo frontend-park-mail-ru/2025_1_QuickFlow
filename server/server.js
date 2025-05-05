@@ -151,6 +151,28 @@ app.get('/api/feed', (req, res) => {
     res.status(200).json(posts);
 });
 
+app.get('/api/profiles/:username/posts', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).json(posts);
+});
+
+app.get('/api/communities/:address/posts', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).json(posts);
+});
+
 app.get('/api/users/search', (req, res) => {
     const id = req.cookies['podvorot'];
     const username = ids[id];
@@ -239,6 +261,77 @@ app.delete('/api/posts/:post_id/like', (req, res) => {
 });
 
 app.get('/api/friends', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const username = ids[id];
+    if (!username || !users[username]) {
+        return res.status(401).end();
+    }
+    
+    res.status(200).json({
+        "body": {
+            "friends": [
+                {
+                    "id": "210a4267-d183-4aee-aaae-06eb6e8c5b24",
+                    "username": "1212121edwddwdwd____",
+                    "firstname": "mmmmmmmmmmmmmmmmmmmm-m",
+                    "lastname": "mmmmmmmmmmmmmmmmmmmm-mmmm",
+                    "avatar_url": "https://quickflowapp.ru/minio/posts/5584e4f1-4920-4cff-bbf5-c01b3d4627d3.jpg",
+                    "university": "ауауауауауауауауауауауауауауауауауауауауауауауауау",
+                    "is_online": false
+                },
+                {
+                    "id": "76682f88-4cf8-4394-bb7e-8a355591cd80",
+                    "username": "Timex",
+                    "firstname": "Матвей",
+                    "lastname": "Митрофанов",
+                    "avatar_url": "https://quickflowapp.ru/minio/posts/0a74b5e0-ed7d-4985-aaf5-0f8bd28ababb.gif",
+                    "university": "ПТУ Баумана",
+                    "is_online": false
+                },
+                {
+                    "id": "846ccb16-f2cc-4d69-a440-7c3149b43227",
+                    "username": "Nikita",
+                    "firstname": "Никита",
+                    "lastname": "Могилин",
+                    "avatar_url": "https://quickflowapp.ru/minio/posts/116dd43b-f3f8-47e1-a9f1-e3c8e96e939b.jpg",
+                    "university": "asdf",
+                    "is_online": false
+                },
+                {
+                    "id": "0ae4ea44-f654-4f9f-8840-b6741b49f8e4",
+                    "username": "Roman",
+                    "firstname": "Роман",
+                    "lastname": "Павловский",
+                    "avatar_url": "https://quickflowapp.ru/minio/posts/cbb1a62a-93ca-4a67-9a68-4741c2ec655e.jpg",
+                    "university": "",
+                    "is_online": false
+                },
+                {
+                    "id": "08024478-4f49-43f6-b620-a99308741ca9",
+                    "username": "lilysha",
+                    "firstname": "Жужужужужужу",
+                    "lastname": "Сусликовн",
+                    "avatar_url": "",
+                    "university": "",
+                    "is_online": false
+                },
+                {
+                    "id": "dd9b9b3b-ac29-4798-a915-174f5ef35681",
+                    "username": "lilysha.yyyyyyyyyyuu",
+                    "firstname": "Николетта",
+                    "lastname": "ЩЩЩЩЩЩЩЩЩЩЩЩЩЩЩЩЩЩЩЩЩЩЩЩЩ",
+                    "avatar_url": "https://quickflowapp.ru/minio/posts/155a4e44-e350-416a-a32b-087f434d294a.jpeg",
+                    "university": "",
+                    "is_online": false
+                }
+            ],
+            "has_more": false,
+            "total_count": 6
+        }
+    });
+});
+
+app.get('/api/communities/:id/members', (req, res) => {
     const id = req.cookies['podvorot'];
     const username = ids[id];
     if (!username || !users[username]) {

@@ -52,24 +52,21 @@ class CommunityView {
         return this.containerObj.container;
     }
 
-    renderFriends(user_id: any) {
-        Ajax.get({
-            url: '/friends',
-            params: { count: 8, offset: 0, user_id },
-            callback: (status: number, friendsData: any) => {
-                switch (status) {
-                    case 200:
-                        this.friendsCbOk(friendsData.body);
-                        break;
-                    case 401:
-                        router.go({ path: '/login' });
-                        break;
-                    case 404:
-                        router.go({ path: '/not-found' });
-                        break;
-                }
-            }
-        });
+    private async renderMembers(communityId: any) {
+        const [status, membersData] = await API.getCommunityMembers(communityId, 8);
+
+        console.log(membersData);
+        switch (status) {
+            case 200:
+                this.friendsCbOk(membersData.body);
+                break;
+            case 401:
+                router.go({ path: '/login' });
+                break;
+            case 404:
+                router.go({ path: '/not-found' });
+                break;
+        }
     }
 
     friendsCbOk(data: Record<string, any>) {
@@ -221,15 +218,18 @@ class CommunityView {
             })
         });
 
-        this.renderActions(profileBottom, data);
+        // this.renderActions(profileBottom, data);
 
+// API.getCommunityPosts
         new FeedComponent(this.containerObj?.left, {
-            getUrl: `/profiles/${data.profile.username}/posts`,
-            hasCreateButton: data.relation === "self" ? true : false,
-            emptyStateText: data.relation === "self" ? "Напишите свой первый пост" : "Пользователь пока не опубликовал ни одного поста",
+            getUrl: `/communities/${data.payload.id}/posts`,
+            hasCreateButton: data.payload.role === "owner" ?
+                true :
+                false,
+            emptyStateText: data.payload.role === "owner" ? "Напишите первый пост в сообществе" : "В сообществе пока нет ни одного поста",
         });
 
-        this.renderFriends(data.id);
+        this.renderMembers(data.id);
     }
 
     renderActions(profileBottom: any, data: any) {
