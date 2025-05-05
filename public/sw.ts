@@ -77,8 +77,8 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(handleStaticFetch(event.request));
     } else if (event.request.method === 'GET' && url.pathname.startsWith('/minio/')) {
         event.respondWith(handleMediaFetch(event.request));
-    } else if (event.request.method === 'GET' && url.pathname.startsWith('/api/')) {
-        event.respondWith(handleApiFetch(event.request));
+    // } else if (event.request.method === 'GET' && url.pathname.startsWith('/api/')) {
+    //     event.respondWith(handleApiFetch(event.request));
     } else {
         event.respondWith(
             caches.match(event.request).then(response =>
