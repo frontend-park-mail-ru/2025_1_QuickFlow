@@ -229,7 +229,7 @@ class CommunityView {
             emptyStateText: data.payload.role === "owner" ? "Напишите первый пост в сообществе" : "В сообществе пока нет ни одного поста",
         });
 
-        this.renderMembers(data.id);
+        this.renderMembers(data.payload.id);
     }
 
     renderActions(profileBottom: any, data: any) {
