@@ -71,14 +71,15 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    if (event.request.method === 'GET' && FIRST_ROUTES.some((regex) => url.pathname.match(regex))) {
-        event.respondWith(handleRequestFirst(event.request));
-    } else if (event.request.method === 'GET' && (url.pathname.startsWith('/static/') || (url.pathname.startsWith('/assets/')))) {
+    // if (event.request.method === 'GET' && FIRST_ROUTES.some((regex) => url.pathname.match(regex))) {
+    //     event.respondWith(handleRequestFirst(event.request));
+    // } else
+    if (event.request.method === 'GET' && (url.pathname.startsWith('/static/') || (url.pathname.startsWith('/assets/')))) {
         event.respondWith(handleStaticFetch(event.request));
     } else if (event.request.method === 'GET' && url.pathname.startsWith('/minio/')) {
         event.respondWith(handleMediaFetch(event.request));
-    // } else if (event.request.method === 'GET' && url.pathname.startsWith('/api/')) {
-    //     event.respondWith(handleApiFetch(event.request));
+    } else if (event.request.method === 'GET' && url.pathname.startsWith('/api/')) {
+        event.respondWith(handleApiFetch(event.request));
     } else {
         event.respondWith(
             caches.match(event.request).then(response =>
