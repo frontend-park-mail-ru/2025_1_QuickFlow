@@ -10,7 +10,7 @@ import SearchComponent from '@components/SearchComponent/SearchComponent';
 
 
 const enum Section {
-    Friends,
+    All,
     Incoming,
     Outcoming,
 }
@@ -61,7 +61,7 @@ class FriendsView {
             items: {
                 friends: {
                     title: 'Мои друзья',
-                    onClick: () => this.renderSection(Section.Friends),
+                    onClick: () => this.renderSection(Section.All),
                 },
                 incoming: {
                     title: 'Заявки в друзья',
@@ -74,31 +74,31 @@ class FriendsView {
             }
         });
 
-        this.renderSection(Section.Friends);
+        this.renderSection(Section.All);
 
         return this.containerObj.container;
     }
 
-    async renderSection(section = Section.Friends) {
+    async renderSection(section = Section.All) {
         this.friends.innerHTML = '';
 
         switch (section) {
-            case Section.Friends:
-                this.renderFriends();
+            case Section.All:
+                this.renderFriends('all');
                 break;
-            // case Section.Incoming:
-            //     this.renderIncoming();
-            //     break;
-            // case Section.Outcoming:
-            //     this.renderOutcoming();
-            //     break;
+            case Section.Incoming:
+                this.renderFriends('incoming');
+                break;
+            case Section.Outcoming:
+                this.renderFriends('outcoming');
+                break;
         }
     }
 
-    async renderFriends() {
+    async renderFriends(section: string) {
         const userId = getLsItem('user_id', null);
 
-        const [friendsStatus, data] = await API.getFriends(userId, 100);
+        const [friendsStatus, data] = await API.getFriends(userId, 100, 0, section);
         const friendsData = data?.payload?.friends;
 
         if (!friendsData || !friendsData.length) {
