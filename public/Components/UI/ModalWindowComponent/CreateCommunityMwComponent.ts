@@ -25,7 +25,7 @@ export default class CreateCommunityMwComponent extends ModalWindowComponent {
         this.modalWindow.classList.add('modal_inherit');
         this.modalWindow.querySelector('.modal__close').classList.add('modal__close_absolute');
         new CreateCommunityFormComponent(this.modalWindow, {
-            closeModal: this.close,
+            closeModal: () => this.close(),
         });
     }
 }
