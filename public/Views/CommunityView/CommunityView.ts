@@ -85,7 +85,7 @@ class CommunityView {
 
         createElement({
             parent: top,
-            text: 'Друзья',
+            text: 'Подписчики',
         });
 
         createElement({
@@ -221,9 +221,9 @@ class CommunityView {
 
         // this.renderActions(profileBottom, data);
 
-// API.getCommunityPosts
         new FeedComponent(this.containerObj?.left, {
             getUrl: `/communities/${data.payload.community.nickname}/posts`,
+            params: { author_id: data.payload.id },
             hasCreateButton: data.payload.role === "owner" ?
                 true :
                 false,

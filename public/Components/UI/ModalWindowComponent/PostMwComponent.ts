@@ -6,6 +6,7 @@ import Ajax from '@modules/ajax';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
 import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
+import API from '@utils/api';
 
 
 const POST_TEXT_MAX_LENGTH = 4000;
@@ -246,6 +247,11 @@ export default class PostMwComponent extends ModalWindowComponent {
 
         const formData = new FormData();
         formData.append('text', text);
+
+        if (this.config.target === 'community') {
+            formData.append('author_id', this.config.params.author_id);
+            formData.append('author_type', 'community');
+        }
 
         if (
             this.fileInput &&
