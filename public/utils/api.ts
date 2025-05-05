@@ -26,7 +26,7 @@ export default class API {
     static async searchCommunities(string: string, count: number): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.get({
-                url: '/users/search',
+                url: '/communities/search',
                 params: { string, count },
                 callback: (status: number, data: any) => resolve([status, data]),
             });
