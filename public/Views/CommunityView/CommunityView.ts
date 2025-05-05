@@ -53,12 +53,13 @@ class CommunityView {
     }
 
     private async renderMembers(communityId: any) {
-        const [status, membersData] = await API.getCommunityMembers(communityId, 8);
+        // const [status, membersData] = await API.getCommunityMembers(communityId, 8);
+        const [status, membersData] = await API.getCommunityMembers(communityId, 100);
 
         console.log(membersData);
         switch (status) {
             case 200:
-                this.friendsCbOk(membersData.body);
+                this.friendsCbOk(membersData.payload);
                 break;
             case 401:
                 router.go({ path: '/login' });
@@ -69,8 +70,8 @@ class CommunityView {
         }
     }
 
-    friendsCbOk(data: Record<string, any>) {
-        if (!data.friends || data.friends.length === 0) return;
+    friendsCbOk(data: Array<Record<string, any>>) {
+        if (!data || data.length === 0) return;
 
         const friendsWrapper = createElement({
             parent: this.containerObj?.right,
@@ -89,7 +90,7 @@ class CommunityView {
 
         createElement({
             parent: top,
-            text: data.total_count,
+            text: data.length,
             classes: ['profile__friends-count'],
         });
 
@@ -98,7 +99,7 @@ class CommunityView {
             classes: ['profile__friends-inner'],
         });
 
-        for (const friendData of data.friends) {
+        for (const friendData of data) {
             const { username, firstname, avatar_url } = friendData;
 
             const friend = createElement({
