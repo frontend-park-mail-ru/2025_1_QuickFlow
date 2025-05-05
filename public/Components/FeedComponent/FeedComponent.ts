@@ -97,9 +97,11 @@ export default class FeedComponent {
             text: 'Создать пост',
         });
         createPostBtn.addEventListener('click', () => {
+            console.log(this.config.params);
             new PostMwComponent(this.parent.parentNode, {
                 type: 'create-post',
                 target: 'community',
+                params: this.config.params,
                 renderCreatedPost: (config: any) => {
                     this.renderPost(config, "top");
 
