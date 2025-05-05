@@ -30,6 +30,8 @@ class CommunityView {
             type: 'profile',
         });
 
+        console.log(params);
+
         const address = params?.username || getLsItem('username', '');
 
         (async () => {
