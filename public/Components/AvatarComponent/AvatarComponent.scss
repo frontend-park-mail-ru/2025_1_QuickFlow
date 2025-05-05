@@ -143,3 +143,26 @@
     line-height: var(--line-height-m);
     color: var(--text-secondary);
 }
+
+@media screen and (max-width: 480px) {
+    .avatar_xs {
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+        min-height: 28px;
+    }
+
+    .avatar_s {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
+    }
+
+    .avatar_xxxl {
+        width: 80px;
+        height: 80px;
+        min-width: 80px;
+        min-height: 80px;
+    }
+}

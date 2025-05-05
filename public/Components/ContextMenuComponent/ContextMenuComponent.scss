@@ -8,7 +8,7 @@
     gap: 4px;
 }
 
-.dropdown:hover .context-menu {
+.js-dropdown:hover .context-menu {
     position: relative;
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -18,7 +18,7 @@
 }
 
 .context-menu {
-    box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.16);
+    box-shadow: var(--shadow-context-menu);
     background: var(--background-white);
     border-radius: 12px;
     display: flex;
@@ -61,6 +61,7 @@
 .context-menu__icon {
     width: 16px;
     height: 16px;
+    color: var(--icon-primary);
 }
 
 .context-menu__option {
@@ -71,6 +72,7 @@
     height: 32px;
     padding: 0 12px;
     font-size: var(--font-size-xs);
+    color: var(--text-primary);
     border-radius: 8px;
     cursor: pointer;
     transition: var(--trans-menu);
@@ -84,6 +86,7 @@
     background: var(--button-secondary-active);
 }
 
-.context-menu__text_critical {
+.context-menu__option_critical,
+.context-menu__option_critical .context-menu__icon {
     color: var(--text-error);
 }

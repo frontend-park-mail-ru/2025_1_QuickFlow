@@ -79,6 +79,10 @@
     -ms-overflow-style: none;
 }
 
+.chats-panel__chats_empty {
+    height: 100%;
+}
+
 .chats-panel__chats::-webkit-scrollbar {
     display: none;
 }
@@ -128,6 +132,7 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     line-clamp: 1;
+    word-break: break-all;
 }
 
 .chats-panel__msg-info {
@@ -147,11 +152,16 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     line-clamp: 1;
+    word-break: break-all;
 }
 
 .chats-panel_mini {
     max-width: 72px;
     min-width: 72px;
+}
+
+.chats-panel_mini .chat-window__empty {
+    display: none;
 }
 
 .chats-panel_mini .chats-panel__chats {

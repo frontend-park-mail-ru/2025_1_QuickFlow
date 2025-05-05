@@ -1,0 +1,15 @@
+{
+    "name": "QuickFlow",
+    "short_name": "QuickFlow",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "icons": [
+        {
+            "src": "public/favicon.svg",
+            "sizes": "24x24",
+            "type": "image/svg"
+        }
+    ]
+}

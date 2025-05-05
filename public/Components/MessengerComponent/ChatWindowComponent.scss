@@ -15,6 +15,7 @@
     flex-direction: column;
     gap: 12px;
     height: 100%;
+    text-align: center;
 }
 
 .chat-window__empty-icon {
@@ -40,6 +41,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    padding-right: 64px;
 }
 
 .chat-window__title {
@@ -47,8 +49,13 @@
     font-weight: 500;
     font-size: 13px;
     line-height: 130%;
-    text-align: center;
     color: var(--text-primary);
+    word-break: break-all;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
 }
 
 .chat-window__status {
@@ -56,8 +63,13 @@
     font-weight: 400;
     font-size: 13px;
     line-height: 130%;
-    text-align: center;
     color: var(--text-secondary);
+    word-break: break-all;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
 }
 
 .chat-window__dropdown {
@@ -70,7 +82,7 @@
     bottom: 0;
     position: absolute;
     padding: 0 16px 16px 16px;
-    background: #ffffffcc;
+    background: var(--background-white);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     -moz-backdrop-filter: blur(12px);

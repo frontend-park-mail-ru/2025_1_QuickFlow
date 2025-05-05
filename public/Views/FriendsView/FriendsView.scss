@@ -1,0 +1,15 @@
+.friends {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    order: 3;
+}
+
+.friends__search-results {
+    order: 2;
+}
+
+.friends__search {
+    order: 1;
+}
