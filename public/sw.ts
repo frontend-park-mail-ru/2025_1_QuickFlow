@@ -10,7 +10,7 @@ const WORKER_HEADER = 'Worker-Cached-At';
 
 const FIRST_ROUTES = [
     '^/$',
-    '^/static/bundle.js$',
+    // '^/static/bundle.js$',
     '\.css$'
 ];
 
@@ -71,9 +71,9 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // if (event.request.method === 'GET' && FIRST_ROUTES.some((regex) => url.pathname.match(regex))) {
-    //     event.respondWith(handleRequestFirst(event.request));
-    // } else
+    if (event.request.method === 'GET' && FIRST_ROUTES.some((regex) => url.pathname.match(regex))) {
+        event.respondWith(handleRequestFirst(event.request));
+    } else
     if (event.request.method === 'GET' && (url.pathname.startsWith('/static/') || (url.pathname.startsWith('/assets/')))) {
         event.respondWith(handleStaticFetch(event.request));
     } else if (event.request.method === 'GET' && url.pathname.startsWith('/minio/')) {
