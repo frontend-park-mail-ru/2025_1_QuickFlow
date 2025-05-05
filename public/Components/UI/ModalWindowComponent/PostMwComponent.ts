@@ -249,8 +249,8 @@ export default class PostMwComponent extends ModalWindowComponent {
         formData.append('text', text);
 
         if (this.config.target === 'community') {
-            console.log(this.config.params);
-            formData.append('author_id', this.config.params.author_id);
+            console.log(this.config?.params);
+            formData.append('author_id', this.config?.params?.author_id);
             formData.append('author_type', 'community');
         }
 

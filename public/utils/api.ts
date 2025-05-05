@@ -223,4 +223,14 @@ export default class API {
             });
         });
     }
+
+    static async getFeed(posts_count: number = 1): Promise<[number, Record<string, any>]> {
+        return new Promise((resolve) => {
+            ajax.get({
+                url: '/feed',
+                params: { posts_count },
+                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+            });
+        });
+    }
 };

@@ -100,7 +100,7 @@ export default class FeedComponent {
             console.log(this.config.params);
             new PostMwComponent(this.parent.parentNode, {
                 type: 'create-post',
-                target: 'community',
+                target: this.config?.params?.author_id ? 'community' : '',
                 params: this.config.params,
                 renderCreatedPost: (config: any) => {
                     this.renderPost(config, "top");
