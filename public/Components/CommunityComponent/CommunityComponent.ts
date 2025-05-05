@@ -22,10 +22,12 @@ export default class CommunityComponent {
             classes: ['search-item'],
         });
 
+        // console.log(this.config.data);
+
         new AvatarComponent(community, {
             size: 'l',
-            src: this.config.data.avatar_url,
-            href: `/communities/${this.config.data.username}`,
+            src: this.config.data.community.avatar_url,
+            href: `/communities/${this.config.data.community.nickname}`,
         });
 
         const communityRight = createElement({
@@ -42,8 +44,8 @@ export default class CommunityComponent {
             tag: 'a',
             parent: communityInfo,
             classes: ['search-item__name'],
-            text: `${this.config.data.firstname} ${this.config.data.lastname}`,
-            attrs: { href: `/communities/${this.config.data.username}` },
+            text: this.config.data.community.name,
+            attrs: { href: `/communities/${this.config.data.community.nickname}` },
         });
 
         const action = createElement({
@@ -51,7 +53,7 @@ export default class CommunityComponent {
             classes: ['search-item__action'],
         });
 
-        this.renderMsgAction(action, this.config.data.username);
+        this.renderMsgAction(action);
         this.renderDropdown(community, this.config.data);
     }
 
@@ -63,13 +65,13 @@ export default class CommunityComponent {
         dropdown.remove();
     }
 
-    private renderMsgAction(parent: HTMLElement, username: string) {
+    private renderMsgAction(parent: HTMLElement) {
         parent.innerHTML = '';
 
         createElement({
             parent,
             classes: ['search-item__text'],
-            text: '2M подписчиков'
+            text: '2M подписчиков',
         });
     }
 
@@ -161,7 +163,7 @@ export default class CommunityComponent {
             // const status: number = 200;
             switch (status) {
                 case 200:
-                    this.renderMsgAction(parent, friendData.username);
+                    this.renderMsgAction(parent);
                     this.renderDropdown(parent.parentNode.parentNode.parentNode as HTMLElement, friendData);
                     break;
                 default:
