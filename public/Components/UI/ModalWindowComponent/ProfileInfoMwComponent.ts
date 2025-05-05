@@ -106,61 +106,47 @@ export default class ProfileInfoMwComponent extends ModalWindowComponent {
             'Сообщество создано ' + convertDate(data.created_at.slice(0, 10)),
         );
         
-        this.renderContactsInfoBlock(items, data.owner_id);
+        this.renderContactsInfoBlock(items);
     }
 
-    private async renderContactsInfoBlock(parent: HTMLElement, ownerId: any) {
-        // const [status, profileData] = await API.getProfile(ownerId);
+    private renderContactsInfoBlock(parent: HTMLElement) {
+        const owner = this.config.data.payload.owner;
 
-        const [status, profileData] = [200, {
-            profile: {
-                avatar_url: 'https://i.pravatar.cc/150',
-                firstname: 'Иван',
-                lastname: 'Иванов',
-                username: 'rvasutenko'
-            }
-        }];
-        switch (status) {
-            case 200:
-                createElement({
-                    parent,
-                    classes: ['modal__divider'],
-                });
+        createElement({
+            parent,
+            classes: ['modal__divider'],
+        });
 
-                createElement({
-                    parent,
-                    classes: ['modal__title'],
-                    text: 'Контакты',
-                });
+        createElement({
+            parent,
+            classes: ['modal__title'],
+            text: 'Контакты',
+        });
 
-                const contact = createElement({
-                    tag: 'a',
-                    parent,
-                    classes: ['modal__contact'],
-                    attrs: { href: `/profiles/${profileData.profile.username}` },
-                });
-                new AvatarComponent(contact, {
-                    src: profileData.profile.avatar_url,
-                    size: 's',
-                })
-                const contactInfo = createElement({
-                    parent: contact,
-                    classes: ['modal__contact-info'],
-                });
-                createElement({
-                    tag: 'h3',
-                    parent: contactInfo,
-                    text: `${profileData.profile.firstname} ${profileData.profile.lastname}`,
-                });
-                createElement({
-                    parent: contactInfo,
-                    classes: ['modal__contact-description'],
-                    text: 'Владелец',
-                });
-                break;
-            default:
-                break;
-        }
+        const contact = createElement({
+            tag: 'a',
+            parent,
+            classes: ['modal__contact'],
+            attrs: { href: `/profiles/${owner.username}` },
+        });
+        new AvatarComponent(contact, {
+            src: owner?.avatar_url,
+            size: 's',
+        })
+        const contactInfo = createElement({
+            parent: contact,
+            classes: ['modal__contact-info'],
+        });
+        createElement({
+            tag: 'h3',
+            parent: contactInfo,
+            text: `${owner?.firstname} ${owner?.lastname}`,
+        });
+        createElement({
+            parent: contactInfo,
+            classes: ['modal__contact-description'],
+            text: 'Владелец',
+        });
     }
 
     private renderProfile(items: HTMLElement) {
