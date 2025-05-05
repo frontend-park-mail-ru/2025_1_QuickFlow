@@ -113,7 +113,7 @@ export default class CommunityComponent {
                 icon: 'minus-icon',
                 isCritical: true,
                 onClick: async () => {
-                    const status = await API.leaveCommunity(communityData.payload.id);
+                    const status = await API.leaveCommunity(communityData.id);
                     switch (status) {
                         case 200:
                             this.renderDeletedCommunity(community, communityData);
@@ -156,7 +156,7 @@ export default class CommunityComponent {
         });
 
         undoBtn.addEventListener('click', async () => {
-            const status = await API.joinCommunity(communityData.payload.id);
+            const status = await API.joinCommunity(communityData.id);
             switch (status) {
                 case 200:
                     this.renderMembersCount(parent);
