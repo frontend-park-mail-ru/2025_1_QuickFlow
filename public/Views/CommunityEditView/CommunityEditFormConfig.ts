@@ -1,52 +1,32 @@
 export const forms = {
-    profile: {
+    settings: {
         header: true,
         fields: [
             [{
-                key: 'username',
+                key: 'name',
                 config: {
-                    label: 'Никнейм',
-                    validation: 'username',
+                    label: 'Название',
                     required: true,
                     maxLength: 20,
                 }
-            }],
-            [{
-                key: 'firstname',
-                config: {
-                    label: 'Имя',
-                    validation: 'name',
-                    required: true,
-                    maxLength: 25,
-                }
             },
             {
-                key: 'lastname',
-                config: {
-                    label: 'Фамилия',
-                    validation: 'name',
-                    required: true,
-                    maxLength: 25,
-                }
-            },
-            {
-                key: 'birth_date',
-                config: {
-                    label: 'Дата рождения',
-                    validation: 'date',
-                    autocomplete: 'date',
-                    placeholder: 'дд.мм.гггг',
-                    required: true,
-                    maxLength: 10,
-                }
-            }],
-            [{
-                key: 'bio',
+                key: 'description',
                 type: 'textarea',
                 config: {
-                    label: 'Краткая информация',
-                    placeholder: 'Расскажите о себе',
+                    label: 'Описание',
+                    placeholder: 'Описание сообщества',
                     maxLength: 256,
+                }
+            }],
+            [{
+                key: 'nickname',
+                config: {
+                    label: 'Адрес сообщества',
+                    validation: 'username',
+                    entity: 'Адрес',
+                    required: true,
+                    maxLength: 20,
                 }
             }]
         ]

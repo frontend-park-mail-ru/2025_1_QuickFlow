@@ -18,6 +18,7 @@ import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 
 import router from '@router';
 import { forms } from './CommunityEditFormConfig';
+import API from '@utils/api';
 
 
 const AVATAR_MAX_RESOLUTION = 1680;
@@ -26,33 +27,44 @@ const AVATAR_MAX_RESOLUTION = 1680;
 class CommunityEditView {
     private containerObj: MainLayoutComponent;
     private section: string;
-    private userData: Record<string, any>;
+    private communityData: Record<string, any>;
     private stateUpdaters: Array<any> = [];
     private submitButton: ButtonComponent;
+    private params: Record<string, any>;
 
     constructor() {
-        this.userData = null;
+        this.communityData = null;
         this.section = null;
     }
 
-    render(params: any, section: string = 'profile') {
+    render(params: any, section: string = 'settings') {
+        this.params = params;
+
         this.containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
 
         new RadioMenuComponent(this.containerObj.right, {
             items: {
-                profile: {
-                    title: 'Профиль',
-                    onClick: () => this.renderSection('profile')
+                settings: {
+                    title: 'Настройка',
+                    onClick: () => this.renderSection('settings')
                 },
                 contacts: {
                     title: 'Контакты',
                     onClick: () => this.renderSection('contacts')
                 },
-                education: {
-                    title: 'Образование',
-                    onClick: () => this.renderSection('education')
+                members: {
+                    title: 'Подписчики',
+                    onClick: () => this.renderSection('members')
+                },
+                managers: {
+                    title: 'Управляющие',
+                    onClick: () => this.renderSection('managers')
+                },
+                deletion: {
+                    title: 'Удаление сообщества',
+                    onClick: () => this.renderSection('deletion')
                 },
             },
             active: section,
@@ -61,38 +73,31 @@ class CommunityEditView {
         this.renderSection(section);
     }
 
-    renderSection(sectionName: string) {
+    private async renderSection(sectionName: string) {
         this.section = sectionName;
         this.stateUpdaters = [];
         const sectionData = forms[this.section];
         this.containerObj.left.innerHTML = '';
 
-        Ajax.get({
-            url: `/profiles/${getLsItem('username', '')}`,
-            callback: (status, userData) => {
-                switch (status) {
-                    case 200:
-                        this.getCbOk(userData, sectionData);
-                        break;
-                    case 401:
-                        this.cbUnauthorized();
-                        break;
-                }
-            }
-        });
+        const [status, communityData] = await API.getCommunity(this.params.address);
+
+        switch (status) {
+            case 200:
+                this.getCbOk(communityData, sectionData);
+                break;
+            case 401:
+                router.go({ path: '/login' });
+                break;
+        }
     }
 
-    cbUnauthorized() {
-        router.go({ path: '/login' });
-    }
-
-    getCbOk(userData, sectionData) {
-        this.userData = userData;
+    getCbOk(communityData: Record<string, any>, sectionData: Record<string, any>) {
+        this.communityData = communityData;
         if (sectionData.header) this.renderHeader();
         this.renderForm(sectionData);
     }
 
-    renderForm(sectionData) {
+    renderForm(sectionData: Record<string, any>) {
         const fields = sectionData.fields;
 
         const form = createElement({
@@ -130,10 +135,9 @@ class CommunityEditView {
                 field.config.name = field.key;
                 field.config.placeholder = field.config.placeholder || field.config.label;
                 field.config.value = 
-                    this.userData?.profile?.[field.key] ?? 
-                    this.userData?.contact_info?.[field.key] ??
-                    this.userData?.school?.[field.key] ?? 
-                    this.userData?.university?.[field.key];
+                    this.communityData?.payload?.[field.key] ??
+                    this.communityData?.payload?.community?.[field.key] ??
+                    this.communityData?.payload?.owner?.[field.key];
 
                 if (field.config.name === 'birth_date') {
                     field.config.value = convertDate(field.config.value);
@@ -197,19 +201,19 @@ class CommunityEditView {
         const newUsername = body?.profile?.username;
 
         if (body.profile) {
-            body.profile['sex'] = this.userData.profile.sex;
+            body.profile['sex'] = this.communityData.profile.sex;
             body.profile = JSON.stringify(body.profile);
         }
         if (body.contact_info) body.contact_info = JSON.stringify(body.contact_info);
         if (body.school) body.school = JSON.stringify(body.school);
         if (body.university) body.university = JSON.stringify(body.university);
 
-        for (const key in this.userData) {
+        for (const key in this.communityData) {
             if (!body[key] || body[key].length === 0) {
-                if (typeof this.userData[key] === 'object') {
-                    body[key] = JSON.stringify(this.userData[key]);
+                if (typeof this.communityData[key] === 'object') {
+                    body[key] = JSON.stringify(this.communityData[key]);
                 } else {
-                    body[key] = this.userData[key];
+                    body[key] = this.communityData[key];
                 }
             }
         }
@@ -230,7 +234,7 @@ class CommunityEditView {
                             this.postCbOk(newUsername);
                             break;
                         case 401:
-                            this.cbUnauthorized();
+                            router.go({ path: '/login' });
                             break;
                         default:
                             this.cbDefault();
@@ -276,7 +280,7 @@ class CommunityEditView {
         });
 
         const cover = new CoverComponent(profileHeader, {
-            src: this.userData.profile.cover_url,
+            src: this.communityData.payload.community.cover_url,
             type: 'edit',
         });
 
@@ -284,8 +288,8 @@ class CommunityEditView {
 
         const avatar = new AvatarComponent(profileHeader, {
             size: 'xxl',
-            src: this.userData.profile.avatar_url,
-            type: 'edit'
+            src: this.communityData.payload.community.avatar_url,
+            type: 'edit',
         });
 
         this.stateUpdaters.push(
