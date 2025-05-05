@@ -1,0 +1,32 @@
+.radio {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-m);
+    color: var(--text-secondary);
+}
+
+.radio__choices {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+}
+
+.radio__choice {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-primary);
+}
+
+.radio__input {
+    transition: var(--trans-input);
+    width: 16px;
+    height: 16px;
+    margin: 0;
+}

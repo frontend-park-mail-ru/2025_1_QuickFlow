@@ -1,0 +1,130 @@
+.parent_hidden-ui .menu,
+.parent_hidden-ui .header {
+    display: none;
+}
+
+.main_wide {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+
+.main_clear {
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    position: fixed;
+    padding: 0;
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+}
+
+.container_auth {
+    max-width: 100%;
+    padding: 15px 64px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 128px;
+    background: var(--background-grad);
+    flex-direction: row;
+}
+
+.container_not-found {
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 80px;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.container_feed {
+    max-width: 932px;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.container_profile {
+    max-width: 932px;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.container_messenger {
+    max-width: 932px;
+    height: calc(100vh - 48px - 56px);
+}
+
+.container__row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+    gap: 16px;
+}
+
+.container__column {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.container__column_left {
+    align-items: flex-start;
+    gap: 24px;
+    max-width: 553px;
+    // min-width: 553px;
+
+    width: 100%;
+}
+
+.container__column_right {
+    align-items: center;
+    gap: 12px;
+
+    width: 272px;
+}
+
+@media screen and (max-width: 480px) {
+    .container__column_left {
+        min-width: 100%;
+    }
+
+    .container {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .container_messenger {
+        flex-direction: column;
+        width: 100vw;
+        height: calc(100vh - 80px);
+        top: 0;
+        position: absolute;
+    }
+
+    .container__row {
+        flex-direction: column;
+    }
+
+    .container__column_right {
+        order: 1;
+        width: 100%;
+    }
+
+    .container__column_left {
+        order: 2;
+    }
+}

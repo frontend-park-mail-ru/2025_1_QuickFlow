@@ -1,0 +1,9 @@
+.iframe {
+    box-shadow: var(--shadow-context-menu);
+    border: none;
+    border-radius: 12px;
+    position: fixed;
+    bottom: 32px;
+    right: 64px;
+    z-index: 1;
+}

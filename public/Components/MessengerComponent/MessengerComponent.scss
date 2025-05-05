@@ -1,0 +1,17 @@
+.messenger {
+    border: 1px solid var(--stroke-primary);
+    border-radius: 16px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+@media screen and (max-width: 480px) {
+    .messenger {
+        border: none;
+        border-radius: 0;
+    }
+}
