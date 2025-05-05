@@ -1,0 +1,106 @@
+.input {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-m);
+    color: var(--text-secondary);
+}
+
+.input__required {
+    color: var(--text-error);
+}
+
+.input:only-child {
+    gap: 0;
+}
+
+.input__description-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.input__field {
+    border: 1px solid var(--stroke-primary);
+    border-radius: 8px;
+    padding: 0 12px;
+    width: 100%;
+    height: 36px;
+    background: var(--background-light-gray);
+
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-m);
+    color: var(--text-primary);
+    transition: var(--trans-input);
+}
+
+.input__field::placeholder {
+    color: var(--text-secondary);
+}
+
+.input__field:hover {
+    border: 1px solid var(--stroke-primary-hover);
+}
+
+.input__field:focus {
+    border: 1px solid var(--stroke-primary-focus);
+    outline: none;
+}
+
+.input__field_invalid {
+    border: 1px solid var(--stroke-error) !important;
+    background: var(--background-error) !important;
+}
+
+.input__error {
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-m);
+    color: var(--text-error);
+}
+
+.input__inner {
+    position: relative;
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+}
+
+.input__password-toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 16px;
+    height: 16px;
+    margin: 10px 12px;
+    background: url(./../static/img/show-icon.svg) 0 0 no-repeat;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.input__password-toggle_show {
+    background: url(./../static/img/hide-icon.svg) 0 0 no-repeat;
+}
+
+.input__field[type='search'] {
+    padding-left: 36px;
+}
+
+.input__search-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    margin: 10px 10px 10px 12px;
+    background: url(./../static/img/search-icon.svg) 0 0 no-repeat;
+    background-size: contain;
+}
+
+.input_wide {
+    width: 100%;
+}

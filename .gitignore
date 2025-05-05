@@ -1,0 +1,12 @@
+/node_modules/
+.DS_Store
+../../МГТУ/VK_technopark/Second Sem/2025_1_QuickFlow/.idea
+.idea/
+
+public/bundle.js
+public/bundle.js.map
+public/sw.js
+public/sw.js.map
+
+public/assets/
+public/styles/

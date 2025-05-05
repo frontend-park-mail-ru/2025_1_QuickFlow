@@ -1,0 +1,108 @@
+/* @import url(../../constants.css); */
+
+button {
+    cursor: pointer;
+    transition: var(--trans-btn);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.button_textless {
+    aspect-ratio: 1 / 1;
+    padding: 0 !important;
+}
+
+.button {
+    cursor: pointer;
+    transition: var(--trans-btn);
+    padding: 0 12px;
+}
+
+.button:disabled {
+    cursor: not-allowed;
+}
+
+.button_large {
+    height: 36px;
+    font-size: var(--font-size-l);
+}
+
+.button_small {
+    height: 32px;
+    font-size: var(--font-size-s);
+}
+
+.button_primary {
+    border-radius: 8px;
+    width: auto;
+    background: var(--button-primary);
+    border: none;
+
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-m);
+    color: var(--text-white);
+}
+
+.button_primary:hover {
+    background: var(--button-primary-hover);
+}
+
+.button_primary:active {
+    background: var(--button-primary-active);
+}
+
+.button_primary:disabled {
+    background: var(--button-primary-disabled);
+}
+
+.button_secondary {
+    width: auto;
+    border-radius: 8px;
+    background: var(--button-secondary);
+    border: 1px solid var(--stroke-primary);
+
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-m);
+    color: var(--text-primary);
+}
+
+.button_secondary:hover {
+    background: var(--button-secondary-hover);
+}
+
+.button_secondary:active {
+    background: var(--button-secondary-active);
+}
+
+.button_overlay {
+    width: auto;
+    border-radius: 8px;
+    backdrop-filter: blur(20px);
+    background: var(--button-overlay);
+    border: 1px solid var(--stroke-white-transp);
+
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-m);
+    color: var(--text-white);
+}
+
+.button_overlay.button_small {
+    font-size: var(--font-size-xs);
+}
+
+.button_overlay:hover {
+    background: var(--button-overlay-hover);
+    border: 1px solid var(--stroke-white-transp-hover);
+}
+
+.button_overlay:active {
+    background: var(--button-overlay-active);
+    border: 1px solid var(--stroke-white-transp-active);
+}
+
+.button__icon {
+    width: 16px;
+    height: 16px;
+}

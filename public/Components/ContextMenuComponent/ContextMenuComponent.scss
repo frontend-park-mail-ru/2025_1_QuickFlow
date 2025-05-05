@@ -1,0 +1,92 @@
+.dropdown {
+    display: flex;
+    position: absolute;
+    top: 4px;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.js-dropdown:hover .context-menu {
+    position: relative;
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    height: auto;
+    padding: 8px;
+    pointer-events: auto;
+}
+
+.context-menu {
+    box-shadow: var(--shadow-context-menu);
+    background: var(--background-white);
+    border-radius: 12px;
+    display: flex;
+    gap: 2px;
+    flex-direction: column;
+    z-index: 1;
+    position: absolute;
+    height: auto;
+    overflow: hidden;
+    opacity: 0;
+    padding: 8px;
+    pointer-events: none;
+    user-select: none;
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        height 0.2s ease,
+        padding 0.2s ease;
+}
+
+.context-menu_below-end {
+    right: 0;
+    top: calc(100% + 4px);
+    transform: scale(0.97) translateY(-12px);
+}
+
+.context-menu_above-start {
+    bottom: calc(100% + 4px);
+    transform: scale(0.97) translateY(12px);
+}
+
+.context-menu_default {
+    width: 228px;
+}
+
+.context-menu_mini {
+    width: 128px;
+}
+
+.context-menu__icon {
+    width: 16px;
+    height: 16px;
+    color: var(--icon-primary);
+}
+
+.context-menu__option {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    height: 32px;
+    padding: 0 12px;
+    font-size: var(--font-size-xs);
+    color: var(--text-primary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--trans-menu);
+}
+
+.context-menu__option:hover {
+    background: var(--button-secondary-hover);
+}
+
+.context-menu__option:active {
+    background: var(--button-secondary-active);
+}
+
+.context-menu__option_critical,
+.context-menu__option_critical .context-menu__icon {
+    color: var(--text-error);
+}

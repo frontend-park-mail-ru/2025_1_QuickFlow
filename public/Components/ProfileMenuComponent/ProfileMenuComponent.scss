@@ -1,0 +1,118 @@
+.profile-menu {
+    top: 56px;
+    right: 0;
+    position: absolute;
+    width: 300px;
+    box-shadow: var(--shadow-context-menu);
+    background: var(--background-white);
+    border-bottom: 1px solid var(--stroke-primary);
+    border-left: 1px solid var(--stroke-primary);
+    border-right: 1px solid var(--stroke-primary);
+    border-radius: 0 0 12px 12px;
+    padding: 28px 8px 12px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+
+    opacity: 0;
+    transform: scale(0.98) translateY(-12px);
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    pointer-events: none;
+
+    clip-path: inset(0 -100px -100px -100px);
+    cursor: default;
+}
+
+.header__right:hover .profile-menu {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    z-index: 0;
+    pointer-events: auto;
+}
+
+.profile-menu__info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.profile-menu__profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.profile-menu__name {
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-l);
+    line-height: var(--line-height-m);
+    color: var(--text-primary);
+    width: 100%;
+    text-align: center;
+    word-break: break-word;
+    padding: 0 12px;
+}
+
+.profile-menu__username {
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-m);
+    color: var(--text-secondary);
+    width: 100%;
+    text-align: center;
+    word-break: break-all;
+    padding: 0 12px;
+}
+
+.profile-menu__items {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.profile-menu__item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px;
+    height: 36px;
+    width: 100%;
+    border-radius: 8px;
+    transition: var(--trans-menu);
+    cursor: pointer;
+
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-l);
+    line-height: 100%;
+    color: var(--text-primary);
+    position: relative;
+}
+
+.profile-menu__item:hover {
+    background: var(--button-secondary-hover);
+}
+
+.profile-menu__item:active {
+    background: var(--button-secondary-active);
+}
+
+.profile-menu__icon {
+    width: 16px;
+    height: 16px;
+    color: var(--icon-accent);
+}
+
+.profile-menu__dropdown {
+    position: absolute;
+    right: 0;
+    top: 36px;
+}
