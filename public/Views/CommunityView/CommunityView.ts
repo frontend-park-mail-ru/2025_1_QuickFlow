@@ -222,7 +222,7 @@ class CommunityView {
 
 // API.getCommunityPosts
         new FeedComponent(this.containerObj?.left, {
-            getUrl: `/communities/${data.payload.id}/posts`,
+            getUrl: `/communities/${data.payload.community.nickname}/posts`,
             hasCreateButton: data.payload.role === "owner" ?
                 true :
                 false,

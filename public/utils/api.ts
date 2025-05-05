@@ -98,7 +98,7 @@ export default class API {
         return new Promise((resolve) => {
             ajax.get({
                 url: `/communities/${id}/members`,
-                params: { count, ts },
+                params: ts? { count, ts } : { count },
                 callback: (status: number, data: Record<string, any>) => resolve([status, data]),
             });
         });
