@@ -164,7 +164,6 @@ export default class PostComponent {
                 prevTranslate = -currentIndex * this.picWidth;
             };
             
-
             prevBtn.addEventListener('click', () => {
                 if (currentIndex > 0) {
                     currentIndex--;
@@ -454,7 +453,9 @@ export default class PostComponent {
 
         new AvatarComponent(authorWrapper, {
             size: AUTHOR_AVATAR_SIZE,
-            src: this.config.author.avatar_url,
+            src: this.config?.author_type === 'community' ?
+                this.config?.author?.community?.avatar_url :
+                this.config?.author?.avatar_url,
             href: this.config?.author_type === 'community' ?
                 `/communities/${this.config?.author?.community?.nickname}` :
                 `/profiles/${this.config?.author?.username}`,
