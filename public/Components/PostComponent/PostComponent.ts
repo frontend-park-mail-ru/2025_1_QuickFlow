@@ -455,7 +455,9 @@ export default class PostComponent {
         new AvatarComponent(authorWrapper, {
             size: AUTHOR_AVATAR_SIZE,
             src: this.config.author.avatar_url,
-            href: `/profiles/${this.config.author.username}`,
+            href: this.config?.author_type === 'community' ?
+                `/communities/${this.config.author.community.nickname}` :
+                `/profiles/${this.config.author.username}`,
         });
 
         const topRightWrapper = createElement({
@@ -474,10 +476,14 @@ export default class PostComponent {
             tag: 'a',
             parent: nameDateWrapper,
             classes: ['post__name'],
-            attrs: { href: `/profiles/${this.config.author.username}` },
+            attrs: {
+                href: this.config?.author_type === 'community' ?
+                    `/communities/${this.config.author.community.nickname}` :
+                    `/profiles/${this.config.author.username}`,
+            },
             text: this.config?.author_type === 'community' ?
-                `${this.config.author.firstname} ${this.config.author.lastname}` :
-                this.config.author.community.name,
+                this.config.author.community.name :
+                `${this.config.author.firstname} ${this.config.author.lastname}`,
         });
 
         createElement({
@@ -543,7 +549,8 @@ export default class PostComponent {
         };
 
         if (
-            this.config.author.username === getLsItem('username', '') ||
+            this.config?.author?.username === getLsItem('username', '') ||
+            this.config?.author?.owner?.username === getLsItem('username', '') ||
             ADMINS_USERNAMES.includes(getLsItem('username', ''))
         ) {
             data.edit = {
