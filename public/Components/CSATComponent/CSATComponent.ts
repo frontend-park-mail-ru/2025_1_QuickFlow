@@ -137,25 +137,24 @@ export default class CSATComponent {
         });
     }
 
-    private renderRating() {
+    private async renderRating() {
         const rating = createElement({
             parent: this.container,
             classes: ['csat__rating'],
         });
 
         for (let i = 0; i < 5; i++) {
-            insertIcon(rating, {
+            const rate = await insertIcon(rating, {
                 name: 'star-fill-icon',
                 classes: ['csat__rate-icon'],
-            })
-            .then((rate) => {
-                rate.setAttribute('data-value', (i + 1).toString());
-                this.stars.push(rate);
-
-                rate.addEventListener('mouseenter', () => this.highlightStars(i + 1, 'hover'));
-                rate.addEventListener('mouseleave', () => this.highlightStars(this.selectedRating, 'select'));
-                rate.addEventListener('click', () => this.selectRating(i + 1));
             });
+
+            rate.setAttribute('data-value', (i + 1).toString());
+            this.stars.push(rate);
+
+            rate.addEventListener('mouseenter', () => this.highlightStars(i + 1, 'hover'));
+            rate.addEventListener('mouseleave', () => this.highlightStars(this.selectedRating, 'select'));
+            rate.addEventListener('click', () => this.selectRating(i + 1));
         }
     }
 
