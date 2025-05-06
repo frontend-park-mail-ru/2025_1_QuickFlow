@@ -228,6 +228,10 @@ class EditProfileView {
         if (body.university) body.university = JSON.stringify(body.university);
 
         for (const key in this.userData) {
+            if (
+                ['chat_id', 'relation', 'online', 'id'].includes(key)
+            ) break;
+
             if (!body[key] || body[key].length === 0) {
                 if (typeof this.userData[key] === 'object') {
                     body[key] = JSON.stringify(this.userData[key]);
