@@ -207,4 +207,34 @@
         max-width: unset;
         border: none;
     }
+
+    .chats-panel__chat .avatar_m {
+        width: 56px;
+        height: 56px;
+    }
+
+    .chats-panel__chat {
+        height: 72px;
+        padding: 8px;
+    }
+
+    .chats-panel__header {
+        padding: 10px 16px 8px 16px;
+    }
+
+    .chats-panel__chat-title {
+        font-size: var(--font-size-l);
+    }
+
+    .chats-panel__msg-info {
+        font-size: var(--font-size-l);
+    }
+
+    .chats-panel__msg {
+        font-size: var(--font-size-l);
+    }
+
+    .chats-panel__title {
+        font-size: 16px;
+    }
 }

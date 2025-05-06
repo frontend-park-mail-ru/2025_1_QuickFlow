@@ -129,9 +129,22 @@
 @media screen and (max-width: 480px) {
     .chat__msg {
         padding: 8px 16px;
+        font-size: var(--font-size-s);
+        line-height: 140%;
     }
 
     .chat__msg_nameless {
-        padding-left: 52px;
+        padding-left: 60px;
+    }
+
+    .chat__msg-ts {
+        font-size: var(--font-size-xs);
+    }
+
+    .chat__msg .avatar_xs {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
     }
 }

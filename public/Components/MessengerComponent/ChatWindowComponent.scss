@@ -171,3 +171,20 @@
     opacity: 0.4;
     cursor: not-allowed;
 }
+
+@media screen and (max-width: 480px) {
+    .chat-window__title {
+        font-size: var(--font-size-s);
+    }
+
+    .chat-window__header .avatar_xs {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
+    }
+
+    .chat-window__msg {
+        line-height: 140%;
+    }
+}
