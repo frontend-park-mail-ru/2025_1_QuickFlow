@@ -24,13 +24,14 @@ const CACHE_ON_INSTALL = [
 self.addEventListener('install', (event) => {
     console.log('Installing Service Worker', VERSION);
 
-    event.waitUntil(
-        caches.open(STATIC_CACHE).then((cache) => {
-            return cache.addAll(CACHE_ON_INSTALL);
-        })
-    );
+    // event.waitUntil(
+    //     caches.open(STATIC_CACHE).then((cache) => {
+    //         return cache.addAll(CACHE_ON_INSTALL);
+    //     })
+    // );
 
     (self as unknown as ServiceWorkerGlobalScope).skipWaiting();
+    console.log('skipped');
 });
 
 self.addEventListener('activate', (event) => {

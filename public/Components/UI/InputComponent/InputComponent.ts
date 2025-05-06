@@ -12,14 +12,12 @@ const MAX_DATE_INPUT_LENGTH = 10;
 const MIN_NAME_INPUT_LENGTH = 2;
 const MIN_PASSWORD_INPUT_LENGTH = 8;
 const DEFAULT_NAME = 'undefined';
-const YEAR_INPUT_MIN = 1925;
-const YEAR_INPUT_MAX = 2050;
 const DEFAULT_MIN_BIRTH_YEAR = 1900;
 
 
 export default class InputComponent {
     private parent: HTMLElement;
-    #config;
+    private _config: Record<string, any>;
 
     input: HTMLInputElement | null = null;
     error: HTMLElement | null = null;
@@ -27,13 +25,13 @@ export default class InputComponent {
     innnerWrapper: HTMLElement | null = null;
 
     constructor(parent: any, config: any) {
-        this.#config = config;
+        this._config = config;
         this.parent = parent;
         this.render();
     }
 
     get config() {
-        return this.#config;
+        return this._config;
     }
 
     get value() {
@@ -42,11 +40,11 @@ export default class InputComponent {
     }
 
     get name() {
-        return this.#config.name?.trim();
+        return this._config.name?.trim();
     }
 
     get required() {
-        return this.#config.required;
+        return this._config.required;
     }
 
     isEmpty() {
@@ -60,8 +58,8 @@ export default class InputComponent {
             classes: ['input'],
         });
 
-        if (this.#config.classes) {
-            const _classes: Array<string> = Array.from(this.#config.classes);
+        if (this._config.classes) {
+            const _classes: Array<string> = Array.from(this._config.classes);
             if (_classes.length) this.wrapper.classList.add(..._classes);
         }
 
@@ -77,18 +75,18 @@ export default class InputComponent {
             parent: this.innnerWrapper,
             classes: ['input__field'],
             attrs: {
-                autocomplete: this.#config.autocomplete || DEFAULT_AUTOCOMPLETE,
-                placeholder: this.#config.placeholder || DEFAULT_PLACEHOLDER,
-                maxLength: this.#config.maxLength || DEFAULT_MAX_LENGTH,
-                value: this.formatValue(this.#config.value) || DEFAULT_INPUT_VALUE,
+                autocomplete: this._config.autocomplete || DEFAULT_AUTOCOMPLETE,
+                placeholder: this._config.placeholder || DEFAULT_PLACEHOLDER,
+                maxLength: this._config.maxLength || DEFAULT_MAX_LENGTH,
+                value: this.formatValue(this._config.value) || DEFAULT_INPUT_VALUE,
                 name: this.name || DEFAULT_NAME,
             },
         }) as HTMLInputElement;
 
         this.input.setAttribute("type",
-            this.#config.type === 'number' ?
+            this._config.type === 'number' ?
             DEFAULT_TYPE :
-            (this.#config.type || DEFAULT_TYPE)
+            (this._config.type || DEFAULT_TYPE)
         );
 
         if (this.required) this.input.setAttribute('required', '');
@@ -97,7 +95,7 @@ export default class InputComponent {
             classes: ['input__error'],
         });
 
-        switch (this.#config.type) {
+        switch (this._config.type) {
             case 'password':
                 this.setPasswordInitOptions();
                 break;
@@ -109,56 +107,57 @@ export default class InputComponent {
                 break;
         }
 
-        if (this.#config.validation) {
+        if (this._config.validation) {
             this.input.addEventListener('input', () => this.validate());
+            if (this._config.value) this.validate();
         }
 
         this.renderBottom();
     }
 
     renderBottom() {
-        if (!this.#config.description && !this.#config.maxLength) return;
+        if (!this._config.description && !this._config.maxLength) return;
         
         const descWrapper = createElement({
             parent: this.wrapper,
             classes: ['input__description-wrapper'],
         });
 
-        if (this.#config.description) {
+        if (this._config.description) {
             createElement({
                 tag: 'span',
-                text: this.#config.description,
+                text: this._config.description,
                 parent: descWrapper,
                 classes: ['input__description'],
             });
         }
 
-        if (this.#config.showCharactersLeft) {
+        if (this._config.showCharactersLeft) {
             const counter = createElement({
                 tag: 'span',
-                text: this.#config.maxLength,
+                text: this._config.maxLength,
                 parent: descWrapper,
                 classes: ['input__counter'],
             });
 
             this.input.addEventListener('input', () => {
                 if (!this.input) return;
-                counter.textContent = (this.#config.maxLength - this.input.value.length).toString();
+                counter.textContent = (this._config.maxLength - this.input.value.length).toString();
             });
         }
     }
 
     private renderHeader() {
-        if (!this.#config.label) return;
+        if (!this._config.label) return;
 
         const label = createElement({
             tag: 'label',
-            text: this.#config.label,
+            text: this._config.label,
             parent: this.wrapper,
             classes: ['input__label'],
         });
 
-        if (!this.#config.showRequired) return;
+        if (!this._config.showRequired) return;
 
         createElement({
             tag: 'span',
@@ -202,7 +201,7 @@ export default class InputComponent {
     }
 
     private formatValue(value: string): string {
-        switch (this.#config.validation) {
+        switch (this._config.validation) {
             case "phone":
                 return this.formatPhoneInput(value);
             default:
@@ -226,7 +225,7 @@ export default class InputComponent {
         if (!this || !this.input) return false;
 
         if (
-            this.#config.validation === 'date' &&
+            this._config.validation === 'date' &&
             this.input.value.trim().length < MAX_DATE_INPUT_LENGTH
         ) return false;
 
@@ -243,7 +242,7 @@ export default class InputComponent {
 
         const value = this.input.value;
 
-        switch (this.#config.validation) {
+        switch (this._config.validation) {
             case 'email':
                 this.validateEmail(value);
                 break;
@@ -274,7 +273,7 @@ export default class InputComponent {
         
         const raw = phone.replace(/\D/g, '');
     
-        if (!raw && !this.#config.required) return this.hideError();
+        if (!raw && !this._config.required) return this.hideError();
 
         if (!raw) {
             this.showError('Введите номер телефона');
@@ -321,15 +320,15 @@ export default class InputComponent {
         const year = Number(value);
 
         if (!isNaN(year)) {
-            if (year < this.#config.min) {
-                this.showError(`Год не может быть меньше ${this.#config.min}`);
-            } else if (year > this.#config.max) {
-                this.showError(`Год не может быть больше ${this.#config.max}`);
+            if (year < this._config.min) {
+                this.showError(`Год не может быть меньше ${this._config.min}`);
+            } else if (year > this._config.max) {
+                this.showError(`Год не может быть больше ${this._config.max}`);
             } else this.hideError();
         }
 
         if (
-            !this.#config.required &&
+            !this._config.required &&
             !this.value
         ) this.hideError();
     }
@@ -339,11 +338,11 @@ export default class InputComponent {
         const hasValidCharacters = chars.every((char: any) => /^[\p{L}-]+$/u.test(char));
 
         if (!name) {
-            this.showError('Введите ' + (this.#config.placeholder === 'Имя' ? 'имя' : 'фамилию'));
+            this.showError('Введите ' + (this._config.placeholder === 'Имя' ? 'имя' : 'фамилию'));
         } else if (!hasValidCharacters) {
-            this.showError(this.#config.placeholder + ' может содержать только буквы и "-"');
+            this.showError(this._config.placeholder + ' может содержать только буквы и "-"');
         } else if (name.length < MIN_NAME_INPUT_LENGTH) {
-            this.showError('Слишком ' + (this.#config.placeholder === 'Имя' ? 'короткое имя' : 'короткая фамилия'));
+            this.showError('Слишком ' + (this._config.placeholder === 'Имя' ? 'короткое имя' : 'короткая фамилия'));
         } else {
             this.hideError();
         }

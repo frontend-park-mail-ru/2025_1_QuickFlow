@@ -3,8 +3,8 @@
     "short_name": "QuickFlow",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#ffffff",
+    "background_color": "var(--background-white)",
+    "theme_color": "var(--background-white)",
     "icons": [
         {
             "src": "public/favicon.svg",

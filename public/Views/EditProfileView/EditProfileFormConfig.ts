@@ -120,7 +120,7 @@ export const forms = {
                 key: 'grad_year',
                 config: {
                     label: 'Год выпуска',
-                    max: 2050,
+                    max: 2040,
                     min: 1925,
                     validation: "year",
                     type: "number",
