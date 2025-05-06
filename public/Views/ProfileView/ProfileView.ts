@@ -58,7 +58,7 @@ class ProfileView {
             callback: (status: number, friendsData: any) => {
                 switch (status) {
                     case 200:
-                        this.friendsCbOk(friendsData.body);
+                        this.friendsCbOk(friendsData.payload);
                         break;
                     case 401:
                         router.go({ path: '/login' });
