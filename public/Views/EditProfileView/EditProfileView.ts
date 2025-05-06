@@ -21,6 +21,8 @@ import { forms } from './EditProfileFormConfig';
 
 
 const AVATAR_MAX_RESOLUTION = 1680;
+const IMAGE_MAX_SIZE = 5;
+const MB_MULTIPLIER = 1024 * 1024;
 
 
 class EditProfileView {
@@ -86,13 +88,13 @@ class EditProfileView {
         router.go({ path: '/login' });
     }
 
-    getCbOk(userData, sectionData) {
+    getCbOk(userData: Record<string, any>, sectionData: Record<string, any>) {
         this.userData = userData;
         if (sectionData.header) this.renderHeader();
         this.renderForm(sectionData);
     }
 
-    renderForm(sectionData) {
+    renderForm(sectionData: Record<string, any>) {
         const fields = sectionData.fields;
 
         const form = createElement({
@@ -170,16 +172,37 @@ class EditProfileView {
 
         const body: Record<string, any> = {};
 
-        this.stateUpdaters.forEach(({ name, value }) => {
+        for (const stateUpdater of this.stateUpdaters) {
+            let { name, value } = stateUpdater;
+
             if (name === 'birth_date') value = convertDate(value, 'ts');
+
+            if ((name === 'avatar' || name === 'cover') && stateUpdater.isLarge) {
+                return new PopUpComponent({
+                    text: `Размер файла не должен превышать ${IMAGE_MAX_SIZE}Мб`,
+                    isError: true,
+                });
+            }
+
             const sections = {
                 profile: () => {
                     body.profile ??= {};
-                    if (name === 'avatar' || name === 'cover') {
-                        body[name] = value instanceof File || (value instanceof FileList && value.length > 0) ? value : '';
-                        return;
-                    }
-                    body.profile[name] = value;
+                    // if (name === 'avatar' || name === 'cover') {
+                    //     if (stateUpdater.isLarge) {
+                    //         new PopUpComponent({
+                    //             text: `Размер файла не должен превышать ${IMAGE_MAX_SIZE}Мб`,
+                    //             isError: true,
+                    //         });
+                    //     }
+                    //     body[name] = value instanceof File ? value : '';
+                    //     return;
+                    // }
+                    // body.profile[name] = value;
+                    body.profile[name] = value instanceof File ?
+                        value :
+                        value instanceof FileList ?
+                            '' :
+                            value;
                 },
                 contacts: () => {
                     body.contact_info ??= {};
@@ -192,7 +215,7 @@ class EditProfileView {
                 }
             };
             sections[this.section]?.();
-        })
+        }
 
         const newUsername = body?.profile?.username;
 
@@ -295,7 +318,8 @@ class EditProfileView {
                 id: 'profile-avatar-upload',
                 name: 'avatar',
                 compress: true,
-                maxSize: AVATAR_MAX_RESOLUTION,
+                maxResolution: AVATAR_MAX_RESOLUTION,
+                maxSize: IMAGE_MAX_SIZE * MB_MULTIPLIER,
             })
         );
     }

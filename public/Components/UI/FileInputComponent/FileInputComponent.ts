@@ -24,7 +24,31 @@ export default class FileInputComponent {
         return this.config.name?.trim();
     }
 
-    get value() {
+    get size() {
+        const files = this.value;
+
+        if (files instanceof File) {
+            return files.size;
+        }
+
+        let totalSize: number = 0;
+        for (const file of files) {
+            totalSize += file.size;
+        }
+
+        return totalSize;
+    }
+
+    get isLarge() {
+        return this.size > this.config.maxSize;
+    }
+
+    isValid() {
+        if (!this.required) return true;
+        return this.files.length > 0;
+    }
+
+    get value(): File | FileList {
         if (
             !this.input ||
             !this.input.files
@@ -96,15 +120,54 @@ export default class FileInputComponent {
     }
 
     async singleOnchange(event: any) {
+        this.files = [];
         let file = event.target.files[0];
         if (this.config.compress) {
             file = await this.resizeImage(file);
         }
+
         this.files.push(file);
+        this.updateInputFiles();
 
         const imageDataUrl = await this.readImageFile(file);
         this.config.preview.src = imageDataUrl;
         
+        this.triggerReady();
+    }
+
+    async multipleOnchange(event: any) {
+        const newFiles: Array<File> = Array.from(event.target.files);
+    
+        const maxCount = this.config.maxCount ?? Infinity;
+        const remainingSlots = maxCount - this.files.length;
+        if (remainingSlots <= 0) return;
+
+        let acceptedFiles = newFiles.slice(0, remainingSlots);
+        if (this.config.compress) {
+            acceptedFiles = await Promise.all(
+                acceptedFiles.map(file => this.resizeImage(file))
+            );
+        }
+
+        this.files.push(...acceptedFiles);
+    
+        const imageDataUrls = await Promise.all(acceptedFiles.map(this.readImageFile));
+        for (let i = 0; i < imageDataUrls.length; i++) {
+            const imageDataUrl = imageDataUrls[i];
+            const file = acceptedFiles[i];
+    
+            const picWrapper = this.config.preview.cloneNode(true);
+            picWrapper.querySelector('img').src = imageDataUrl;
+    
+            const removeBtn = picWrapper.querySelector('.js-post-pic-delete');
+            removeBtn.addEventListener('click', () => this.removeFile(file, picWrapper));
+    
+            this.parent.insertBefore(picWrapper, this.config.imitator);
+        }
+    
+        this.updateInputFiles();
+    
+        this.input.disabled = this.files.length >= maxCount;
         this.triggerReady();
     }
 
@@ -164,11 +227,15 @@ export default class FileInputComponent {
         return new File([blob], filename, { type: blob.type });
     }
 
-    private async resizeImage(file: File, maxSize: number = this.config.maxSize ?? 1680): Promise<File> {
+    private async resizeImage(file: File, maxResolution: number = this.config.maxResolution ?? 1680): Promise<File> {
+        if (file.type === 'image/gif') {
+            return file;
+        }
+
         const imageBitmap = await createImageBitmap(file);
         const { width, height } = imageBitmap;
     
-        const scale = Math.min(maxSize / width, maxSize / height, 1);
+        const scale = Math.min(maxResolution / width, maxResolution / height, 1);
         const newWidth = Math.round(width * scale);
         const newHeight = Math.round(height * scale);
     
@@ -189,42 +256,6 @@ export default class FileInputComponent {
             }, file.type);
         });
     }    
-
-    async multipleOnchange(event: any) {
-        const newFiles: Array<File> = Array.from(event.target.files);
-    
-        const maxCount = this.config.maxCount ?? Infinity;
-        const remainingSlots = maxCount - this.files.length;
-        if (remainingSlots <= 0) return;
-
-        let acceptedFiles = newFiles.slice(0, remainingSlots);
-        if (this.config.compress) {
-            acceptedFiles = await Promise.all(
-                acceptedFiles.map(file => this.resizeImage(file))
-            );
-        }
-
-        this.files.push(...acceptedFiles);
-    
-        const imageDataUrls = await Promise.all(acceptedFiles.map(this.readImageFile));
-        for (let i = 0; i < imageDataUrls.length; i++) {
-            const imageDataUrl = imageDataUrls[i];
-            const file = acceptedFiles[i];
-    
-            const picWrapper = this.config.preview.cloneNode(true);
-            picWrapper.querySelector('img').src = imageDataUrl;
-    
-            const removeBtn = picWrapper.querySelector('.js-post-pic-delete');
-            removeBtn.addEventListener('click', () => this.removeFile(file, picWrapper));
-    
-            this.parent.insertBefore(picWrapper, this.config.imitator);
-        }
-    
-        this.updateInputFiles();
-    
-        this.input.disabled = this.files.length >= maxCount;
-        this.triggerReady();
-    }
 
     async removeFile(fileToRemove: File, wrapper: HTMLElement) {
         this.files = this.files.filter(file => file !== fileToRemove);
@@ -256,11 +287,6 @@ export default class FileInputComponent {
 
     getFiles() {
         return this.files;
-    }
-
-    isValid() {
-        if (!this.required) return true;
-        return this.files.length > 0;
     }
 
     onReady(callback: () => void) {

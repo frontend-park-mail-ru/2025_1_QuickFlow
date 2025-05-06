@@ -6,7 +6,6 @@ import Ajax from '@modules/ajax';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
 import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
-import API from '@utils/api';
 
 
 const POST_TEXT_MAX_LENGTH = 4000;
@@ -75,7 +74,8 @@ export default class PostMwComponent extends ModalWindowComponent {
             required: true,
             maxCount: PICS_MAX_COUNT,
             compress: true,
-            maxSize: PIC_MAX_RESOLUTION,
+            maxResolution: PIC_MAX_RESOLUTION,
+            maxSize: 10 * 1024 * 1024,
         };
         
         if (hasPics) {

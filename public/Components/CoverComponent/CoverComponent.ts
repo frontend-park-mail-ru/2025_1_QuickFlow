@@ -11,18 +11,13 @@ export default class CoverComponent {
     private parent: HTMLElement;
     private config: Record<string, any>;
 
-    coverWrapper: HTMLElement | null;
-    cover: HTMLElement | null;
-    fileInput: FileInputComponent | null;
+    coverWrapper: HTMLElement | null = null;
+    cover: HTMLElement | null = null;
+    fileInput: FileInputComponent | null = null;
 
-    constructor(parent: any, config: any) {
+    constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
         this.config = config;
-
-        this.coverWrapper = null;
-        this.cover = null;
-        this.fileInput = null;
-
         this.render();
     }
 
@@ -63,7 +58,8 @@ export default class CoverComponent {
             id: 'profile-cover-upload',
             name: 'cover',
             compress: true,
-            maxSize: COVER_MAX_RESOLUTION,
+            maxResolution: COVER_MAX_RESOLUTION,
+            maxSize: 5 * 1024 * 1024,
         })
     }
 }

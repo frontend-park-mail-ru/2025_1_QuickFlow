@@ -1,5 +1,3 @@
-import Ajax from '@modules/ajax';
-
 import RadioMenuComponent from '@components/RadioMenuComponent/RadioMenuComponent';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
@@ -11,10 +9,7 @@ import FileInputComponent from '@components/UI/FileInputComponent/FileInputCompo
 
 import createElement from '@utils/createElement';
 import TextareaComponent from '@components/UI/TextareaComponent/TextareaComponent';
-import { getLsItem, setLsItem } from '@utils/localStorage';
 import convertDate from '@utils/convertDate';
-import convertToFormData from '@utils/convertToFormData';
-import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 
 import router from '@router';
 import { forms } from './CommunityEditFormConfig';
@@ -26,16 +21,13 @@ const AVATAR_MAX_RESOLUTION = 1680;
 
 class CommunityEditView {
     private containerObj: MainLayoutComponent;
-    private section: string;
-    private communityData: Record<string, any>;
+    private section: string = null;
+    private communityData: Record<string, any> = null;
     private stateUpdaters: Array<any> = [];
     private submitButton: ButtonComponent;
     private params: Record<string, any>;
 
-    constructor() {
-        this.communityData = null;
-        this.section = null;
-    }
+    constructor() {}
 
     render(params: any, section: string = 'settings') {
         this.params = params;
@@ -253,7 +245,8 @@ class CommunityEditView {
                 id: 'profile-avatar-upload',
                 name: 'avatar',
                 compress: true,
-                maxSize: AVATAR_MAX_RESOLUTION,
+                maxResolution: AVATAR_MAX_RESOLUTION,
+                maxSize: 5 * 1024 * 1024,
             })
         );
     }
