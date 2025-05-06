@@ -4,7 +4,7 @@
     "start_url": "/",
     "display": "standalone",
     "background_color": "#fff",
-    "theme_color": "#f5f6f7",
+    "theme_color": "#fff",
     "icons": [
         {
             "src": "/icons/icon-128x128.svg",
@@ -31,6 +31,19 @@
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "/screenshots/screen-desktop.jpg",
+            "sizes": "1920x1080",
+            "type": "image/jpg",
+            "form_factor": "wide"
+        },
+        {
+            "src": "/screenshots/screen-mobile.jpg",
+            "sizes": "1080x1920",
+            "type": "image/jpg"
         }
     ]
 }
