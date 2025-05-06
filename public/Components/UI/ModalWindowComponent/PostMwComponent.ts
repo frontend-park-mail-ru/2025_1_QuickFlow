@@ -72,6 +72,7 @@ export default class PostMwComponent extends ModalWindowComponent {
             compress: true,
             maxResolution: FILE.IMG_MAX_RES,
             maxSize: FILE.MAX_SIZE_TOTAL * FILE.MB_MULTIPLIER,
+            maxSizeSingle: FILE.MAX_SIZE_SINGLE * FILE.MB_MULTIPLIER,
         };
         
         if (hasPics) {
@@ -244,6 +245,13 @@ export default class PostMwComponent extends ModalWindowComponent {
         if (this.fileInput.isLarge) {
             return new PopUpComponent({
                 text: `Размер фотографий суммарно не должен превышать ${FILE.MAX_SIZE_TOTAL}Мб`,
+                isError: true,
+            });
+        }
+
+        if (this.fileInput.isAnyLarge) {
+            return new PopUpComponent({
+                text: `Размер каждой фотографии не должен превышать ${FILE.MAX_SIZE_SINGLE}Мб`,
                 isError: true,
             });
         }

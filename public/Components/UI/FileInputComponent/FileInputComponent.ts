@@ -20,11 +20,11 @@ export default class FileInputComponent {
         this.render();
     }
 
-    get name() {
+    get name(): string {
         return this.config.name?.trim();
     }
 
-    get size() {
+    get size(): number {
         const files = this.value;
 
         if (files instanceof File) {
@@ -39,11 +39,28 @@ export default class FileInputComponent {
         return totalSize;
     }
 
-    get isLarge() {
+    get isLarge(): boolean {
+        if (this.config)
         return this.size > this.config.maxSize;
     }
 
-    isValid() {
+    get isAnyLarge(): boolean {
+        const files = this.value;
+
+        if (files instanceof File) {
+            return files.size > this.config.maxSizeSingle;
+        }
+
+        for (const file of files) {
+            if (file.size > this.config.maxSizeSingle) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    isValid(): boolean {
         if (!this.required) return true;
         return this.files.length > 0;
     }

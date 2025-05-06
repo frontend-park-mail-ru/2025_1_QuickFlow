@@ -13,7 +13,6 @@ import createElement from '@utils/createElement';
 import TextareaComponent from '@components/UI/TextareaComponent/TextareaComponent';
 import { getLsItem, setLsItem } from '@utils/localStorage';
 import convertDate from '@utils/convertDate';
-import convertToFormData from '@utils/convertToFormData';
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 
 import router from '@router';
