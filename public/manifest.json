@@ -3,7 +3,7 @@
     "short_name": "QuickFlow",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#f5f6f7",
+    "background_color": "#fff",
     "theme_color": "#f5f6f7",
     "icons": [
         {
