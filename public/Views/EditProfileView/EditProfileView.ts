@@ -216,7 +216,7 @@ class EditProfileView {
         console.log(this.userData);
 
         for (const key in this.userData) {
-            if (!['profile', 'school', 'university', 'contact_info'].includes(key)) break;
+            if (!['profile', 'school', 'university', 'contact_info'].includes(key)) continue;
 
             if (!body[key] || body[key].length === 0) {
                 if (typeof this.userData[key] === 'object') {
@@ -229,8 +229,8 @@ class EditProfileView {
 
         console.log(JSON.parse(JSON.stringify(body)));
 
-        if (!body['cover']) body['cover'] = '';
-        if (!body['avatar']) body['avatar'] = '';
+        // if (!body['cover']) body['cover'] = '';
+        // if (!body['avatar']) body['avatar'] = '';
 
         const fd = convertToFormData(body);
 
