@@ -3,7 +3,7 @@ import MenuComponent from '@components/MenuComponent/MenuComponent';
 import createElement from '@utils/createElement';
 import router from '@router';
 
-import ws from '@modules/WebSocketService';
+// import ws from '@modules/WebSocketService';
 import './index.scss';
 import { getLsItem } from '@utils/localStorage';
 
@@ -80,6 +80,6 @@ const config = {
 router.menu = new MenuComponent(container, config);
 router.header = new HeaderComponent(container);
 
-if (ws) null; // for linter
+// if (ws) null; // for linter
 
 router.start();
