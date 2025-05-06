@@ -223,7 +223,6 @@ class EditProfileView {
             }
         }
 
-
         try {
             const status = await API.editProfile(body);
             switch (status) {
@@ -237,26 +236,6 @@ class EditProfileView {
                     this.cbDefault();
                     break;
             }
-
-            // const fd = convertToFormData(body);
-            // Ajax.post({
-            //     url: '/profile',
-            //     body: fd,
-            //     isFormData: true,
-            //     callback: (status: number) => {
-            //         switch (status) {
-            //             case 200:
-            //                 this.postCbOk(newUsername);
-            //                 break;
-            //             case 401:
-            //                 this.cbUnauthorized();
-            //                 break;
-            //             default:
-            //                 this.cbDefault();
-            //                 break;
-            //         }
-            //     }
-            // });
         } catch {
             this.cbDefault();
         }
