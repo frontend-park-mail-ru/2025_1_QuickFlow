@@ -6,17 +6,17 @@ class WebSocketService {
     socket: any = null;
     subscribers: any = {};
 
-    static _instance: WebSocketService;
+    static __instance: WebSocketService = null;
     
     constructor(path = '/api/ws') {
-        if (WebSocketService._instance) {
-            return;
+        if (WebSocketService.__instance) {
+            return WebSocketService.__instance;
         }
 
         this.baseUrl = this.detectWebSocketUrl(path);
         this.connect();
 
-        WebSocketService._instance = this;
+        WebSocketService.__instance = this;
     }
 
     private detectWebSocketUrl(path: string) {
@@ -82,4 +82,4 @@ class WebSocketService {
     }
 }
 
-export default new WebSocketService();
+export default WebSocketService;

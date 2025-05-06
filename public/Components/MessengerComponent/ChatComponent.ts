@@ -69,7 +69,7 @@ export default class ChatComponent {
     private handleIntersect = (entries: IntersectionObserverEntry[]) => {
         for (const entry of entries) {
             if (entry.isIntersecting) {
-                ws.send('message_read', {
+                new ws().send('message_read', {
                     chat_id: this.config?.chatData?.id,
                     message_id: (entry.target as HTMLElement).dataset.msgId,
                 });
@@ -133,7 +133,7 @@ export default class ChatComponent {
 
         this.scrollToTargetMsg();
 
-        ws.subscribe('message_read', (payload: any) => {
+        new ws().subscribe('message_read', (payload: any) => {
             const readMessage = this.scroll.querySelector(`[data-msg-id="${payload.message_id}"]`) as HTMLElement;
             console.log(readMessage);
             const status = readMessage.querySelector('.chat__msg-status');

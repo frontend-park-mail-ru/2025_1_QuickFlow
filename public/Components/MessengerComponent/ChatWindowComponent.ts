@@ -126,7 +126,7 @@ export default class ChatWindowComponent {
             });
         }
 
-        ws.subscribe('message', (payload: any) => {
+        new ws().subscribe('message', (payload: any) => {
 
             if (getLsItem('is-messenger-feedback-given', 'false') === 'false') {
                 new IFrameComponent(this.parent.parentNode as HTMLElement, {
@@ -361,7 +361,7 @@ export default class ChatWindowComponent {
     sendMessage(sendBtn: any) {
         if (sendBtn.classList.contains('chat-window__send_disabled')) return;
 
-        ws.send('message', {
+        new ws().send('message', {
             chat_id: this._chatData?.id,
             receiver_id: this._chatData?.receiver_id,
             text: this.messageInput?.value.trim(),

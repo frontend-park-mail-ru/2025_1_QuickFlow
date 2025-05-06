@@ -14,6 +14,7 @@ export default class MenuComponent {
     private container: HTMLElement | null = null;
     menuElements: Record<string, any> = {};
     activePageLink: any = null;
+    
     constructor(parent: HTMLElement, config: Record<string, any>) {
         if (MenuComponent.__instance) {
             return MenuComponent.__instance;
