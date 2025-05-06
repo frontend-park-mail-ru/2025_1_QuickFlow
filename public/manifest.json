@@ -10,6 +10,21 @@
             "src": "public/favicon.svg",
             "sizes": "24x24",
             "type": "image/svg"
+        },
+        {
+            "src": "public/favicon.svg",
+            "sizes": "128x128",
+            "type": "image/svg"
+        },
+        {
+            "src": "public/favicon.svg",
+            "sizes": "144x144",
+            "type": "image/svg"
+        },
+        {
+            "src": "public/favicon.svg",
+            "sizes": "192x192",
+            "type": "image/svg"
         }
     ]
 }
