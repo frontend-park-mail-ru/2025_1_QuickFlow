@@ -6,11 +6,11 @@ import focusInput from '@utils/focusInput';
 import { setLsItem, getLsItem, removeLsItem } from '@utils/localStorage';
 import getTimeDifference from '@utils/getTimeDifference';
 import ws from '@modules/WebSocketService';
-import Ajax from '@modules/ajax';
 import router from '@router';
 import ChatsPanelComponent from './ChatsPanelComponent';
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 import { MOBILE_MAX_WIDTH, MSG } from '@config';
+import API from '@utils/api';
 
 
 const TEXTAREA_PLACEHOLDER = 'Напишите сообщение...';
@@ -81,7 +81,7 @@ export default class ChatWindowComponent {
         this.render();
     }
 
-    render() {
+    async render() {
         this.container = createElement({
             parent: this.parent,
             classes: ['chat-window'],
@@ -95,38 +95,37 @@ export default class ChatWindowComponent {
 
         if (!this.config?.chat_id && this.config?.receiver_username) {
             removeLsItem('active-chat');
-            Ajax.get({
-                url: `/profiles/${this.config.receiver_username}`,
-                callback: (status: number, chatUser: any) => {
-                    switch (status) {
-                        case 200:
-                            if (this.container) this.container.innerHTML = '';
 
-                            this._chatData = {
-                                name: `${chatUser.profile.firstname} ${chatUser.profile.lastname}`,
-                                online: chatUser.online,
-                                avatar_url: chatUser.profile.avatar_url,
-                                receiver_id: chatUser.id,
-                                username: this.config?.receiver_username,
-                            };
+            const [status, profileData] = await API.getProfile(this.config.receiver_username);
 
-                            this.renderHeader();
-                            this.renderMessageInput();
-                            this.renderChat();
-
-                            break;
-                        case 401:
-                            router.go({ path: '/login' });
-                            break;
-                        case 404:
-                            router.go({ path: '/not-found' });
-                            break;
+            switch (status) {
+                case 200:
+                    if (this.container) {
+                        this.container.innerHTML = '';
                     }
-                }
-            });
+                    this._chatData = {
+                        name: `${profileData.profile.firstname} ${profileData.profile.lastname}`,
+                        online: profileData.online,
+                        avatar_url: profileData.profile.avatar_url,
+                        receiver_id: profileData.id,
+                        username: this.config?.receiver_username,
+                    };
+                    this.renderHeader();
+                    this.renderMessageInput();
+                    this.renderChat();
+                    break;
+
+                case 401:
+                    router.go({ path: '/login' });
+                    break;
+
+                case 404:
+                    router.go({ path: '/not-found' });
+                    break;
+            }
         }
 
-        new ws().subscribe('message', (payload: any) => {
+        new ws().subscribe('message', (payload: Record<string, any>) => {
 
             if (getLsItem('is-messenger-feedback-given', 'false') === 'false') {
                 new IFrameComponent(this.parent.parentNode as HTMLElement, {
@@ -136,11 +135,12 @@ export default class ChatWindowComponent {
             }
 
             removeLsItem(CHAT_MSG_PREFIX + `${this._chatData?.id}`);
+
             if (!this._chatData?.id && this._chatData?.receiver_id) {
                 setLsItem('active-chat', `chat-${payload.chat_id}`);
                 this._chatsPanel?.renderChatList();
             } else {
-                if (`chat-${payload.chat_id}` === getLsItem('active-chat', null)) { // payload.chat_id === this._chatData?.id
+                if (`chat-${payload.chat_id}` === getLsItem('active-chat', null)) {
                     this.msgs?.push(payload);
                     this.chat?.renderMsg(payload, []);
                     this.updateTextareaHeight();
@@ -153,7 +153,10 @@ export default class ChatWindowComponent {
                     }
                 });
             }
-            if (this.messageInput) focusInput(this.messageInput, this.focusTimer);
+
+            if (this.messageInput) {
+                focusInput(this.messageInput, this.focusTimer);
+            }
         });
     }
 
@@ -380,7 +383,7 @@ export default class ChatWindowComponent {
         this.messageInput.style.height = this.messageInput.scrollHeight + 'px';
     
         const parent = this.chatElement.parentNode as HTMLElement;
-        const scrollThreshold = 50; // если до конца меньше 50px, считаем "внизу"
+        const scrollThreshold = 100; // если до конца меньше 50px, считаем "внизу"
     
         // обновляем паддинг у блока сообщений
         const newPadding = bottomWrapper.clientHeight - 62 + CHAT_DEFAULT_PADDING_BOTTOM;
