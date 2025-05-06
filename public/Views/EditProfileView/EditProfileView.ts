@@ -19,6 +19,7 @@ import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 import router from '@router';
 import { forms } from './EditProfileFormConfig';
 import { FILE } from '@config';
+import API from '@utils/api';
 
 
 class EditProfileView {
@@ -160,7 +161,7 @@ class EditProfileView {
         });
     }
 
-    handleFormSubmit() {
+    async handleFormSubmit() {
         this.submitButton.disable();
 
         const body: Record<string, any> = {};
@@ -200,8 +201,6 @@ class EditProfileView {
             sections[this.section]?.();
         }
 
-        console.log(JSON.parse(JSON.stringify(body)));
-
         const newUsername = body?.profile?.username;
 
         if (body.profile) {
@@ -211,9 +210,6 @@ class EditProfileView {
         if (body.contact_info) body.contact_info = JSON.stringify(body.contact_info);
         if (body.school) body.school = JSON.stringify(body.school);
         if (body.university) body.university = JSON.stringify(body.university);
-
-        console.log(JSON.parse(JSON.stringify(body)));
-        console.log(this.userData);
 
         for (const key in this.userData) {
             if (!['profile', 'school', 'university', 'contact_info'].includes(key)) continue;
@@ -227,32 +223,40 @@ class EditProfileView {
             }
         }
 
-        console.log(JSON.parse(JSON.stringify(body)));
-
-        // if (!body['cover']) body['cover'] = '';
-        // if (!body['avatar']) body['avatar'] = '';
-
-        const fd = convertToFormData(body);
 
         try {
-            Ajax.post({
-                url: '/profile',
-                body: fd,
-                isFormData: true,
-                callback: (status: number) => {
-                    switch (status) {
-                        case 200:
-                            this.postCbOk(newUsername);
-                            break;
-                        case 401:
-                            this.cbUnauthorized();
-                            break;
-                        default:
-                            this.cbDefault();
-                            break;
-                    }
-                }
-            });
+            const status = await API.editProfile(body);
+            switch (status) {
+                case 200:
+                    this.postCbOk(newUsername);
+                    break;
+                case 401:
+                    this.cbUnauthorized();
+                    break;
+                default:
+                    this.cbDefault();
+                    break;
+            }
+
+            // const fd = convertToFormData(body);
+            // Ajax.post({
+            //     url: '/profile',
+            //     body: fd,
+            //     isFormData: true,
+            //     callback: (status: number) => {
+            //         switch (status) {
+            //             case 200:
+            //                 this.postCbOk(newUsername);
+            //                 break;
+            //             case 401:
+            //                 this.cbUnauthorized();
+            //                 break;
+            //             default:
+            //                 this.cbDefault();
+            //                 break;
+            //         }
+            //     }
+            // });
         } catch {
             this.cbDefault();
         }

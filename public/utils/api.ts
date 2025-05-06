@@ -3,6 +3,17 @@ import convertToFormData from '@utils/convertToFormData';
 
 
 export default class API {
+    static async editProfile(body: Record<string, any>): Promise<number> {
+        return new Promise((resolve) => {
+            ajax.post({
+                url: '/profile',
+                body: convertToFormData(body),
+                isFormData: true,
+                callback: (status: number) => resolve(status),
+            });
+        });
+    }
+
     static async searchUsers(string: string, count: number): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.get({
