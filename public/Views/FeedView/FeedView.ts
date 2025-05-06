@@ -2,7 +2,7 @@ import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutCompo
 import RadioMenuComponent from '@components/RadioMenuComponent/RadioMenuComponent';
 import FeedComponent from '@components/FeedComponent/FeedComponent';
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
-import { getLsItem, setLsItem } from '@utils/localStorage';
+import { getLsItem } from '@utils/localStorage';
 
 
 const HAS_CREATE_BUTTON = true;

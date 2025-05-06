@@ -8,6 +8,7 @@ import convertDate from '@utils/convertDate';
 import { getLsItem, removeLsItem, setLsItem } from '@utils/localStorage';
 import router from '@router';
 import API from '@utils/api';
+import { SEX } from '@config';
 
 
 const DEFAULT_INPUT_VALUE = '';
@@ -17,8 +18,6 @@ const PWD_TITLE = 'Придумайте пароль';
 const PWD_TEXT = 'Или используйте пароль,\nпредложенный устройством';
 const CONTINUE_BTN_TEXT = 'Продолжить';
 const PWD_INPUT_MAX_LENGTH = 32;
-const MALE_VALUE = 1;
-const FEMALE_VALUE = 2;
 
 
 export default class SignupFormComponent {
@@ -96,14 +95,6 @@ export default class SignupFormComponent {
             this.step = 1;
             this.render();
         });
-
-        // if (this.step === 2) {
-        //     createElement({
-        //         parent: topWrapper,
-        //         classes: ['auth-form__logo'],
-        //         attrs: {src: LOGO_SRC}
-        //     })
-        // }
 
         createElement({
             tag: 'h1',
@@ -307,7 +298,7 @@ export default class SignupFormComponent {
                 password: this.passwordInput?.value,
                 firstname: this.firstnameInput?.value,
                 lastname: this.lastnameInput?.value,
-                sex: this.sexInput?.value === 'male' ? MALE_VALUE : FEMALE_VALUE, 
+                sex: this.sexInput?.value === 'male' ? SEX.MALE : SEX.FEMALE, 
                 birth_date: convertDate(this.birthDateInput?.value ?? '', 'ts'),
             },
             callback: (status: number) => {
@@ -320,9 +311,6 @@ export default class SignupFormComponent {
                         if (status === 200) setLsItem('user_id', data.id);
                     })();
 
-                    // setLsItem(`is-general-feedback-given`, 'false');
-                    // setLsItem(`is-general-feedback-ready`, 'false');
-                    // setLsItem(`is-auth-feedback-given`, 'false');
                     router.go({ path: '/feed' });
                     return;
                 }

@@ -14,9 +14,7 @@ import convertDate from '@utils/convertDate';
 import router from '@router';
 import { forms } from './CommunityEditFormConfig';
 import API from '@utils/api';
-
-
-const AVATAR_MAX_RESOLUTION = 1680;
+import { FILE } from '@config';
 
 
 class CommunityEditView {
@@ -29,7 +27,7 @@ class CommunityEditView {
 
     constructor() {}
 
-    render(params: any, section: string = 'settings') {
+    render(params: Record<string, any>, section: string = 'settings') {
         this.params = params;
 
         this.containerObj = new MainLayoutComponent().render({
@@ -245,8 +243,8 @@ class CommunityEditView {
                 id: 'profile-avatar-upload',
                 name: 'avatar',
                 compress: true,
-                maxResolution: AVATAR_MAX_RESOLUTION,
-                maxSize: 5 * 1024 * 1024,
+                maxResolution: FILE.IMG_MAX_RES,
+                maxSize: FILE.MAX_SIZE_SINGLE * FILE.MB_MULTIPLIER,
             })
         );
     }

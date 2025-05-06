@@ -18,26 +18,19 @@ import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 
 import router from '@router';
 import { forms } from './EditProfileFormConfig';
-
-
-const AVATAR_MAX_RESOLUTION = 1680;
-const IMAGE_MAX_SIZE = 5;
-const MB_MULTIPLIER = 1024 * 1024;
+import { FILE } from '@config';
 
 
 class EditProfileView {
     private containerObj: MainLayoutComponent;
-    private section: string;
-    private userData: Record<string, any>;
+    private section: string | null = null;
+    private userData: Record<string, any> | null = null;
     private stateUpdaters: Array<any> = [];
     private submitButton: ButtonComponent;
 
-    constructor() {
-        this.userData = null;
-        this.section = null;
-    }
+    constructor() {}
 
-    render(params: any, section: string = 'profile') {
+    render(params: Record<string, any>, section: string = 'profile') {
         this.containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
@@ -179,7 +172,7 @@ class EditProfileView {
 
             if ((name === 'avatar' || name === 'cover') && stateUpdater.isLarge) {
                 return new PopUpComponent({
-                    text: `Размер файла не должен превышать ${IMAGE_MAX_SIZE}Мб`,
+                    text: `Размер файла не должен превышать ${FILE.MAX_SIZE_SINGLE}Мб`,
                     isError: true,
                 });
             }
@@ -322,8 +315,8 @@ class EditProfileView {
                 id: 'profile-avatar-upload',
                 name: 'avatar',
                 compress: true,
-                maxResolution: AVATAR_MAX_RESOLUTION,
-                maxSize: IMAGE_MAX_SIZE * MB_MULTIPLIER,
+                maxResolution: FILE.IMG_MAX_RES,
+                maxSize: FILE.MAX_SIZE_SINGLE * FILE.MB_MULTIPLIER,
             })
         );
     }

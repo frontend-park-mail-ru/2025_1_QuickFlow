@@ -33,19 +33,21 @@ const MENU_ITEMS = {
 
 
 export default class ProfileMenuComponent {
-    #parent;
-    #config;
+    private parent: HTMLElement;
+    private config: Record<string, any>;
+
     private menuItems: HTMLElement;
     wrapper: HTMLElement | null = null;
-    constructor(parent: any, config: any) {
-        this.#config = config;
-        this.#parent = parent;
+
+    constructor(parent: HTMLElement, config: Record<string, any>) {
+        this.config = config;
+        this.parent = parent;
         this.render();
     }
 
     render() {
         this.wrapper = createElement({
-            parent: this.#parent,
+            parent: this.parent,
             classes: ['profile-menu'],
         });
         
@@ -56,7 +58,7 @@ export default class ProfileMenuComponent {
 
         new AvatarComponent(topWrapper, {
             size: AVATAR_SIZE,
-            src: this.#config.userData.profile.avatar_url,
+            src: this.config.userData.profile.avatar_url,
         });
 
         const userData = createElement({
@@ -67,13 +69,13 @@ export default class ProfileMenuComponent {
         createElement({
             parent: userData,
             classes: ['profile-menu__name'],
-            text: `${this.#config.userData.profile.firstname} ${this.#config.userData.profile.lastname}`
+            text: `${this.config.userData.profile.firstname} ${this.config.userData.profile.lastname}`
         });
 
         createElement({
             parent: userData,
             classes: ['profile-menu__username'],
-            text: `${USERNAME_PREFIX}${this.#config.userData.profile.username}`
+            text: `${USERNAME_PREFIX}${this.config.userData.profile.username}`
         });
 
         this.menuItems = createElement({

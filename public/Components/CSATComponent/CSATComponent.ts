@@ -2,10 +2,7 @@ import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import TextareaComponent from '@components/UI/TextareaComponent/TextareaComponent';
 import createElement from '@utils/createElement';
 import insertIcon from '@utils/insertIcon';
-import { setLsItem, getLsItem } from '@utils/localStorage';
-
-
-const DEFAULT_SRC = '/static/img/default-cover.jpg';
+import { setLsItem } from '@utils/localStorage';
 
 
 export default class CSATComponent {

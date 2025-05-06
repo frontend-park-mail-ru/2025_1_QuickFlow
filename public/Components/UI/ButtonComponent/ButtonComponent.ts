@@ -10,6 +10,7 @@ const DEFAULT_CLASSES = ['button'];
 export default class ButtonComponent {
     private parent: HTMLElement;
     private config: Record<string, any>;
+    
     buttonElement: HTMLButtonElement | null = null;
 
     constructor(parent: HTMLElement, config: Record<string, any>) {

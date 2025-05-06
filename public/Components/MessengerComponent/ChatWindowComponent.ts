@@ -10,7 +10,7 @@ import Ajax from '@modules/ajax';
 import router from '@router';
 import ChatsPanelComponent from './ChatsPanelComponent';
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
-import { MOBILE_MAX_WIDTH } from '@config';
+import { MOBILE_MAX_WIDTH, MSG } from '@config';
 
 
 const TEXTAREA_PLACEHOLDER = 'Напишите сообщение...';
@@ -18,7 +18,6 @@ const HEADER_AVATAR_SIZE = 'xs';
 const EMPTY_CHAT_WINDOW_TEXT = 'Выберите чат или создайте новый';
 const CHAT_DEFAULT_PADDING_BOTTOM = 16;
 const CHAT_MSG_PREFIX = 'chat-msg-';
-const MSG_MAX_LENGTH = 4000;
 
 const HEADER_CONTEXT_MENU_DATA = {
     disableNotify: {
@@ -318,7 +317,7 @@ export default class ChatWindowComponent {
             attrs: {
                 placeholder: TEXTAREA_PLACEHOLDER,
                 rows: 1,
-                maxLength: MSG_MAX_LENGTH,
+                maxLength: MSG.MAX_LEN,
             },
             text: value
         }) as HTMLTextAreaElement;

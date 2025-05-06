@@ -1,16 +1,12 @@
-import Ajax from '@modules/ajax';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import FeedComponent from '@components/FeedComponent/FeedComponent';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
 import ProfileInfoMwComponent from '@components/UI/ModalWindowComponent/ProfileInfoMwComponent';
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import createElement from '@utils/createElement';
-import { getLsItem } from '@utils/localStorage';
 import CoverComponent from '@components/CoverComponent/CoverComponent';
 import router from '@router';
 import { ACTIONS_PROPERTIES, INFO_ITEMS_LAYOUT } from './CommunityConfig';
-import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
-import ProfileMenuComponent from '@components/ProfileMenuComponent/ProfileMenuComponent';
 import insertIcon from '@utils/insertIcon';
 import { MOBILE_MAX_WIDTH } from '@config';
 import API from '@utils/api';
@@ -25,7 +21,7 @@ class CommunityView {
 
     constructor() {}
 
-    render(params: any) {
+    render(params: Record<string, any>) {
         this.containerObj = new MainLayoutComponent().render({
             type: 'profile',
         });

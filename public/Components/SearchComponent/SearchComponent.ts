@@ -1,4 +1,3 @@
-import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
 import InputComponent from '@components/UI/InputComponent/InputComponent';
 import createElement from '@utils/createElement';
 
@@ -12,7 +11,7 @@ export default class SearchComponent {
     private config: Record<string, any>;
     private search: HTMLElement | null = null;
 
-    constructor(parent: any, config: Record<string, any>) {
+    constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
         this.config = config;
         this.render();

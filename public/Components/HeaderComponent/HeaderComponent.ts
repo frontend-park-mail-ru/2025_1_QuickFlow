@@ -1,16 +1,10 @@
 import Ajax from '@modules/ajax';
-import InputComponent from '@components/UI/InputComponent/InputComponent';
 import ProfileMenuComponent from '@components/ProfileMenuComponent/ProfileMenuComponent';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
-import router from '@router';
 import createElement from '@utils/createElement';
 import { getLsItem } from '@utils/localStorage';
 import SearchComponent from '@components/SearchComponent/SearchComponent';
 import API from '@utils/api';
-
-
-const DEBOUNCE_DELAY = 500;
-const REQUEST_USERS_COUNT = 10;
 
 
 export default class HeaderComponent {

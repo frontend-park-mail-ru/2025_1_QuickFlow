@@ -3,7 +3,7 @@ import CreateCommunityFormComponent from '@components/CreateCommunityFormCompone
 
 
 export default class CreateCommunityMwComponent extends ModalWindowComponent {
-    constructor(parent: any, config: any) {
+    constructor(parent: HTMLElement, config: Record<string, any>) {
         super(parent, config);
         this.render();
     }

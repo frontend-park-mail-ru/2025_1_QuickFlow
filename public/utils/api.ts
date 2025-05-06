@@ -1,5 +1,5 @@
 import ajax from '@modules/ajax';
-import convertToFormData from './convertToFormData';
+import convertToFormData from '@utils/convertToFormData';
 
 
 export default class API {

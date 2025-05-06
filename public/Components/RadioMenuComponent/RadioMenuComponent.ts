@@ -11,7 +11,6 @@ export default class RadioMenuComponent {
     constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
         this.config = config;
-
         this.render();
     }
 

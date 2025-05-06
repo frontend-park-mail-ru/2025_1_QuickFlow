@@ -4,7 +4,7 @@ import PostMwComponent from '@components/UI/ModalWindowComponent/PostMwComponent
 import createElement from '@utils/createElement';
 import router from '@router';
 import insertIcon from '@utils/insertIcon';
-import { setLsItem, getLsItem } from '@utils/localStorage'
+import { getLsItem } from '@utils/localStorage'
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 
 
@@ -83,22 +83,20 @@ export default class FeedComponent {
             tag: 'button',
             classes: ['button_feed']
         });
+
         insertIcon(createPostBtn, {
             name: 'add-icon',
             classes: ['button_feed__icon']
         });
-        // createElement({
-        //     parent: createPostBtn,
-        //     tag: 'div',
-        //     classes: ['button_feed__icon']
-        // });
+        
         createElement({
             parent: createPostBtn,
             text: 'Создать пост',
         });
+
         createPostBtn.addEventListener('click', () => {
             console.log(this.config.params);
-            new PostMwComponent(this.parent.parentNode, {
+            new PostMwComponent(this.parent.parentNode as HTMLElement, {
                 type: 'create-post',
                 target: this.config?.params?.author_id ? 'community' : '',
                 params: this.config.params,

@@ -3,7 +3,6 @@ import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutCompo
 import router from '@router';
 import API from '@utils/api';
 import createElement from '@utils/createElement';
-import { getLsItem } from '@utils/localStorage';
 
 
 class LoginView {

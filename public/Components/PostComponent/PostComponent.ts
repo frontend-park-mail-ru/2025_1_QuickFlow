@@ -1,7 +1,7 @@
-import ContextMenuComponent from '../ContextMenuComponent/ContextMenuComponent'
-import AvatarComponent from '../AvatarComponent/AvatarComponent';
-import PostMwComponent from '../UI/ModalWindowComponent/PostMwComponent';
-import DeleteMwComponent from '../UI/ModalWindowComponent/DeleteMwComponent';
+import ContextMenuComponent from '@components/ContextMenuComponent/ContextMenuComponent'
+import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
+import PostMwComponent from '@components/UI/ModalWindowComponent/PostMwComponent';
+import DeleteMwComponent from '@components/UI/ModalWindowComponent/DeleteMwComponent';
 import getTimeDifference from '@utils/getTimeDifference';
 import createElement from '@utils/createElement';
 import { getLsItem } from '@utils/localStorage';
@@ -559,7 +559,7 @@ export default class PostComponent {
                 text: 'Редактировать',
                 icon: 'pencil-primary-icon',
                 onClick: () => {
-                    new PostMwComponent(this.parent.parentNode, {
+                    new PostMwComponent(this.parent.parentNode as HTMLElement, {
                         type: 'edit-post',
                         data: this.config,
                         onAjaxEditPost: (config: any) => this.onAjaxEditPost(config),
@@ -572,7 +572,7 @@ export default class PostComponent {
                 icon: 'trash-accent-icon',
                 isCritical: true,
                 onClick: () => {
-                    new DeleteMwComponent(this.parent.parentNode, {
+                    new DeleteMwComponent(this.parent.parentNode as HTMLElement, {
                         data: {
                             title: 'Вы уверены, что хотите удалить этот пост?',
                             text: 'Пост будет удалён навсегда, это действие нельзя будет отменить',

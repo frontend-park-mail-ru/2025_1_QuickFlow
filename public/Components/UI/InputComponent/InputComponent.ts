@@ -24,7 +24,7 @@ export default class InputComponent {
     wrapper: HTMLElement | null = null;
     innnerWrapper: HTMLElement | null = null;
 
-    constructor(parent: any, config: any) {
+    constructor(parent: HTMLElement, config: Record<string, any>) {
         this._config = config;
         this.parent = parent;
         this.render();

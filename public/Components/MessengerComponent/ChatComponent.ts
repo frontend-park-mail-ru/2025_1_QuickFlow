@@ -13,7 +13,6 @@ const EMPTY_STATE_BTN_SIZE = 'small';
 const EMPTY_STATE_BTN_VARIANT = 'secondary';
 const EMPTY_STATE_CALL_TO_ACTION_TEXT = 'Напишите или отправьте стикер';
 const OPEN_PROFILE_BTN_TEXT = 'Открыть профиль';
-// const ADD_TO_FRIENDS_BTN_TEXT = 'Заявка отправлена';
 
 
 export default class ChatComponent {

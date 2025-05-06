@@ -1,10 +1,10 @@
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
+import { FILE } from '@config';
 import createElement from '@utils/createElement';
 
 
 const DEFAULT_SRC = '/static/img/default-cover.jpg';
-const COVER_MAX_RESOLUTION = 1680;
 
 
 export default class CoverComponent {
@@ -58,8 +58,8 @@ export default class CoverComponent {
             id: 'profile-cover-upload',
             name: 'cover',
             compress: true,
-            maxResolution: COVER_MAX_RESOLUTION,
-            maxSize: 5 * 1024 * 1024,
+            maxResolution: FILE.IMG_MAX_RES,
+            maxSize: FILE.MAX_SIZE_SINGLE * FILE.MB_MULTIPLIER,
         })
     }
 }

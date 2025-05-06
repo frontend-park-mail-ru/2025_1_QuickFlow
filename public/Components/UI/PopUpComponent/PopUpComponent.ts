@@ -14,6 +14,7 @@ export default class PopUpComponent {
         size?: string;
         isError?: boolean;
     };
+    
     private popup: HTMLElement;
     private hideTimeout: number | null = null;
     private hover: boolean = false;

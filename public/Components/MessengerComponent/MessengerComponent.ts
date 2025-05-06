@@ -7,30 +7,30 @@ import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutCompo
 
 
 export default class MessengerComponent {
-    #parent
-    #config
-    constructor(parent: MainLayoutComponent, config: Record<string, any>) {
-        this.#parent = parent;
-        this.#config = config;
+    private parent: MainLayoutComponent;
+    private config: Record<string, any>;
 
+    constructor(parent: MainLayoutComponent, config: Record<string, any>) {
+        this.parent = parent;
+        this.config = config;
         this.render();
     }
 
     render() {
         const messengerWrapper = createElement({
-            parent: this.#parent.container,
+            parent: this.parent.container,
             classes: ['messenger'],
         });
         
         const chatsPanel = new ChatsPanelComponent(messengerWrapper, {
-            user: this.#config.user,
+            user: this.config.user,
             messenger: this,
-            chat_id: this.#config?.chat_id,
+            chat_id: this.config?.chat_id,
         });
         const chatWindow = new ChatWindowComponent(messengerWrapper, {
-            user: this.#config.user,
-            receiver_username: this.#config?.receiver_username,
-            chat_id: this.#config?.chat_id,
+            user: this.config.user,
+            receiver_username: this.config?.receiver_username,
+            chat_id: this.config?.chat_id,
             messenger: this
         });
 

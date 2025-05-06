@@ -9,7 +9,7 @@ export default class ModalWindowComponent {
     protected modalWindow: HTMLElement | null = null;
     protected title: HTMLElement | null = null;
     
-    constructor(parent: any, config: any) {
+    constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
         this.config = config;
     }

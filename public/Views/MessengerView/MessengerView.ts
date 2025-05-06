@@ -8,7 +8,7 @@ import router from '@router';
 class MessengerView {
     constructor() {}
 
-    render(params) {
+    render(params: Record<string, any>) {
         const containerObj = new MainLayoutComponent().render({
             type: 'messenger',
         });

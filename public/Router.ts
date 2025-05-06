@@ -1,6 +1,7 @@
 import MenuComponent from "@components/MenuComponent/MenuComponent";
 import HeaderComponent from "@components/HeaderComponent/HeaderComponent";
 
+
 const DEFAULT_PATH = '/feed';
 const NOT_FOUND_PATH = '/not-found';
 const AUTH_PATHS = [
@@ -11,34 +12,31 @@ const AUTH_PATHS = [
 
 
 class Router {
-    #routes: Record<string, any> = {};
-    #menu: MenuComponent | null = null;
-    #header: HeaderComponent | null = null;
-    static __instance: any = null;
-    constructor() {
-        if (Router.__instance) return Router.__instance;
-        Router.__instance = this;
-    }
+    private routes: Record<string, any> = {};
+    private _menu: MenuComponent | null = null;
+    private _header: HeaderComponent | null = null;
+
+    constructor() {}
 
     set menu(menu: MenuComponent) {
-        this.#menu = menu;
+        this._menu = menu;
     }
 
     set header(header: HeaderComponent) {
-        this.#header = header;
+        this._header = header;
     }
 
     get menu(): any {
-        return this.#menu;
+        return this._menu;
     }
 
     get header(): any {
-        return this.#header;
+        return this._header;
     }
 
     register(view: any, config: any) {
         const { path, section }: Record<string, string> = config;
-        this.#routes[path] = {
+        this.routes[path] = {
             view,
             path,
             section: section === null ? null : (section || path).slice(1),
@@ -49,7 +47,7 @@ class Router {
         const [pathname] = path.split('?');
         const pathSegments = pathname.split('/').filter(Boolean);
 
-        for (const route in this.#routes) {
+        for (const route in this.routes) {
             const routeSegments = route.split('/').filter(Boolean);
             if (pathSegments.length !== routeSegments.length) continue;
 
@@ -70,7 +68,7 @@ class Router {
             }
 
             if (matched) {
-                const { view, section } = this.#routes[route];
+                const { view, section } = this.routes[route];
                 return { view, params, section };
             }
         }
@@ -87,7 +85,7 @@ class Router {
         // const pathWithoutQuery = data.path.split('?')[0];
 
         if (AUTH_PATHS.includes(this.path)) { // TODO
-            this.#header?.renderAvatarMenu();
+            this._header?.renderAvatarMenu();
         }
  
         if (data.path === '/') data.path = DEFAULT_PATH;
@@ -146,8 +144,8 @@ class Router {
         const { view, params: routeParams, section } = matchResult;
         const queryParams = queryString ? this.#parseQueryParams(queryString) : {};
 
-        if (section && this.#menu) {
-            this.#menu.setActive(section);
+        if (section && this._menu) {
+            this._menu.setActive(section);
         }
 
         view.render({ ...routeParams, ...queryParams });

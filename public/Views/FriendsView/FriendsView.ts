@@ -5,7 +5,6 @@ import API from '@utils/api';
 import FriendComponent from '@components/FriendComponent/FriendComponent';
 import { getLsItem } from '@utils/localStorage';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
-import InputComponent from '@components/UI/InputComponent/InputComponent';
 import SearchComponent from '@components/SearchComponent/SearchComponent';
 
 

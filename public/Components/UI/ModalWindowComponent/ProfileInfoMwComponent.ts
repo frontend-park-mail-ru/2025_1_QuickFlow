@@ -2,7 +2,6 @@ import createElement from '@utils/createElement';
 import convertDate from '@utils/convertDate';
 import { INFO_ITEMS_LAYOUT } from '@views/ProfileView/ProfileActionsConfig';
 import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
-import API from '@utils/api';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
 
 
@@ -28,20 +27,11 @@ const COMMUNITY_INFO_ITEMS_LAYOUT = {
     univ_name: {icon: "diploma"},
     faculty: {icon: "diploma"},
     grad_year: {icon: "diploma"},
-
-    // friends: {text: 'друзей'},
-    // subscribers: {text: 'подписчиков'},
-    // subscribes: {text: 'подписок'},
-
-    // more: {
-    //     icon: 'info',
-    //     text: 'Подробнее',
-    // }
 };
 
 
 export default class ProfileInfoMwComponent extends ModalWindowComponent {
-    constructor(parent: any, config: any) {
+    constructor(parent: HTMLElement, config: Record<string, any>) {
         super(parent, config);
         this.render();
     }

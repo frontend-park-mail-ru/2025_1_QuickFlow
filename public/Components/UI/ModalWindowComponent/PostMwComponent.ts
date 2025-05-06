@@ -1,4 +1,4 @@
-import ButtonComponent from '../ButtonComponent/ButtonComponent';
+import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import TextareaComponent from '@components/UI/TextareaComponent/TextareaComponent';
 import createElement from '@utils/createElement';
 import insertIcon from '@utils/insertIcon';
@@ -6,20 +6,14 @@ import Ajax from '@modules/ajax';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
 import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
-
-
-const POST_TEXT_MAX_LENGTH = 4000;
-const PICS_MAX_COUNT = 10;
-const PIC_MAX_RESOLUTION = 1680;
-const TOTAL_MAX_SIZE = 10;
-const MB_MULTIPLIER = 1024 * 1024;
+import { FILE, POST } from '@config';
 
 
 export default class PostMwComponent extends ModalWindowComponent {
     fileInput: FileInputComponent | null = null;
     button: ButtonComponent;
 
-    constructor(parent: any, config: any) {
+    constructor(parent: HTMLElement, config: Record<string, any>) {
         super(parent, config);
         this.render();
     }
@@ -74,10 +68,10 @@ export default class PostMwComponent extends ModalWindowComponent {
             onUpload: () => this.handlePicUpload(scrollWrapper),
             multiple: true,
             required: true,
-            maxCount: PICS_MAX_COUNT,
+            maxCount: POST.IMG_MAX_COUNT,
             compress: true,
-            maxResolution: PIC_MAX_RESOLUTION,
-            maxSize: TOTAL_MAX_SIZE * MB_MULTIPLIER,
+            maxResolution: FILE.IMG_MAX_RES,
+            maxSize: FILE.MAX_SIZE_TOTAL * FILE.MB_MULTIPLIER,
         };
         
         if (hasPics) {
@@ -87,9 +81,9 @@ export default class PostMwComponent extends ModalWindowComponent {
         this.fileInput = new FileInputComponent(scrollWrapper, fileInputConfig);
         this.fileInput.addListener(() => {
             const filesCount = this.fileInput?.getFiles().length || 0;
-            addPicWrapper.style.display = filesCount >= PICS_MAX_COUNT ? 'none' : 'flex';
+            addPicWrapper.style.display = filesCount >= POST.IMG_MAX_COUNT ? 'none' : 'flex';
         });
-        if (this.config?.data?.pics?.length >= PICS_MAX_COUNT) {
+        if (this.config?.data?.pics?.length >= POST.IMG_MAX_COUNT) {
             addPicWrapper.style.display = 'none';
         }
 
@@ -190,7 +184,7 @@ export default class PostMwComponent extends ModalWindowComponent {
             placeholder: 'Поделитесь своими мыслями',
             value: this.config?.data?.text || '',
             showCharactersLeft: true,
-            maxLength: POST_TEXT_MAX_LENGTH,
+            maxLength: POST.MAX_LEN,
             required: true,
         });
 
@@ -249,7 +243,7 @@ export default class PostMwComponent extends ModalWindowComponent {
 
         if (this.fileInput.isLarge) {
             return new PopUpComponent({
-                text: `Размер фотографий суммарно не должен превышать ${TOTAL_MAX_SIZE}Мб`,
+                text: `Размер фотографий суммарно не должен превышать ${FILE.MAX_SIZE_TOTAL}Мб`,
                 isError: true,
             });
         }

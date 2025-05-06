@@ -1,10 +1,9 @@
-import Ajax from '@modules/ajax';
 import InputComponent from '@components/UI/InputComponent/InputComponent';
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import createElement from '@utils/createElement';
 import focusInput from '@utils/focusInput';
 import router from '@router';
-import { setLsItem, getLsItem, removeLsItem } from '@utils/localStorage';
+import { setLsItem, getLsItem } from '@utils/localStorage';
 import API from '@utils/api';
 
 

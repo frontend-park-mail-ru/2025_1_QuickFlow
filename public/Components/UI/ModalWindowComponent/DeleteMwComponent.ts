@@ -1,10 +1,10 @@
-import ButtonComponent from '../ButtonComponent/ButtonComponent';
+import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import createElement from '@utils/createElement';
 import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
 
 
 export default class DeleteMwComponent extends ModalWindowComponent {
-    constructor(parent: any, config: any) {
+    constructor(parent: HTMLElement, config: Record<string, any>) {
         super(parent, config);
         this.render();
     }

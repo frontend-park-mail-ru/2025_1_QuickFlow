@@ -8,30 +8,31 @@ const DEFAULT_SIZE = 'default';
 
 
 export default class ContextMenuComponent {
-    #parent
-    #config
-    wrapper: HTMLElement | any;
-    constructor(parent: any, config: any) {
-        this.#parent = parent;
-        this.#config = config;
+    private parent: HTMLElement;
+    private config: Record<string, any>;
 
+    wrapper: HTMLElement | any;
+
+    constructor(parent: HTMLElement, config: Record<string, any>) {
+        this.parent = parent;
+        this.config = config;
         this.render();
     }
 
     render() {
-        if (Object.keys(this.#config.data).length === 0) return;
+        if (Object.keys(this.config.data).length === 0) return;
 
         this.wrapper = createElement({
-            parent: this.#parent,
+            parent: this.parent,
             classes: [
                 'context-menu',
-                `context-menu_${this.#config.size || DEFAULT_SIZE}`,
-                this.#config.classes,
-                `context-menu_${this.#config.position || DEFAULT_POSITION}`
+                `context-menu_${this.config.size || DEFAULT_SIZE}`,
+                this.config.classes,
+                `context-menu_${this.config.position || DEFAULT_POSITION}`
             ]
         });
 
-        Object.entries(this.#config.data).forEach(([, option]: [string, any]) => {
+        Object.entries(this.config.data).forEach(([, option]: [string, any]) => {
             const { href, text, icon, isCritical, onClick } = option;
 
             const menuOption = createElement({
