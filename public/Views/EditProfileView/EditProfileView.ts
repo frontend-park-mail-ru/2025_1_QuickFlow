@@ -198,11 +198,11 @@ class EditProfileView {
                     //     return;
                     // }
                     // body.profile[name] = value;
-                    body.profile[name] = value instanceof File ?
-                        value :
+                    value instanceof File ?
+                        body[name] = value :
                         value instanceof FileList ?
-                            '' :
-                            value;
+                            body[name] = '' :
+                            body.profile[name] = value;
                 },
                 contacts: () => {
                     body.contact_info ??= {};
