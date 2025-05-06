@@ -5,20 +5,28 @@ class WebSocketService {
     baseUrl: string;
     socket: any = null;
     subscribers: any = {};
-    constructor(path = '/api/ws') {
-        this.baseUrl = this.#detectWebSocketUrl(path);
 
-        this.#connect();
+    static _instance: WebSocketService;
+    
+    constructor(path = '/api/ws') {
+        if (WebSocketService._instance) {
+            return;
+        }
+
+        this.baseUrl = this.detectWebSocketUrl(path);
+        this.connect();
+
+        WebSocketService._instance = this;
     }
 
-    #detectWebSocketUrl(path: string) {
+    private detectWebSocketUrl(path: string) {
         const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
         const protocol = isLocalhost ? 'ws://' : 'wss://';
         const host = isLocalhost ? window.location.host : "quickflowapp.ru";
         return `${protocol}${host}${path}`;
     }
 
-    #connect() {
+    private connect() {
         this.socket = new WebSocket(this.baseUrl);
 
         this.socket.addEventListener('open', () => {});
@@ -26,7 +34,7 @@ class WebSocketService {
         this.socket.addEventListener('message', (event: any) => {
             try {
                 const { type, payload } = JSON.parse(event.data);
-                this.#notifySubscribers(type, payload);
+                this.notifySubscribers(type, payload);
             } catch (error) {
                 console.error('[WebSocket] Failed to parse message:', event.data);
             }
@@ -34,7 +42,7 @@ class WebSocketService {
 
         this.socket.addEventListener('close', () => {
             console.warn('[WebSocket] Connection closed. Reconnecting...');
-            setTimeout(() => this.#connect(), RECONNECTION_TIMEOUT);
+            setTimeout(() => this.connect(), RECONNECTION_TIMEOUT);
         });
 
         this.socket.addEventListener('error', (error: any) => {
@@ -42,12 +50,12 @@ class WebSocketService {
         });
     }
 
-    #notifySubscribers(type: any, payload: any) {
+    private notifySubscribers(type: string, payload: Record<string, any>) {
         const callbacks = this.subscribers[type] || [];
         callbacks.forEach((callback: any) => callback(payload));
     }
 
-    send(type: any, payload = {}) {
+    send(type: string, payload: Record<string, any> = {}) {
         const message = JSON.stringify({ type, payload });
         if (this.socket.readyState === WebSocket.OPEN) {
             this.socket.send(message);
@@ -57,14 +65,14 @@ class WebSocketService {
         }
     }
 
-    subscribe(type: any, callback: any) {
+    subscribe(type: string, callback: any) {
         if (!this.subscribers[type]) {
             this.subscribers[type] = [];
         }
         this.subscribers[type].push(callback);
     }
 
-    unsubscribe(type: any, callback: any) {
+    unsubscribe(type: string, callback: any) {
         if (!this.subscribers[type]) return;
         this.subscribers[type] = this.subscribers[type].filter((cb: any) => cb !== callback);
     }
