@@ -7,23 +7,28 @@
     "theme_color": "#fff",
     "icons": [
         {
-            "src": "public/favicon.svg",
-            "sizes": "24x24",
-            "type": "image/svg"
-        },
-        {
-            "src": "public/favicon.svg",
+            "src": "public/icons/icon-128x128.svg",
             "sizes": "128x128",
             "type": "image/svg"
         },
         {
-            "src": "public/favicon.svg",
+            "src": "public/icons/icon-144x144.svg",
             "sizes": "144x144",
             "type": "image/svg"
         },
         {
-            "src": "public/favicon.svg",
+            "src": "public/icons/icon-152x152.svg",
+            "sizes": "152x152",
+            "type": "image/svg"
+        },
+        {
+            "src": "public/icons/icon-192x192.svg",
             "sizes": "192x192",
+            "type": "image/svg"
+        },
+        {
+            "src": "public/icons/icon-512x512.svg",
+            "sizes": "512x512",
             "type": "image/svg"
         }
     ]
