@@ -383,7 +383,7 @@ export default class ChatWindowComponent {
         this.messageInput.style.height = this.messageInput.scrollHeight + 'px';
     
         const parent = this.chatElement.parentNode as HTMLElement;
-        const scrollThreshold = 100; // если до конца меньше 50px, считаем "внизу"
+        const scrollThreshold = this.chat.scroll.scrollHeight + 10; // если до конца меньше 50px, считаем "внизу"
     
         // обновляем паддинг у блока сообщений
         const newPadding = bottomWrapper.clientHeight - 62 + CHAT_DEFAULT_PADDING_BOTTOM;
