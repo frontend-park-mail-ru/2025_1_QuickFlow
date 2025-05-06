@@ -11,6 +11,8 @@ import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 const POST_TEXT_MAX_LENGTH = 4000;
 const PICS_MAX_COUNT = 10;
 const PIC_MAX_RESOLUTION = 1680;
+const TOTAL_MAX_SIZE = 10;
+const MB_MULTIPLIER = 1024 * 1024;
 
 
 export default class PostMwComponent extends ModalWindowComponent {
@@ -75,7 +77,7 @@ export default class PostMwComponent extends ModalWindowComponent {
             maxCount: PICS_MAX_COUNT,
             compress: true,
             maxResolution: PIC_MAX_RESOLUTION,
-            maxSize: 10 * 1024 * 1024,
+            maxSize: TOTAL_MAX_SIZE * MB_MULTIPLIER,
         };
         
         if (hasPics) {
@@ -244,6 +246,13 @@ export default class PostMwComponent extends ModalWindowComponent {
                 !this.fileInput.input.files.length
             )
         ) return;
+
+        if (this.fileInput.isLarge) {
+            return new PopUpComponent({
+                text: `Размер фотографий суммарно не должен превышать ${TOTAL_MAX_SIZE}Мб`,
+                isError: true,
+            });
+        }
 
         const formData = new FormData();
         formData.append('text', text);
