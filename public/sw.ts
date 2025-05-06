@@ -1,4 +1,5 @@
-const VERSION = '1.0.5'; // Версия для управления кэшами
+const VERSION = '1.0.6'; // Версия для управления кэшами
+
 const STATIC_CACHE = 'STATIC_CACHE-' + VERSION;
 const MEDIA_CACHE = 'MEDIA_CACHE-' + VERSION;
 const API_CACHE = 'API_CACHE-' + VERSION;
@@ -24,14 +25,13 @@ const CACHE_ON_INSTALL = [
 self.addEventListener('install', (event) => {
     console.log('Installing Service Worker', VERSION);
 
-    // event.waitUntil(
-    //     caches.open(STATIC_CACHE).then((cache) => {
-    //         return cache.addAll(CACHE_ON_INSTALL);
-    //     })
-    // );
+    event.waitUntil(
+        caches.open(STATIC_CACHE).then((cache) => {
+            return cache.addAll(CACHE_ON_INSTALL);
+        })
+    );
 
     (self as unknown as ServiceWorkerGlobalScope).skipWaiting();
-    console.log('skipped');
 });
 
 self.addEventListener('activate', (event) => {
