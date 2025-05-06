@@ -180,17 +180,6 @@ class EditProfileView {
             const sections = {
                 profile: () => {
                     body.profile ??= {};
-                    // if (name === 'avatar' || name === 'cover') {
-                    //     if (stateUpdater.isLarge) {
-                    //         new PopUpComponent({
-                    //             text: `Размер файла не должен превышать ${IMAGE_MAX_SIZE}Мб`,
-                    //             isError: true,
-                    //         });
-                    //     }
-                    //     body[name] = value instanceof File ? value : '';
-                    //     return;
-                    // }
-                    // body.profile[name] = value;
                     value instanceof File ?
                         body[name] = value :
                         value instanceof FileList ?
@@ -207,8 +196,11 @@ class EditProfileView {
                     body[key][name] = name === 'grad_year' ? Number(value) : value;
                 }
             };
+
             sections[this.section]?.();
         }
+
+        console.log(body);
 
         const newUsername = body?.profile?.username;
 
@@ -220,10 +212,11 @@ class EditProfileView {
         if (body.school) body.school = JSON.stringify(body.school);
         if (body.university) body.university = JSON.stringify(body.university);
 
+        console.log(body);
+        console.log(this.userData);
+
         for (const key in this.userData) {
-            if (
-                ['chat_id', 'relation', 'online', 'id'].includes(key)
-            ) break;
+            if (!['profile', 'school', 'university', 'contact_info'].includes(key)) break;
 
             if (!body[key] || body[key].length === 0) {
                 if (typeof this.userData[key] === 'object') {
@@ -234,8 +227,12 @@ class EditProfileView {
             }
         }
 
+        console.log(body);
+
         if (!body['cover']) body['cover'] = '';
         if (!body['avatar']) body['avatar'] = '';
+
+        console.log(body);
 
         const fd = convertToFormData(body);
 
