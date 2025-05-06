@@ -7,3 +7,10 @@
     right: 64px;
     z-index: 1;
 }
+
+@media screen and (max-width: 480px) {
+    .iframe {
+        bottom: 96px;
+        right: calc(50% - 148px);
+    }
+}

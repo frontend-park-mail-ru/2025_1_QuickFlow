@@ -200,7 +200,7 @@ class EditProfileView {
             sections[this.section]?.();
         }
 
-        console.log(body);
+        console.log(JSON.parse(JSON.stringify(body)));
 
         const newUsername = body?.profile?.username;
 
@@ -212,7 +212,7 @@ class EditProfileView {
         if (body.school) body.school = JSON.stringify(body.school);
         if (body.university) body.university = JSON.stringify(body.university);
 
-        console.log(body);
+        console.log(JSON.parse(JSON.stringify(body)));
         console.log(this.userData);
 
         for (const key in this.userData) {
@@ -227,12 +227,10 @@ class EditProfileView {
             }
         }
 
-        console.log(body);
+        console.log(JSON.parse(JSON.stringify(body)));
 
         if (!body['cover']) body['cover'] = '';
         if (!body['avatar']) body['avatar'] = '';
-
-        console.log(body);
 
         const fd = convertToFormData(body);
 
