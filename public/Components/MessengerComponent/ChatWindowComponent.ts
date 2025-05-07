@@ -140,6 +140,10 @@ export default class ChatWindowComponent {
             if (!this._chatData?.id && this._chatData?.receiver_id) {
                 setLsItem('active-chat', `chat-${payload.chat_id}`);
                 this._chatsPanel?.renderChatList(true);
+
+                console.log('firstMsgSent');
+                var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `chat_id=${this.msgsData.messages[0].chat_id}`;
+                window.history.pushState({path: newurl}, '', newurl);
             } else {
                 if (`chat-${payload.chat_id}` === getLsItem('active-chat', null)) {
                     this.msgsData?.messages?.push(payload);
