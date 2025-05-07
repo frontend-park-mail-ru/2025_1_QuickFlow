@@ -82,11 +82,13 @@ class Router {
     }
 
     go(data: any) {
-        // const pathWithoutQuery = data.path.split('?')[0];
-
-        if (AUTH_PATHS.includes(this.path)) { // TODO
+        if (AUTH_PATHS.includes(this.path)) {
             this._header?.renderAvatarMenu();
         }
+
+        // if (AUTH_PATHS.includes(data.path)) {
+        //     this.historyPush(data.path);
+        // }
  
         if (data.path === '/') data.path = DEFAULT_PATH;
         if (data.path !== NOT_FOUND_PATH) this.historyPush(data.path);

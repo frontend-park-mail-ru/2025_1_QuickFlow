@@ -50,10 +50,10 @@ class EditProfileView {
                     onClick: () => this.renderSection('education')
                 },
             },
-            active: section,
+            active: params?.section || section,
         });
 
-        this.renderSection(section);
+        // this.renderSection(section);
     }
 
     renderSection(sectionName: string) {

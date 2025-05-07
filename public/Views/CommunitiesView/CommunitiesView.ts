@@ -24,7 +24,7 @@ class CommunitiesView {
 
     constructor() {}
 
-    render() {
+    render(params: Record<string, any>) {
         this.containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
@@ -77,10 +77,9 @@ class CommunitiesView {
                     title: 'Управляемые',
                     onClick: () => this.renderSection(Section.Managed),
                 },
-            }
+            },
+            active: params?.section || 'communities',
         });
-
-        this.renderSection(Section.Communities);
 
         return this.containerObj.container;
     }

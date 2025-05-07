@@ -31,7 +31,7 @@ class CommunityEditView {
 
     constructor() {}
 
-    async render(params: Record<string, any>, section: string = 'settings') {
+    async render(params: Record<string, any>) {
         this.params = params;
 
         this.containerObj = new MainLayoutComponent().render({
@@ -39,6 +39,7 @@ class CommunityEditView {
         });
 
         const [status, communityData] = await API.getCommunity(this.params.address);
+
         switch (status) {
             case 200:
                 this.communityData = communityData;
@@ -53,32 +54,30 @@ class CommunityEditView {
             items: {
                 settings: {
                     title: 'Настройка',
-                    onClick: () => this.renderSection('settings')
+                    onClick: () => this.renderFormSection('settings')
                 },
                 contacts: {
                     title: 'Контакты',
-                    onClick: () => this.renderSection('contacts')
+                    onClick: () => this.renderFormSection('contacts')
                 },
                 members: {
                     title: 'Подписчики',
-                    onClick: () => this.renderSection('members')
-                    // onClick: () => this.renderMembers(),
+                    onClick: () => this.renderMembersSection(),
                 },
                 managers: {
                     title: 'Управляющие',
-                    onClick: () => this.renderSection('managers')
+                    onClick: () => this.renderFormSection('managers')
                 },
                 deletion: {
                     title: 'Удаление сообщества',
-                    onClick: () => this.renderDeleteCommunity(),
+                    onClick: () => this.renderDeletionSection(),
                 },
             },
-        active: section,
-    });
-        this.renderSection(section);
+            active: this.params?.section,
+        });
     }
 
-    private async renderDeleteCommunity() {
+    private async renderDeletionSection() {
         this.containerObj.left.innerHTML = '';
 
         createElement({
@@ -113,6 +112,8 @@ class CommunityEditView {
                                     text: 'Сообщество было удалено',
                                 })
                                 break;
+                            case 401:
+                                return router.go({ path: '/login' });
                             default:
                                 new PopUpComponent({
                                     isError: true,
@@ -129,7 +130,9 @@ class CommunityEditView {
 
 
 
-    private renderMembers() {
+    private renderMembersSection() {
+        this.containerObj.left.innerHTML = '';
+
         const results = createElement({
             parent: this.containerObj.left,
             classes: [
@@ -144,20 +147,56 @@ class CommunityEditView {
             classes: ['communities'],
         });
 
-        new SearchComponent(this.containerObj.left, {
-            placeholder: 'Введите запрос',
-            classes: ['search_wide'],
-            inputClasses: [
-                'input_wide',
-                'input_search-small',
-                'communities__search',
-            ],
-            results,
-            searchResults: API.searchCommunities,
-            renderTitle: this.renderTitle,
-            renderEmptyState: this.renderEmptyState,
-            renderResult: this.renderCommunity,
-            elementToHide: members,
+        // new SearchComponent(this.containerObj.left, {
+        //     placeholder: 'Введите запрос',
+        //     classes: ['search_wide'],
+        //     inputClasses: [
+        //         'input_wide',
+        //         'input_search-small',
+        //         'communities__search',
+        //     ],
+        //     results,
+        //     searchResults: API.searchFriends,
+        //     renderTitle: this.renderTitle,
+        //     renderEmptyState: this.renderEmptyState,
+        //     renderResult: this.renderMember,
+        //     elementToHide: members,
+        // });
+
+        this.renderMembersList(members);
+    }
+
+    async renderMembersList(parent: HTMLElement) {
+        const [status, membersData] = await API.getCommunityMembers(this.communityData?.payload?.id, 100);
+
+        switch (status) {
+            case 401:
+                return router.go({ path: '/login' });
+        }
+
+        if (!membersData?.payload || !membersData?.payload?.length) {
+            return new EmptyStateComponent(parent, {
+                icon: 'friends-icon',
+                text: 'На сообщество пока никто не подписан',
+            });
+        }
+
+        for (const friendData of membersData?.payload) {
+            this.renderMember(parent, friendData);
+        }
+    }
+
+    private renderEmptyState(parent: HTMLElement) {
+        new EmptyStateComponent(parent, {
+            icon: 'friends-icon',
+            text: 'Пользователи не найдены',
+        });
+    }
+
+    private renderMember(parent: HTMLElement, friendData: Record<string, any>, section?: string) {
+        new FriendComponent(parent, {
+            data: friendData,
+            section: 'all',
         });
     }
 
@@ -170,26 +209,13 @@ class CommunityEditView {
         });
     }
 
-    private renderEmptyState(parent: HTMLElement) {
-        new EmptyStateComponent(parent, {
-            icon: 'communities-icon',
-            text: 'Сообщества не найдены',
-        });
-    }
-
-    private renderCommunity(parent: HTMLElement, friendData: Record<string, any>) {
-        new FriendComponent(parent, {
-            data: friendData,
-        });
-    }
 
 
 
 
 
 
-
-    private async renderSection(sectionName: string) {
+    private async renderFormSection(sectionName: string) {
         this.section = sectionName;
         this.stateUpdaters = [];
         const sectionData = forms[this.section];

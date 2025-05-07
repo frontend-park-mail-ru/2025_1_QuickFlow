@@ -21,7 +21,7 @@ class FriendsView {
 
     constructor() {}
 
-    render() {
+    render(params: Record<string, any>) {
         this.containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
@@ -70,10 +70,9 @@ class FriendsView {
                     title: 'Исходящие заявки',
                     onClick: () => this.renderSection(Section.Outcoming),
                 },
-            }
+            },
+            active: params?.section || 'friends',
         });
-
-        this.renderSection(Section.All);
 
         return this.containerObj.container;
     }

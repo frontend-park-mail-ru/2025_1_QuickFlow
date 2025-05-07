@@ -13,7 +13,7 @@ class FeedView {
 
     constructor() {}
 
-    render() {
+    render(params: Record<string, any>) {
         this.containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
@@ -44,21 +44,8 @@ class FeedView {
                         });
                     },
                 },
-                // comments: {
-                //     title: 'Комментарии',
-                //     // onClick: () => this.renderSection('education')
-                // },
-                // reactions: {
-                //     title: 'Реакции',
-                //     // onClick: () => this.renderSection('education')
-                // },
-            }
-        });
-
-        new FeedComponent(this.containerObj.left, {
-            getUrl: "/feed",
-            hasCreateButton: HAS_CREATE_BUTTON,
-            emptyStateText: "Ваша лента пока пуста",
+            },
+            active: params?.section || 'feed',
         });
 
         return this.containerObj.container;
