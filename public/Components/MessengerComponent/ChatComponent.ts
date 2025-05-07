@@ -134,6 +134,8 @@ export default class ChatComponent {
         this.scrollToTargetMsg();
 
         new ws().subscribe('message_read', (payload: any) => {
+            console.log(payload);
+            console.log(payload.message_id);
             const readMessage = this.scroll.querySelector(`[data-msg-id="${payload.message_id}"]`) as HTMLElement;
             console.log(readMessage);
             const status = readMessage.querySelector('.chat__msg-status');
