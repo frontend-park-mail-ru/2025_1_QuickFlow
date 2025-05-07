@@ -18,6 +18,7 @@ import { FILE } from '@config';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
 import FriendComponent from '@components/FriendComponent/FriendComponent';
 import SearchComponent from '@components/SearchComponent/SearchComponent';
+import DeleteMwComponent from '@components/UI/ModalWindowComponent/DeleteMwComponent';
 
 
 class CommunityEditView {
@@ -78,18 +79,48 @@ class CommunityEditView {
     }
 
     private async renderDeleteCommunity() {
-        const status = await API.deleteCommunity(this.communityData?.payload?.id);
-        switch (status) {
-            case 200:
-                router.go({ path: '/feed' });
-                break;
-            default:
-                new PopUpComponent({
-                    isError: true,
-                    text: 'Не удалось удалить сообщество, попробуйте позже',
+        this.containerObj.left.innerHTML = '';
+
+        createElement({
+            tag: 'h1',
+            parent: this.containerObj.left,
+            text: 'Удаление сообщества',
+        });
+
+        createElement({
+            parent: this.containerObj.left,
+            classes: ['community_edit__text'],
+            text: 'Все связанные данные, включая посты, комментарии и подписчиков, будут безвозвратно удалены. Пожалуйста, убедитесь, что хотите продолжить, так как восстановить информацию будет невозможно.',
+        });
+
+        new ButtonComponent(this.containerObj.left, {
+            text: 'Удалить сообщество',
+            variant: 'primary',
+            onClick: () => {
+                new DeleteMwComponent(this.containerObj.left, {
+                    data: {
+                        title: 'Удаление сообщества',
+                        text: 'Вы уверены, что хотите удалить сообщество? После подтверждения удаления, действие нельзя будет отменить.',
+                        cancel: 'Отмена',
+                        confirm: 'Удалить',
+                    },
+                    delete: async () => {
+                        const status = await API.deleteCommunity(this.communityData?.payload?.id);
+                        switch (status) {
+                            case 200:
+                                router.go({ path: '/feed' });
+                                break;
+                            default:
+                                new PopUpComponent({
+                                    isError: true,
+                                    text: 'Не удалось удалить сообщество, попробуйте позже',
+                                })
+                                break;
+                        }
+                    },
                 })
-                break;
-        }
+            },
+        });
     }
 
 
