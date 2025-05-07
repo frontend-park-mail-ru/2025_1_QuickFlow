@@ -9,9 +9,9 @@ class LoginView {
     constructor() {}
 
     async render() {
-        const [status, feedData] = await API.getFeed();
+        const [status, feedData] = await API.getFeed(1);
         if (status === 200) {
-            router.go({ path: '/feed' });
+            return router.go({ path: '/feed' });
         }
 
         const containerObj = new MainLayoutComponent().render({

@@ -471,8 +471,6 @@ export default class PostComponent {
             classes: ['post__info'],
         });
 
-        console.log(this.config);
-
         createElement({
             tag: 'a',
             parent: nameDateWrapper,
@@ -542,11 +540,11 @@ export default class PostComponent {
         });
 
         const data: Record<string, object> = {
-            copyLink: {
-                href: '/copy-link',
-                text: 'Скопировать ссылку',
-                icon: 'copy-icon',
-            },
+            // copyLink: {
+            //     href: '/copy-link',
+            //     text: 'Скопировать ссылку',
+            //     icon: 'copy-icon',
+            // },
         };
 
         if (

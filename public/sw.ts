@@ -1,4 +1,4 @@
-const VERSION = '1.0.6'; // Версия для управления кэшами
+const VERSION = '1.0.7'; // Версия для управления кэшами
 
 const STATIC_CACHE = 'STATIC_CACHE-' + VERSION;
 const MEDIA_CACHE = 'MEDIA_CACHE-' + VERSION;
@@ -118,7 +118,7 @@ async function handleRequestFirst(request) {
         if (networkResponse.ok) {
             const cache = await caches.open(STATIC_CACHE);
             await cache.put(request, cloneResponse(networkResponse));
-            console.log('Updated cache after successful network request:', request.url);
+            // console.log('Updated cache after successful network request:', request.url);
         }
 
         return networkResponse;
@@ -140,7 +140,7 @@ async function handleStaticFetch(request) {
     const cachedResponse = await cache.match(request);
 
     if (cachedResponse && checkCachedResponse(cachedResponse, STATIC_CACHE_EXPIRES)) {
-        console.log('Serving static content from cache:', request.url);
+        // console.log('Serving static content from cache:', request.url);
         return cachedResponse;
     }
 

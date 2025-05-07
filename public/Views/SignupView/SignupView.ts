@@ -10,9 +10,14 @@ class SignupView {
     constructor() {}
 
     async render() {
-        const [status, profileData] = await API.getProfile(getLsItem('username', ""));
+        // const [status, profileData] = await API.getProfile(getLsItem('username', ""));
+        // if (status === 200) {
+        //     router.go({ path: '/feed' });
+        // }
+
+        const [status, feedData] = await API.getFeed(1);
         if (status === 200) {
-            router.go({ path: '/feed' });
+            return router.go({ path: '/feed' });
         }
 
         const containerObj = new MainLayoutComponent().render({

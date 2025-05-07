@@ -15,9 +15,17 @@ export default class HeaderComponent {
     wrapper: HTMLElement | null = null;
     rightWrapper: HTMLElement | null = null;
 
+    // static __instance: HeaderComponent;
+
     constructor(parent: any) {
+        // if (HeaderComponent.__instance) {
+        //     return HeaderComponent.__instance;
+        // }
+
         this.parent = parent;
         this.render();
+
+        // HeaderComponent.__instance = this;
     }
 
     render() {
@@ -205,7 +213,10 @@ export default class HeaderComponent {
     }
 
     async renderAvatarMenu() {
-        if (this.rightWrapper) this.rightWrapper.innerHTML = '';
+        if (this.rightWrapper) {
+            this.rightWrapper.remove();
+            this.rightWrapper.innerHTML = '';
+        }
 
         this.rightWrapper = createElement({
             parent: this.wrapper,
@@ -220,11 +231,13 @@ export default class HeaderComponent {
         }
     }
 
-    renderAvatarCallback(userData: any) {
-        if (userData && this.rightWrapper) {
+    renderAvatarCallback(profileData: Record<string, any>) {
+        this.rightWrapper.innerHTML = '';
+
+        if (profileData && this.rightWrapper) {
             new AvatarComponent(this.rightWrapper, {
                 size: 'xs',
-                src: userData.profile.avatar_url,
+                src: profileData.profile.avatar_url,
             });
 
             createElement({
@@ -234,7 +247,7 @@ export default class HeaderComponent {
             });
 
             new ProfileMenuComponent(this.rightWrapper, {
-                userData,
+                userData: profileData,
             });
         }
     }
