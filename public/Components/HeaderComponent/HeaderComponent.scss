@@ -146,7 +146,8 @@ a {
     padding: 0 8px;
 }
 
-.header__results-items {
+.header__results-items,
+.header__results-items_community {
     display: flex;
     flex-direction: column;
     width: 100%;

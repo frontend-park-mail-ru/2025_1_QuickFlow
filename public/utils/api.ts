@@ -14,6 +14,15 @@ export default class API {
         });
     }
 
+    static async logout(): Promise<number> {
+        return new Promise((resolve) => {
+            ajax.post({
+                url: '/logout',
+                callback: (status: number) => resolve(status),
+            });
+        });
+    }
+
     static async searchUsers(string: string, count: number): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.get({

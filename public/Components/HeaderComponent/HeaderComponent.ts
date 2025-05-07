@@ -1,4 +1,3 @@
-import Ajax from '@modules/ajax';
 import ProfileMenuComponent from '@components/ProfileMenuComponent/ProfileMenuComponent';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
 import createElement from '@utils/createElement';
@@ -18,7 +17,6 @@ export default class HeaderComponent {
 
     constructor(parent: any) {
         this.parent = parent;
-
         this.render();
     }
 
@@ -52,7 +50,7 @@ export default class HeaderComponent {
             ],
         });
 
-        new SearchComponent(this.left, {
+        const search = new SearchComponent(this.left, {
             placeholder: 'Поиск',
             classes: ['header__search-wrapper'],
             inputClasses: ['header__search'],
@@ -64,6 +62,14 @@ export default class HeaderComponent {
             renderTitle: this.renderTitle,
             renderResult: this.renderResult,
         });
+
+        new SearchComponent(search, {
+            searchResults: API.searchCommunities,
+            resultsCount: 3,
+            renderEmptyState: this.renderEmptyState,
+            renderTitle: this.renderCommunityTitle,
+            renderResult: this.renderCommunityResult,
+        });
     }
 
     private renderTitle(parent: HTMLElement) {
@@ -71,6 +77,14 @@ export default class HeaderComponent {
             parent,
             classes: ['header__results-title'],
             text: 'Люди'
+        });
+    }
+
+    private renderCommunityTitle(parent: HTMLElement) {
+        createElement({
+            parent,
+            classes: ['header__results-title'],
+            text: 'Сообщества'
         });
     }
 
@@ -97,6 +111,35 @@ export default class HeaderComponent {
             resultsList = createElement({
                 parent,
                 classes: ['header__results-items'],
+            });
+        }
+
+        resultsList.appendChild(result);
+    }
+
+    private renderCommunityResult(parent: HTMLElement, userData: Record<string, any>) {
+        const result = createElement({
+            tag: 'a',
+            classes: ['header__result'],
+            attrs: { href: `/profiles/${userData.username}` },
+        });
+
+        new AvatarComponent(result, {
+            src: userData?.avatar_url,
+            size: 'xs',
+        });
+
+        createElement({
+            parent: result,
+            classes: ['header__result-name'],
+            text: `${userData.firstname} ${userData.lastname}`,
+        });
+
+        let resultsList = parent.querySelector('.header__results-items_community');
+        if (!resultsList) {
+            resultsList = createElement({
+                parent,
+                classes: ['header__results-items_community'],
             });
         }
 
@@ -155,7 +198,7 @@ export default class HeaderComponent {
         }
     }
 
-    renderAvatarMenu() {
+    async renderAvatarMenu() {
         if (this.rightWrapper) this.rightWrapper.innerHTML = '';
 
         this.rightWrapper = createElement({
@@ -163,16 +206,12 @@ export default class HeaderComponent {
             classes: ['header__right']
         });
 
-        Ajax.get({
-            url: `/profiles/${getLsItem('username', '')}`,
-            callback: (status: number, userData: any) => {
-                switch (status) {
-                    case 200:
-                        this.renderAvatarCallback(userData);
-                        break;
-                }
-            }
-        });
+        const [status, profileData] = await API.getProfile(getLsItem('username', ''));
+        switch (status) {
+            case 200:
+                this.renderAvatarCallback(profileData);
+                break;
+        }
     }
 
     renderAvatarCallback(userData: any) {
