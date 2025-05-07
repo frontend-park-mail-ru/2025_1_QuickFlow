@@ -43,7 +43,7 @@ class Router {
         };
     }
 
-    #matchRoute(path: string) {
+    private matchRoute(path: string) {
         const [pathname] = path.split('?');
         const pathSegments = pathname.split('/').filter(Boolean);
 
@@ -78,7 +78,7 @@ class Router {
 
     start() {
         this.go({ path: this.path });
-        window.addEventListener('popstate', () => this.#renderPath({ path: this.path }));
+        window.addEventListener('popstate', () => this.renderPath({ path: this.path }));
     }
 
     go(data: any) {
@@ -89,9 +89,9 @@ class Router {
         }
  
         if (data.path === '/') data.path = DEFAULT_PATH;
-        if (data.path !== NOT_FOUND_PATH) this.#historyPush(data.path);
+        if (data.path !== NOT_FOUND_PATH) this.historyPush(data.path);
 
-        this.#renderPath(data);
+        this.renderPath(data);
     }
 
     get path() {
@@ -106,7 +106,7 @@ class Router {
         window.history.forward();
     }
 
-    #historyPush(path: string, state = {}, title = '') {
+    private historyPush(path: string, state = {}, title = '') {
         window.history.pushState(
             state,
             title,
@@ -122,7 +122,7 @@ class Router {
     //     );
     // }
 
-    #parseQueryParams(queryString: string) {
+    private parseQueryParams(queryString: string) {
         const params: Record<string, any> = {};
         const query = new URLSearchParams(queryString);
         for (const [key, value] of query.entries()) {
@@ -131,18 +131,18 @@ class Router {
         return params;
     }
 
-    #renderPath(data: any) {
+    private renderPath(data: any) {
         const [pathname, queryString] = data.path.split('?');
         if (pathname) null; // for linter
 
-        const matchResult = this.#matchRoute(data.path);
+        const matchResult = this.matchRoute(data.path);
         if (!matchResult) {
             console.error(`No view registered for path: ${data.path}`);
             return this.go({ path: NOT_FOUND_PATH });
         }
         // const { view, params, section } = matchResult;
         const { view, params: routeParams, section } = matchResult;
-        const queryParams = queryString ? this.#parseQueryParams(queryString) : {};
+        const queryParams = queryString ? this.parseQueryParams(queryString) : {};
 
         if (section && this._menu) {
             this._menu.setActive(section);

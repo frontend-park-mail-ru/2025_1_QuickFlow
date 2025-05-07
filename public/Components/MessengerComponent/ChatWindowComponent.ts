@@ -139,7 +139,7 @@ export default class ChatWindowComponent {
 
             if (!this._chatData?.id && this._chatData?.receiver_id) {
                 setLsItem('active-chat', `chat-${payload.chat_id}`);
-                this._chatsPanel?.renderChatList();
+                this._chatsPanel?.renderChatList(true);
             } else {
                 if (`chat-${payload.chat_id}` === getLsItem('active-chat', null)) {
                     this.msgsData?.messages?.push(payload);

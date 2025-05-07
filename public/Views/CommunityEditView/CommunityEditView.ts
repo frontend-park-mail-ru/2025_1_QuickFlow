@@ -15,6 +15,7 @@ import router from '@router';
 import { forms } from './CommunityEditFormConfig';
 import API from '@utils/api';
 import { FILE } from '@config';
+import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
 
 
 class CommunityEditView {
@@ -69,6 +70,16 @@ class CommunityEditView {
         const sectionData = forms[this.section];
         this.containerObj.left.innerHTML = '';
 
+        if (
+            ['contacts', 'members', 'managers', 'deletion']
+            .includes(this.section)
+        ) {
+            return new EmptyStateComponent(this.containerObj.left, {
+                text: 'Этот раздел пока в разработке',
+                icon: 'communities-icon',
+            });
+        }
+
         const [status, communityData] = await API.getCommunity(this.params.address);
 
         switch (status) {
@@ -83,7 +94,9 @@ class CommunityEditView {
 
     getCbOk(communityData: Record<string, any>, sectionData: Record<string, any>) {
         this.communityData = communityData;
-        if (sectionData.header) this.renderHeader();
+        if (sectionData.header) {
+            this.renderHeader();
+        }
         this.renderForm(sectionData);
     }
 

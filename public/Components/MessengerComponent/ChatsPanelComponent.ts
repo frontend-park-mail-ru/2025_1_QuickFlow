@@ -77,8 +77,11 @@ export default class ChatsPanelComponent {
         this._chatWindow = chatWindow;
     }
 
-    renderChatList() {
-        if (this.chats) this.container?.removeChild(this.chats);
+    renderChatList(firstMsgSent = false) {
+        if (this.chats) {
+            this.container?.removeChild(this.chats);
+        }
+
         this.chats = createElement({
             parent: this.container,
             classes: ['chats-panel__chats'],
@@ -107,6 +110,10 @@ export default class ChatsPanelComponent {
                     this.activeChatItem = chatItem;
                     this.activeChatItem?.classList.add('chats-panel__chat_active');
                     this._chatWindow.renderActiveChat(chatData);
+                    if (firstMsgSent) {
+                        var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `chat_id=${this._chatWindow.msgsData.messages[0].chat_id}`;
+                        window.history.pushState({path: newurl}, '', newurl);
+                    }
                 }
             }
         });
