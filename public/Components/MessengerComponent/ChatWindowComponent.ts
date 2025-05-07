@@ -144,8 +144,9 @@ export default class ChatWindowComponent {
                 this._chatsPanel?.renderChatList(true);
 
                 console.log('firstMsgSent 2');
-                // var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `chat_id=${this.msgsData.messages[0].chat_id}`;
-                // window.history.pushState({path: newurl}, '', newurl);
+                const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `chat_id=${this.msgsData.messages[0].chat_id}`;
+                console.log(newurl);
+                window.history.pushState({path: newurl}, '', newurl);
             } else {
                 if (`chat-${payload.chat_id}` === getLsItem('active-chat', null)) {
                     console.log('firstMsgSent 4');
