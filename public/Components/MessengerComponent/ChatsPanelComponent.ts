@@ -111,6 +111,7 @@ export default class ChatsPanelComponent {
                     this.activeChatItem?.classList.add('chats-panel__chat_active');
                     this._chatWindow.renderActiveChat(chatData);
                     if (firstMsgSent) {
+                        console.log('firstMsgSent');
                         var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `chat_id=${this._chatWindow.msgsData.messages[0].chat_id}`;
                         window.history.pushState({path: newurl}, '', newurl);
                     }
