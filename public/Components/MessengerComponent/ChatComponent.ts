@@ -107,7 +107,7 @@ export default class ChatComponent {
             classes: ['chat__scroll'],
         });
 
-        if (!this.config.msgsData.messages || !this.config.msgsData.messages.length) {
+        if (!this.config?.msgsData?.messages || !this.config?.msgsData?.messages?.length) {
             this.renderEmptyState();
             return;
         }
