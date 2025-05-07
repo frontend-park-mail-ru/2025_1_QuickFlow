@@ -109,6 +109,9 @@ class CommunityEditView {
                         switch (status) {
                             case 200:
                                 router.go({ path: '/feed' });
+                                new PopUpComponent({
+                                    text: 'Сообщество было удалено',
+                                })
                                 break;
                             default:
                                 new PopUpComponent({
