@@ -137,20 +137,24 @@ export default class ChatWindowComponent {
 
             removeLsItem(CHAT_MSG_PREFIX + `${this._chatData?.id}`);
 
+            console.log('firstMsgSent 0');
             if (!this._chatData?.id && this._chatData?.receiver_id) {
+                console.log('firstMsgSent 1');
                 setLsItem('active-chat', `chat-${payload.chat_id}`);
                 this._chatsPanel?.renderChatList(true);
 
-                console.log('firstMsgSent');
-                var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `chat_id=${this.msgsData.messages[0].chat_id}`;
-                window.history.pushState({path: newurl}, '', newurl);
+                console.log('firstMsgSent 2');
+                // var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `chat_id=${this.msgsData.messages[0].chat_id}`;
+                // window.history.pushState({path: newurl}, '', newurl);
             } else {
                 if (`chat-${payload.chat_id}` === getLsItem('active-chat', null)) {
+                    console.log('firstMsgSent 4');
                     this.msgsData?.messages?.push(payload);
                     // this.msgs?.push(payload);
                     this.chat?.renderMsg(payload, []);
                     this.updateTextareaHeight();
                 }
+                console.log('firstMsgSent 5');
                 this._chatsPanel?.renderLastMsg({
                     id: payload.chat_id,
                     last_message: {
