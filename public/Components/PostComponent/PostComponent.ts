@@ -524,20 +524,20 @@ export default class PostComponent {
             });
         }
 
-        const dropdown = createElement({
-            classes: ['js-dropdown', 'dropdown'],
-            parent: topWrapper,
-        });
+        // const dropdown = createElement({
+        //     classes: ['js-dropdown', 'dropdown'],
+        //     parent: topWrapper,
+        // });
 
-        const optionsWrapper = createElement({
-            classes: ['post__options'],
-            parent: dropdown,
-        });
+        // const optionsWrapper = createElement({
+        //     classes: ['post__options'],
+        //     parent: dropdown,
+        // });
 
-        createElement({
-            classes: ['post__options-icon'],
-            parent: optionsWrapper,
-        });
+        // createElement({
+        //     classes: ['post__options-icon'],
+        //     parent: optionsWrapper,
+        // });
 
         const data: Record<string, object> = {
             // copyLink: {
@@ -552,6 +552,21 @@ export default class PostComponent {
             this.config?.author?.owner?.username === getLsItem('username', '') ||
             ADMINS_USERNAMES.includes(getLsItem('username', ''))
         ) {
+            const dropdown = createElement({
+                classes: ['js-dropdown', 'dropdown'],
+                parent: topWrapper,
+            });
+    
+            const optionsWrapper = createElement({
+                classes: ['post__options'],
+                parent: dropdown,
+            });
+    
+            createElement({
+                classes: ['post__options-icon'],
+                parent: optionsWrapper,
+            });
+            
             data.edit = {
                 href: '/edit',
                 text: 'Редактировать',
