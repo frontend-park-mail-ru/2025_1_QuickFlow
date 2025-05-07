@@ -87,8 +87,14 @@ export default class ChatComponent {
             this.lastReadByMeTime = new Date(this.config?.chatData?.last_read_by_me)?.getTime();
         }
 
-        if (this.config?.chatData?.last_read_by_other) {
-            this.lastReadByOtherTime = new Date(this.config?.chatData?.last_read_by_other)?.getTime();
+        // if (this.config?.chatData?.last_read_by_other) {
+        //     // const chatsLastRead = new Date(this.config?.chatData?.last_read_by_other);
+        //     // const chatLastRead = new Date(this.config?.msgsData?.last_read_ts);
+        //     this.lastReadByOtherTime = new Date(this.config?.chatData?.last_read_by_other)?.getTime();
+        // }
+
+        if (this.config?.msgsData?.last_read_ts) {
+            this.lastReadByOtherTime = new Date(this.config?.msgsData?.last_read_ts)?.getTime();
         }
         
         this.container = createElement({
@@ -101,7 +107,7 @@ export default class ChatComponent {
             classes: ['chat__scroll'],
         });
 
-        if (!this.config.messages || !this.config.messages.length) {
+        if (!this.config.msgsData.messages || !this.config.msgsData.messages.length) {
             this.renderEmptyState();
             return;
         }
@@ -109,7 +115,7 @@ export default class ChatComponent {
         let prevMsg: Record<string, any> = {};
         let prevDay = '';
 
-        for (const msg of this.config.messages) {
+        for (const msg of this.config.msgsData.messages) {
             const classes = [];
 
             const curDay = this.formatDateTitle(msg.created_at);
@@ -143,7 +149,7 @@ export default class ChatComponent {
                 status.classList.remove('chat__msg-status_unread');
                 status.classList.add('chat__msg-status_read');
                 clearTimeout(timeout);
-            }, 100);
+            }, 50);
         });
     }
 

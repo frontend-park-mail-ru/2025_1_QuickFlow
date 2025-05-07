@@ -65,7 +65,8 @@ export default class ChatWindowComponent {
     
     private isMobile: boolean;
 
-    private msgs: Array<any> | null = null;
+    // private msgsData: Array<any> | null = null;
+    private msgsData: Record<string, any> | null = null;
     private chat: ChatComponent | null = null;
     private chatElement: HTMLElement | null = null;
     private _chatData: Record<string, any> | null = null;
@@ -141,7 +142,8 @@ export default class ChatWindowComponent {
                 this._chatsPanel?.renderChatList();
             } else {
                 if (`chat-${payload.chat_id}` === getLsItem('active-chat', null)) {
-                    this.msgs?.push(payload);
+                    this.msgsData?.messages?.push(payload);
+                    // this.msgs?.push(payload);
                     this.chat?.renderMsg(payload, []);
                     this.updateTextareaHeight();
                 }
@@ -181,7 +183,7 @@ export default class ChatWindowComponent {
             chatId: this._chatData?.id,
             count: 50,
         }, (status: number, chatMsgs: any) => {
-            this.msgs = chatMsgs.messages;
+            this.msgsData = chatMsgs;
             this.renderHeader();
             this.renderMessageInput();
             this.renderChat();
@@ -401,7 +403,7 @@ export default class ChatWindowComponent {
 
         this.chat = new ChatComponent(this.container, {
             chatData: this._chatData,
-            messages: this.msgs,
+            msgsData: this.msgsData,
             user: this.config?.user,
         });
 
