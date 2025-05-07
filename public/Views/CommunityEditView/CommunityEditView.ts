@@ -16,6 +16,8 @@ import { forms } from './CommunityEditFormConfig';
 import API from '@utils/api';
 import { FILE } from '@config';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
+import FriendComponent from '@components/FriendComponent/FriendComponent';
+import SearchComponent from '@components/SearchComponent/SearchComponent';
 
 
 class CommunityEditView {
@@ -28,12 +30,23 @@ class CommunityEditView {
 
     constructor() {}
 
-    render(params: Record<string, any>, section: string = 'settings') {
+    async render(params: Record<string, any>, section: string = 'settings') {
         this.params = params;
 
         this.containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
+
+        const [status, communityData] = await API.getCommunity(this.params.address);
+        switch (status) {
+            case 200:
+                this.communityData = communityData;
+                break;
+            case 401:
+                return router.go({ path: '/login' });
+            case 404:
+                return router.go({ path: '/not-found' });
+        }
 
         new RadioMenuComponent(this.containerObj.right, {
             items: {
@@ -48,6 +61,7 @@ class CommunityEditView {
                 members: {
                     title: 'Подписчики',
                     onClick: () => this.renderSection('members')
+                    // onClick: () => this.renderMembers(),
                 },
                 managers: {
                     title: 'Управляющие',
@@ -55,14 +69,91 @@ class CommunityEditView {
                 },
                 deletion: {
                     title: 'Удаление сообщества',
-                    onClick: () => this.renderSection('deletion')
+                    onClick: () => this.renderDeleteCommunity(),
                 },
             },
-            active: section,
-        });
-
+        active: section,
+    });
         this.renderSection(section);
     }
+
+    private async renderDeleteCommunity() {
+        const status = await API.deleteCommunity(this.communityData?.payload?.id);
+        switch (status) {
+            case 200:
+                router.go({ path: '/feed' });
+                break;
+            default:
+                new PopUpComponent({
+                    isError: true,
+                    text: 'Не удалось удалить сообщество, попробуйте позже',
+                })
+                break;
+        }
+    }
+
+
+
+
+    private renderMembers() {
+        const results = createElement({
+            parent: this.containerObj.left,
+            classes: [
+                'communities',
+                'communities__search-results',
+                'hidden',
+            ],
+        });
+
+        const members = createElement({
+            parent: this.containerObj.left,
+            classes: ['communities'],
+        });
+
+        new SearchComponent(this.containerObj.left, {
+            placeholder: 'Введите запрос',
+            classes: ['search_wide'],
+            inputClasses: [
+                'input_wide',
+                'input_search-small',
+                'communities__search',
+            ],
+            results,
+            searchResults: API.searchCommunities,
+            renderTitle: this.renderTitle,
+            renderEmptyState: this.renderEmptyState,
+            renderResult: this.renderCommunity,
+            elementToHide: members,
+        });
+    }
+
+    private renderTitle(parent: HTMLElement) {
+        createElement({
+            tag: 'h2',
+            parent,
+            classes: ['search__title'],
+            text: 'Результаты поиска',
+        });
+    }
+
+    private renderEmptyState(parent: HTMLElement) {
+        new EmptyStateComponent(parent, {
+            icon: 'communities-icon',
+            text: 'Сообщества не найдены',
+        });
+    }
+
+    private renderCommunity(parent: HTMLElement, friendData: Record<string, any>) {
+        new FriendComponent(parent, {
+            data: friendData,
+        });
+    }
+
+
+
+
+
+
 
     private async renderSection(sectionName: string) {
         this.section = sectionName;

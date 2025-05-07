@@ -9,10 +9,11 @@ import ws from '@modules/WebSocketService';
 import router from '@router';
 import ChatsPanelComponent from './ChatsPanelComponent';
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
-import { MOBILE_MAX_WIDTH, MSG } from '@config';
+import { MSG } from '@config';
 import API from '@utils/api';
 
 
+const MOBILE_MAX_WIDTH = 610;
 const TEXTAREA_PLACEHOLDER = 'Напишите сообщение...';
 const HEADER_AVATAR_SIZE = 'xs';
 const EMPTY_CHAT_WINDOW_TEXT = 'Выберите чат или создайте новый';

@@ -4,9 +4,9 @@ import InputComponent from '@components/UI/InputComponent/InputComponent';
 import createElement from '@utils/createElement';
 import {setLsItem, getLsItem, removeLsItem} from '@utils/localStorage';
 import getTimeDifference from '@utils/getTimeDifference';
-import { MOBILE_MAX_WIDTH } from '@config';
 
 
+const MOBILE_MAX_WIDTH = 610;
 const DEFAULT_WIDTH = 300;
 const RESIZER_TO_DEFAULT_WIDTH = 200;
 const RESIZER_TO_MINI_WIDTH = 96;
