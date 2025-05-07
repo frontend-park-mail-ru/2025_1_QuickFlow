@@ -66,7 +66,7 @@ export default class HeaderComponent {
         new SearchComponent(search, {
             searchResults: API.searchCommunities,
             resultsCount: 3,
-            renderEmptyState: this.renderEmptyState,
+            renderEmptyState: this.renderCommunityEmptyState,
             renderTitle: this.renderCommunityTitle,
             renderResult: this.renderCommunityResult,
         });
@@ -156,6 +156,20 @@ export default class HeaderComponent {
         createElement({
             parent,
             text: 'Пользователи не найдены',
+            classes: ['header__result_empty'],
+        });
+    }
+
+    private renderCommunityEmptyState(parent: HTMLElement) {
+        createElement({
+            parent,
+            classes: ['header__results-title'],
+            text: 'Сообщества'
+        });
+
+        createElement({
+            parent,
+            text: 'Сообщества не найдены',
             classes: ['header__result_empty'],
         });
     }

@@ -99,7 +99,9 @@ export default class SearchComponent {
     }
 
     showNotFound() {
-        this.config.results.innerHTML = '';
+        if (!this.isSecondary) {
+            this.config.results.innerHTML = '';
+        }
         this.config.renderEmptyState(this.config.results);
     }
 
