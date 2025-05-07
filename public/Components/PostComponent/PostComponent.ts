@@ -581,26 +581,29 @@ export default class PostComponent {
                     });
                 }
             };
-        } else {
-            data.notify = {
-                href: '/notify',
-                text: 'Уведомлять о постах',
-                icon: 'notice-icon',
-            };
-            data.notInterested = {
-                href: '/not-interested',
-                text: 'Не интересно',
-                icon: 'cross-circle-icon',
-            };
-            data.ban = {
-                href: '/ban',
-                text: 'Пожаловаться',
-                icon: 'ban-icon',
-                isCritical: true
-            };
-        }
 
-        new ContextMenuComponent(dropdown, { data });
+            new ContextMenuComponent(dropdown, { data });
+        }
+        // else {
+        //     data.notify = {
+        //         href: '/notify',
+        //         text: 'Уведомлять о постах',
+        //         icon: 'notice-icon',
+        //     };
+        //     data.notInterested = {
+        //         href: '/not-interested',
+        //         text: 'Не интересно',
+        //         icon: 'cross-circle-icon',
+        //     };
+        //     data.ban = {
+        //         href: '/ban',
+        //         text: 'Пожаловаться',
+        //         icon: 'ban-icon',
+        //         isCritical: true
+        //     };
+        // }
+
+        // new ContextMenuComponent(dropdown, { data });
     }
 
     actionCbOk() {
