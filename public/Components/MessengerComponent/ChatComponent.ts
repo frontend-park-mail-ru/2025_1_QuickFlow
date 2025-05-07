@@ -142,8 +142,8 @@ export default class ChatComponent {
                 const status = readMessage.querySelector('.chat__msg-status');
                 status.classList.remove('chat__msg-status_unread');
                 status.classList.add('chat__msg-status_read');
+                clearTimeout(timeout);
             }, 100);
-            clearTimeout(timeout);
         });
     }
 
