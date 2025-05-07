@@ -53,7 +53,7 @@ class CommunitiesView {
             ],
             results,
             searchResults: API.searchCommunities,
-            title: 'Результаты поиска',
+            renderTitle: this.renderTitle,
             renderEmptyState: this.renderEmptyState,
             renderResult: this.renderCommunity,
             elementToHide: this.communities,
@@ -83,6 +83,15 @@ class CommunitiesView {
         this.renderSection(Section.Communities);
 
         return this.containerObj.container;
+    }
+
+    private renderTitle(parent: HTMLElement) {
+        createElement({
+            tag: 'h2',
+            parent,
+            classes: ['search__title'],
+            text: 'Результаты поиска',
+        });
     }
 
     private renderEmptyState(parent: HTMLElement) {

@@ -71,7 +71,7 @@ export default class HeaderComponent {
             ],
             renderResult: [
                 this.renderResult,
-                this.renderResult,
+                this.renderCommunityResult,
             ]
         });
     }
@@ -121,13 +121,36 @@ export default class HeaderComponent {
         resultsList.appendChild(result);
     }
 
-    private renderEmptyState(parent: HTMLElement) {
-        // createElement({
-        //     parent,
-        //     classes: ['header__results-title'],
-        //     text: 'Люди'
-        // });
+    private renderCommunityResult(parent: HTMLElement, communityData: Record<string, any>) {
+        const result = createElement({
+            tag: 'a',
+            classes: ['header__result'],
+            attrs: { href: `/communities/${communityData?.community?.nickname}` },
+        });
 
+        new AvatarComponent(result, {
+            src: communityData?.community?.avatar_url,
+            size: 'xs',
+        });
+
+        createElement({
+            parent: result,
+            classes: ['header__result-name'],
+            text: communityData?.community?.name,
+        });
+
+        let resultsList = parent.querySelector('.header__results-items');
+        if (!resultsList) {
+            resultsList = createElement({
+                parent,
+                classes: ['header__results-items'],
+            });
+        }
+
+        resultsList.appendChild(result);
+    }
+
+    private renderEmptyState(parent: HTMLElement) {
         createElement({
             parent,
             text: 'Пользователи не найдены',
@@ -136,12 +159,6 @@ export default class HeaderComponent {
     }
 
     private renderCommunityEmptyState(parent: HTMLElement) {
-        // createElement({
-        //     parent,
-        //     classes: ['header__results-title'],
-        //     text: 'Cообщества'
-        // });
-
         createElement({
             parent,
             text: 'Cообщества не найдены',

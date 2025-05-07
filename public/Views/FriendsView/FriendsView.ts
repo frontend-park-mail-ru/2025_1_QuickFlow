@@ -51,7 +51,7 @@ class FriendsView {
             results,
             searchResults: API.searchFriends,
             renderEmptyState: this.renderEmptyState,
-            title: 'Результаты поиска',
+            renderTitle: this.renderTitle,
             renderResult: this.renderFriend,
             elementToHide: this.friends,
         });
@@ -76,6 +76,15 @@ class FriendsView {
         this.renderSection(Section.All);
 
         return this.containerObj.container;
+    }
+
+    private renderTitle(parent: HTMLElement) {
+        createElement({
+            tag: 'h2',
+            parent,
+            classes: ['search__title'],
+            text: 'Результаты поиска',
+        });
     }
 
     async renderSection(section = Section.All) {
