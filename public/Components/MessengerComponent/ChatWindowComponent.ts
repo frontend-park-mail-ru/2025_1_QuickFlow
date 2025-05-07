@@ -144,7 +144,7 @@ export default class ChatWindowComponent {
                 this._chatsPanel?.renderChatList(true);
 
                 console.log('firstMsgSent 2');
-                const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `chat_id=${this.msgsData.messages[0].chat_id}`;
+                const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `chat_id=${payload.chat_id}`;
                 console.log(newurl);
                 window.history.pushState({path: newurl}, '', newurl);
             } else {
