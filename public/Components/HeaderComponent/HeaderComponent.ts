@@ -50,25 +50,29 @@ export default class HeaderComponent {
             ],
         });
 
-        const search = new SearchComponent(this.left, {
+        new SearchComponent(this.left, {
             placeholder: 'Поиск',
             classes: ['header__search-wrapper'],
             inputClasses: ['header__search'],
             results,
             isResultsChild: true,
-            searchResults: API.searchFriends,
             resultsCount: 3,
-            renderEmptyState: this.renderEmptyState,
-            renderTitle: this.renderTitle,
-            renderResult: this.renderResult,
-        });
-
-        new SearchComponent(search, {
-            searchResults: API.searchCommunities,
-            resultsCount: 3,
-            renderEmptyState: this.renderCommunityEmptyState,
-            renderTitle: this.renderCommunityTitle,
-            renderResult: this.renderCommunityResult,
+            searchResults: [
+                API.searchFriends,
+                API.searchCommunities,
+            ],
+            renderEmptyState: [
+                this.renderEmptyState,
+                this.renderCommunityEmptyState,
+            ],
+            renderTitle: [
+                this.renderTitle,
+                this.renderCommunityTitle,
+            ],
+            renderResult: [
+                this.renderResult,
+                this.renderResult,
+            ]
         });
     }
 
@@ -84,7 +88,7 @@ export default class HeaderComponent {
         createElement({
             parent,
             classes: ['header__results-title'],
-            text: 'Сообщества'
+            text: 'Cообщества'
         });
     }
 
@@ -117,41 +121,12 @@ export default class HeaderComponent {
         resultsList.appendChild(result);
     }
 
-    private renderCommunityResult(parent: HTMLElement, userData: Record<string, any>) {
-        const result = createElement({
-            tag: 'a',
-            classes: ['header__result'],
-            attrs: { href: `/profiles/${userData.username}` },
-        });
-
-        new AvatarComponent(result, {
-            src: userData?.avatar_url,
-            size: 'xs',
-        });
-
-        createElement({
-            parent: result,
-            classes: ['header__result-name'],
-            text: `${userData.firstname} ${userData.lastname}`,
-        });
-
-        let resultsList = parent.querySelector('.header__results-items_community');
-        if (!resultsList) {
-            resultsList = createElement({
-                parent,
-                classes: ['header__results-items_community'],
-            });
-        }
-
-        resultsList.appendChild(result);
-    }
-
     private renderEmptyState(parent: HTMLElement) {
-        createElement({
-            parent,
-            classes: ['header__results-title'],
-            text: 'Люди'
-        });
+        // createElement({
+        //     parent,
+        //     classes: ['header__results-title'],
+        //     text: 'Люди'
+        // });
 
         createElement({
             parent,
@@ -161,15 +136,15 @@ export default class HeaderComponent {
     }
 
     private renderCommunityEmptyState(parent: HTMLElement) {
-        createElement({
-            parent,
-            classes: ['header__results-title'],
-            text: 'Сообщества'
-        });
+        // createElement({
+        //     parent,
+        //     classes: ['header__results-title'],
+        //     text: 'Cообщества'
+        // });
 
         createElement({
             parent,
-            text: 'Сообщества не найдены',
+            text: 'Cообщества не найдены',
             classes: ['header__result_empty'],
         });
     }
