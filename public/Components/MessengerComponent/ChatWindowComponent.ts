@@ -66,8 +66,6 @@ export default class ChatWindowComponent {
     
     private isMobile: boolean;
 
-    // private msgsData: Array<any> | null = null;
-    // private msgsData: Record<string, any> | null = null;
     private chat: ChatComponent | null = null;
     private chatElement: HTMLElement | null = null;
     private _chatData: Record<string, any> | null = null;
@@ -188,6 +186,7 @@ export default class ChatWindowComponent {
         if (this.isMobile) {
             this._chatsPanel.container.classList.add('hidden');
             this.container.classList.remove('hidden');
+            router.menu.container.classList.add('hidden');
         }
 
         // this.config?.messenger.ajaxGetMessages({
@@ -210,6 +209,8 @@ export default class ChatWindowComponent {
         if (this.isMobile) {
             this._chatsPanel.container.classList.remove('hidden');
             this.container.classList.add('hidden');
+            router.menu.container.classList.remove('hidden');
+            
         }
         this.renderEmptyState();
     }

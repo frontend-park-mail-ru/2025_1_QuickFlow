@@ -4,6 +4,7 @@ import InputComponent from '@components/UI/InputComponent/InputComponent';
 import createElement from '@utils/createElement';
 import { setLsItem, getLsItem, removeLsItem } from '@utils/localStorage';
 import getTimeDifference from '@utils/getTimeDifference';
+import router from '@router';
 
 
 const MOBILE_MAX_WIDTH = 610;
@@ -49,6 +50,7 @@ export default class ChatsPanelComponent {
 
         if (!this.isMobile) {
             this.createResizer();
+            router.menu.container.classList.remove('hidden');
         }
 
         const chatsPanelSize = getLsItem('chats-panel-size', `${DEFAULT_WIDTH}px`);
