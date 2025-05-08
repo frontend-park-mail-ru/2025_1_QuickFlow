@@ -74,7 +74,7 @@ export default class ChatWindowComponent {
     private focusTimer: any = null;
     private messageInput: HTMLTextAreaElement | null = null;
 
-    constructor(parent: any, config: any) {
+    constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
         this.config = config;
         this.isMobile = window.innerWidth <= MOBILE_MAX_WIDTH;
@@ -179,7 +179,7 @@ export default class ChatWindowComponent {
         this._chatsPanel = chatsPanel;
     }
 
-    renderActiveChat(chatData: any) {
+    renderActiveChat(chatData: Record<string, any>) {
         this._chatData = chatData;
         if (this.container) this.container.innerHTML = '';
 
@@ -188,16 +188,6 @@ export default class ChatWindowComponent {
             this.container.classList.remove('hidden');
             router.menu.container.classList.add('hidden');
         }
-
-        // this.config?.messenger.ajaxGetMessages({
-        //     chatId: this._chatData?.id,
-        //     count: 50,
-        // }, (status: number, chatMsgs: any) => {
-        //     this.msgsData = chatMsgs;
-        //     this.renderHeader();
-        //     this.renderMessageInput();
-        //     this.renderChat();
-        // });
 
         this.renderHeader();
         this.renderMessageInput();
@@ -210,7 +200,7 @@ export default class ChatWindowComponent {
             this._chatsPanel.container.classList.remove('hidden');
             this.container.classList.add('hidden');
             router.menu.container.classList.remove('hidden');
-            
+
         }
         this.renderEmptyState();
     }
@@ -379,7 +369,7 @@ export default class ChatWindowComponent {
         this.messageInput?.addEventListener("input", () => this.updateTextareaHeight(bottomWrapper));
     }
 
-    sendMessage(sendBtn: any) {
+    sendMessage(sendBtn: HTMLElement) {
         if (sendBtn.classList.contains('chat-window__send_disabled')) return;
 
         new ws().send('message', {
@@ -419,7 +409,6 @@ export default class ChatWindowComponent {
 
         this.chat = new ChatComponent(this.container, {
             chatData: this._chatData,
-            // msgsData: this.msgsData,
             user: this.config?.user,
         });
 

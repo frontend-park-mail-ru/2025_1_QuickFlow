@@ -6,6 +6,7 @@ import router from '@router';
 import ws from '@modules/WebSocketService';
 import { getLsItem } from '@utils/localStorage';
 import API from '@utils/api';
+import ExtraLoadComponent from '@components/ExtraLoadComponent/ExtraLoadComponent';
 
 
 const MSG_AVATAR_SIZE = 'xs';
@@ -113,6 +114,42 @@ export default class ChatComponent {
                 clearTimeout(timeout);
             }, 50);
         });
+
+
+
+
+
+        new ExtraLoadComponent<any>({
+            sentinelContainer: this.scroll!,
+            marginPx: 100,
+            position: 'top',
+            fetchFn: this.fetchOlderMessages.bind(this),
+            renderFn: (msgs) => {
+                let prevSender = '';
+                let prevDay = '';
+                for (const msg of msgs) {
+                    const curDay = this.formatDateTitle(msg.created_at);
+                    const classes = [];
+        
+                    if (curDay !== prevDay) {
+                        createElement({
+                            parent: this.scroll,
+                            tag: 'div',
+                            classes: ['chat__date'],
+                            text: curDay,
+                            insertBefore: this.scroll.firstChild,
+                        });
+                    } else if (msg.sender.username === prevSender) {
+                        classes.push('chat__msg_nameless');
+                    }
+        
+                    this.prependMsg(msg, classes);
+        
+                    prevSender = msg.sender.username;
+                    prevDay = curDay;
+                }
+            }
+        });        
     }
 
     pushMessage(payload: Record<string, any>) {
@@ -221,17 +258,6 @@ export default class ChatComponent {
             }
         }
 
-        // // 🛠 Ключевое исправление: отложенное наблюдение
-        // if (!isMine && msgTime > this.lastReadByMeTime) {
-        //     // Дать время DOM отрисовать размеры сообщения
-        //     requestAnimationFrame(() => {
-        //         requestAnimationFrame(() => {
-        //             this.observer.observe(msg);
-        //             console.log('renderMsg msg-observed (delayed)');
-        //         });
-        //     });
-        // }
-
         new AvatarComponent(msg, {
             size: MSG_AVATAR_SIZE,
             src: msgData.sender?.avatar_url || '',
@@ -275,6 +301,105 @@ export default class ChatComponent {
             text: getTime(msgData.created_at),
         });
     }
+
+    // private cbOk(feedData: any) {
+    //     feedData?.forEach((config: Record<string, any>) => {
+    //         this.renderPost(config);
+    //         this.lastTs = config.created_at;
+    //     });
+
+    //     new ExtraLoadComponent<any>({
+    //         sentinelContainer: this.posts!,
+    //         marginPx: OBSERVER_MARGIN,
+    //         fetchFn: this.fetchMorePosts.bind(this),
+    //         renderFn: (posts) => {
+    //             posts?.forEach((postConfig) => {
+    //                 this.renderPost(postConfig);
+    //                 this.lastTs = postConfig.created_at;
+    //             });
+    //         }
+    //     });
+    // }
+
+    private async fetchOlderMessages(): Promise<any[]> {
+        const firstMsg = this.scroll?.querySelector<HTMLElement>('[data-msg-ts]');
+        const firstMsgTs = firstMsg?.dataset.msgTs;
+    
+        if (!firstMsgTs) return [];
+    
+        const [status, msgsData] = await API.getMessages(this.config?.chatData?.id, 50, firstMsgTs);
+        // const [status, msgsData] = await API.getMessagesBefore(this.config?.chatData?.id, firstMsgTs, 20);
+        if (status === 200 && Array.isArray(msgsData?.messages)) {
+            return msgsData.messages;
+        }
+    
+        return [];
+    }
+
+    private prependMsg(msgData: any, classes: string[]) {
+        const isMine = msgData.sender.username === getLsItem('username', null);
+        const msgTime = new Date(msgData.created_at).getTime();
+    
+        const msg = createElement({
+            parent: this.scroll,
+            classes: ['chat__msg', ...classes],
+            attrs: {
+                'data-msg-id': msgData.id.toString(),
+                'data-msg-ts': msgData.created_at,
+                'data-msg-from': msgData.sender.username,
+            },
+            insertBefore: this.scroll.firstChild,
+        });
+    
+        if (!isMine && msgTime > this.lastReadByMeTime) {
+            this.observer.observe(msg);
+        }
+    
+        new AvatarComponent(msg, {
+            size: MSG_AVATAR_SIZE,
+            src: msgData.sender?.avatar_url || '',
+            href: `/profiles/${msgData.sender?.username}`
+        });
+    
+        const msgContent = createElement({
+            parent: msg,
+            classes: ['chat__msg-content'],
+        });
+    
+        createElement({
+            parent: msgContent,
+            classes: ['chat__sender'],
+            text: `${msgData.sender.firstname} ${msgData.sender.lastname}`
+        });
+    
+        createElement({
+            parent: msgContent,
+            text: msgData.text,
+        });
+    
+        const msgInfo = createElement({
+            parent: msg,
+            classes: ['chat__msg-info'],
+        });
+    
+        if (isMine) {
+            createElement({
+                parent: msgInfo,
+                classes: [
+                    'chat__msg-status',
+                    msgTime <= this.lastReadByOtherTime ? 'chat__msg-status_read' : 'chat__msg-status_unread'
+                ],
+            });
+        }
+    
+        createElement({
+            parent: msgInfo,
+            classes: ['chat__msg-ts'],
+            text: getTime(msgData.created_at),
+        });
+    }
+    
+    
 
     formatDateTitle(dateString: string) { // TODO: вынести в utils
         const date = new Date(dateString);

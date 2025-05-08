@@ -1,5 +1,3 @@
-import Ajax from '@modules/ajax';
-
 import RadioMenuComponent from '@components/RadioMenuComponent/RadioMenuComponent';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
@@ -52,29 +50,23 @@ class EditProfileView {
             },
             active: params?.section || section,
         });
-
-        // this.renderSection(section);
     }
 
-    renderSection(sectionName: string) {
+    async renderSection(sectionName: string) {
         this.section = sectionName;
         this.stateUpdaters = [];
         const sectionData = forms[this.section];
         this.containerObj.left.innerHTML = '';
 
-        Ajax.get({
-            url: `/profiles/${getLsItem('username', '')}`,
-            callback: (status, userData) => {
-                switch (status) {
-                    case 200:
-                        this.getCbOk(userData, sectionData);
-                        break;
-                    case 401:
-                        this.cbUnauthorized();
-                        break;
-                }
-            }
-        });
+        const [status, profileData] = await API.getProfile(getLsItem('username', ''));
+        switch (status) {
+            case 200:
+                this.getCbOk(profileData, sectionData);
+                break;
+            case 401:
+                this.cbUnauthorized();
+                break;
+        }
     }
 
     cbUnauthorized() {

@@ -132,6 +132,7 @@ export default class FeedComponent {
         new ExtraLoadComponent<any>({
             sentinelContainer: this.posts!,
             marginPx: OBSERVER_MARGIN,
+            position: 'bottom',
             fetchFn: this.fetchMorePosts.bind(this),
             renderFn: (posts) => {
                 posts?.forEach((postConfig) => {

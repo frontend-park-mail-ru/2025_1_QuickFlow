@@ -1,17 +1,20 @@
-import Ajax from '@modules/ajax';
+import router from '@router';
+
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import FeedComponent from '@components/FeedComponent/FeedComponent';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
 import ProfileInfoMwComponent from '@components/UI/ModalWindowComponent/ProfileInfoMwComponent';
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
-import createElement from '@utils/createElement';
-import { getLsItem } from '@utils/localStorage';
 import CoverComponent from '@components/CoverComponent/CoverComponent';
-import router from '@router';
-import { ACTIONS_PROPERTIES, INFO_ITEMS_LAYOUT } from './ProfileActionsConfig';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import ProfileMenuComponent from '@components/ProfileMenuComponent/ProfileMenuComponent';
+
+import createElement from '@utils/createElement';
+import { getLsItem } from '@utils/localStorage';
 import insertIcon from '@utils/insertIcon';
+import API from '@utils/api';
+
+import { ACTIONS_PROPERTIES, INFO_ITEMS_LAYOUT } from './ProfileActionsConfig';
 import { MOBILE_MAX_WIDTH } from '@config';
 
 
@@ -21,52 +24,47 @@ const MOBILE_MAX_DISPLAYED_FRIENDS_COUNT = 3;
 class ProfileView {
     private containerObj: MainLayoutComponent | null = null;
     private profileActions: HTMLElement | null = null;
+    private isMobile: boolean;
 
-    constructor() {}
+    constructor() {
+        this.isMobile = window.innerWidth <= MOBILE_MAX_WIDTH;
+    }
 
-    render(params: any) {
+    async render(params: Record<string, any>) {
         this.containerObj = new MainLayoutComponent().render({
             type: 'profile',
         });
 
         const username = params?.username || getLsItem('username', '');
 
-        Ajax.get({
-            url: `/profiles/${username}`,
-            callback: (status: number, userData: any) => {
-                switch (status) {
-                    case 200:
-                        this.cbOk(userData);
-                        break;
-                    case 401:
-                        router.go({ path: '/login' });
-                        break;
-                    case 404:
-                        router.go({ path: '/not-found' });
-                        break;
-                }
-            }
-        });
+        const [status, profileData] = await API.getProfile(username);
+        switch (status) {
+            case 200:
+                this.cbOk(profileData);
+                break;
+            case 401:
+                router.go({ path: '/login' });
+                break;
+            case 404:
+                router.go({ path: '/not-found' });
+                break;
+        }
 
         return this.containerObj.container;
     }
 
-    renderFriends(user_id: any) {
-        Ajax.get({
-            url: '/friends',
-            params: { count: 8, offset: 0, user_id },
-            callback: (status: number, friendsData: any) => {
-                switch (status) {
-                    case 200:
-                        this.friendsCbOk(friendsData.payload);
-                        break;
-                    case 401:
-                        router.go({ path: '/login' });
-                        break;
-                    case 404:
-                        router.go({ path: '/not-found' });
-                        break;
-                }
+    renderFriends(user_id: string) {
+        API.getFriends(user_id, 8, 0).then(([status, friendsData]) => {
+            switch (status) {
+                case 200:
+                    this.friendsCbOk(friendsData.payload);
+                    break;
+                case 401:
+                    router.go({ path: '/login' });
+                    break;
+                case 404:
+                    router.go({ path: '/not-found' });
+                    break;
             }
         });
     }
@@ -129,7 +127,7 @@ class ProfileView {
         }
     }
 
-    cbOk(data: any) {
+    cbOk(data: Record<string, any>) {
         const profileHeader = createElement({
             parent: this.containerObj?.top,
             classes: ['profile']
@@ -140,29 +138,26 @@ class ProfileView {
             type: 'profile',
         });
 
-        const profileMenu = createElement({
-            parent: profileHeader,
-            classes: ['js-profile-menu'],
-        });
-
-        const profileMenuBtn = createElement({
-            parent: profileMenu,
-            classes: ['profile__menu-btn'],
-        });
-
-        insertIcon(profileMenuBtn, {
-            name: 'options-icon',
-            classes: ['profile__menu-icon'],
-        });
-
-        new ProfileMenuComponent(profileMenu, {
-            userData: data,
-        });
-
-        // createElement({
-        //     parent: profileMenu,
-        //     classes: ['profile__menu-btn'],
-        // });
+        if (this.isMobile) {
+            const profileMenu = createElement({
+                parent: profileHeader,
+                classes: ['js-profile-menu'],
+            });
+    
+            const profileMenuBtn = createElement({
+                parent: profileMenu,
+                classes: ['profile__menu-btn'],
+            });
+    
+            insertIcon(profileMenuBtn, {
+                name: 'options-icon',
+                classes: ['profile__menu-icon'],
+            });
+    
+            new ProfileMenuComponent(profileMenu, {
+                userData: data,
+            });
+        }
 
         new AvatarComponent(profileHeader, {
             size: 'xxxl',
@@ -244,7 +239,7 @@ class ProfileView {
         this.renderFriends(data.id);
     }
 
-    renderActions(profileBottom: any, data: any) {
+    renderActions(profileBottom: HTMLElement, data: Record<string, any>) {
         if (this.profileActions) {
             this.profileActions.innerHTML = '';
             profileBottom.appendChild(this.profileActions);
@@ -267,7 +262,7 @@ class ProfileView {
         }
     }
 
-    renderOtherActions(data: any) {
+    renderOtherActions(data: Record<string, any>) {
         if (this.profileActions) this.profileActions.innerHTML = '';
 
         const relation = data.relation as keyof typeof ACTIONS_PROPERTIES;
@@ -305,7 +300,7 @@ class ProfileView {
         return item;
     }
 
-    createInfoItem(parent: HTMLElement, icon: string, value: any, isShort: Boolean = false) {
+    createInfoItem(parent: HTMLElement, icon: string, value: string, isShort: boolean = false) {
         const item = createElement({
             parent,
             classes: ['profile__detail']
