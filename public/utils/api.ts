@@ -3,6 +3,16 @@ import convertToFormData from '@utils/convertToFormData';
 
 
 export default class API {
+    static async getMessages(chat_id: string, messages_count: number, ts?: string): Promise<[number, Record<string, any>]> {
+        return new Promise((resolve) => {
+            ajax.get({
+                url: `/chats/${chat_id}/messages`,
+                params: { messages_count, ...(ts && { ts }) },
+                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+            });
+        });
+    }
+
     static async editProfile(body: Record<string, any>): Promise<number> {
         return new Promise((resolve) => {
             ajax.post({

@@ -17,13 +17,8 @@ export default class FeedComponent {
     private parent: HTMLElement;
     private config: Record<string, any>;
     private posts: HTMLElement | null = null;
-    // private isLoading: Boolean = false;
-    // private endOfFeed: Boolean = false;
     private lastTs: string | null = null;
-    // private sentinel: HTMLElement | null = null;
     private emptyWrapper: HTMLElement;
-
-    private extraLoader: ExtraLoadComponent<any>;
 
     constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
@@ -134,30 +129,23 @@ export default class FeedComponent {
             this.lastTs = config.created_at;
         });
 
-        this.extraLoader = new ExtraLoadComponent<any>({
+        new ExtraLoadComponent<any>({
             sentinelContainer: this.posts!,
             marginPx: OBSERVER_MARGIN,
             fetchFn: this.fetchMorePosts.bind(this),
             renderFn: (posts) => {
-                posts.forEach((post) => {
-                    this.renderPost(post);
-                    this.lastTs = post.created_at;
+                posts?.forEach((postConfig) => {
+                    this.renderPost(postConfig);
+                    this.lastTs = postConfig.created_at;
                 });
             }
         });
-
-        // this.sentinel = createElement({
-        //     parent: this.posts,
-        //     classes: ['feed__bottom-sentinel'],
-        // });
-
-        // this.createIntersectionObserver();
     }
 
     private async fetchMorePosts(): Promise<any[]> {
         if (!this.lastTs) return [];
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             Ajax.get({
                 url: this.config.getUrl,
                 params: {
@@ -191,61 +179,4 @@ export default class FeedComponent {
             text: this.config.emptyStateText,
         });
     }
-
-    // private createIntersectionObserver() {
-    //     if (!this.sentinel) return;
-
-    //     const observer = new IntersectionObserver((entries) => {
-    //         if (entries[0].isIntersecting && !this.isLoading && !this.endOfFeed) {
-    //             this.loadMorePosts();
-    //         }
-    //     }, {
-    //         rootMargin: `${OBSERVER_MARGIN}px`,
-    //     });
-    
-    //     observer.observe(this.sentinel);
-    // }
-    
-    // private loadMorePosts() {
-    //     if (!this.lastTs) return;
-
-    //     this.isLoading = true;
-    
-    //     Ajax.get({
-    //         url: this.config.getUrl,
-    //         params: {
-    //             posts_count: POSTS_COUNT,
-    //             ts: this.lastTs,
-    //         },
-    //         callback: (status: number, feedData: any) => {
-    //             this.isLoading = false;
-
-    //             switch (status) {
-    //                 case 200:
-    //                     this.extraLoadCbOk(feedData);
-    //                     break;
-    //                 default:
-    //                     this.endOfFeed = true;
-    //                     if (this.sentinel) this.sentinel.remove();
-    //                     break;
-    //             }
-    //         }
-    //     });
-    // }    
-
-    // private extraLoadCbOk(feedData: any) {
-    //     if (!this.posts || !this.sentinel) return;
-
-    //     if (Array.isArray(feedData) && feedData.length > 0) {
-    //         feedData.forEach((config) => {
-    //             this.renderPost(config);
-    //             this.lastTs = config.created_at;
-    //         });
-    //         this.posts.appendChild(this.sentinel);
-    //         return;
-    //     }
-
-    //     this.endOfFeed = true;
-    //     this.sentinel.remove();
-    // }
 }

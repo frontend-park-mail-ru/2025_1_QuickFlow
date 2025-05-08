@@ -67,7 +67,7 @@ export default class ChatWindowComponent {
     private isMobile: boolean;
 
     // private msgsData: Array<any> | null = null;
-    private msgsData: Record<string, any> | null = null;
+    // private msgsData: Record<string, any> | null = null;
     private chat: ChatComponent | null = null;
     private chatElement: HTMLElement | null = null;
     private _chatData: Record<string, any> | null = null;
@@ -138,6 +138,7 @@ export default class ChatWindowComponent {
 
             removeLsItem(CHAT_MSG_PREFIX + `${this._chatData?.id}`);
 
+            // Отправили первое сообщение
             if (!this._chatData?.id && this._chatData?.receiver_id) {
                 setLsItem('active-chat', `chat-${payload.chat_id}`);
                 this._chatsPanel?.renderChatList();
@@ -148,10 +149,13 @@ export default class ChatWindowComponent {
                     `/messenger/${this._chatData.username}?chat_id=${payload?.chat_id}`;
 
                 window.history.pushState({ path: newUrl }, '', newUrl);
+
+            // Отправили очередное сообщение
             } else {
                 if (`chat-${payload.chat_id}` === getLsItem('active-chat', null)) {
-                    this.msgsData?.messages?.push(payload);
-                    this.chat?.renderMsg(payload, []);
+                    // this.msgsData?.messages?.push(payload);
+                    this.chat?.pushMessage(payload);
+                    // this.chat?.renderMsg(payload, []);
                     this.updateTextareaHeight();
                 }
                 this._chatsPanel?.renderLastMsg({
@@ -186,15 +190,19 @@ export default class ChatWindowComponent {
             this.container.classList.remove('hidden');
         }
 
-        this.config?.messenger.ajaxGetMessages({
-            chatId: this._chatData?.id,
-            count: 50,
-        }, (status: number, chatMsgs: any) => {
-            this.msgsData = chatMsgs;
-            this.renderHeader();
-            this.renderMessageInput();
-            this.renderChat();
-        });
+        // this.config?.messenger.ajaxGetMessages({
+        //     chatId: this._chatData?.id,
+        //     count: 50,
+        // }, (status: number, chatMsgs: any) => {
+        //     this.msgsData = chatMsgs;
+        //     this.renderHeader();
+        //     this.renderMessageInput();
+        //     this.renderChat();
+        // });
+
+        this.renderHeader();
+        this.renderMessageInput();
+        this.renderChat();
     }
 
     close() {
@@ -410,7 +418,7 @@ export default class ChatWindowComponent {
 
         this.chat = new ChatComponent(this.container, {
             chatData: this._chatData,
-            msgsData: this.msgsData,
+            // msgsData: this.msgsData,
             user: this.config?.user,
         });
 

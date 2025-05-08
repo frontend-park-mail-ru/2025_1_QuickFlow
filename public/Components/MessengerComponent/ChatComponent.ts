@@ -5,6 +5,7 @@ import getTime from '@utils/getTime';
 import router from '@router';
 import ws from '@modules/WebSocketService';
 import { getLsItem } from '@utils/localStorage';
+import API from '@utils/api';
 
 
 const MSG_AVATAR_SIZE = 'xs';
@@ -24,6 +25,7 @@ export default class ChatComponent {
     scroll: HTMLElement | null = null;
     private lastReadByMeTime: number | null = null;
     private lastReadByOtherTime: number | null = null;
+    private msgsData: Record<string, any> = null;
 
     constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
@@ -35,6 +37,103 @@ export default class ChatComponent {
         });
 
         this.render();
+    }
+
+    async render() {
+        this.container = createElement({
+            parent: this.parent,
+            classes: ['chat'],
+        });
+
+        this.scroll = createElement({
+            parent: this.container,
+            classes: ['chat__scroll'],
+        });
+
+        const [status, msgsData] = await API.getMessages(this.config?.chatData?.id, 50);
+        this.msgsData = msgsData;
+
+        switch (status) {
+            case 200:
+                this.renderChat();
+                break;
+            case 404:
+                this.renderEmptyState();
+                break;
+        }
+    }
+
+    private renderChat() {
+        if (this.config?.chatData?.last_read_by_me) {
+            this.lastReadByMeTime = new Date(this.config?.chatData?.last_read_by_me)?.getTime();
+        }
+
+        // if (this.config?.chatData?.last_read_by_other) {
+        //     // const chatsLastRead = new Date(this.config?.chatData?.last_read_by_other);
+        //     // const chatLastRead = new Date(this.config?.msgsData?.last_read_ts);
+        //     this.lastReadByOtherTime = new Date(this.config?.chatData?.last_read_by_other)?.getTime();
+        // }
+
+        if (this.msgsData?.last_read_ts) {
+            this.lastReadByOtherTime = new Date(this.msgsData?.last_read_ts)?.getTime();
+        }
+        
+        // this.container = createElement({
+        //     parent: this.parent,
+        //     classes: ['chat'],
+        // });
+
+        // this.scroll = createElement({
+        //     parent: this.container,
+        //     classes: ['chat__scroll'],
+        // });
+
+        if (!this.msgsData?.messages || !this.msgsData?.messages?.length) {
+            this.renderEmptyState();
+            return;
+        }
+
+        let prevMsg: Record<string, any> = {};
+        let prevDay = '';
+
+        for (const msg of this.msgsData?.messages) {
+            const classes = [];
+
+            const curDay = this.formatDateTitle(msg.created_at);
+            if (curDay !== prevDay) {
+                createElement({
+                    parent: this.scroll,
+                    text: prevDay === '' ? this.formatDateTitle(msg.created_at) : curDay,
+                    classes: ['chat__date'],
+                });
+            } else {
+                if (msg.sender.id === prevMsg.sender.id) {
+                    classes.push('chat__msg_nameless');
+                }
+            }
+
+            this.renderMsg(msg, classes);
+
+            prevMsg = msg;
+            prevDay = this.formatDateTitle(msg.created_at);
+        }
+
+        this.scrollToTargetMsg();
+
+        new ws().subscribe('message_read', (payload: any) => {
+            const timeout = setTimeout(() => {
+                const readMessage = this.scroll.querySelector(`[data-msg-id="${payload.message_id}"]`) as HTMLElement;
+                const status = readMessage.querySelector('.chat__msg-status');
+                status.classList.remove('chat__msg-status_unread');
+                status.classList.add('chat__msg-status_read');
+                clearTimeout(timeout);
+            }, 50);
+        });
+    }
+
+    pushMessage(payload: Record<string, any>) {
+        this.msgsData?.messages?.push(payload);
+        this.renderMsg(payload, []);
     }
 
     private scrollToTargetMsg() {
@@ -73,7 +172,6 @@ export default class ChatComponent {
                     chat_id: this.config?.chatData?.id,
                     message_id: (entry.target as HTMLElement).dataset.msgId,
                 });
-                console.log(entry.target);
                 // const status = entry.target.querySelector('.chat__msg-status');
                 // status.classList.remove('chat__msg-status_unread');
                 // status.classList.add('chat__msg-status_read');
@@ -82,76 +180,51 @@ export default class ChatComponent {
         }
     };
 
-    render() {
-        if (this.config?.chatData?.last_read_by_me) {
-            this.lastReadByMeTime = new Date(this.config?.chatData?.last_read_by_me)?.getTime();
-        }
 
-        // if (this.config?.chatData?.last_read_by_other) {
-        //     // const chatsLastRead = new Date(this.config?.chatData?.last_read_by_other);
-        //     // const chatLastRead = new Date(this.config?.msgsData?.last_read_ts);
-        //     this.lastReadByOtherTime = new Date(this.config?.chatData?.last_read_by_other)?.getTime();
-        // }
 
-        if (this.config?.msgsData?.last_read_ts) {
-            this.lastReadByOtherTime = new Date(this.config?.msgsData?.last_read_ts)?.getTime();
-        }
-        
-        this.container = createElement({
-            parent: this.parent,
-            classes: ['chat'],
-        });
+    // private cbOk(feedData: any) {
+    //     feedData?.forEach((config: Record<string, any>) => {
+    //         this.renderPost(config);
+    //         this.lastTs = config.created_at;
+    //     });
 
-        this.scroll = createElement({
-            parent: this.container,
-            classes: ['chat__scroll'],
-        });
+    //     new ExtraLoadComponent<any>({
+    //         sentinelContainer: this.posts!,
+    //         marginPx: OBSERVER_MARGIN,
+    //         fetchFn: this.fetchMorePosts.bind(this),
+    //         renderFn: (posts) => {
+    //             posts?.forEach((postConfig) => {
+    //                 this.renderPost(postConfig);
+    //                 this.lastTs = postConfig.created_at;
+    //             });
+    //         }
+    //     });
+    // }
 
-        if (!this.config?.msgsData?.messages || !this.config?.msgsData?.messages?.length) {
-            this.renderEmptyState();
-            return;
-        }
+    // private async fetchMorePosts(): Promise<any[]> {
+    //     if (!this.lastTs) return [];
 
-        let prevMsg: Record<string, any> = {};
-        let prevDay = '';
+    //     return new Promise((resolve) => {
+    //         Ajax.get({
+    //             url: this.config.getUrl,
+    //             params: {
+    //                 posts_count: POSTS_COUNT,
+    //                 ts: this.lastTs,
+    //             },
+    //             callback: (status: number, data: any) => {
+    //                 if (status === 200 && Array.isArray(data)) {
+    //                     resolve(data);
+    //                 } else {
+    //                     resolve([]);
+    //                 }
+    //             }
+    //         });
+    //     });
+    // }
 
-        for (const msg of this.config.msgsData.messages) {
-            const classes = [];
 
-            const curDay = this.formatDateTitle(msg.created_at);
-            if (curDay !== prevDay) {
-                createElement({
-                    parent: this.scroll,
-                    text: prevDay === '' ? this.formatDateTitle(msg.created_at) : curDay,
-                    classes: ['chat__date'],
-                });
-            } else {
-                if (msg.sender.id === prevMsg.sender.id) {
-                    classes.push('chat__msg_nameless');
-                }
-            }
 
-            this.renderMsg(msg, classes);
 
-            prevMsg = msg;
-            prevDay = this.formatDateTitle(msg.created_at);
-        }
-
-        this.scrollToTargetMsg();
-
-        new ws().subscribe('message_read', (payload: any) => {
-            const timeout = setTimeout(() => {
-                console.log(payload);
-                console.log(payload.message_id);
-                const readMessage = this.scroll.querySelector(`[data-msg-id="${payload.message_id}"]`) as HTMLElement;
-                console.log(readMessage);
-                const status = readMessage.querySelector('.chat__msg-status');
-                status.classList.remove('chat__msg-status_unread');
-                status.classList.add('chat__msg-status_read');
-                clearTimeout(timeout);
-            }, 50);
-        });
-    }
 
     renderEmptyState() {
         this.scroll?.classList.add('chat__scroll_empty');
@@ -163,14 +236,14 @@ export default class ChatComponent {
 
         new AvatarComponent(infoWrapper, {
             size: EMPTY_STATE_AVATAR_SIZE,
-            src: this.config.chatData.avatar_url,
-            href: `/profiles/${this.config.chatData.username}`,
+            src: this.config?.chatData?.avatar_url,
+            href: `/profiles/${this.config?.chatData?.username}`,
         });
 
         createElement({
             tag: 'h1',
             parent: infoWrapper,
-            text: this.config.chatData.name,
+            text: this.config?.chatData?.name,
         });
         
         createElement({
@@ -187,7 +260,7 @@ export default class ChatComponent {
             text: OPEN_PROFILE_BTN_TEXT,
             variant: EMPTY_STATE_BTN_VARIANT,
             size: EMPTY_STATE_BTN_SIZE,
-            onClick: () => router.go({ path: `/profiles/${this.config.chatData.username}` }),
+            onClick: () => router.go({ path: `/profiles/${this.config?.chatData?.username}` }),
         });
     }
 
