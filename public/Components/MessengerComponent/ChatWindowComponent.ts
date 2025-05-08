@@ -140,7 +140,7 @@ export default class ChatWindowComponent {
 
             if (!this._chatData?.id && this._chatData?.receiver_id) {
                 setLsItem('active-chat', `chat-${payload.chat_id}`);
-                this._chatsPanel?.renderChatList(true);
+                this._chatsPanel?.renderChatList();
 
                 const newUrl =
                     window.location.protocol +

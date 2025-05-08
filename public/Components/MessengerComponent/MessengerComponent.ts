@@ -27,6 +27,7 @@ export default class MessengerComponent {
             messenger: this,
             chat_id: this.config?.chat_id,
         });
+        
         const chatWindow = new ChatWindowComponent(messengerWrapper, {
             user: this.config.user,
             receiver_username: this.config?.receiver_username,
