@@ -33,7 +33,7 @@ export default class ChatComponent {
 
         this.observer = new IntersectionObserver(this.handleIntersect, {
             root: this.parent,
-            threshold: 0.5,
+            threshold: 0,
         });
 
         this.render();
@@ -68,25 +68,9 @@ export default class ChatComponent {
             this.lastReadByMeTime = new Date(this.config?.chatData?.last_read_by_me)?.getTime();
         }
 
-        // if (this.config?.chatData?.last_read_by_other) {
-        //     // const chatsLastRead = new Date(this.config?.chatData?.last_read_by_other);
-        //     // const chatLastRead = new Date(this.config?.msgsData?.last_read_ts);
-        //     this.lastReadByOtherTime = new Date(this.config?.chatData?.last_read_by_other)?.getTime();
-        // }
-
         if (this.msgsData?.last_read_ts) {
             this.lastReadByOtherTime = new Date(this.msgsData?.last_read_ts)?.getTime();
         }
-        
-        // this.container = createElement({
-        //     parent: this.parent,
-        //     classes: ['chat'],
-        // });
-
-        // this.scroll = createElement({
-        //     parent: this.container,
-        //     classes: ['chat__scroll'],
-        // });
 
         if (!this.msgsData?.messages || !this.msgsData?.messages?.length) {
             this.renderEmptyState();
@@ -138,11 +122,6 @@ export default class ChatComponent {
 
     private scrollToTargetMsg() {
         if (!this.scroll) return;
-
-        // if (this.lastReadByMeTime > this.lastReadByOtherTime) {
-        //     this.container.scrollTop = this.container.scrollHeight;
-        //     return;
-        // }
       
         const messages = Array.from(this.scroll.querySelectorAll<HTMLElement>('[data-msg-id]'));
         if (!messages.length) return;
@@ -175,61 +154,13 @@ export default class ChatComponent {
                     chat_id: this.config?.chatData?.id,
                     message_id: (entry.target as HTMLElement).dataset.msgId,
                 });
-                // const status = entry.target.querySelector('.chat__msg-status');
-                // status.classList.remove('chat__msg-status_unread');
-                // status.classList.add('chat__msg-status_read');
+
                 this.observer.unobserve(entry.target);
 
                 console.log('handleIntersect isIntersecting=true ws-sended msg-unobserved');
             }
         }
     };
-
-
-
-    // private cbOk(feedData: any) {
-    //     feedData?.forEach((config: Record<string, any>) => {
-    //         this.renderPost(config);
-    //         this.lastTs = config.created_at;
-    //     });
-
-    //     new ExtraLoadComponent<any>({
-    //         sentinelContainer: this.posts!,
-    //         marginPx: OBSERVER_MARGIN,
-    //         fetchFn: this.fetchMorePosts.bind(this),
-    //         renderFn: (posts) => {
-    //             posts?.forEach((postConfig) => {
-    //                 this.renderPost(postConfig);
-    //                 this.lastTs = postConfig.created_at;
-    //             });
-    //         }
-    //     });
-    // }
-
-    // private async fetchMorePosts(): Promise<any[]> {
-    //     if (!this.lastTs) return [];
-
-    //     return new Promise((resolve) => {
-    //         Ajax.get({
-    //             url: this.config.getUrl,
-    //             params: {
-    //                 posts_count: POSTS_COUNT,
-    //                 ts: this.lastTs,
-    //             },
-    //             callback: (status: number, data: any) => {
-    //                 if (status === 200 && Array.isArray(data)) {
-    //                     resolve(data);
-    //                 } else {
-    //                     resolve([]);
-    //                 }
-    //             }
-    //         });
-    //     });
-    // }
-
-
-
-
 
     renderEmptyState() {
         this.scroll?.classList.add('chat__scroll_empty');
@@ -289,6 +220,17 @@ export default class ChatComponent {
                 console.log('renderMsg msg-observed');
             }
         }
+
+        // // 🛠 Ключевое исправление: отложенное наблюдение
+        // if (!isMine && msgTime > this.lastReadByMeTime) {
+        //     // Дать время DOM отрисовать размеры сообщения
+        //     requestAnimationFrame(() => {
+        //         requestAnimationFrame(() => {
+        //             this.observer.observe(msg);
+        //             console.log('renderMsg msg-observed (delayed)');
+        //         });
+        //     });
+        // }
 
         new AvatarComponent(msg, {
             size: MSG_AVATAR_SIZE,
