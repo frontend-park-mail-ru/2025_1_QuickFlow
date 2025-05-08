@@ -166,8 +166,11 @@ export default class ChatComponent {
     }
 
     private handleIntersect = (entries: IntersectionObserverEntry[]) => {
+        console.log('handleIntersect');
         for (const entry of entries) {
             if (entry.isIntersecting) {
+                console.log('handleIntersect isIntersecting=true');
+
                 new ws().send('message_read', {
                     chat_id: this.config?.chatData?.id,
                     message_id: (entry.target as HTMLElement).dataset.msgId,
@@ -176,6 +179,8 @@ export default class ChatComponent {
                 // status.classList.remove('chat__msg-status_unread');
                 // status.classList.add('chat__msg-status_read');
                 this.observer.unobserve(entry.target);
+
+                console.log('handleIntersect isIntersecting=true ws-sended msg-unobserved');
             }
         }
     };
@@ -265,6 +270,9 @@ export default class ChatComponent {
     }
 
     renderMsg(msgData: any, classes: Array<string>) {
+        const isMine = msgData.sender.username === getLsItem('username', null);
+        const msgTime = new Date(msgData.created_at).getTime();
+
         const msg = createElement({
             parent: this.scroll,
             classes: ['chat__msg', ...classes],
@@ -275,10 +283,10 @@ export default class ChatComponent {
             },
         });
 
-        if (msgData.sender.username !== getLsItem('username', null)) {
-            const msgTime = new Date(msgData.created_at).getTime();
+        if (!isMine) {
             if (msgTime > this.lastReadByMeTime) {
                 this.observer.observe(msg);
+                console.log('renderMsg msg-observed');
             }
         }
 
@@ -309,8 +317,7 @@ export default class ChatComponent {
             classes: ['chat__msg-info'],
         });
 
-        if (msgData.sender.username === getLsItem('username', null)) {
-            const msgTime = new Date(msgData.created_at).getTime();
+        if (isMine) {
             createElement({
                 parent: msgInfo,
                 classes: [
