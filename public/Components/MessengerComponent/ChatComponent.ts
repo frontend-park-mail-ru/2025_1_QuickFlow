@@ -121,12 +121,16 @@ export default class ChatComponent {
 
         new ExtraLoadComponent<any>({
             sentinelContainer: this.scroll!,
-            marginPx: 100,
+            marginPx: 300,
             position: 'top',
             fetchFn: this.fetchOlderMessages.bind(this),
             renderFn: (msgs) => {
                 let prevSender = '';
                 let prevDay = '';
+
+                const previousScrollHeight = this.scroll.scrollHeight;
+                const firstVisible = this.scroll.firstElementChild as HTMLElement;
+                const previousOffset = firstVisible?.offsetTop || 0;
 
                 const msgsArr: Array<HTMLElement> = [];
 
@@ -158,6 +162,14 @@ export default class ChatComponent {
                 for (const msg of msgsArr) {
                     this.scroll.prepend(msg);
                 }
+
+                const newScrollHeight = this.scroll.scrollHeight;
+                const newFirst = this.scroll.firstElementChild as HTMLElement;
+                const newOffset = newFirst?.offsetTop || 0;
+
+                // Сохраняем расстояние от верха до прежнего сообщения
+                const offsetDelta = newScrollHeight - previousScrollHeight;
+                this.scroll.scrollTop += offsetDelta;
             }
         });        
     }
