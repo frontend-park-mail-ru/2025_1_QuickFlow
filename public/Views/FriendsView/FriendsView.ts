@@ -60,6 +60,7 @@ class FriendsView {
             items: {
                 friends: {
                     title: 'Мои друзья',
+                    // count: await API.getFriends(),
                     onClick: () => this.renderSection(Section.All),
                 },
                 incoming: {

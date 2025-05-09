@@ -1,0 +1,30 @@
+.notification {
+    position: fixed;
+    background: var(--background-white);
+    box-shadow: var(--shadow-context-menu);
+    bottom: 32px;
+    right: 64px;
+    padding: 16px;
+    border-radius: 12px;
+    z-index: 1;
+    max-width: 256px;
+}
+
+.notification_msg {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    font-size: 13px;
+    line-height: 130%;
+    gap: 8px;
+    word-break: break-word;
+    white-space: pre-line;
+}
+
+.notification_msg__text {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 6;
+    line-clamp: 1;
+}
