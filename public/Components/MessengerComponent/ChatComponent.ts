@@ -121,7 +121,7 @@ export default class ChatComponent {
 
         new ExtraLoadComponent<any>({
             sentinelContainer: this.scroll!,
-            marginPx: 700,
+            marginPx: 500,
             position: 'top',
             fetchFn: this.fetchOlderMessages.bind(this),
             renderFn: (msgs) => {
@@ -131,6 +131,8 @@ export default class ChatComponent {
                 // 1. Сохраняем текущий первый видимый элемент
                 const firstVisible = this.scroll.firstElementChild as HTMLElement;
                 const previousTop = firstVisible?.getBoundingClientRect().top || 0;
+                console.log(this.container.scrollTop);
+                console.log(previousTop);
 
                 const msgsArr: Array<HTMLElement> = [];
 
@@ -165,10 +167,13 @@ export default class ChatComponent {
 
                 // 3. Сравниваем новую позицию первого видимого элемента
                 const newTop = firstVisible?.getBoundingClientRect().top || 0;
+                console.log(newTop);
                 const delta = newTop - previousTop;
+                console.log(delta);
 
                 // 4. Компенсируем изменение
-                this.scroll.scrollTop += delta;
+                this.container.scrollTop += delta;
+                console.log(this.container.scrollTop);
             }
         });        
     }
