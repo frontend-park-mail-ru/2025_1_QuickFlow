@@ -121,7 +121,7 @@ export default class ChatComponent {
 
         new ExtraLoadComponent<any>({
             sentinelContainer: this.scroll!,
-            marginPx: 300,
+            marginPx: 700,
             position: 'top',
             fetchFn: this.fetchOlderMessages.bind(this),
             renderFn: (msgs) => {
