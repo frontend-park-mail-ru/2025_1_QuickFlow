@@ -128,7 +128,7 @@ export default class ChatComponent {
                 let prevSender = '';
                 let prevDay = '';
 
-                const msgsArr: Array<HTMLElement>;
+                const msgsArr: Array<HTMLElement> = [];
 
                 for (const msg of msgs) {
                     const curDay = this.formatDateTitle(msg.created_at);
