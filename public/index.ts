@@ -82,7 +82,7 @@ router.menu = new MenuComponent(container, config);
 router.header = new HeaderComponent(container);
 
 new ws().subscribe('message', (payload: Record<string, any>) => {
-    new NotificationComponent(main, {
+    new NotificationComponent({
         type: 'msg',
         classes: ['notification_msg'],
         data: payload,
@@ -106,11 +106,27 @@ new ws().subscribe('message', (payload: Record<string, any>) => {
 // };
 
 // setTimeout(() => {
-//     new NotificationComponent(main, {
+//     new NotificationComponent({
 //         type: 'msg',
 //         classes: ['notification_msg'],
 //         data: payload,
 //     });
 // }, 500);
+
+// setTimeout(() => {
+//     new NotificationComponent({
+//         type: 'msg',
+//         classes: ['notification_msg'],
+//         data: payload,
+//     });
+// }, 1000);
+
+// setTimeout(() => {
+//     new NotificationComponent({
+//         type: 'msg',
+//         classes: ['notification_msg'],
+//         data: payload,
+//     });
+// }, 1500);
 
 router.start();

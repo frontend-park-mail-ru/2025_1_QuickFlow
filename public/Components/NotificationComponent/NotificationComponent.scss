@@ -1,13 +1,24 @@
 .notification {
-    position: fixed;
     background: var(--background-white);
     box-shadow: var(--shadow-context-menu);
-    bottom: 32px;
-    right: 64px;
     padding: 16px;
     border-radius: 12px;
     z-index: 1;
     max-width: 256px;
+
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+    transition: var(--trans-menu);
+}
+
+.notification_visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notification_removing {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
 }
 
 .notification_msg {
@@ -27,4 +38,17 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 6;
     line-clamp: 1;
+}
+
+.notification__container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    position: fixed;
+    bottom: 32px;
+    right: 64px;
+    z-index: 1;
+    max-width: 256px;
+    transition: var(--trans-menu);
 }

@@ -3,21 +3,41 @@ import createElement from '@utils/createElement';
 
 
 export default class NotificationComponent {
-    private parent: HTMLElement;
     private config: Record<string, any>;
 
     element: HTMLElement | null = null;
 
-    constructor(parent: HTMLElement, config: Record<string, any>) {
+    // static container: HTMLElement = createElement({
+    //     parent: document.querySelector('.main'),
+    // });
+
+    static container: HTMLElement | null = null;
+
+    static initContainer() {
+        if (!NotificationComponent.container) {
+            NotificationComponent.container = createElement({
+                parent: document.querySelector('.main'),
+                classes: ['notification__container']
+            });
+        }
+    }
+
+    constructor(config: Record<string, any>) {
+        NotificationComponent.initContainer();
         this.config = config;
-        this.parent = parent;
         this.render();
     }
 
     render() {
         this.element = createElement({
-            parent: this.parent,
+            parent: NotificationComponent.container,
             classes: ['notification', this.config.classes],
+        });
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                this.element!.classList.add('notification_visible');
+            });
         });
 
         switch (this.config.type) {
@@ -25,6 +45,15 @@ export default class NotificationComponent {
                 this.renderMsg();
                 break;
         }
+
+        setTimeout(() => {
+            this.element!.classList.remove('notification_visible');
+            this.element!.classList.add('notification_removing');
+    
+            this.element!.addEventListener('transitionend', () => {
+                this.element?.remove();
+            }, { once: true });
+        }, 5000);
     }
 
     private renderMsg() {
@@ -51,6 +80,6 @@ export default class NotificationComponent {
             classes: ['notification_msg__text'],
         });
 
-        setTimeout(() => this.element.remove(), 5000);
+        // setTimeout(() => this.element.remove(), 5000);
     }
 }
