@@ -132,13 +132,14 @@ export default class ChatComponent {
                     const classes = [];
         
                     if (curDay !== prevDay) {
-                        createElement({
-                            parent: this.scroll,
+                        const date = createElement({
+                            // parent: this.scroll,
                             tag: 'div',
                             classes: ['chat__date'],
                             text: curDay,
-                            insertBefore: this.scroll.firstChild,
+                            // insertBefore: this.scroll.firstChild,
                         });
+                        this.scroll.prepend(date);
                     } else if (msg.sender.username === prevSender) {
                         classes.push('chat__msg_nameless');
                     }
