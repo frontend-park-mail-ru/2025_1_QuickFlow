@@ -128,9 +128,9 @@ export default class ChatComponent {
                 let prevSender = '';
                 let prevDay = '';
 
-                const previousScrollHeight = this.scroll.scrollHeight;
+                // 1. Сохраняем текущий первый видимый элемент
                 const firstVisible = this.scroll.firstElementChild as HTMLElement;
-                const previousOffset = firstVisible?.offsetTop || 0;
+                const previousTop = firstVisible?.getBoundingClientRect().top || 0;
 
                 const msgsArr: Array<HTMLElement> = [];
 
@@ -163,13 +163,12 @@ export default class ChatComponent {
                     this.scroll.prepend(msg);
                 }
 
-                const newScrollHeight = this.scroll.scrollHeight;
-                const newFirst = this.scroll.firstElementChild as HTMLElement;
-                const newOffset = newFirst?.offsetTop || 0;
+                // 3. Сравниваем новую позицию первого видимого элемента
+                const newTop = firstVisible?.getBoundingClientRect().top || 0;
+                const delta = newTop - previousTop;
 
-                // Сохраняем расстояние от верха до прежнего сообщения
-                const offsetDelta = newScrollHeight - previousScrollHeight;
-                this.scroll.scrollTop += offsetDelta;
+                // 4. Компенсируем изменение
+                this.scroll.scrollTop += delta;
             }
         });        
     }
