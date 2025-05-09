@@ -341,15 +341,17 @@ export default class ChatComponent {
         const msgTime = new Date(msgData.created_at).getTime();
     
         const msg = createElement({
-            parent: this.scroll,
+            // parent: this.scroll,
             classes: ['chat__msg', ...classes],
             attrs: {
                 'data-msg-id': msgData.id.toString(),
                 'data-msg-ts': msgData.created_at,
                 'data-msg-from': msgData.sender.username,
             },
-            insertBefore: this.scroll.firstChild,
+            // insertBefore: this.scroll.firstChild,
         });
+
+        this.scroll.prepend(msg);
     
         if (!isMine && msgTime > this.lastReadByMeTime) {
             this.observer.observe(msg);
