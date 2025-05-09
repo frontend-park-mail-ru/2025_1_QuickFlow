@@ -127,6 +127,8 @@ export default class ChatComponent {
             renderFn: (msgs) => {
                 let prevSender = '';
                 let prevDay = '';
+                
+                msgs.reverse();
                 for (const msg of msgs) {
                     const curDay = this.formatDateTitle(msg.created_at);
                     const classes = [];
