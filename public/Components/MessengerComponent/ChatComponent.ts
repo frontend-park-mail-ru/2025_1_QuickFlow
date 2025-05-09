@@ -127,8 +127,9 @@ export default class ChatComponent {
             renderFn: (msgs) => {
                 let prevSender = '';
                 let prevDay = '';
-                
-                msgs.reverse();
+
+                const msgsArr: Array<HTMLElement>;
+
                 for (const msg of msgs) {
                     const curDay = this.formatDateTitle(msg.created_at);
                     const classes = [];
@@ -141,15 +142,21 @@ export default class ChatComponent {
                             text: curDay,
                             // insertBefore: this.scroll.firstChild,
                         });
-                        this.scroll.prepend(date);
+                        // this.scroll.prepend(date);
+                        msgsArr.push(date);
                     } else if (msg.sender.username === prevSender) {
                         classes.push('chat__msg_nameless');
                     }
         
-                    this.prependMsg(msg, classes);
+                    this.prependMsg(msg, classes, msgsArr);
         
                     prevSender = msg.sender.username;
                     prevDay = curDay;
+                }
+
+                msgsArr.reverse();
+                for (const msg of msgsArr) {
+                    this.scroll.prepend(msg);
                 }
             }
         });        
@@ -339,7 +346,7 @@ export default class ChatComponent {
         return [];
     }
 
-    private prependMsg(msgData: any, classes: string[]) {
+    private prependMsg(msgData: any, classes: string[], msgsArr: Array<HTMLElement>) {
         const isMine = msgData.sender.username === getLsItem('username', null);
         const msgTime = new Date(msgData.created_at).getTime();
     
@@ -354,7 +361,9 @@ export default class ChatComponent {
             // insertBefore: this.scroll.firstChild,
         });
 
-        this.scroll.prepend(msg);
+        msgsArr.push(msg);
+
+        // this.scroll.prepend(msg);
     
         if (!isMine && msgTime > this.lastReadByMeTime) {
             this.observer.observe(msg);
