@@ -1,7 +1,5 @@
 import MenuComponent from "@components/MenuComponent/MenuComponent";
 import HeaderComponent from "@components/HeaderComponent/HeaderComponent";
-import ws from "@modules/WebSocketService";
-import NotificationComponent from "@components/NotificationComponent/NotificationComponent";
 
 
 const DEFAULT_PATH = '/feed';
@@ -18,19 +16,7 @@ class Router {
     private _menu: MenuComponent | null = null;
     private _header: HeaderComponent | null = null;
 
-    // static initNotifications() {
-    //     new ws().subscribe('message', (payload: Record<string, any>) => {
-    //         new NotificationComponent({
-    //             type: 'msg',
-    //             classes: ['notification_msg'],
-    //             data: payload,
-    //         });
-    //     });
-    // };
-
-    constructor() {
-        // Router.initNotifications();
-    }
+    constructor() {}
 
     set menu(menu: MenuComponent) {
         this._menu = menu;

@@ -29,7 +29,7 @@ const container = createElement({
     attrs: {id: 'parent'},
 });
 
-const main = createElement({
+createElement({
     tag: 'main',
     parent: container,
     classes: ['main']
@@ -81,54 +81,13 @@ const config = {
 router.menu = new MenuComponent(container, config);
 router.header = new HeaderComponent(container);
 
-
-
 new ws().subscribe('message', (payload: Record<string, any>) => {
+    if (payload)
     new NotificationComponent({
         type: 'msg',
         classes: ['notification_msg'],
         data: payload,
     });
 });
-
-// const payload = {
-//     "id": "d5cb71f1-61f1-4f5e-8d0a-d0adf17cda94",
-//     "text": "hkj dfogjodfjgoi df df g dfgdfgdijgdfiog dfgodfgoidfgiodfg fdoigdfoig ndfg dfgoidfig dfg df g dfgidfogodfgoidfi g dfg df godfo ig dfg df gdfgiodfgofdiogodfg fdg fdog fd godfgiodfiogoidfghkj dfogjodfjgoi df df g dfgdfgdijgdfiog dfgodfgoidfgiodfg fdoigdfoig ndfg dfgoidfig dfg df g dfgidfogodfgoidfi g dfg df godfo ig dfg df gdfgiodfgofdiogodfg fdg fdog fd godfgiodfiogoidfghkj dfogjodfjgoi df df g dfgdfgdijgdfiog dfgodfgoidfgiodfg fdoigdfoig ndfg dfgoidfig dfg df g dfgidfogodfgoidfi g dfg df godfo ig dfg df gdfgiodfgofdiogodfg fdg fdog fd godfgiodfiogoidfghkj dfogjodfjgoi df df g dfgdfgdijgdfiog dfgodfgoidfgiodfg fdoigdfoig ndfg dfgoidfig dfg df g dfgidfogodfgoidfi g dfg df godfo ig dfg df gdfgiodfgofdiogodfg fdg fdog fd godfgiodfiogoidfg",
-//     "created_at": "2025-05-09T12:32:22Z",
-//     "updated_at": "2025-05-09T12:32:22Z",
-//     "attachment_urls": null,
-//     "sender": {
-//         "id": "6cbac770-225d-4358-9d9d-5f3cef176883",
-//         "username": "rvasutenko",
-//         "avatar_url": "https://quickflowapp.ru/minio/posts/3fadfcf0-572b-4f32-a8d9-5f620afefb3c.gif",
-//         "firstname": "Роман",
-//         "lastname": "Васютенко"
-//     },
-//     "chat_id": "1fc25f37-b16d-4d19-8faa-109d22351ea1"
-// };
-
-// setTimeout(() => {
-//     new NotificationComponent({
-//         type: 'msg',
-//         classes: ['notification_msg'],
-//         data: payload,
-//     });
-// }, 500);
-
-// setTimeout(() => {
-//     new NotificationComponent({
-//         type: 'msg',
-//         classes: ['notification_msg'],
-//         data: payload,
-//     });
-// }, 1000);
-
-// setTimeout(() => {
-//     new NotificationComponent({
-//         type: 'msg',
-//         classes: ['notification_msg'],
-//         data: payload,
-//     });
-// }, 1500);
 
 router.start();

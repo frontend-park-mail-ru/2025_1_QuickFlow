@@ -8,7 +8,7 @@ import path from 'path';
 import crypto from 'crypto';
 
 import http from 'http';
-import { WebSocketServer } from 'ws';
+// import { WebSocketServer } from 'ws';
 
 import { users, posts, chats, messages, search, community } from '../public/mocks.js';
 import { fileURLToPath } from 'url';
@@ -19,7 +19,7 @@ const __dirname = dirname(__filename);
 
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocketServer({ server, path: '/api/ws' });
+// const wss = new WebSocketServer({ server, path: '/api/ws' });
 
 const ids = {};
 
@@ -27,42 +27,42 @@ const ids = {};
 
 
 
-wss.on('connection', (ws) => {
-    ws.on('message', (data) => {
-        try {
-            console.log(data);
-            const { type, payload } = JSON.parse(data);
-            console.log(`[WS] Message received:`, type, payload);
+// wss.on('connection', (ws) => {
+//     ws.on('message', (data) => {
+//         try {
+//             console.log(data);
+//             const { type, payload } = JSON.parse(data);
+//             console.log(`[WS] Message received:`, type, payload);
 
-            const response = {
-                type: 'message',
-                payload: {
-                    id: "uuidv4()",
-                    text: "hello!",
-                    created_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString(),
-                    is_read: false,
-                    attachment_urls: null,
-                    sender: {
-                        id: "1eabe150-7b9e-42b3-a8d5-ad6ad900180c",
-                        username: "Nikita2",
-                        firstname: "Myname",
-                        lastname: "Mysurname"
-                    },
-                    chat_id: "99f9d7dd-e955-4eda-97ec-91c958208b3b"
-                }
-            };
+//             const response = {
+//                 type: 'message',
+//                 payload: {
+//                     id: "uuidv4()",
+//                     text: "hello!",
+//                     created_at: new Date().toISOString(),
+//                     updated_at: new Date().toISOString(),
+//                     is_read: false,
+//                     attachment_urls: null,
+//                     sender: {
+//                         id: "1eabe150-7b9e-42b3-a8d5-ad6ad900180c",
+//                         username: "Nikita2",
+//                         firstname: "Myname",
+//                         lastname: "Mysurname"
+//                     },
+//                     chat_id: "99f9d7dd-e955-4eda-97ec-91c958208b3b"
+//                 }
+//             };
 
-            ws.send(JSON.stringify(response));
-        } catch (err) {
-            console.error('[WS] Failed to parse message', data);
-        }
-    });
+//             ws.send(JSON.stringify(response));
+//         } catch (err) {
+//             console.error('[WS] Failed to parse message', data);
+//         }
+//     });
 
-    ws.on('close', () => {
-        console.log('[WS] Client disconnected');
-    });
-});
+//     ws.on('close', () => {
+//         console.log('[WS] Client disconnected');
+//     });
+// });
 
 
 
