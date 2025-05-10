@@ -18,18 +18,18 @@ class Router {
     private _menu: MenuComponent | null = null;
     private _header: HeaderComponent | null = null;
 
-    static initNotifications() {
-        new ws().subscribe('message', (payload: Record<string, any>) => {
-            new NotificationComponent({
-                type: 'msg',
-                classes: ['notification_msg'],
-                data: payload,
-            });
-        });
-    };
+    // static initNotifications() {
+    //     new ws().subscribe('message', (payload: Record<string, any>) => {
+    //         new NotificationComponent({
+    //             type: 'msg',
+    //             classes: ['notification_msg'],
+    //             data: payload,
+    //         });
+    //     });
+    // };
 
     constructor() {
-        Router.initNotifications();
+        // Router.initNotifications();
     }
 
     set menu(menu: MenuComponent) {
