@@ -6,7 +6,6 @@
     "type": "module",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "DEBUG=* && node server/devServer.js",
         "start": "DEBUG=* && node server/server.js",
         "lint": "eslint --fix .",
         "prepare": "husky install",
