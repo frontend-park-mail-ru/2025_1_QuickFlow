@@ -10,8 +10,8 @@ import ThemeManager from '@modules/ThemeManager';
 import LsStandaloneBridge from '@modules/LsStandaloneBridge';
 import registerSW from '@utils/registerSW';
 import registerRoutes from './registerRoutes';
-import ws from '@modules/WebSocketService';
-import NotificationComponent from '@components/NotificationComponent/NotificationComponent';
+// import ws from '@modules/WebSocketService';
+// import NotificationComponent from '@components/NotificationComponent/NotificationComponent';
 
 
 registerSW();
@@ -81,13 +81,15 @@ const config = {
 router.menu = new MenuComponent(container, config);
 router.header = new HeaderComponent(container);
 
-new ws().subscribe('message', (payload: Record<string, any>) => {
-    new NotificationComponent({
-        type: 'msg',
-        classes: ['notification_msg'],
-        data: payload,
-    });
-});
+
+
+// new ws().subscribe('message', (payload: Record<string, any>) => {
+//     new NotificationComponent({
+//         type: 'msg',
+//         classes: ['notification_msg'],
+//         data: payload,
+//     });
+// });
 
 // const payload = {
 //     "id": "d5cb71f1-61f1-4f5e-8d0a-d0adf17cda94",

@@ -3,8 +3,8 @@ const RECONNECTION_TIMEOUT = 10 * 1000;
 
 class WebSocketService {
     baseUrl: string;
-    socket: any = null;
-    subscribers: any = {};
+    socket: WebSocket = null;
+    subscribers: Record<string, any> = {};
 
     static __instance: WebSocketService = null;
     

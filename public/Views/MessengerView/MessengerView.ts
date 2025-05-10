@@ -3,15 +3,12 @@ import MessengerComponent from '@components/MessengerComponent/MessengerComponen
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import { getLsItem } from '@utils/localStorage';
 import router from '@router';
-import ws from '@modules/WebSocketService';
 
 
 class MessengerView {
     constructor() {}
 
     render(params: Record<string, any>) {
-        new ws();
-
         const containerObj = new MainLayoutComponent().render({
             type: 'messenger',
         });
