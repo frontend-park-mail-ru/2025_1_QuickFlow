@@ -81,14 +81,16 @@ const config = {
 router.menu = new MenuComponent(container, config);
 router.header = new HeaderComponent(container);
 
-new ws().subscribe('message', (payload: Record<string, any>) => {
-    if (payload?.sender?.username === getLsItem('username', '')) return;
-
-    new NotificationComponent({
-        type: 'msg',
-        classes: ['notification_msg'],
-        data: payload,
+if (!router.path.startsWith('/scores')) {
+    new ws().subscribe('message', (payload: Record<string, any>) => {
+        if (payload?.sender?.username === getLsItem('username', '')) return;
+    
+        new NotificationComponent({
+            type: 'msg',
+            classes: ['notification_msg'],
+            data: payload,
+        });
     });
-});
+}
 
 router.start();
