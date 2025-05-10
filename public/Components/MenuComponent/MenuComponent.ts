@@ -11,10 +11,11 @@ export default class MenuComponent {
     static __instance: MenuComponent;
     private config: Record<string, any>;
     private parent: HTMLElement;
-    private container: HTMLElement | null = null;
+
+    container: HTMLElement | null = null;
     menuElements: Record<string, any> = {};
-    activePageLink: any = null;
-    
+    activePageLink: HTMLElement = null;
+
     constructor(parent: HTMLElement, config: Record<string, any>) {
         if (MenuComponent.__instance) {
             return MenuComponent.__instance;
@@ -113,7 +114,7 @@ export default class MenuComponent {
         this.menuElements.signup.classList.remove('hidden');
     }
 
-    setActive(section: any) {
+    setActive(section: string) {
         const menuElement = this.menuElements[section];
         if (this.activePageLink) {
             this.activePageLink.classList.remove('menu__item_active');

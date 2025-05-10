@@ -26,15 +26,15 @@ class Router {
         this._header = header;
     }
 
-    get menu(): any {
+    get menu(): MenuComponent {
         return this._menu;
     }
 
-    get header(): any {
+    get header(): HeaderComponent {
         return this._header;
     }
 
-    register(view: any, config: any) {
+    register(view: any, config: Record<string, any>) {
         const { path, section }: Record<string, string> = config;
         this.routes[path] = {
             view,
@@ -81,7 +81,7 @@ class Router {
         window.addEventListener('popstate', () => this.renderPath({ path: this.path }));
     }
 
-    go(data: any) {
+    go(data: Record<string, any>) {
         if (AUTH_PATHS.includes(this.path)) {
             this._header?.renderAvatarMenu();
         }
@@ -133,7 +133,7 @@ class Router {
         return params;
     }
 
-    private renderPath(data: any) {
+    private renderPath(data: Record<string, any>) {
         const [pathname, queryString] = data.path.split('?');
         if (pathname) null; // for linter
 
