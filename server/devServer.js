@@ -148,6 +148,10 @@ app.get('/api/feed', (req, res) => {
         return res.status(401).end();
     }
 
+    posts.forEach((post) => {
+        post.id = crypto.randomUUID();
+    });
+
     res.status(200).json(posts);
 });
 

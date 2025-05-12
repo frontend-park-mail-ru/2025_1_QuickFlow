@@ -1,0 +1,32 @@
+.pics-viewer__bg {
+    background: var(--background-black-transparent);
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pics-viewer {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    overflow: scroll;
+    padding: 56px;
+    height: 100vh;
+}
+
+.pics-viewer__pic {
+    max-height: 80vh;
+    max-width: 100vh;
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}

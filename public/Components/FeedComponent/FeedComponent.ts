@@ -7,6 +7,7 @@ import insertIcon from '@utils/insertIcon';
 import { getLsItem } from '@utils/localStorage'
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 import ExtraLoadComponent from '@components/ExtraLoadComponent/ExtraLoadComponent';
+import VirtualizedListComponent from '@components/VirtualizedListComponent/VirtualizedListComponent';
 
 
 const POSTS_COUNT = 10;
@@ -19,6 +20,9 @@ export default class FeedComponent {
     private posts: HTMLElement | null = null;
     private lastTs: string | null = null;
     private emptyWrapper: HTMLElement;
+
+    private virtualization!: VirtualizedListComponent<any>;
+    private postKeyMap: Map<string, any> = new Map();
 
     constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
@@ -118,30 +122,79 @@ export default class FeedComponent {
         router.go({ path: '/login' });
     }
 
-    private renderPost(config: any, position: string | null = null) {
+    // private renderPost(config: any, position: string | null = null) {
+    //     if (position) config.position = "top";
+    //     new PostComponent(this.posts, config);
+    // }
+
+    private renderPost(config: any, position: string | null = null): HTMLElement {
+        const key = config.id; // предполагаем, что post_id уникален
+        if (!key) return;
+    
         if (position) config.position = "top";
+    
+        this.postKeyMap.set(String(key), config); // сохраняем config по ключу
         new PostComponent(this.posts, config);
+
+        return this.posts.querySelector(`[data-id="${config.id}"]`);
     }
+    
 
     private cbOk(feedData: any) {
+        let newPostsHeight = -48;
+
         feedData?.forEach((config: Record<string, any>) => {
-            this.renderPost(config);
+            const post = this.renderPost(config);
             this.lastTs = config.created_at;
+            newPostsHeight += post.offsetHeight + 48;
         });
+
+        this.initVirtualization(newPostsHeight);
 
         new ExtraLoadComponent<any>({
             sentinelContainer: this.posts!,
             marginPx: OBSERVER_MARGIN,
-            position: 'bottom',
+            position: 'pre-bottom',
             fetchFn: this.fetchMorePosts.bind(this),
             renderFn: (posts) => {
+                let newPostsHeight = -48;
+
+                const postsElements: Array<HTMLElement> = [];
                 posts?.forEach((postConfig) => {
-                    this.renderPost(postConfig);
+                    const post = this.renderPost(postConfig);
                     this.lastTs = postConfig.created_at;
+                    newPostsHeight += post.offsetHeight + 48;
+                    postsElements.push(post);
                 });
+
+                // this.virtualization?.destroy(); // пересоздаем виртуализацию
+                this.virtualization.pushElements(postsElements);
+                // this.initVirtualization(newPostsHeight);
             }
         });
     }
+
+    private initVirtualization(newPostsHeight: number) {
+        if (!this.posts) return;
+    
+        this.virtualization?.destroy();
+    
+        this.virtualization = new VirtualizedListComponent<any>({
+            container: this.posts,
+            itemSelector: '.post',
+            virtualizeMargin: newPostsHeight,
+            getKey: (el) => el.getAttribute('data-id')!,
+            fetchRenderedItem: (key) => {
+                const config = this.postKeyMap.get(key);
+                if (!config) return document.createElement('div');
+    
+                const wrapper = document.createElement('div');
+                new PostComponent(wrapper, config);
+                const el = wrapper.firstElementChild as HTMLElement;
+                return el;
+            },
+        });
+    }    
 
     private async fetchMorePosts(): Promise<any[]> {
         if (!this.lastTs) return [];

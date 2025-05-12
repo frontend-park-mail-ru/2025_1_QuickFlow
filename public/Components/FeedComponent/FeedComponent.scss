@@ -68,3 +68,12 @@
 .feed__bottom-sentinel {
     margin-top: -48px;
 }
+
+.feed__posts-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    overflow-y: auto;
+    height: 100%;
+}

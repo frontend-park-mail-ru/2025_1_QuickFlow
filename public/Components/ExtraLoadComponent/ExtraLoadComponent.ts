@@ -1,7 +1,6 @@
 type FetchFunction<T> = () => Promise<T[]>;
 type RenderFunction<T> = (items: T[]) => void;
-
-type ExtraLoadPosition = 'top' | 'bottom';
+type ExtraLoadPosition = 'top' | 'bottom' | 'pre-bottom';
 
 interface ExtraLoadConfig<T> {
     fetchFn: FetchFunction<T>;
@@ -24,11 +23,7 @@ export default class ExtraLoadComponent<T> {
         this.sentinel.classList.add('extra-load-sentinel');
 
         // Вставляем sentinel в указанную позицию
-        if (this.config.position === 'top') {
-            this.config.sentinelContainer.prepend(this.sentinel);
-        } else {
-            this.config.sentinelContainer.appendChild(this.sentinel);
-        }
+        this.setSentinel();
 
         this.initObserver();
     }
@@ -57,11 +52,7 @@ export default class ExtraLoadComponent<T> {
             this.config.renderFn(items);
 
             // Переустановка sentinel в нужное место
-            if (this.config.position === 'top') {
-                this.config.sentinelContainer.prepend(this.sentinel);
-            } else {
-                this.config.sentinelContainer.appendChild(this.sentinel);
-            }
+            this.setSentinel();
 
         } catch (e) {
             console.error('Failed to fetch extra items', e);
@@ -70,6 +61,20 @@ export default class ExtraLoadComponent<T> {
             this.observer.disconnect();
         } finally {
             this.isLoading = false;
+        }
+    }
+
+    private setSentinel() {
+        switch (this.config.position) {
+            case 'top':
+                this.config.sentinelContainer.prepend(this.sentinel);
+                break;
+            case 'pre-bottom':
+                this.config.sentinelContainer.lastChild.before(this.sentinel);
+                break;
+            case 'bottom':
+                this.config.sentinelContainer.appendChild(this.sentinel);
+                break;
         }
     }
 }

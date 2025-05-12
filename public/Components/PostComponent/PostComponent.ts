@@ -10,6 +10,7 @@ import router from '@router';
 import insertIcon from '@utils/insertIcon';
 import API from '@utils/api';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
+import PicsViewerComponent from '@components/PicsViewerComponent/PicsViewerComponent';
 
 
 const AUTHOR_AVATAR_SIZE = 's';
@@ -42,7 +43,7 @@ export default class PostComponent {
 
     wrapper: HTMLElement | null = null;
 
-    constructor(parent: any, config: any) {
+    constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
         this.config = config;
         this.isLiked = this.config.is_liked;
@@ -59,6 +60,7 @@ export default class PostComponent {
 
         this.wrapper = createElement({
             classes: ['post'],
+            attrs: { 'data-id': this.config?.id },
         });
 
         switch (this.config?.position) {
@@ -117,6 +119,12 @@ export default class PostComponent {
                 });
             });
         }
+
+        slider.addEventListener('click', () => {
+            new PicsViewerComponent({
+                picsWrapper: slider,
+            });
+        });
 
         this.renderPaginator(picsWrapper, slider);
 
@@ -566,7 +574,7 @@ export default class PostComponent {
                 classes: ['post__options-icon'],
                 parent: optionsWrapper,
             });
-            
+
             data.edit = {
                 href: '/edit',
                 text: 'Редактировать',

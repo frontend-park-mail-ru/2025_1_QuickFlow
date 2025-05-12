@@ -83,7 +83,10 @@ router.header = new HeaderComponent(container);
 
 if (!router.path.startsWith('/scores')) {
     new ws().subscribe('message', (payload: Record<string, any>) => {
-        if (payload?.sender?.username === getLsItem('username', '')) return;
+        if (
+            router.path.startsWith('/messenger') ||
+            payload?.sender?.username === getLsItem('username', '')
+        ) return;
     
         new NotificationComponent({
             type: 'msg',

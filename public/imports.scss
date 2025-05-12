@@ -29,6 +29,8 @@
 @use './Components/EmptyStateComponent/EmptyStateComponent';
 @use './Components/SearchComponent/SearchComponent';
 @use './Components/NotificationComponent/NotificationComponent';
+@use './Components/VirtualizedListComponent/VirtualizedListComponent';
+@use './Components/PicsViewerComponent/PicsViewerComponent';
 
 @use './Views/FeedView/FeedView';
 @use './Views/ProfileView/ProfileView';
