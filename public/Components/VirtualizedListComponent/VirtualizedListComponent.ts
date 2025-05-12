@@ -54,7 +54,7 @@ export default class VirtualizedListComponent<T> {
 
         this.observer = new IntersectionObserver(this.handleIntersect.bind(this), {
             root: null,
-            rootMargin: `${this.virtualizeMargin}px`,
+            rootMargin: `${this.virtualizeMargin / 2}px`,
             threshold: 0,
         });
 
@@ -92,13 +92,16 @@ export default class VirtualizedListComponent<T> {
                     !this.topItems.length
                 ) continue;
 
-                const returningPost = this.topItems.pop();
+                console.log('spacer_top');
 
-                this.topSpacer.after(returningPost);
-                const height = returningPost.offsetHeight;
-                this.topPadding -= height;
-                this.updateSpacers();
-                this.observer.observe(returningPost);
+                requestAnimationFrame(() => {
+                    const returningPost = this.topItems.pop();
+                    this.topSpacer.after(returningPost);
+                    const height = returningPost.offsetHeight;
+                    this.topPadding -= height;
+                    this.updateSpacers();
+                    this.observer.observe(returningPost);
+                });
 
                 continue;
             }
@@ -109,13 +112,21 @@ export default class VirtualizedListComponent<T> {
                     !this.bottomItems.length
                 ) continue;
 
-                const returningPost = this.bottomItems.pop();
+                console.log('spacer_bottom');
 
-                this.bottomSpacer.previousSibling.before(returningPost);
-                const height = returningPost.offsetHeight;
-                this.bottomPadding -= height;
-                this.updateSpacers();
-                this.observer.observe(returningPost);
+                requestAnimationFrame(() => {
+                    const returningPost = this.bottomItems.pop();
+                    const beforeBottomSpacer = this.bottomSpacer.previousElementSibling;
+                    if (beforeBottomSpacer.classList.contains('extra-load-sentinel')) {
+                        beforeBottomSpacer.before(returningPost);
+                    } else {
+                        this.bottomSpacer.before(returningPost);
+                    }
+                    const height = returningPost.offsetHeight;
+                    this.bottomPadding -= height;
+                    this.updateSpacers();
+                    this.observer.observe(returningPost);
+                });
 
                 continue;
             }
@@ -124,20 +135,41 @@ export default class VirtualizedListComponent<T> {
                 const top = el.offsetTop;
                 const height = el.offsetHeight;
 
-                this.observer.unobserve(el);
-                el.remove();
+                console.log('!entry.isIntersecting');
 
-                if (top < -this.container.getBoundingClientRect().top) {
-                    this.topPadding += height;
-                    this.topItems.push(el);
-                } else {
-                    this.bottomPadding += height;
-                    this.bottomItems.push(el);
-                }
+                requestAnimationFrame(() => {
+                    this.observer.unobserve(el);
+                    el.remove();
+
+                    if (top < -this.container.getBoundingClientRect().top) {
+                        this.topPadding += height;
+                        this.topItems.push(el);
+                    } else {
+                        this.bottomPadding += height;
+                        this.bottomItems.push(el);
+                    }
+                });
 
                 this.updateSpacers();
             }
         };
+
+        const scrollTop = this.container.scrollTop;
+
+        if (
+            scrollTop < this.topPadding &&
+            this.topItems.length
+        ) {            
+            requestAnimationFrame(() => {
+                console.log('hook');
+                const returningPost = this.topItems.pop();
+                this.topSpacer.after(returningPost);
+                const height = returningPost?.offsetHeight;
+                this.topPadding -= height;
+                this.updateSpacers();
+                this.observer.observe(returningPost);
+            });
+        }
     }
 
     private updateSpacers() {
