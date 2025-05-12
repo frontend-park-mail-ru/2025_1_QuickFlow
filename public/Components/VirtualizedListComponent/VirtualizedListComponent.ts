@@ -159,12 +159,14 @@ export default class VirtualizedListComponent<T> {
         if (
             scrollTop < this.topPadding &&
             this.topItems.length
-        ) {            
+        ) {
             requestAnimationFrame(() => {
                 console.log('hook');
                 const returningPost = this.topItems.pop();
+                if (!returningPost) return;
+                
                 this.topSpacer.after(returningPost);
-                const height = returningPost?.offsetHeight;
+                const height = returningPost.offsetHeight;
                 this.topPadding -= height;
                 this.updateSpacers();
                 this.observer.observe(returningPost);
