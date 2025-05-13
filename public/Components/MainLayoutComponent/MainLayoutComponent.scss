@@ -78,23 +78,19 @@
 .container__column {
     display: flex;
     flex-direction: column;
-    width: 100%;
 }
 
 .container__column_left {
     align-items: flex-start;
     gap: 24px;
     max-width: 553px;
-    // min-width: 553px;
-
     width: 100%;
 }
 
 .container__column_right {
     align-items: center;
     gap: 12px;
-
-    width: 272px;
+    flex-grow: 1;
 }
 
 @media screen and (max-width: 480px) {
