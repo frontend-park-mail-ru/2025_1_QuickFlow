@@ -1,4 +1,4 @@
-import { ValidateCommunityName } from "@components/UI/InputComponent/Validators";
+import { ValidateCommunityName, ValidateCommunityNickname } from "@components/UI/InputComponent/Validators";
 
 export const forms = {
     settings: {
@@ -26,10 +26,9 @@ export const forms = {
                 key: 'nickname',
                 config: {
                     label: 'Адрес сообщества',
-                    validation: 'username',
-                    entity: 'Адрес',
                     required: true,
                     maxLength: 20,
+                    validator: ValidateCommunityNickname,
                 }
             }]
         ]

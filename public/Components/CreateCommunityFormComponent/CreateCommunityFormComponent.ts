@@ -5,7 +5,7 @@ import focusInput from '@utils/focusInput';
 import router from '@router';
 import { setLsItem, getLsItem } from '@utils/localStorage';
 import API from '@utils/api';
-import { ValidateCommunityName } from '@components/UI/InputComponent/Validators';
+import { ValidateCommunityName, ValidateCommunityNickname } from '@components/UI/InputComponent/Validators';
 
 
 export default class CreateCommunityFormComponent {
@@ -164,8 +164,7 @@ export default class CreateCommunityFormComponent {
             label: 'https://quickflowapp.ru/communities/',
             required: true,
             showRequired: false,
-            validation: 'username',
-            entity: 'Адрес',
+            validator: ValidateCommunityNickname,
             maxLength: 20,
         });
         if (this.addressInput.input) focusInput(this.addressInput.input, this.focusTimer);
