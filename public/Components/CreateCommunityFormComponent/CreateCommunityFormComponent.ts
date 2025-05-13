@@ -166,6 +166,7 @@ export default class CreateCommunityFormComponent {
             showRequired: false,
             validation: 'username',
             entity: 'Адрес',
+            maxLength: 20,
         });
         if (this.addressInput.input) focusInput(this.addressInput.input, this.focusTimer);
 
