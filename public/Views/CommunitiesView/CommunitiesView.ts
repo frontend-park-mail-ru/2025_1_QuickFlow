@@ -8,6 +8,8 @@ import CommunityComponent from '@components/CommunityComponent/CommunityComponen
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import CreateCommunityMwComponent from '@components/UI/ModalWindowComponent/CreateCommunityMwComponent';
 import SearchComponent from '@components/SearchComponent/SearchComponent';
+import router from '@router';
+import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 
 
 const enum Section {
@@ -101,22 +103,39 @@ class CommunitiesView {
     }
 
     async renderSection(section = Section.Communities) {
-        this.communities.innerHTML = '';
-
         switch (section) {
             case Section.Communities:
-                this.renderCommunities(API.getUserCommunities);
+                this.fetchCommunities(API.getUserCommunities);
                 break;
             case Section.Managed:
-                this.renderCommunities(API.getManagedCommunities);
+                this.fetchCommunities(API.getManagedCommunities);
                 break;
         }
     }
 
-    async renderCommunities(getMethod: Function) {
+    async fetchCommunities(getMethod: Function) {
         const username = getLsItem('username', null);
 
-        const [communitiesStatus, data] = await getMethod(username, COMMUNITIES_COUNT);
+        const [status, data] = await getMethod(username, COMMUNITIES_COUNT);
+        switch (status) {
+            case 200:
+                this.renderCommunities(data);
+                break;
+            case 401:
+                router.go({ path: '/login' });
+                break;
+            default:
+                new PopUpComponent({
+                    isError: true,
+                    text: 'Не удалось получить список сообществ',
+                });
+                break;
+        }
+    }
+
+    private renderCommunities(data: Record<string, any>) {
+        this.communities.innerHTML = '';
+
         const communitiesData = data?.payload;
 
         if (!communitiesData || !communitiesData.length) {

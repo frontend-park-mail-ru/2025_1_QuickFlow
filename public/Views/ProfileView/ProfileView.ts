@@ -35,6 +35,13 @@ class ProfileView {
             type: 'profile',
         });
 
+        createElement({
+            parent: this.containerObj?.left,
+            attrs: {
+                style: 'width: 100%; height: 100%; background: red;',
+            }
+        });
+
         const username = params?.username || getLsItem('username', '');
 
         const [status, profileData] = await API.getProfile(username);

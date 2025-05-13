@@ -5,6 +5,7 @@ import focusInput from '@utils/focusInput';
 import router from '@router';
 import { setLsItem, getLsItem } from '@utils/localStorage';
 import API from '@utils/api';
+import { ValidateCommunityName } from '@components/UI/InputComponent/Validators';
 
 
 export default class CreateCommunityFormComponent {
@@ -136,6 +137,8 @@ export default class CreateCommunityFormComponent {
             required: true,
             showRequired: false,
             value: getLsItem("new-community-name", ""),
+            validator: ValidateCommunityName,
+            maxLength: 50,
         });
         if (this.nameInput.input) focusInput(this.nameInput.input, this.focusTimer);
 

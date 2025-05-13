@@ -6,6 +6,8 @@ import FriendComponent from '@components/FriendComponent/FriendComponent';
 import { getLsItem } from '@utils/localStorage';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
 import SearchComponent from '@components/SearchComponent/SearchComponent';
+import router from '@router';
+import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 
 
 const enum Section {
@@ -60,7 +62,6 @@ class FriendsView {
             items: {
                 friends: {
                     title: 'Мои друзья',
-                    // count: await API.getFriends(),
                     onClick: () => this.renderSection(Section.All),
                 },
                 incoming: {
@@ -88,25 +89,41 @@ class FriendsView {
     }
 
     async renderSection(section = Section.All) {
-        this.friends.innerHTML = '';
-
         switch (section) {
             case Section.All:
-                this.renderFriends('all');
+                this.fetchFriends('all');
                 break;
             case Section.Incoming:
-                this.renderFriends('incoming');
+                this.fetchFriends('incoming');
                 break;
             case Section.Outcoming:
-                this.renderFriends('outcoming');
+                this.fetchFriends('outcoming');
                 break;
         }
     }
 
-    async renderFriends(section: string) {
+    async fetchFriends(section: string) {
         const userId = getLsItem('user_id', null);
 
-        const [friendsStatus, data] = await API.getFriends(userId, 100, 0, section);
+        const [status, data] = await API.getFriends(userId, 100, 0, section);
+        switch (status) {
+            case 200: 
+                this.renderFriends(data, section);
+                break;
+            case 401:
+                router.go({ path: '/login' });
+                break;
+            default:
+                new PopUpComponent({
+                    isError: true,
+                    text: 'Не удалось получить список друзей',
+                });
+                break;
+        }
+    }
+
+    private renderFriends(data: Record<string, any>, section: string) {
+        this.friends.innerHTML = '';
         const friendsData = data?.payload?.friends;
 
         if (!friendsData || !friendsData.length) {

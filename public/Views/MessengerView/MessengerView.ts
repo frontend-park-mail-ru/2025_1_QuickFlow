@@ -1,37 +1,45 @@
-import Ajax from '@modules/ajax';
 import MessengerComponent from '@components/MessengerComponent/MessengerComponent';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import { getLsItem } from '@utils/localStorage';
 import router from '@router';
+import API from '@utils/api';
+import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 
 
 class MessengerView {
+    private params: Record<string, any>;
+    private containerObj: MainLayoutComponent;
+
     constructor() {}
 
-    render(params: Record<string, any>) {
-        const containerObj = new MainLayoutComponent().render({
+    async render(params: Record<string, any>) {
+        this.params = params;
+
+        this.containerObj = new MainLayoutComponent().render({
             type: 'messenger',
         });
 
-        Ajax.get({
-            url: `/profiles/${getLsItem('username', '')}`,
-            callback: (status: number, userData: any) => {
-                switch (status) {
-                    case 200:
-                        new MessengerComponent(containerObj, {
-                            user: userData,
-                            receiver_username: params?.username,
-                            chat_id: params?.chat_id,
-                        });
-                        break;
-                    case 401:
-                        router.go({ path: '/login' });
-                        break;
-                }
-            }
-        });
+        const [status, profileData] = await API.getProfile(getLsItem('username', ''));
+        switch (status) {
+            case 200:
+                new MessengerComponent(this.containerObj, {
+                    user: profileData,
+                    receiver_username: this.params?.username,
+                    chat_id: this.params?.chat_id,
+                });
+                break;
+            case 401:
+                router.go({ path: '/login' });
+                break;
+            default:
+                new PopUpComponent({
+                    isError: true,
+                    text: 'Не удалось получить данные профиля',
+                });
+                break;
+        }
 
-        return containerObj.container;
+        return this.containerObj.container;
     }
 }
 

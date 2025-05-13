@@ -54,32 +54,41 @@ class EditProfileView {
 
     async renderSection(sectionName: string) {
         this.section = sectionName;
-        this.stateUpdaters = [];
         const sectionData = forms[this.section];
-        this.containerObj.left.innerHTML = '';
 
-        const [status, profileData] = await API.getProfile(getLsItem('username', ''));
-        switch (status) {
-            case 200:
-                this.getCbOk(profileData, sectionData);
-                break;
-            case 401:
-                this.cbUnauthorized();
-                break;
+        try {
+            const [status, profileData] = await API.getProfile(getLsItem('username', ''));
+            switch (status) {
+                case 200:
+                    this.userData = profileData;
+                    this.renderForm(sectionData);
+                    break;
+                case 401:
+                    router.go({ path: '/login' });
+                    return;
+                default:
+                    new PopUpComponent({
+                        isError: true,
+                        text: 'Не удалось получить данные профиля',
+                    });
+                    break;
+            }
+        } catch {
+            new PopUpComponent({
+                isError: true,
+                text: 'Проверьте подключение к интернету',
+            });
         }
     }
 
-    cbUnauthorized() {
-        router.go({ path: '/login' });
-    }
-
-    getCbOk(userData: Record<string, any>, sectionData: Record<string, any>) {
-        this.userData = userData;
-        if (sectionData.header) this.renderHeader();
-        this.renderForm(sectionData);
-    }
-
     renderForm(sectionData: Record<string, any>) {
+        this.containerObj.left.innerHTML = '';
+        this.stateUpdaters = [];
+
+        if (sectionData.header) {
+            this.renderHeader();
+        }
+
         const fields = sectionData.fields;
 
         const form = createElement({
@@ -221,7 +230,7 @@ class EditProfileView {
                     this.postCbOk(newUsername);
                     break;
                 case 401:
-                    this.cbUnauthorized();
+                    router.go({ path: '/login' });
                     break;
                 default:
                     this.cbDefault();

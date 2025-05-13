@@ -1,3 +1,5 @@
+import { ValidateCommunityName } from "@components/UI/InputComponent/Validators";
+
 export const forms = {
     settings: {
         header: true,
@@ -7,7 +9,8 @@ export const forms = {
                 config: {
                     label: 'Название',
                     required: true,
-                    maxLength: 20,
+                    maxLength: 50,
+                    validator: ValidateCommunityName,
                 }
             },
             {
@@ -16,7 +19,7 @@ export const forms = {
                 config: {
                     label: 'Описание',
                     placeholder: 'Описание сообщества',
-                    maxLength: 256,
+                    maxLength: 500,
                 }
             }],
             [{

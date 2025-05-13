@@ -107,12 +107,31 @@ export default class InputComponent {
                 break;
         }
 
-        if (this._config.validation) {
+        if (this._config.validator) {
+            this.input.addEventListener('input', () => this.checkValue());
+            if (this._config.value) {
+                this.checkValue();
+            }
+        } else if (this._config.validation) {
             this.input.addEventListener('input', () => this.validate());
-            if (this._config.value) this.validate();
+            if (this._config.value) {
+                this.validate();
+            }
         }
 
         this.renderBottom();
+    }
+
+    checkValue(): boolean | string {
+        const validationResult = this.config.validator(this.value);
+    
+        if (!validationResult.result) {
+            this.showError(validationResult.message || '');
+            return false;
+        }
+    
+        this.hideError();
+        return true;
     }
 
     renderBottom() {
