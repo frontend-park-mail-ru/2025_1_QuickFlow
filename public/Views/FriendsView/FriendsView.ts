@@ -1,13 +1,13 @@
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import RadioMenuComponent from '@components/RadioMenuComponent/RadioMenuComponent';
 import createElement from '@utils/createElement';
-import API from '@utils/api';
 import FriendComponent from '@components/FriendComponent/FriendComponent';
 import { getLsItem } from '@utils/localStorage';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
 import SearchComponent from '@components/SearchComponent/SearchComponent';
 import router from '@router';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
+import { FriendsRequests, UsersRequests } from '@modules/api';
 
 
 const enum Section {
@@ -51,7 +51,7 @@ class FriendsView {
                 'friends__search',
             ],
             results,
-            searchResults: API.searchFriends,
+            searchResults: UsersRequests.searchUsers,
             renderEmptyState: this.renderEmptyState,
             renderTitle: this.renderTitle,
             renderResult: this.renderFriend,
@@ -105,7 +105,7 @@ class FriendsView {
     async fetchFriends(section: string) {
         const userId = getLsItem('user_id', null);
 
-        const [status, data] = await API.getFriends(userId, 100, 0, section);
+        const [status, data] = await FriendsRequests.getFriends(userId, 100, 0, section);
         switch (status) {
             case 200: 
                 this.renderFriends(data, section);

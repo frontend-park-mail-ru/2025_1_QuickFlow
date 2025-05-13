@@ -5,8 +5,8 @@ import getTime from '@utils/getTime';
 import router from '@router';
 import ws from '@modules/WebSocketService';
 import { getLsItem } from '@utils/localStorage';
-import API from '@utils/api';
 import ExtraLoadComponent from '@components/ExtraLoadComponent/ExtraLoadComponent';
+import { ChatsRequests } from '@modules/api';
 
 
 const MSG_AVATAR_SIZE = 'xs';
@@ -51,7 +51,7 @@ export default class ChatComponent {
             classes: ['chat__scroll'],
         });
 
-        const [status, msgsData] = await API.getMessages(this.config?.chatData?.id, 50);
+        const [status, msgsData] = await ChatsRequests.getMessages(this.config?.chatData?.id, 50);
         this.msgsData = msgsData;
 
         switch (status) {
@@ -353,8 +353,7 @@ export default class ChatComponent {
     
         if (!firstMsgTs) return [];
     
-        const [status, msgsData] = await API.getMessages(this.config?.chatData?.id, 50, firstMsgTs);
-        // const [status, msgsData] = await API.getMessagesBefore(this.config?.chatData?.id, firstMsgTs, 20);
+        const [status, msgsData] = await ChatsRequests.getMessages(this.config?.chatData?.id, 50, firstMsgTs);
         if (status === 200 && Array.isArray(msgsData?.messages)) {
             return msgsData.messages;
         }

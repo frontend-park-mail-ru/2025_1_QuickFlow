@@ -7,6 +7,7 @@ import FileInputComponent from '@components/UI/FileInputComponent/FileInputCompo
 import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import { FILE, POST } from '@config';
+import { PostsRequests } from '@modules/api';
 
 
 export default class PostMwComponent extends ModalWindowComponent {
@@ -277,43 +278,31 @@ export default class PostMwComponent extends ModalWindowComponent {
         }
 
         if (this.config.type === 'create-post') {
-            Ajax.post({
-                url: '/post',
-                body: formData,
-                isFormData: true,
-                callback: (status: number, config: any) => {
-                    switch (status) {
-                        case 200:
-                            this.config.renderCreatedPost(config?.payload);
-                            this.close();
-                            break;
-                        case 413:
-                            alert('File is too large');
-                            break;
-                        default:
-                            this.cbFailed();
-                    }
-                }
-            });
+            const [status, postData] = await PostsRequests.createPost(formData);
+            switch (status) {
+                case 200:
+                    this.config.renderCreatedPost(postData?.payload);
+                    this.close();
+                    break;
+                case 413:
+                    alert('File is too large');
+                    break;
+                default:
+                    this.cbFailed();
+            }
         } else if (this.config.type === 'edit-post') {
-            Ajax.put({
-                url: `/posts/${this.config.data.id}`,
-                body: formData,
-                isFormData: true,
-                callback: (status: number, config: any) => {
-                    switch (status) {
-                        case 200:
-                            this.config.onAjaxEditPost(config?.payload);
-                            this.close();
-                            break;
-                        case 413:
-                            alert('File is too large');
-                            break;
-                        default:
-                            this.cbFailed();
-                    }
-                }
-            });
+            const [status, postData] = await PostsRequests.editPost(this.config.data.id, formData);
+            switch (status) {
+                case 200:
+                    this.config.onAjaxEditPost(postData?.payload);
+                    this.close();
+                    break;
+                case 413:
+                    alert('File is too large');
+                    break;
+                default:
+                    this.cbFailed();
+            }
         }
     }
 

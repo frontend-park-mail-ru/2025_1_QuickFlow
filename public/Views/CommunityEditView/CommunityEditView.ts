@@ -13,12 +13,11 @@ import convertDate from '@utils/convertDate';
 
 import router from '@router';
 import { forms } from './CommunityEditFormConfig';
-import API from '@utils/api';
 import { FILE } from '@config';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
 import FriendComponent from '@components/FriendComponent/FriendComponent';
-import SearchComponent from '@components/SearchComponent/SearchComponent';
 import DeleteMwComponent from '@components/UI/ModalWindowComponent/DeleteMwComponent';
+import { CommunitiesRequests } from '@modules/api';
 
 
 class CommunityEditView {
@@ -38,7 +37,7 @@ class CommunityEditView {
             type: 'feed',
         });
 
-        const [status, communityData] = await API.getCommunity(this.params.address);
+        const [status, communityData] = await CommunitiesRequests.getCommunity(this.params.address);
 
         switch (status) {
             case 200:
@@ -104,7 +103,7 @@ class CommunityEditView {
                         confirm: 'Удалить',
                     },
                     delete: async () => {
-                        const status = await API.deleteCommunity(this.communityData?.payload?.id);
+                        const status = await CommunitiesRequests.deleteCommunity(this.communityData?.payload?.id);
                         switch (status) {
                             case 200:
                                 router.go({ path: '/feed' });
@@ -147,27 +146,11 @@ class CommunityEditView {
             classes: ['communities'],
         });
 
-        // new SearchComponent(this.containerObj.left, {
-        //     placeholder: 'Введите запрос',
-        //     classes: ['search_wide'],
-        //     inputClasses: [
-        //         'input_wide',
-        //         'input_search-small',
-        //         'communities__search',
-        //     ],
-        //     results,
-        //     searchResults: API.searchFriends,
-        //     renderTitle: this.renderTitle,
-        //     renderEmptyState: this.renderEmptyState,
-        //     renderResult: this.renderMember,
-        //     elementToHide: members,
-        // });
-
         this.renderMembersList(members);
     }
 
     async renderMembersList(parent: HTMLElement) {
-        const [status, membersData] = await API.getCommunityMembers(this.communityData?.payload?.id, 100);
+        const [status, membersData] = await CommunitiesRequests.getCommunityMembers(this.communityData?.payload?.id, 100);
 
         switch (status) {
             case 401:
@@ -231,7 +214,7 @@ class CommunityEditView {
             });
         }
 
-        const [status, communityData] = await API.getCommunity(this.params.address);
+        const [status, communityData] = await CommunitiesRequests.getCommunity(this.params.address);
 
         switch (status) {
             case 200:
@@ -347,7 +330,7 @@ class CommunityEditView {
         const newNickname = body?.nickname;
 
         try {
-            const [status, communityData] = await API.editCommunity(this.communityData?.payload?.id, body);
+            const [status, communityData] = await CommunitiesRequests.editCommunity(this.communityData?.payload?.id, body);
             switch (status) {
                 case 200:
                     this.postCbOk(newNickname);

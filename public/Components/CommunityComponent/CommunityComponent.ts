@@ -1,7 +1,7 @@
 import createElement from '@utils/createElement';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
 import ContextMenuComponent from '@components/ContextMenuComponent/ContextMenuComponent';
-import API from '@utils/api';
+import { CommunitiesRequests } from '@modules/api';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 
 
@@ -115,7 +115,7 @@ export default class CommunityComponent {
                 icon: 'minus-icon',
                 isCritical: true,
                 onClick: async () => {
-                    const status = await API.leaveCommunity(communityData.id);
+                    const status = await CommunitiesRequests.leaveCommunity(communityData.id);
                     switch (status) {
                         case 200:
                             this.renderDeletedCommunity(community, communityData);
@@ -158,7 +158,7 @@ export default class CommunityComponent {
         });
 
         undoBtn.addEventListener('click', async () => {
-            const status = await API.joinCommunity(communityData.id);
+            const status = await CommunitiesRequests.joinCommunity(communityData.id);
             switch (status) {
                 case 200:
                     // this.renderMembersCount(parent);

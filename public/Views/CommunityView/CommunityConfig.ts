@@ -1,15 +1,12 @@
-import DeleteMwComponent from '@components/UI/ModalWindowComponent/DeleteMwComponent';
-import Ajax from '@modules/ajax';
-import router from '@router';
-import API from '@utils/api';
+import { CommunitiesRequests } from '@modules/api';
 
 
 export const ACTIONS_PROPERTIES = {
     not_member: [{
         text: "Подписаться",
         variant: "primary",
-        onClick: async function(data: any) {
-            const status = await API.joinCommunity(data.payload.id);
+        onClick: async function(data: Record<string, any>) {
+            const status = await CommunitiesRequests.joinCommunity(data.payload.id);
             switch (status) {
                 case 200:
                     data.payload.role = "member";
@@ -30,8 +27,8 @@ export const ACTIONS_PROPERTIES = {
     member: [{
         text: "Вы подписаны",
         variant: "secondary",
-        onClick: async function(data: any) {
-            const status = await API.leaveCommunity(data.payload.id);
+        onClick: async function(data: Record<string, any>) {
+            const status = await CommunitiesRequests.leaveCommunity(data.payload.id);
             switch (status) {
                 case 200:
                     data.payload.role = "not_member";

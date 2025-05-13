@@ -5,7 +5,7 @@ import createElement from '@utils/createElement';
 import focusInput from '@utils/focusInput';
 import router from '@router';
 import { setLsItem, getLsItem, removeLsItem } from '@utils/localStorage';
-import API from '@utils/api';
+import { UsersRequests } from '@modules/api';
 
 
 export default class LoginFormComponent {
@@ -234,7 +234,7 @@ export default class LoginFormComponent {
                     setLsItem('is-general-feedback-ready', 'true');
 
                     (async () => {
-                        const [status, data] = await API.getProfile(getLsItem('username', null));
+                        const [status, data] = await UsersRequests.getProfile(getLsItem('username', null));
                         if (status === 200) setLsItem('user_id', data.id);
                     })();
 

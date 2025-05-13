@@ -2,8 +2,8 @@ import createElement from '@utils/createElement';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
 import ContextMenuComponent from '@components/ContextMenuComponent/ContextMenuComponent';
 import insertIcon from '@utils/insertIcon';
-import API from '@utils/api';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
+import { FriendsRequests } from '@modules/api';
 
 
 export default class FriendComponent {
@@ -108,7 +108,7 @@ export default class FriendComponent {
                 });
 
                 action.addEventListener('click', async () => {
-                    const status = await API.acceptFriendRequest(this.config.data.id);
+                    const status = await FriendsRequests.acceptFriendRequest(this.config.data.id);
                     switch (status) {
                         case 200:
                             this.element.remove();
@@ -140,7 +140,7 @@ export default class FriendComponent {
                 });
 
                 action.addEventListener('click', async () => {
-                    const status = await API.cancelFriendRequest(this.config.data.id);
+                    const status = await FriendsRequests.cancelFriendRequest(this.config.data.id);
                     switch (status) {
                         case 200:
                             this.element.remove();
@@ -181,7 +181,7 @@ export default class FriendComponent {
                 icon: 'user-delete-icon',
                 isCritical: true,
                 onClick: async () => {
-                    const status = await API.deleteFriend(friendData.id);
+                    const status = await FriendsRequests.deleteFriend(friendData.id);
 
                     switch (status) {
                         case 200:
@@ -223,7 +223,7 @@ export default class FriendComponent {
         });
 
         undoBtn.addEventListener('click', async () => {
-            const status = await API.acceptFriendRequest(friendData.id);
+            const status = await FriendsRequests.acceptFriendRequest(friendData.id);
 
             switch (status) {
                 case 200:

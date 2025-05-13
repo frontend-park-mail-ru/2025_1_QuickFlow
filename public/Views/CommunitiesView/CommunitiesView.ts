@@ -1,7 +1,6 @@
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import RadioMenuComponent from '@components/RadioMenuComponent/RadioMenuComponent';
 import createElement from '@utils/createElement';
-import API from '@utils/api';
 import { getLsItem } from '@utils/localStorage';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
 import CommunityComponent from '@components/CommunityComponent/CommunityComponent';
@@ -10,6 +9,7 @@ import CreateCommunityMwComponent from '@components/UI/ModalWindowComponent/Crea
 import SearchComponent from '@components/SearchComponent/SearchComponent';
 import router from '@router';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
+import { CommunitiesRequests } from '@modules/api';
 
 
 const enum Section {
@@ -54,7 +54,7 @@ class CommunitiesView {
                 'communities__search',
             ],
             results,
-            searchResults: API.searchCommunities,
+            searchResults: CommunitiesRequests.searchCommunities,
             renderTitle: this.renderTitle,
             renderEmptyState: this.renderEmptyState,
             renderResult: this.renderCommunity,
@@ -105,10 +105,10 @@ class CommunitiesView {
     async renderSection(section = Section.Communities) {
         switch (section) {
             case Section.Communities:
-                this.fetchCommunities(API.getUserCommunities);
+                this.fetchCommunities(CommunitiesRequests.getUserCommunities);
                 break;
             case Section.Managed:
-                this.fetchCommunities(API.getManagedCommunities);
+                this.fetchCommunities(CommunitiesRequests.getManagedCommunities);
                 break;
         }
     }

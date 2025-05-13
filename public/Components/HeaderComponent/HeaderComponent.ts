@@ -3,7 +3,7 @@ import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
 import createElement from '@utils/createElement';
 import { getLsItem } from '@utils/localStorage';
 import SearchComponent from '@components/SearchComponent/SearchComponent';
-import API from '@utils/api';
+import { CommunitiesRequests, FriendsRequests, UsersRequests } from '@modules/api';
 
 
 export default class HeaderComponent {
@@ -15,17 +15,10 @@ export default class HeaderComponent {
     wrapper: HTMLElement | null = null;
     rightWrapper: HTMLElement | null = null;
 
-    // static __instance: HeaderComponent;
 
-    constructor(parent: any) {
-        // if (HeaderComponent.__instance) {
-        //     return HeaderComponent.__instance;
-        // }
-
+    constructor(parent: HTMLElement) {
         this.parent = parent;
         this.render();
-
-        // HeaderComponent.__instance = this;
     }
 
     render() {
@@ -66,8 +59,8 @@ export default class HeaderComponent {
             isResultsChild: true,
             resultsCount: 3,
             searchResults: [
-                API.searchFriends,
-                API.searchCommunities,
+                UsersRequests.searchUsers,
+                CommunitiesRequests.searchCommunities,
             ],
             renderEmptyState: [
                 this.renderEmptyState,
@@ -185,7 +178,7 @@ export default class HeaderComponent {
         });
     }
 
-    cdOk(users: any) {
+    cdOk(users: Record<string, any>) {
         if (!this.searchResults) {
             this.searchResults = createElement({
                 parent: this.search,
@@ -223,7 +216,7 @@ export default class HeaderComponent {
             classes: ['header__right']
         });
 
-        const [status, profileData] = await API.getProfile(getLsItem('username', ''));
+        const [status, profileData] = await UsersRequests.getProfile(getLsItem('username', ''));
         switch (status) {
             case 200:
                 this.renderAvatarCallback(profileData);

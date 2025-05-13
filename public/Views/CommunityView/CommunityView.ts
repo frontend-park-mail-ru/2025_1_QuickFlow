@@ -9,7 +9,7 @@ import router from '@router';
 import { ACTIONS_PROPERTIES, INFO_ITEMS_LAYOUT } from './CommunityConfig';
 import insertIcon from '@utils/insertIcon';
 import { MOBILE_MAX_WIDTH } from '@config';
-import API from '@utils/api';
+import { CommunitiesRequests } from '@modules/api';
 
 
 const MOBILE_MAX_DISPLAYED_FRIENDS_COUNT = 3;
@@ -31,7 +31,7 @@ class CommunityView {
         const address = params?.address;
 
         (async () => {
-            const [status, communityData] = await API.getCommunity(address);
+            const [status, communityData] = await CommunitiesRequests.getCommunity(address);
             switch (status) {
                 case 200:
                     this.cbOk(communityData);
@@ -48,9 +48,8 @@ class CommunityView {
         return this.containerObj.container;
     }
 
-    private async renderMembers(communityId: any) {
-        // const [status, membersData] = await API.getCommunityMembers(communityId, 8);
-        const [status, membersData] = await API.getCommunityMembers(communityId, 100);
+    private async renderMembers(communityId: string) {
+        const [status, membersData] = await CommunitiesRequests.getCommunityMembers(communityId, 100);
 
         console.log(membersData);
         switch (status) {

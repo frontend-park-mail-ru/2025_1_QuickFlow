@@ -1,14 +1,13 @@
-import Ajax from '@modules/ajax';
 import createElement from '@utils/createElement';
 import router from '@router';
-import API from '@utils/api';
+import { AuthRequests } from '@modules/api';
 
 
 class LogoutView {
     constructor() {}
 
     async render() {
-        const status = await API.logout();
+        const status = await AuthRequests.logout();
 
         switch (status) {
             case 200:

@@ -2,8 +2,8 @@ import MessengerComponent from '@components/MessengerComponent/MessengerComponen
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import { getLsItem } from '@utils/localStorage';
 import router from '@router';
-import API from '@utils/api';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
+import { UsersRequests } from '@modules/api';
 
 
 class MessengerView {
@@ -19,7 +19,7 @@ class MessengerView {
             type: 'messenger',
         });
 
-        const [status, profileData] = await API.getProfile(getLsItem('username', ''));
+        const [status, profileData] = await UsersRequests.getProfile(getLsItem('username', ''));
         switch (status) {
             case 200:
                 new MessengerComponent(this.containerObj, {

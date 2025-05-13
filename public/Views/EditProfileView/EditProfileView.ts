@@ -16,7 +16,7 @@ import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 import router from '@router';
 import { forms } from './EditProfileFormConfig';
 import { FILE } from '@config';
-import API from '@utils/api';
+import { UsersRequests } from '@modules/api';
 
 
 class EditProfileView {
@@ -57,7 +57,7 @@ class EditProfileView {
         const sectionData = forms[this.section];
 
         try {
-            const [status, profileData] = await API.getProfile(getLsItem('username', ''));
+            const [status, profileData] = await UsersRequests.getProfile(getLsItem('username', ''));
             switch (status) {
                 case 200:
                     this.userData = profileData;
@@ -224,7 +224,7 @@ class EditProfileView {
         }
 
         try {
-            const status = await API.editProfile(body);
+            const status = await UsersRequests.editProfile(body);
             switch (status) {
                 case 200:
                     this.postCbOk(newUsername);

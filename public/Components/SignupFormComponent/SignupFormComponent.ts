@@ -7,8 +7,8 @@ import focusInput from '@utils/focusInput';
 import convertDate from '@utils/convertDate';
 import { getLsItem, removeLsItem, setLsItem } from '@utils/localStorage';
 import router from '@router';
-import API from '@utils/api';
 import { SEX } from '@config';
+import { UsersRequests } from '@modules/api';
 
 
 const DEFAULT_INPUT_VALUE = '';
@@ -307,7 +307,7 @@ export default class SignupFormComponent {
                     router.menu.renderProfileMenuItem();
 
                     (async () => {
-                        const [status, data] = await API.getProfile(getLsItem('username', null));
+                        const [status, data] = await UsersRequests.getProfile(getLsItem('username', null));
                         if (status === 200) setLsItem('user_id', data.id);
                     })();
 

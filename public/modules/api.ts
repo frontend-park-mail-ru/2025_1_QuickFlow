@@ -2,13 +2,89 @@ import ajax from '@modules/ajax';
 import convertToFormData from '@utils/convertToFormData';
 
 
-export default class API {
+export class PostsRequests {
+    static async createPost(body: Record<string, any>): Promise<[number, Record<string, any>]> {
+        return new Promise((resolve) => {
+            ajax.post({
+                url: `/post`,
+                body,
+                isFormData: true,
+                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+            });
+        });
+    }
+
+    static async getPost(post_id: string): Promise<[number, Record<string, any>]> {
+        return new Promise((resolve) => {
+            ajax.get({
+                url: `/posts/${post_id}`,
+                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+            });
+        });
+    }
+
+    static async editPost(post_id: string, body: Record<string, any>): Promise<[number, Record<string, any>]> {
+        return new Promise((resolve) => {
+            ajax.put({
+                url: `/posts/${post_id}`,
+                body,
+                isFormData: true,
+                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+            });
+        });
+    }
+
+    static async putLike(post_id: string): Promise<number> {
+        return new Promise((resolve) => {
+            ajax.post({
+                url: `/posts/${post_id}/like`,
+                callback: (status: number) => resolve(status),
+            });
+        });
+    }
+
+    static async removeLike(post_id: string): Promise<number> {
+        return new Promise((resolve) => {
+            ajax.delete({
+                url: `/posts/${post_id}/like`,
+                callback: (status: number) => resolve(status),
+            });
+        });
+    }
+};
+
+
+export class ChatsRequests {
     static async getMessages(chat_id: string, messages_count: number, ts?: string): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.get({
                 url: `/chats/${chat_id}/messages`,
                 params: { messages_count, ...(ts && { ts }) },
                 callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+            });
+        });
+    }
+};
+
+
+export class AuthRequests {
+    static async logout(): Promise<number> {
+        return new Promise((resolve) => {
+            ajax.post({
+                url: '/logout',
+                callback: (status: number) => resolve(status),
+            });
+        });
+    }
+};
+
+
+export class UsersRequests {
+    static async getProfile(username: string): Promise<[number, Record<string, any>]> {
+        return new Promise((resolve) => {
+            ajax.get({
+                url: `/profiles/${username}`,
+                callback: (status: number, data: any) => resolve([status, data]),
             });
         });
     }
@@ -24,15 +100,6 @@ export default class API {
         });
     }
 
-    static async logout(): Promise<number> {
-        return new Promise((resolve) => {
-            ajax.post({
-                url: '/logout',
-                callback: (status: number) => resolve(status),
-            });
-        });
-    }
-
     static async searchUsers(string: string, count: number): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.get({
@@ -42,39 +109,10 @@ export default class API {
             });
         });
     }
-
-    static async searchFriends(string: string, count: number): Promise<[number, Record<string, any>]> {
-        return new Promise((resolve) => {
-            ajax.get({
-                url: '/users/search',
-                params: { string, count },
-                callback: (status: number, data: any) => resolve([status, data]),
-            });
-        });
-    }
-
-    static async searchCommunities(string: string, count: number): Promise<[number, Record<string, any>]> {
-        return new Promise((resolve) => {
-            ajax.get({
-                url: '/communities/search',
-                params: { string, count },
-                callback: (status: number, data: any) => resolve([status, data]),
-            });
-        });
-    }
-
-    static async searchMyCommunities(string: string, count: number): Promise<[number, Record<string, any>]> {
-        return new Promise((resolve) => {
-            ajax.get({
-                url: '/users/search',
-                params: { string, count },
-                callback: (status: number, data: any) => resolve([status, data]),
-            });
-        });
-    }
+};
 
 
-
+export class CommunitiesRequests {
     static async createCommunity(nickname: string, name: string): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.post({
@@ -124,6 +162,16 @@ export default class API {
         });
     }
 
+    static async searchCommunities(string: string, count: number): Promise<[number, Record<string, any>]> {
+        return new Promise((resolve) => {
+            ajax.get({
+                url: '/communities/search',
+                params: { string, count },
+                callback: (status: number, data: any) => resolve([status, data]),
+            });
+        });
+    }
+
     static async getCommunityMembers(id: string, count: number, ts?: string): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.get({
@@ -163,17 +211,6 @@ export default class API {
         });
     }
 
-    static async createPost(body: Record<string, any>): Promise<[number, Record<string, any>]> {
-        return new Promise((resolve) => {
-            ajax.post({
-                url: `/post`,
-                body,
-                isFormData: true,
-                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
-            });
-        });
-    }
-
     static async getCommunityPosts(name: string, posts_count: number): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.get({
@@ -183,37 +220,10 @@ export default class API {
             });
         });
     }
+};
 
 
-    
-
-    static async putLike(post_id: string): Promise<number> {
-        return new Promise((resolve) => {
-            ajax.post({
-                url: `/posts/${post_id}/like`,
-                callback: (status: number) => resolve(status),
-            });
-        });
-    }
-
-    static async removeLike(post_id: string): Promise<number> {
-        return new Promise((resolve) => {
-            ajax.delete({
-                url: `/posts/${post_id}/like`,
-                callback: (status: number) => resolve(status),
-            });
-        });
-    }
-
-    static async getProfile(username: string): Promise<[number, Record<string, any>]> {
-        return new Promise((resolve) => {
-            ajax.get({
-                url: `/profiles/${username}`,
-                callback: (status: number, data: any) => resolve([status, data]),
-            });
-        });
-    }
-
+export class FriendsRequests {
     static async getFriends(user_id: string, count: number = 25, offset: number = 0, section: string = 'all'): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.get({
@@ -253,7 +263,10 @@ export default class API {
             });
         });
     }
+};
 
+
+export class FeedRequests {
     static async getFeed(posts_count: number = 1): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.get({

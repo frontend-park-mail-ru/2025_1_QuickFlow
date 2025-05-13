@@ -1,7 +1,7 @@
 import LoginFormComponent from '@components/LoginFormComponent/LoginFormComponent';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
+import { FeedRequests } from '@modules/api';
 import router from '@router';
-import API from '@utils/api';
 import createElement from '@utils/createElement';
 
 
@@ -9,7 +9,7 @@ class LoginView {
     constructor() {}
 
     async render() {
-        const [status, feedData] = await API.getFeed(1);
+        const [status, feedData] = await FeedRequests.getFeed(1);
         if (status === 200) {
             return router.go({ path: '/feed' });
         }

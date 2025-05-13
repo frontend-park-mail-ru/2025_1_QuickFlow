@@ -12,10 +12,11 @@ import ProfileMenuComponent from '@components/ProfileMenuComponent/ProfileMenuCo
 import createElement from '@utils/createElement';
 import { getLsItem } from '@utils/localStorage';
 import insertIcon from '@utils/insertIcon';
-import API from '@utils/api';
 
 import { ACTIONS_PROPERTIES, INFO_ITEMS_LAYOUT } from './ProfileActionsConfig';
 import { MOBILE_MAX_WIDTH } from '@config';
+import { FriendsRequests, UsersRequests } from '@modules/api';
+import copyToClipboard from '@utils/copyToClipboard';
 
 
 const MOBILE_MAX_DISPLAYED_FRIENDS_COUNT = 3;
@@ -35,16 +36,9 @@ class ProfileView {
             type: 'profile',
         });
 
-        createElement({
-            parent: this.containerObj?.left,
-            attrs: {
-                style: 'width: 100%; height: 100%; background: red;',
-            }
-        });
-
         const username = params?.username || getLsItem('username', '');
 
-        const [status, profileData] = await API.getProfile(username);
+        const [status, profileData] = await UsersRequests.getProfile(username);
         switch (status) {
             case 200:
                 this.cbOk(profileData);
@@ -61,7 +55,7 @@ class ProfileView {
     }
 
     renderFriends(user_id: string) {
-        API.getFriends(user_id, 8, 0).then(([status, friendsData]) => {
+        FriendsRequests.getFriends(user_id, 8, 0).then(([status, friendsData]) => {
             switch (status) {
                 case 200:
                     this.friendsCbOk(friendsData.payload);
@@ -207,16 +201,15 @@ class ProfileView {
         usernameItem.classList.add('profile__detail_more');
 
         usernameItem.addEventListener("click", () => {
-            navigator.clipboard.writeText(data.profile.username)
-            .then(() => {
-                new PopUpComponent({
-                    text: 'Текст скопирован в буфер обмена',
-                    icon: "copy-green-icon",
-                });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            copyToClipboard(
+                data.profile.username,
+                () => {
+                    new PopUpComponent({
+                        text: 'Текст скопирован в буфер обмена',
+                        icon: "copy-green-icon",
+                    });
+                }
+            );
         });
 
         const moreInfo = this.createInfoItem(

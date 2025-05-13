@@ -8,9 +8,10 @@ import { getLsItem } from '@utils/localStorage';
 import Ajax from '@modules/ajax';
 import router from '@router';
 import insertIcon from '@utils/insertIcon';
-import API from '@utils/api';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import PicsViewerComponent from '@components/PicsViewerComponent/PicsViewerComponent';
+import { PostsRequests } from '@modules/api';
+import copyToClipboard from '@utils/copyToClipboard';
 
 
 const AUTHOR_AVATAR_SIZE = 's';
@@ -335,7 +336,7 @@ export default class PostComponent {
         this.toggleLike(like);
 
         if (oldIsLiked) {
-            status = await API.removeLike(this.config.id)
+            status = await PostsRequests.removeLike(this.config.id)
             switch (status) {
                 case 204:
                     // this.isLiked = false;
@@ -347,7 +348,7 @@ export default class PostComponent {
                     break;
             }
         } else {
-            status = await API.putLike(this.config.id);
+            status = await PostsRequests.putLike(this.config.id);
             switch (status) {
                 case 204:
                     // this.isLiked = true;
@@ -548,11 +549,22 @@ export default class PostComponent {
         // });
 
         const data: Record<string, object> = {
-            // copyLink: {
-            //     href: '/copy-link',
-            //     text: 'Скопировать ссылку',
-            //     icon: 'copy-icon',
-            // },
+            copyLink: {
+                href: '/copy-link',
+                text: 'Скопировать ссылку',
+                icon: 'copy-icon',
+                onClick: () => {
+                    copyToClipboard(
+                        `${window.location.origin}/posts/${this.config?.id}`,
+                        () => {
+                            new PopUpComponent({
+                                text: 'Текст скопирован в буфер обмена',
+                                icon: "copy-green-icon",
+                            });
+                        }
+                    );
+                }
+            },
         };
 
         if (

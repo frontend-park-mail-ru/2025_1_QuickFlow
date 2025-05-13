@@ -10,7 +10,7 @@ import router from '@router';
 import ChatsPanelComponent from './ChatsPanelComponent';
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 import { MSG } from '@config';
-import API from '@utils/api';
+import { UsersRequests } from '@modules/api';
 
 
 const MOBILE_MAX_WIDTH = 610;
@@ -96,7 +96,7 @@ export default class ChatWindowComponent {
         if (!this.config?.chat_id && this.config?.receiver_username) {
             removeLsItem('active-chat');
 
-            const [status, profileData] = await API.getProfile(this.config.receiver_username);
+            const [status, profileData] = await UsersRequests.getProfile(this.config.receiver_username);
 
             switch (status) {
                 case 200:

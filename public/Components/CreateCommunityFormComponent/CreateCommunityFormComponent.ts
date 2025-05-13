@@ -4,8 +4,8 @@ import createElement from '@utils/createElement';
 import focusInput from '@utils/focusInput';
 import router from '@router';
 import { setLsItem, getLsItem } from '@utils/localStorage';
-import API from '@utils/api';
 import { ValidateCommunityName, ValidateCommunityNickname } from '@components/UI/InputComponent/Validators';
+import { CommunitiesRequests } from '@modules/api';
 
 
 export default class CreateCommunityFormComponent {
@@ -189,7 +189,7 @@ export default class CreateCommunityFormComponent {
     private async submit() {
         this.submitBtn.disable();
 
-        const [status, communityData] = await API.createCommunity(
+        const [status, communityData] = await CommunitiesRequests.createCommunity(
             this.addressInput?.input?.value?.trim(),
             this.nameInput?.input?.value?.trim()
         );
