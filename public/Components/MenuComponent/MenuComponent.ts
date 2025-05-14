@@ -61,15 +61,22 @@ export default class MenuComponent {
                 attrs: {'data-section': key}
             });
 
-            if (href) menuElement.setAttribute('href', href);
+            if (href) {
+                menuElement.setAttribute('href', href);
+            }
 
-            insertIcon(menuElement, {
+            const itemLeft = createElement({
+                parent: menuElement,
+                classes: ['menu__item-left'],
+            });
+
+            insertIcon(itemLeft, {
                 name: icon,
                 classes: ['menu__icon'],
             });
 
             createElement({
-                parent: menuElement,
+                parent: itemLeft,
                 text,
                 classes: ['menu__text'],
             });
@@ -112,15 +119,12 @@ export default class MenuComponent {
         }
 
         const requestsCount = friendsData?.payload?.friends?.length;
-        new CounterComponent(this.menuElements.friends, {
-            value: requestsCount,
-        });
-
-
-
-        const counters = this.container?.getElementsByClassName('js-counters')[0];
-        if (!counters) return;
-        counters.innerHTML = this.config.counters;
+        if (requestsCount) {
+            new CounterComponent(this.menuElements.friends, {
+                value: requestsCount,
+                classes: ['menu__counter'],
+            });
+        }
     }
 
     renderProfileMenuItem() {

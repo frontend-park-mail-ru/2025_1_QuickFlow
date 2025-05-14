@@ -2,11 +2,14 @@ import createElement from "@utils/createElement";
 
 interface CounterConfig<T> {
     value: number;
+    classes: Array<string>;
 }
 
 export default class CounterComponent {
     private parent: HTMLElement;
     private config: CounterConfig<any>;
+
+    element: HTMLElement | null = null;
 
     constructor(parent: HTMLElement, config: CounterConfig<any>) {
         this.parent = parent;
@@ -15,10 +18,14 @@ export default class CounterComponent {
     }
 
     private render() {
-        createElement({
+        this.element = createElement({
             parent: this.parent,
-            classes: ["counter"],
-            text: this.config.value,
+            classes: ["counter", ...this.config.classes],
+        });
+
+        createElement({
+            parent: this.element,
+            text: this.config.value.toString(),
         });
     }
 }
