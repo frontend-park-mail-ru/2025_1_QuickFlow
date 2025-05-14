@@ -6,7 +6,7 @@ import Ajax from '@modules/ajax';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
 import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
-import { FILE, POST } from '@config';
+import { FILE, POST } from '@config/config';
 import { PostsRequests } from '@modules/api';
 
 

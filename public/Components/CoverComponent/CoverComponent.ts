@@ -1,6 +1,6 @@
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
-import { FILE } from '@config';
+import { FILE } from '@config/config';
 import createElement from '@utils/createElement';
 
 

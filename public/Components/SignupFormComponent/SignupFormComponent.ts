@@ -7,7 +7,7 @@ import focusInput from '@utils/focusInput';
 import convertDate from '@utils/convertDate';
 import { getLsItem, removeLsItem, setLsItem } from '@utils/localStorage';
 import router from '@router';
-import { SEX } from '@config';
+import { SEX } from '@config/config';
 import { UsersRequests } from '@modules/api';
 
 

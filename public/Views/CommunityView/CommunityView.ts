@@ -8,7 +8,7 @@ import CoverComponent from '@components/CoverComponent/CoverComponent';
 import router from '@router';
 import { ACTIONS_PROPERTIES, INFO_ITEMS_LAYOUT } from './CommunityConfig';
 import insertIcon from '@utils/insertIcon';
-import { MOBILE_MAX_WIDTH } from '@config';
+import { MOBILE_MAX_WIDTH } from '@config/config';
 import { CommunitiesRequests } from '@modules/api';
 
 

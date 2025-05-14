@@ -13,7 +13,7 @@ import convertDate from '@utils/convertDate';
 
 import router from '@router';
 import { forms } from './CommunityEditFormConfig';
-import { FILE } from '@config';
+import { FILE } from '@config/config';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
 import FriendComponent from '@components/FriendComponent/FriendComponent';
 import DeleteMwComponent from '@components/UI/ModalWindowComponent/DeleteMwComponent';

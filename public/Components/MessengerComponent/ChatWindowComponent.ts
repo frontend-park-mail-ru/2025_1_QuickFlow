@@ -9,7 +9,7 @@ import ws from '@modules/WebSocketService';
 import router from '@router';
 import ChatsPanelComponent from './ChatsPanelComponent';
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
-import { MSG } from '@config';
+import { MSG } from '@config/config';
 import { UsersRequests } from '@modules/api';
 
 
@@ -330,7 +330,7 @@ export default class ChatWindowComponent {
             },
             text: value
         }) as HTMLTextAreaElement;
-        
+
         if (this.messageInput && !this.isMobile) {
             focusInput(this.messageInput, this.focusTimer);
         }

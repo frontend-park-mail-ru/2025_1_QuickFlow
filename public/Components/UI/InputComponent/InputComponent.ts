@@ -15,16 +15,40 @@ const DEFAULT_NAME = 'undefined';
 const DEFAULT_MIN_BIRTH_YEAR = 1900;
 
 
+interface InputConfig {
+    suggestions?: string[];
+    name?: string;
+    required?: boolean;
+    classes?: Array<string>;
+    autocomplete?: string;
+    placeholder?: string;
+    type?: string;
+    value?: string;
+    maxLength?: number;
+    validator?: (value: string) => { result: boolean; message?: string; };
+    showRequired?: boolean;
+    description?: string;
+    validation?: string;
+    showCharactersLeft?: boolean;
+    label?: string;
+    entity?: string;
+    min?: number;
+    max?: number;
+}
+
+
 export default class InputComponent {
     private parent: HTMLElement;
-    private _config: Record<string, any>;
+    private _config: InputConfig;
 
+    private suggestionsList: HTMLElement | null = null;
+    private currentSuggestions: string[] = [];
     input: HTMLInputElement | null = null;
     error: HTMLElement | null = null;
     wrapper: HTMLElement | null = null;
     innnerWrapper: HTMLElement | null = null;
 
-    constructor(parent: HTMLElement, config: Record<string, any>) {
+    constructor(parent: HTMLElement, config: InputConfig) {
         this._config = config;
         this.parent = parent;
         this.render();
@@ -83,6 +107,10 @@ export default class InputComponent {
             },
         }) as HTMLInputElement;
 
+        if (this._config.suggestions?.length) {
+            this.initSuggestions();
+        }
+
         this.input.setAttribute("type",
             this._config.type === 'number' ?
             DEFAULT_TYPE :
@@ -121,6 +149,97 @@ export default class InputComponent {
 
         this.renderBottom();
     }
+
+    private initSuggestions() {
+        if (!this.innnerWrapper || !this.input) return;
+    
+        this.suggestionsList = createElement({
+            parent: this.innnerWrapper,
+            classes: ['input__suggestions', 'hidden'],
+        });
+
+        this.input.addEventListener('focus', () => {
+            const inputValue = this.input!.value.toLowerCase();
+            this.currentSuggestions = this._config.suggestions.filter(
+                (item: string) => item.toLowerCase().includes(inputValue)
+            );
+
+            if (this.currentSuggestions.length === 0) {
+                this.suggestionsList.classList.add('hidden');   
+                return;
+            }
+
+            this.suggestionsList.classList.remove('hidden');    
+            this.renderSuggestions();
+        });
+    
+        this.input.addEventListener('input', () => {
+            const inputValue = this.input!.value.toLowerCase();
+            this.currentSuggestions = this._config.suggestions.filter(
+                (item: string) => item.toLowerCase().includes(inputValue)
+            );
+
+            if (this.currentSuggestions.length === 0) {
+                this.suggestionsList.classList.add('hidden');   
+                return;
+            }
+
+            this.suggestionsList.classList.remove('hidden');    
+            this.renderSuggestions();
+        });
+    
+        document.addEventListener('click', (e) => {
+            if (
+                this.suggestionsList &&
+                !this.suggestionsList.contains(e.target as Node) &&
+                e.target !== this.input
+            ) {
+                this.clearSuggestions();
+            }
+        });
+    }
+
+    private renderSuggestions() {
+        if (!this.suggestionsList) return;
+    
+        this.suggestionsList.innerHTML = '';
+    
+        this.currentSuggestions.forEach((suggestion) => {
+            const item = createElement({
+                text: suggestion,
+                parent: this.suggestionsList,
+                classes: ['input__suggestion'],
+            });
+    
+            item.addEventListener('click', () => {
+                if (this.input) {
+                    this.input.value = suggestion;
+                    this.clearSuggestions();
+                    this.input.dispatchEvent(new Event('input')); // триггерим валидацию
+                }
+            });
+        });
+    
+        if (this.currentSuggestions.length) {
+            this.suggestionsList.style.display = 'block';
+        } else {
+            this.clearSuggestions();
+        }
+    }
+    
+    private clearSuggestions() {
+        if (this.suggestionsList) {
+            this.suggestionsList.innerHTML = '';
+            // this.suggestionsList.style.display = 'none';
+            this.suggestionsList.classList.add('hidden');
+        }
+    }
+
+    
+
+
+
+    
 
     checkValue(): boolean | string {
         const validationResult = this.config.validator(this.value);

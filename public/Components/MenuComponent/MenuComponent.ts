@@ -4,7 +4,7 @@ import { getLsItem } from '@utils/localStorage';
 import router from '@router';
 import { FriendsRequests } from '@modules/api';
 import CounterComponent from '@components/CounterComponent/CounterComponent';
-import { MOBILE_MAX_WIDTH } from '@config';
+import { MOBILE_MAX_WIDTH } from '@config/config';
 
 
 const LOGO = 'annotated-logo';

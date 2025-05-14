@@ -15,7 +15,7 @@ import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 
 import router from '@router';
 import { forms } from './EditProfileFormConfig';
-import { FILE } from '@config';
+import { FILE } from '@config/config';
 import { UsersRequests } from '@modules/api';
 
 

@@ -14,7 +14,7 @@ import { getLsItem } from '@utils/localStorage';
 import insertIcon from '@utils/insertIcon';
 
 import { ACTIONS_PROPERTIES, INFO_ITEMS_LAYOUT } from './ProfileActionsConfig';
-import { MOBILE_MAX_WIDTH } from '@config';
+import { MOBILE_MAX_WIDTH } from '@config/config';
 import { FriendsRequests, UsersRequests } from '@modules/api';
 import copyToClipboard from '@utils/copyToClipboard';
 

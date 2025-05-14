@@ -104,3 +104,36 @@
 .input_wide {
     width: 100%;
 }
+
+.input__suggestions {
+    border: 1px solid var(--stroke-primary);
+    border-radius: 12px;
+    padding: 4px 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    display: block;
+    position: absolute;
+    z-index: 1;
+    background: var(--background-white);
+    top: 40px;
+    max-height: 240px;
+    overflow: scroll;
+    box-shadow: var(--shadow-context-menu);
+}
+
+.input__suggestion {
+    padding: 8px 8px;
+    border-radius: 8px;
+    color: var(--text-primary);
+    transition: var(--trans-menu);
+    cursor: pointer;
+}
+
+.input__suggestion:hover {
+    background: var(--background-light-gray);
+}
+
+.input__suggestion:active {
+    background: var(--background-gray);
+}
