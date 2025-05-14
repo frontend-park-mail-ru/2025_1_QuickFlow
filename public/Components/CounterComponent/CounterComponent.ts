@@ -25,6 +25,7 @@ export default class CounterComponent {
 
         createElement({
             parent: this.element,
+            classes: ['counter__value'],
             text: this.config.value.toString(),
         });
     }

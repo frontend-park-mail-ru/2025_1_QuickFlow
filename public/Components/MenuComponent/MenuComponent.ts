@@ -4,6 +4,7 @@ import { getLsItem } from '@utils/localStorage';
 import router from '@router';
 import { FriendsRequests } from '@modules/api';
 import CounterComponent from '@components/CounterComponent/CounterComponent';
+import { MOBILE_MAX_WIDTH } from '@config';
 
 
 const LOGO = 'annotated-logo';
@@ -14,6 +15,7 @@ export default class MenuComponent {
     private config: Record<string, any>;
     private parent: HTMLElement;
 
+    private isMobile: boolean;
     container: HTMLElement | null = null;
     menuElements: Record<string, any> = {};
     activePageLink: HTMLElement = null;
@@ -25,6 +27,7 @@ export default class MenuComponent {
 
         this.parent = parent;
         this.config = config;
+        this.isMobile = window.innerWidth <= MOBILE_MAX_WIDTH;
         this.render();
 
         MenuComponent.__instance = this;
@@ -73,6 +76,18 @@ export default class MenuComponent {
             insertIcon(itemLeft, {
                 name: icon,
                 classes: ['menu__icon'],
+            }).then((menuIcon) => {
+                if (this.isMobile) {
+                    menuElement.addEventListener('click', (e) => {
+                        menuIcon.classList.remove('menu__icon-animating');
+                        void menuIcon.offsetWidth;
+
+                        menuIcon.classList.add('menu__icon-animating');
+                        menuIcon.addEventListener('animationend', () => {
+                            menuIcon.classList.remove('menu__icon-animating');
+                        }, { once: true });
+                    });   
+                }
             });
 
             createElement({
@@ -155,7 +170,7 @@ export default class MenuComponent {
 
     goToPage(menuElement: HTMLElement) {
         if (
-            menuElement.getAttribute('href') === router.path &&
+            menuElement.getAttribute('href') === router.path.split('?')[0] &&
             // menuElement.dataset.section === router.path.slice(1) &&
             this.activePageLink.getAttribute('href')
         ) return;

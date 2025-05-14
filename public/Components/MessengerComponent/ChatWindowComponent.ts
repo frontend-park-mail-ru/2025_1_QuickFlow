@@ -151,9 +151,7 @@ export default class ChatWindowComponent {
             // Отправили очередное сообщение
             } else {
                 if (`chat-${payload.chat_id}` === getLsItem('active-chat', null)) {
-                    // this.msgsData?.messages?.push(payload);
                     this.chat?.pushMessage(payload);
-                    // this.chat?.renderMsg(payload, []);
                     this.updateTextareaHeight();
                 }
                 this._chatsPanel?.renderLastMsg({
@@ -165,7 +163,7 @@ export default class ChatWindowComponent {
                 });
             }
 
-            if (this.messageInput) {
+            if (this.messageInput && !this.isMobile) {
                 focusInput(this.messageInput, this.focusTimer);
             }
         });
@@ -332,7 +330,10 @@ export default class ChatWindowComponent {
             },
             text: value
         }) as HTMLTextAreaElement;
-        if (this.messageInput) focusInput(this.messageInput, this.focusTimer);
+        
+        if (this.messageInput && !this.isMobile) {
+            focusInput(this.messageInput, this.focusTimer);
+        }
 
         const sendBtn = createElement({
             classes: [

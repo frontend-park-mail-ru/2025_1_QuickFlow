@@ -4,6 +4,7 @@ import ContextMenuComponent from '@components/ContextMenuComponent/ContextMenuCo
 import insertIcon from '@utils/insertIcon';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import { FriendsRequests } from '@modules/api';
+import router from '@router';
 
 
 export default class FriendComponent {
@@ -174,29 +175,40 @@ export default class FriendComponent {
             parent: optionsWrapper,
         });
 
-        const contextMenuData: Record<string, object> = {
-            deleteFriend: {
-                href: '/delete-friend',
-                text: 'Удалить из друзей',
-                icon: 'user-delete-icon',
-                isCritical: true,
-                onClick: async () => {
-                    const status = await FriendsRequests.deleteFriend(friendData.id);
+        const contextMenuData: Record<string, object> = {};
 
-                    switch (status) {
-                        case 200:
-                            this.renderDeletedFriend(friend, friendData);
-                            break;
-                        default:
-                            new PopUpComponent({
-                                text: "Не удалось удалить пользователя из друзей",
-                                isError: true,
-                            });
-                            break;
-                    }
-                },
-            },
-        };
+        switch (this.config.section) {
+            case 'all':
+                contextMenuData.deleteFriend = {
+                    href: '/delete-friend',
+                    text: 'Удалить из друзей',
+                    icon: 'user-delete-icon',
+                    isCritical: true,
+                    onClick: async () => {
+                        const status = await FriendsRequests.deleteFriend(friendData.id);
+                        switch (status) {
+                            case 200:
+                                this.renderDeletedFriend(friend, friendData);
+                                break;
+                            default:
+                                new PopUpComponent({
+                                    text: "Не удалось удалить пользователя из друзей",
+                                    isError: true,
+                                });
+                                break;
+                        }
+                    },
+                };
+                break;
+            default:
+                contextMenuData.message = {
+                    href: '/message',
+                    text: 'Написать сообщение',
+                    icon: 'messenger-icon',
+                    onClick: async () => router.go({ path: `/messenger/${friendData.username}` }),
+                };
+                break;
+        }
 
         new ContextMenuComponent(dropdown, { data: contextMenuData });
     }
