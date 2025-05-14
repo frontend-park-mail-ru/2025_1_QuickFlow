@@ -283,7 +283,7 @@ app.get('/api/friends', (req, res) => {
     }
     
     res.status(200).json({
-        "body": {
+        "payload": {
             "friends": [
                 {
                     "id": "210a4267-d183-4aee-aaae-06eb6e8c5b24",
@@ -340,7 +340,6 @@ app.get('/api/friends', (req, res) => {
                     "is_online": false
                 }
             ],
-            "has_more": false,
             "total_count": 6
         }
     });

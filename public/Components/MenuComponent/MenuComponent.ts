@@ -2,6 +2,8 @@ import createElement from '@utils/createElement';
 import insertIcon from '@utils/insertIcon';
 import { getLsItem } from '@utils/localStorage';
 import router from '@router';
+import { FriendsRequests } from '@modules/api';
+import CounterComponent from '@components/CounterComponent/CounterComponent';
 
 
 const LOGO = 'annotated-logo';
@@ -95,6 +97,30 @@ export default class MenuComponent {
                 this.goToPage(event.target.closest('a'));
             }
         });
+
+        this.renderCounters();
+    }
+
+    private async renderCounters() {
+        const userId = getLsItem('user_id', null);
+
+        const [status, friendsData] = await FriendsRequests.getFriends(userId, 100, 0, 'incoming');
+        switch (status) {
+            case 401:
+                router.go({ path: '/login' });
+                return;
+        }
+
+        const requestsCount = friendsData?.payload?.friends?.length;
+        new CounterComponent(this.menuElements.friends, {
+            value: requestsCount,
+        });
+
+
+
+        const counters = this.container?.getElementsByClassName('js-counters')[0];
+        if (!counters) return;
+        counters.innerHTML = this.config.counters;
     }
 
     renderProfileMenuItem() {
