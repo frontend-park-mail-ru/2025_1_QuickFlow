@@ -224,7 +224,7 @@ class EditProfileView {
         }
 
         try {
-            const status = await UsersRequests.editProfile(body);
+            const [status, profileData] = await UsersRequests.editProfile(body);
             switch (status) {
                 case 200:
                     this.postCbOk(newUsername);
@@ -232,6 +232,13 @@ class EditProfileView {
                 case 401:
                     router.go({ path: '/login' });
                     break;
+                case 500:
+                    if (
+                        profileData?.error_code.includes('ALREADY_EXISTS') ||
+                        profileData?.message.includes('ALREADY_EXISTS')
+                    ) {
+                        this.stateUpdaters[2].showError('Такой никнейм уже занят');
+                    }
                 default:
                     this.cbDefault();
                     break;

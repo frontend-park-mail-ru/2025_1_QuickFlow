@@ -84,18 +84,18 @@ export class UsersRequests {
         return new Promise((resolve) => {
             ajax.get({
                 url: `/profiles/${username}`,
-                callback: (status: number, data: any) => resolve([status, data]),
+                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
             });
         });
     }
 
-    static async editProfile(body: Record<string, any>): Promise<number> {
+    static async editProfile(body: Record<string, any>): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.post({
                 url: '/profile',
                 body: convertToFormData(body),
                 isFormData: true,
-                callback: (status: number) => resolve(status),
+                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
             });
         });
     }
