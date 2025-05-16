@@ -124,9 +124,8 @@ export default class MenuComponent {
         this.renderCounters();
     }
 
-    private async renderCounters() {
+    public async renderCounters() {
         const userId = LsProfile.id;
-        // const userId = getLsItem('user_id', null);
 
         const [status, friendsData] = await FriendsRequests.getFriends(userId, 100, 0, 'incoming');
         switch (status) {
@@ -137,6 +136,7 @@ export default class MenuComponent {
 
         const requestsCount = friendsData?.payload?.friends?.length;
         if (requestsCount) {
+            this.menuElements.friends.querySelector('.menu__counter')?.remove();
             new CounterComponent(this.menuElements.friends, {
                 value: requestsCount,
                 classes: ['menu__counter'],
@@ -144,7 +144,7 @@ export default class MenuComponent {
         }
     }
 
-    renderProfileMenuItem() {
+    public renderProfileMenuItem() {
         const profileMenuItem = this.container?.getElementsByClassName('js-profile-menu-item')[0] as HTMLAnchorElement | undefined;
         if (profileMenuItem) {
             profileMenuItem.href = `/profiles/${LsProfile.username}`;

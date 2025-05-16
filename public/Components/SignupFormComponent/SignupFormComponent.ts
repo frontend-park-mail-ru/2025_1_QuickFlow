@@ -308,6 +308,7 @@ export default class SignupFormComponent {
 
                     document.cookie = `username=${encodeURIComponent(LsProfile.username)}; path=/`;
                     router.menu.renderProfileMenuItem();
+                    router?.menu?.renderCounters();
 
                     // (async () => {
                     //     const [status, data] = await UsersRequests.getMyProfile();

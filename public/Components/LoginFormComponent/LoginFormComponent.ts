@@ -234,6 +234,7 @@ export default class LoginFormComponent {
 
                     document.cookie = `username=${encodeURIComponent(LsProfile.username)}; path=/`;
                     router?.menu?.renderProfileMenuItem();
+                    router?.menu?.renderProfileMenuItem();
                     setLsItem('is-general-feedback-ready', 'true');
 
                     // (async () => {
