@@ -10,6 +10,7 @@ import SearchComponent from '@components/SearchComponent/SearchComponent';
 import router from '@router';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import { CommunitiesRequests } from '@modules/api';
+import LsProfile from '@modules/LsProfile';
 
 
 const enum Section {
@@ -114,7 +115,7 @@ class CommunitiesView {
     }
 
     async fetchCommunities(getMethod: Function) {
-        const username = getLsItem('username', null);
+        const username = LsProfile.username;
 
         const [status, data] = await getMethod(username, COMMUNITIES_COUNT);
         switch (status) {

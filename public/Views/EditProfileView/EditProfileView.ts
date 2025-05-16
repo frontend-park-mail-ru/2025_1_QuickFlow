@@ -17,6 +17,7 @@ import router from '@router';
 import { forms } from './EditProfileFormConfig';
 import { FILE } from '@config/config';
 import { UsersRequests } from '@modules/api';
+import LsProfile from '@modules/LsProfile';
 
 
 class EditProfileView {
@@ -57,23 +58,27 @@ class EditProfileView {
         const sectionData = forms[this.section];
 
         try {
-            const [status, profileData] = await UsersRequests.getMyProfile();
-            // const [status, profileData] = await UsersRequests.getProfile(getLsItem('username', ''));
-            switch (status) {
-                case 200:
-                    this.userData = profileData;
-                    this.renderForm(sectionData);
-                    break;
-                case 401:
-                    router.go({ path: '/login' });
-                    return;
-                default:
-                    new PopUpComponent({
-                        isError: true,
-                        text: 'Не удалось получить данные профиля',
-                    });
-                    break;
-            }
+            LsProfile.update();
+            this.userData = LsProfile.data;
+            this.renderForm(sectionData);
+
+            // const [status, profileData] = await UsersRequests.getMyProfile();
+            // // const [status, profileData] = await UsersRequests.getProfile(getLsItem('username', ''));
+            // switch (status) {
+            //     case 200:
+            //         this.userData = profileData;
+            //         this.renderForm(sectionData);
+            //         break;
+            //     case 401:
+            //         router.go({ path: '/login' });
+            //         return;
+            //     default:
+            //         new PopUpComponent({
+            //             isError: true,
+            //             text: 'Не удалось получить данные профиля',
+            //         });
+            //         break;
+            // }
         } catch {
             new PopUpComponent({
                 isError: true,

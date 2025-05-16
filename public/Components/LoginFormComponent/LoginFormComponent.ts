@@ -6,6 +6,7 @@ import focusInput from '@utils/focusInput';
 import router from '@router';
 import { setLsItem, getLsItem, removeLsItem } from '@utils/localStorage';
 import { UsersRequests } from '@modules/api';
+import LsProfile from '@modules/LsProfile';
 
 
 export default class LoginFormComponent {
@@ -233,11 +234,12 @@ export default class LoginFormComponent {
                     router?.menu?.renderProfileMenuItem();
                     setLsItem('is-general-feedback-ready', 'true');
 
-                    (async () => {
-                        const [status, data] = await UsersRequests.getMyProfile();
-                        // const [status, data] = await UsersRequests.getProfile(getLsItem('username', null));
-                        if (status === 200) setLsItem('user_id', data.id);
-                    })();
+                    LsProfile.update();
+                    // (async () => {
+                    //     const [status, data] = await UsersRequests.getMyProfile();
+                    //     // const [status, data] = await UsersRequests.getProfile(getLsItem('username', null));
+                    //     if (status === 200) setLsItem('user_id', data.id);
+                    // })();
 
                     router.go({ path: '/feed' });
                     return;

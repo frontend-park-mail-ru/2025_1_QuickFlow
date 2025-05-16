@@ -9,6 +9,7 @@ import { getLsItem, removeLsItem, setLsItem } from '@utils/localStorage';
 import router from '@router';
 import { SEX } from '@config/config';
 import { UsersRequests } from '@modules/api';
+import LsProfile from '@modules/LsProfile';
 
 
 const DEFAULT_INPUT_VALUE = '';
@@ -306,11 +307,12 @@ export default class SignupFormComponent {
                     document.cookie = `username=${encodeURIComponent(this.usernameInput?.value)}; path=/`;
                     router.menu.renderProfileMenuItem();
 
-                    (async () => {
-                        const [status, data] = await UsersRequests.getMyProfile();
-                        // const [status, data] = await UsersRequests.getProfile(getLsItem('username', null));
-                        if (status === 200) setLsItem('user_id', data.id);
-                    })();
+                    LsProfile.update();
+                    // (async () => {
+                    //     const [status, data] = await UsersRequests.getMyProfile();
+                    //     // const [status, data] = await UsersRequests.getProfile(getLsItem('username', null));
+                    //     if (status === 200) setLsItem('user_id', data.id);
+                    // })();
 
                     router.go({ path: '/feed' });
                     return;

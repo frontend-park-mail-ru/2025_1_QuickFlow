@@ -7,6 +7,7 @@ import ws from '@modules/WebSocketService';
 import { getLsItem } from '@utils/localStorage';
 import ExtraLoadComponent from '@components/ExtraLoadComponent/ExtraLoadComponent';
 import { ChatsRequests } from '@modules/api';
+import LsProfile from '@modules/LsProfile';
 
 
 const MSG_AVATAR_SIZE = 'xs';
@@ -192,7 +193,7 @@ export default class ChatComponent {
         let target: HTMLElement | null = null;
         for (const msg of messages) {
             const msgMoment = new Date(msg.dataset.msgTs);
-            if (msgMoment.getTime() > this.lastReadByMeTime && msg.dataset.msgFrom !== getLsItem('username', null)) {
+            if (msgMoment.getTime() > this.lastReadByMeTime && msg.dataset.msgFrom !== LsProfile.username) {
                 target = msg;
                 break;
             }
@@ -264,7 +265,7 @@ export default class ChatComponent {
     }
 
     renderMsg(msgData: any, classes: Array<string>) {
-        const isMine = msgData.sender.username === getLsItem('username', null);
+        const isMine = msgData.sender.username === LsProfile.username;
         const msgTime = new Date(msgData.created_at).getTime();
 
         const msg = createElement({
@@ -362,7 +363,7 @@ export default class ChatComponent {
     }
 
     private prependMsg(msgData: any, classes: string[], msgsArr: Array<HTMLElement>) {
-        const isMine = msgData.sender.username === getLsItem('username', null);
+        const isMine = msgData.sender.username === LsProfile.username;
         const msgTime = new Date(msgData.created_at).getTime();
     
         const msg = createElement({

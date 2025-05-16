@@ -5,6 +5,7 @@ import router from '@router';
 import { FriendsRequests } from '@modules/api';
 import CounterComponent from '@components/CounterComponent/CounterComponent';
 import { MOBILE_MAX_WIDTH } from '@config/config';
+import LsProfile from '@modules/LsProfile';
 
 
 const LOGO = 'annotated-logo';
@@ -145,7 +146,7 @@ export default class MenuComponent {
     renderProfileMenuItem() {
         const profileMenuItem = this.container?.getElementsByClassName('js-profile-menu-item')[0] as HTMLAnchorElement | undefined;
         if (profileMenuItem) {
-            profileMenuItem.href = `/profiles/${getLsItem('username', '')}`;
+            profileMenuItem.href = `/profiles/${LsProfile.username}`;
         }
     }
 

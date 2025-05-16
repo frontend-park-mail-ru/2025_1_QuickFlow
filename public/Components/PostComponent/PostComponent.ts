@@ -12,6 +12,7 @@ import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import PicsViewerComponent from '@components/PicsViewerComponent/PicsViewerComponent';
 import { PostsRequests } from '@modules/api';
 import copyToClipboard from '@utils/copyToClipboard';
+import LsProfile from '@modules/LsProfile';
 
 
 const AUTHOR_AVATAR_SIZE = 's';
@@ -568,9 +569,9 @@ export default class PostComponent {
         };
 
         if (
-            this.config?.author?.username === getLsItem('username', '') ||
-            this.config?.author?.owner?.username === getLsItem('username', '') ||
-            ADMINS_USERNAMES.includes(getLsItem('username', ''))
+            this.config?.author?.username === LsProfile.username ||
+            this.config?.author?.owner?.username === LsProfile.username ||
+            ADMINS_USERNAMES.includes(LsProfile.username)
         ) {
             const dropdown = createElement({
                 classes: ['js-dropdown', 'dropdown'],

@@ -4,7 +4,6 @@ import createElement from '@utils/createElement';
 import router from '@router';
 
 import './index.scss';
-import { getLsItem } from '@utils/localStorage';
 
 import ThemeManager from '@modules/ThemeManager';
 import LsStandaloneBridge from '@modules/LsStandaloneBridge';
@@ -12,6 +11,7 @@ import registerSW from '@utils/registerSW';
 import registerRoutes from './registerRoutes';
 import ws from '@modules/WebSocketService';
 import NotificationComponent from '@components/NotificationComponent/NotificationComponent';
+import LsProfile from '@modules/LsProfile';
 
 
 registerSW();
@@ -36,11 +36,12 @@ createElement({
 });
 
 registerRoutes();
+LsProfile.update();
 
 const config = {
     menu: {
         profiles: {
-            href: `/profiles/${getLsItem('username', '')}`,
+            href: `/profiles/${LsProfile.username}`,
             text: 'Профиль',
             icon: 'profile-icon',
         },
@@ -85,7 +86,7 @@ if (!router.path.startsWith('/scores')) {
     new ws().subscribe('message', (payload: Record<string, any>) => {
         if (
             router.path.startsWith('/messenger') ||
-            payload?.sender?.username === getLsItem('username', '')
+            payload?.sender?.username === LsProfile.username
         ) return;
     
         new NotificationComponent({

@@ -17,6 +17,7 @@ import { ACTIONS_PROPERTIES, INFO_ITEMS_LAYOUT } from './ProfileActionsConfig';
 import { MOBILE_MAX_WIDTH } from '@config/config';
 import { FriendsRequests, UsersRequests } from '@modules/api';
 import copyToClipboard from '@utils/copyToClipboard';
+import LsProfile from '@modules/LsProfile';
 
 
 const MOBILE_MAX_DISPLAYED_FRIENDS_COUNT = 3;
@@ -36,10 +37,9 @@ class ProfileView {
             type: 'profile',
         });
 
-        // const username = params?.username || getLsItem('username', '');
+        const username = params?.username || LsProfile.username;
 
-        const [status, profileData] = await UsersRequests.getMyProfile();
-        // const [status, profileData] = await UsersRequests.getProfile(username);
+        const [status, profileData] = await UsersRequests.getProfile(username);
         switch (status) {
             case 200:
                 this.cbOk(profileData);

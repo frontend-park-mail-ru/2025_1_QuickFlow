@@ -4,6 +4,7 @@ import createElement from '@utils/createElement';
 import { getLsItem } from '@utils/localStorage';
 import SearchComponent from '@components/SearchComponent/SearchComponent';
 import { CommunitiesRequests, FriendsRequests, UsersRequests } from '@modules/api';
+import LsProfile from '@modules/LsProfile';
 
 
 export default class HeaderComponent {
@@ -216,13 +217,14 @@ export default class HeaderComponent {
             classes: ['header__right']
         });
 
-        // const [status, profileData] = await UsersRequests.getProfile(getLsItem('username', ''));
-        const [status, profileData] = await UsersRequests.getMyProfile();
-        switch (status) {
-            case 200:
-                this.renderAvatarCallback(profileData);
-                break;
-        }
+        // const [status, profileData] = await UsersRequests.getMyProfile();
+        // switch (status) {
+        //     case 200:
+        //         this.renderAvatarCallback(profileData);
+        //         break;
+        // }
+
+        this.renderAvatarCallback(LsProfile.data);
     }
 
     renderAvatarCallback(profileData: Record<string, any>) {
