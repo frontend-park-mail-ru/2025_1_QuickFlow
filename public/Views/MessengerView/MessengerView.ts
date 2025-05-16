@@ -20,7 +20,7 @@ class MessengerView {
             type: 'messenger',
         });
 
-        LsProfile.update();
+        await LsProfile.update();
         new MessengerComponent(this.containerObj, {
             user: LsProfile.data,
             receiver_username: this.params?.username,

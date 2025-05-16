@@ -302,12 +302,12 @@ export default class SignupFormComponent {
                 sex: this.sexInput?.value === 'male' ? SEX.MALE : SEX.FEMALE, 
                 birth_date: convertDate(this.birthDateInput?.value ?? '', 'ts'),
             },
-            callback: (status: number) => {
+            callback: async (status: number) => {
                 if (status === 200) {
                     document.cookie = `username=${encodeURIComponent(this.usernameInput?.value)}; path=/`;
                     router.menu.renderProfileMenuItem();
 
-                    LsProfile.update();
+                    await LsProfile.update();
                     // (async () => {
                     //     const [status, data] = await UsersRequests.getMyProfile();
                     //     // const [status, data] = await UsersRequests.getProfile(getLsItem('username', null));

@@ -36,65 +36,68 @@ createElement({
 });
 
 registerRoutes();
-LsProfile.update();
 
-const config = {
-    menu: {
-        profiles: {
-            href: `/profiles/${LsProfile.username}`,
-            text: 'Профиль',
-            icon: 'profile-icon',
-        },
-        feed: {
-            href: '/feed',
-            text: 'Лента',
-            icon: 'feed-icon',
-        },
-        login: {
-            href: '/login',
-            text: 'Авторизация',
-            icon: 'login-icon',
-        },
-        signup: {
-            href: '/signup',
-            text: 'Регистрация',
-            icon: 'signup-icon',
-        },
-        messenger: {
-            href: '/messenger',
-            text: 'Мессенджер',
-            icon: 'messenger-icon',
-        },
-        friends: {
-            href: '/friends',
-            text: 'Друзья',
-            icon: 'friends-icon',
-        },
-        communities: {
-            href: '/communities',
-            text: 'Сообщества',
-            icon: 'communities-icon',
-        },
-    },
-    isAuthorized: true,
-};
+(async () => {
+    await LsProfile.update();
 
-router.menu = new MenuComponent(container, config);
-router.header = new HeaderComponent(container);
-
-if (!router.path.startsWith('/scores')) {
-    new ws().subscribe('message', (payload: Record<string, any>) => {
-        if (
-            router.path.startsWith('/messenger') ||
-            payload?.sender?.username === LsProfile.username
-        ) return;
+    const config = {
+        menu: {
+            profiles: {
+                href: `/profiles/${LsProfile.username}`,
+                text: 'Профиль',
+                icon: 'profile-icon',
+            },
+            feed: {
+                href: '/feed',
+                text: 'Лента',
+                icon: 'feed-icon',
+            },
+            login: {
+                href: '/login',
+                text: 'Авторизация',
+                icon: 'login-icon',
+            },
+            signup: {
+                href: '/signup',
+                text: 'Регистрация',
+                icon: 'signup-icon',
+            },
+            messenger: {
+                href: '/messenger',
+                text: 'Мессенджер',
+                icon: 'messenger-icon',
+            },
+            friends: {
+                href: '/friends',
+                text: 'Друзья',
+                icon: 'friends-icon',
+            },
+            communities: {
+                href: '/communities',
+                text: 'Сообщества',
+                icon: 'communities-icon',
+            },
+        },
+        isAuthorized: true,
+    };
     
-        new NotificationComponent({
-            type: 'msg',
-            classes: ['notification_msg'],
-            data: payload,
+    router.menu = new MenuComponent(container, config);
+    router.header = new HeaderComponent(container);
+    
+    if (!router.path.startsWith('/scores')) {
+        new ws().subscribe('message', (payload: Record<string, any>) => {
+            if (
+                router.path.startsWith('/messenger') ||
+                payload?.sender?.username === LsProfile.username
+            ) return;
+        
+            new NotificationComponent({
+                type: 'msg',
+                classes: ['notification_msg'],
+                data: payload,
+            });
         });
-    });
-}
-
-router.start();
+    }
+    
+    router.start();
+})();

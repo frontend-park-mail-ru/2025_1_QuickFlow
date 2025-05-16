@@ -58,7 +58,7 @@ class EditProfileView {
         const sectionData = forms[this.section];
 
         try {
-            LsProfile.update();
+            await LsProfile.update();
             this.userData = LsProfile.data;
             this.renderForm(sectionData);
 
