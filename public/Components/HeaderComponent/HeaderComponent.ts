@@ -224,7 +224,6 @@ export default class HeaderComponent {
         //         break;
         // }
 
-        await LsProfile.update();
         this.renderAvatarCallback(LsProfile.data);
     }
 
