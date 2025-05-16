@@ -8,6 +8,7 @@ import SearchComponent from '@components/SearchComponent/SearchComponent';
 import router from '@router';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import { FriendsRequests, UsersRequests } from '@modules/api';
+import LsProfile from '@modules/LsProfile';
 
 
 const enum Section {
@@ -103,7 +104,8 @@ class FriendsView {
     }
 
     async fetchFriends(section: string) {
-        const userId = getLsItem('user_id', null);
+        const userId = LsProfile.id;
+        // const userId = getLsItem('user_id', null);
 
         const [status, data] = await FriendsRequests.getFriends(userId, 100, 0, section);
         switch (status) {

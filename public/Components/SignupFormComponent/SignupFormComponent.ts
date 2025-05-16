@@ -304,10 +304,11 @@ export default class SignupFormComponent {
             },
             callback: async (status: number) => {
                 if (status === 200) {
-                    document.cookie = `username=${encodeURIComponent(this.usernameInput?.value)}; path=/`;
+                    await LsProfile.update();
+
+                    document.cookie = `username=${encodeURIComponent(LsProfile.username)}; path=/`;
                     router.menu.renderProfileMenuItem();
 
-                    await LsProfile.update();
                     // (async () => {
                     //     const [status, data] = await UsersRequests.getMyProfile();
                     //     // const [status, data] = await UsersRequests.getProfile(getLsItem('username', null));

@@ -228,13 +228,14 @@ export default class LoginFormComponent {
         Ajax.post({
             url: '/login',
             body,
-            callback: (status: number) => {
+            callback: async (status: number) => {
                 if (status === 200) {
-                    document.cookie = `username=${encodeURIComponent(body.username)}; path=/`;
+                    await LsProfile.update();
+
+                    document.cookie = `username=${encodeURIComponent(LsProfile.username)}; path=/`;
                     router?.menu?.renderProfileMenuItem();
                     setLsItem('is-general-feedback-ready', 'true');
 
-                    LsProfile.update();
                     // (async () => {
                     //     const [status, data] = await UsersRequests.getMyProfile();
                     //     // const [status, data] = await UsersRequests.getProfile(getLsItem('username', null));

@@ -125,7 +125,8 @@ export default class MenuComponent {
     }
 
     private async renderCounters() {
-        const userId = getLsItem('user_id', null);
+        const userId = LsProfile.id;
+        // const userId = getLsItem('user_id', null);
 
         const [status, friendsData] = await FriendsRequests.getFriends(userId, 100, 0, 'incoming');
         switch (status) {
