@@ -149,7 +149,7 @@ export default class FeedComponent {
             newPostsHeight += post.offsetHeight + 48;
         });
 
-        this.initVirtualization(newPostsHeight);
+        // this.initVirtualization(newPostsHeight);
 
         new ExtraLoadComponent<any>({
             sentinelContainer: this.posts!,
@@ -157,44 +157,48 @@ export default class FeedComponent {
             position: 'pre-bottom',
             fetchFn: this.fetchMorePosts.bind(this),
             renderFn: (posts) => {
-                let newPostsHeight = -48;
+                // let newPostsHeight = -48;
+
+                // this.virtualization.observer.disconnect();
+                // this.virtualization.isInserting = true;
 
                 const postsElements: Array<HTMLElement> = [];
                 posts?.forEach((postConfig) => {
                     const post = this.renderPost(postConfig);
                     this.lastTs = postConfig.created_at;
-                    newPostsHeight += post.offsetHeight + 48;
+                    // newPostsHeight += post.offsetHeight + 48;
                     postsElements.push(post);
                 });
 
                 // this.virtualization?.destroy(); // пересоздаем виртуализацию
-                this.virtualization.pushElements(postsElements);
+                // this.virtualization.pushElements(postsElements);
+                // this.virtualization.isInserting = false;
                 // this.initVirtualization(newPostsHeight);
             }
         });
     }
 
-    private initVirtualization(newPostsHeight: number) {
-        if (!this.posts) return;
+    // private initVirtualization(newPostsHeight: number) {
+    //     if (!this.posts) return;
     
-        this.virtualization?.destroy();
+    //     this.virtualization?.destroy();
     
-        this.virtualization = new VirtualizedListComponent<any>({
-            container: this.posts,
-            itemSelector: '.post',
-            virtualizeMargin: newPostsHeight,
-            getKey: (el) => el.getAttribute('data-id')!,
-            fetchRenderedItem: (key) => {
-                const config = this.postKeyMap.get(key);
-                if (!config) return document.createElement('div');
+    //     this.virtualization = new VirtualizedListComponent<any>({
+    //         container: this.posts,
+    //         itemSelector: '.post',
+    //         virtualizeMargin: newPostsHeight,
+    //         getKey: (el) => el.getAttribute('data-id')!,
+    //         fetchRenderedItem: (key) => {
+    //             const config = this.postKeyMap.get(key);
+    //             if (!config) return document.createElement('div');
     
-                const wrapper = document.createElement('div');
-                new PostComponent(wrapper, config);
-                const el = wrapper.firstElementChild as HTMLElement;
-                return el;
-            },
-        });
-    }    
+    //             const wrapper = document.createElement('div');
+    //             new PostComponent(wrapper, config);
+    //             const el = wrapper.firstElementChild as HTMLElement;
+    //             return el;
+    //         },
+    //     });
+    // }    
 
     private async fetchMorePosts(): Promise<any[]> {
         if (!this.lastTs) return [];

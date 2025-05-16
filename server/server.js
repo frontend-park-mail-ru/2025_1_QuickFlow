@@ -140,6 +140,7 @@ app.post('/api/logout', (req, res) => {
     res.status(200).end();
 });
 
+let counter = 1;
 app.get('/api/feed', (req, res) => {
     const id = req.cookies['podvorot'];
     const usernameSession = ids[id];
@@ -150,6 +151,8 @@ app.get('/api/feed', (req, res) => {
 
     posts.forEach((post) => {
         post.id = crypto.randomUUID();
+        post.text = counter;
+        counter++;
     });
 
     res.status(200).json(posts);

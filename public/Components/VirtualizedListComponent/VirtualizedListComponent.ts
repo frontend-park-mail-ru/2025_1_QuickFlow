@@ -12,11 +12,8 @@ interface VirtualizedListConfig<T> {
 export default class VirtualizedListComponent<T> {
     private container: HTMLElement;
     private itemSelector: string;
-    private bufferSize: number;
     private virtualizeMargin: number;
-    private getKey: (el: HTMLElement) => string;
-    private fetchRenderedItem: (key: string) => HTMLElement;
-    private observer: IntersectionObserver;
+    observer: IntersectionObserver;
 
     private itemsMap: Map<string, HTMLElement> = new Map();
     private storedItems: Map<string, { top: number; height: number }> = new Map();
@@ -28,15 +25,13 @@ export default class VirtualizedListComponent<T> {
 
     private topItems: Array<HTMLElement> = [];
     private bottomItems: Array<HTMLElement> = [];
+    isInserting: boolean = false;
+    private items: HTMLElement[];
 
     constructor(config: VirtualizedListConfig<T>) {
         this.container = config.container;
         this.itemSelector = config.itemSelector;
-        this.bufferSize = config.bufferSize || 3;
         this.virtualizeMargin = config.virtualizeMargin || 3500;
-        this.getKey = config.getKey;
-        this.fetchRenderedItem = config.fetchRenderedItem;
-
         this.init();
     }
 
@@ -58,120 +53,112 @@ export default class VirtualizedListComponent<T> {
             threshold: 0,
         });
 
+        this.items = Array.from(
+            this.container.querySelectorAll(this.itemSelector)
+        ) as HTMLElement[];
+
         this.observe();
+        document.addEventListener('scroll', this.onScroll.bind(this));
     }
 
     public pushElements(items: Array<HTMLElement>) {
         this.bottomSpacer.remove();
         this.container.append(this.bottomSpacer);
-        this.observe(items);
+
+        this.items = this.items.concat(items);
+        this.observe();
     }
 
-    private observe(
-        items: Array<HTMLElement> = Array.from(
-            this.container.querySelectorAll(this.itemSelector)
-        ) as HTMLElement[]
-    ) {
-        items.forEach(item => {
-            const key = this.getKey(item);
-            this.itemsMap.set(key, item);
-            this.observer.observe(item);
-        });
+    private observe() {
+        this.items.forEach(item => this.observer.observe(item));
+    }
 
-        this.observer.observe(this.topSpacer);
-        this.observer.observe(this.bottomSpacer);
+    private onScroll() {
+        if (this.isInserting) return;
+        this.isInserting = true;
+
+        setTimeout(() => {
+            const scrollTop = document.documentElement.scrollTop;
+            const containerRect = this.container.getBoundingClientRect();
+
+            console.log(
+                scrollTop,
+                this.topPadding,
+                this.bottomSpacer.getBoundingClientRect().top - window.innerHeight
+            );
+
+            requestAnimationFrame(() => {
+                this.observer.disconnect();
+
+                if (
+                    scrollTop < this.topPadding &&
+                    this.topItems.length
+                ) {
+                    console.log('hook top');
+                    const returningPost = this.topItems.pop();
+                    if (returningPost) {
+                        this.topSpacer.after(returningPost);
+                        const height = returningPost.offsetHeight;
+                        this.topPadding -= height;
+                        this.updateSpacers();
+
+                        this.items.unshift(returningPost);
+                    }
+                }
+                
+                if (
+                    scrollTop + this.container.clientHeight > containerRect.height - this.bottomPadding &&
+                    this.bottomItems.length
+                ) {
+                    console.log('hook bottom');
+                    const returningPost = this.bottomItems.shift();
+                    if (returningPost) {
+                        const beforeBottomSpacer = this.bottomSpacer.previousElementSibling;
+                        if (beforeBottomSpacer.classList.contains('extra-load-sentinel')) {
+                            beforeBottomSpacer.before(returningPost);
+                        } else {
+                            this.bottomSpacer.before(returningPost);
+                        }
+                        const height = returningPost.offsetHeight;
+                        this.bottomPadding -= height;
+                        this.updateSpacers();
+
+                        this.items.push(returningPost);
+                    }
+                }
+
+                this.observe();
+                this.isInserting = false;
+            });
+        }, 50);
     }
 
     private handleIntersect(entries: IntersectionObserverEntry[]) {
         for (const entry of entries) {
             const el = entry.target as HTMLElement;
 
-            if (el.classList.contains('spacer_top')) {
-                if (
-                    !entry.isIntersecting ||
-                    !this.topItems.length
-                ) continue;
-
-                console.log('spacer_top');
-
-                requestAnimationFrame(() => {
-                    const returningPost = this.topItems.pop();
-                    this.topSpacer.after(returningPost);
-                    const height = returningPost.offsetHeight;
-                    this.topPadding -= height;
-                    this.updateSpacers();
-                    this.observer.observe(returningPost);
-                });
-
-                continue;
-            }
-            
-            if (el.classList.contains('spacer_bottom')) {
-                if (
-                    !entry.isIntersecting ||
-                    !this.bottomItems.length
-                ) continue;
-
-                console.log('spacer_bottom');
-
-                requestAnimationFrame(() => {
-                    const returningPost = this.bottomItems.pop();
-                    const beforeBottomSpacer = this.bottomSpacer.previousElementSibling;
-                    if (beforeBottomSpacer.classList.contains('extra-load-sentinel')) {
-                        beforeBottomSpacer.before(returningPost);
-                    } else {
-                        this.bottomSpacer.before(returningPost);
-                    }
-                    const height = returningPost.offsetHeight;
-                    this.bottomPadding -= height;
-                    this.updateSpacers();
-                    this.observer.observe(returningPost);
-                });
-
-                continue;
-            }
-
             if (!entry.isIntersecting) {
                 const top = el.offsetTop;
                 const height = el.offsetHeight;
-
-                console.log('!entry.isIntersecting');
 
                 requestAnimationFrame(() => {
                     this.observer.unobserve(el);
                     el.remove();
 
                     if (top < -this.container.getBoundingClientRect().top) {
+                        console.log('!entry.isIntersecting TOP');
                         this.topPadding += height;
                         this.topItems.push(el);
                     } else {
+                        console.log('!entry.isIntersecting BOTTOM');
                         this.bottomPadding += height;
                         this.bottomItems.push(el);
                     }
-                });
 
-                this.updateSpacers();
+                    this.updateSpacers();
+                });
             }
         };
-
-        const scrollTop = this.container.scrollTop;
-
-        if (
-            scrollTop < this.topPadding &&
-            this.topItems.length
-        ) {
-            requestAnimationFrame(() => {
-                console.log('hook');
-                const returningPost = this.topItems.pop();
-                if (!returningPost) return;
-                
-                this.topSpacer.after(returningPost);
-                const height = returningPost.offsetHeight;
-                this.topPadding -= height;
-                this.updateSpacers();
-                this.observer.observe(returningPost);
-            });
-        }
     }
 
     private updateSpacers() {
