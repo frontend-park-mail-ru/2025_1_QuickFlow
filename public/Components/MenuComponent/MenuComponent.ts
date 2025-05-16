@@ -125,6 +125,8 @@ export default class MenuComponent {
     }
 
     public async renderCounters() {
+        this.menuElements.friends.querySelector('.menu__counter')?.remove();
+
         const userId = LsProfile.id;
 
         const [status, friendsData] = await FriendsRequests.getFriends(userId, 100, 0, 'incoming');
@@ -136,7 +138,6 @@ export default class MenuComponent {
 
         const requestsCount = friendsData?.payload?.friends?.length;
         if (requestsCount) {
-            this.menuElements.friends.querySelector('.menu__counter')?.remove();
             new CounterComponent(this.menuElements.friends, {
                 value: requestsCount,
                 classes: ['menu__counter'],
