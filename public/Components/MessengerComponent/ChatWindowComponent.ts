@@ -2,23 +2,20 @@ import ChatComponent from '@components/MessengerComponent/ChatComponent';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
 import ContextMenuComponent from '@components/ContextMenuComponent/ContextMenuComponent';
 import createElement from '@utils/createElement';
-import focusInput from '@utils/focusInput';
 import { setLsItem, getLsItem, removeLsItem } from '@utils/localStorage';
 import getTimeDifference from '@utils/getTimeDifference';
 import ws from '@modules/WebSocketService';
 import router from '@router';
 import ChatsPanelComponent from './ChatsPanelComponent';
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
-import { MSG } from '@config/config';
 import { UsersRequests } from '@modules/api';
+import MessageInputComponent from './MessageInputComponent/MessageInputComponent';
 
 
 const MOBILE_MAX_WIDTH = 610;
-const TEXTAREA_PLACEHOLDER = 'Напишите сообщение...';
 const HEADER_AVATAR_SIZE = 'xs';
 const EMPTY_CHAT_WINDOW_TEXT = 'Выберите чат или создайте новый';
-const CHAT_DEFAULT_PADDING_BOTTOM = 16;
-const CHAT_MSG_PREFIX = 'chat-msg-';
+// const CHAT_MSG_PREFIX = 'chat-msg-';
 
 const HEADER_CONTEXT_MENU_DATA = {
     disableNotify: {
@@ -40,25 +37,6 @@ const HEADER_CONTEXT_MENU_DATA = {
     },
 };
 
-const MEDIA_CONTEXT_MENU_DATA = {
-    photo: {
-        text: 'Фото',
-        icon: 'primary-photo-icon',
-    },
-    video: {
-        text: 'Видео',
-        icon: 'videocamera-icon',
-    },
-    music: {
-        text: 'Музыка',
-        icon: 'primary-music-icon',
-    },
-    file: {
-        text: 'Файл',
-        icon: 'file-icon',
-    },
-};
-
 
 export default class ChatWindowComponent {
     private parent: HTMLElement | null = null;
@@ -71,8 +49,7 @@ export default class ChatWindowComponent {
     private _chatData: Record<string, any> | null = null;
     private container: HTMLElement | null = null;
     private _chatsPanel: ChatsPanelComponent | null = null;
-    private focusTimer: any = null;
-    private messageInput: HTMLTextAreaElement | null = null;
+    private messageInput: MessageInputComponent | null = null;
 
     constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
@@ -111,8 +88,15 @@ export default class ChatWindowComponent {
                         username: this.config?.receiver_username,
                     };
                     this.renderHeader();
-                    this.renderMessageInput();
+                    // this.renderMessageInput();
                     this.renderChat();
+                    this.messageInput = new MessageInputComponent(this.container, {
+                        chatData: this._chatData,
+                        renderLastMsg: this._chatsPanel?.renderLastMsg,
+                        chatElement: this.chatElement,
+                        chat: this.chat,
+                    });
+                    // this.renderChat();
                     break;
 
                 case 401:
@@ -134,7 +118,7 @@ export default class ChatWindowComponent {
                 });
             }
 
-            removeLsItem(CHAT_MSG_PREFIX + `${this._chatData?.id}`);
+            // removeLsItem(CHAT_MSG_PREFIX + `${this._chatData?.id}`);
 
             // Отправили первое сообщение
             if (!this._chatData?.id && this._chatData?.receiver_id) {
@@ -152,7 +136,8 @@ export default class ChatWindowComponent {
             } else {
                 if (`chat-${payload.chat_id}` === getLsItem('active-chat', null)) {
                     this.chat?.pushMessage(payload);
-                    this.updateTextareaHeight();
+                    this.messageInput.updateTextareaHeight();
+                    // this.updateTextareaHeight();
                 }
                 this._chatsPanel?.renderLastMsg({
                     id: payload.chat_id,
@@ -163,8 +148,8 @@ export default class ChatWindowComponent {
                 });
             }
 
-            if (this.messageInput && !this.isMobile) {
-                focusInput(this.messageInput, this.focusTimer);
+            if (!this.isMobile) {
+                this.messageInput?.focus();
             }
         });
     }
@@ -188,8 +173,13 @@ export default class ChatWindowComponent {
         }
 
         this.renderHeader();
-        this.renderMessageInput();
         this.renderChat();
+        this.messageInput = new MessageInputComponent(this.container, {
+            chatData: this._chatData,
+            renderLastMsg: this._chatsPanel?.renderLastMsg,
+            chatElement: this.chatElement,
+            chat: this.chat,
+        });
     }
 
     close() {
@@ -284,125 +274,6 @@ export default class ChatWindowComponent {
         new ContextMenuComponent(dropdown, {
             data: HEADER_CONTEXT_MENU_DATA,
         });
-    }
-
-    renderMessageInput() {
-        const bottomWrapper = createElement({
-            classes: ['chat-window__bottom'],
-            parent: this.container,
-            attrs: { id: 'chat-window__bottom' },
-        });
-
-        const bottomBar = createElement({
-            classes: ['chat-window__bottom-bar'],
-            parent: bottomWrapper,
-        });
-
-        const dropdown = createElement({
-            classes: ['js-dropdown', 'dropdown', 'chat-window__media-dropdown'],
-            parent: bottomBar,
-        });
-
-        new ContextMenuComponent(dropdown, {
-            data: MEDIA_CONTEXT_MENU_DATA,
-            size: 'mini',
-            position: 'above-start',
-        });
-
-        createElement({
-            classes: ['chat-window__media'],
-            parent: dropdown,
-        });
-
-        const value = getLsItem(
-            CHAT_MSG_PREFIX + `${this._chatData?.id}`,
-            ''
-        );
-
-        this.messageInput = createElement({
-            tag: 'textarea',
-            parent: bottomBar,
-            classes: ['chat-window__msg'],
-            attrs: {
-                placeholder: TEXTAREA_PLACEHOLDER,
-                rows: 1,
-                maxLength: MSG.MAX_LEN,
-            },
-            text: value
-        }) as HTMLTextAreaElement;
-
-        if (this.messageInput && !this.isMobile) {
-            focusInput(this.messageInput, this.focusTimer);
-        }
-
-        const sendBtn = createElement({
-            classes: [
-                'chat-window__send',
-                this.messageInput?.value.trim() === '' ? 'chat-window__send_disabled' : null
-            ],
-            parent: bottomBar,
-        });
-
-        sendBtn.addEventListener('click', () => this.sendMessage(sendBtn));
-
-        this.messageInput?.addEventListener("input", () => {
-            if (this.messageInput?.value.trim() !== '') {
-                sendBtn.classList.remove('chat-window__send_disabled');
-                if (this.messageInput) setLsItem(
-                    CHAT_MSG_PREFIX + `${this._chatData?.id}`,
-                    this.messageInput.value.trim()
-                );
-                return;
-            }
-            removeLsItem(CHAT_MSG_PREFIX + `${this._chatData?.id}`);
-            this._chatsPanel?.renderLastMsg(this._chatData);
-            sendBtn.classList.add('chat-window__send_disabled');
-        });
-
-        this.messageInput?.addEventListener('keypress', (event) => {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                this.sendMessage(sendBtn);
-            }
-        });
-
-        this.updateTextareaHeight(bottomWrapper);
-        this.messageInput?.addEventListener("input", () => this.updateTextareaHeight(bottomWrapper));
-    }
-
-    sendMessage(sendBtn: HTMLElement) {
-        if (sendBtn.classList.contains('chat-window__send_disabled')) return;
-
-        new ws().send('message', {
-            chat_id: this._chatData?.id,
-            receiver_id: this._chatData?.receiver_id,
-            text: this.messageInput?.value.trim(),
-        });
-
-        if (this.messageInput) this.messageInput.value = '';
-        sendBtn.classList.add('chat-window__send_disabled');
-    }
-
-    updateTextareaHeight(
-        bottomWrapper = document.getElementById('chat-window__bottom')
-    ) {
-        if (!this.chatElement || !this.messageInput || !bottomWrapper) return;
-    
-        this.messageInput.style.height = 'auto';
-        this.messageInput.style.height = this.messageInput.scrollHeight + 'px';
-    
-        const parent = this.chatElement.parentNode as HTMLElement;
-        const scrollThreshold = this.chat.scroll.lastElementChild.scrollHeight + 50; // если до конца меньше 50px, считаем "внизу"
-    
-        // обновляем паддинг у блока сообщений
-        const newPadding = bottomWrapper.clientHeight - 62 + CHAT_DEFAULT_PADDING_BOTTOM;
-        this.chatElement.style.paddingBottom = `${newPadding}px`;
-    
-        // проверяем, близок ли скролл к самому низу
-        const scrollBottom = parent.scrollHeight - parent.scrollTop - parent.clientHeight;
-        if (scrollBottom <= scrollThreshold) {
-            parent.scrollTop = parent.scrollHeight;
-        }
     }
 
     renderChat() {

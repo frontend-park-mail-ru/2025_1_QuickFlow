@@ -36,9 +36,10 @@ class ProfileView {
             type: 'profile',
         });
 
-        const username = params?.username || getLsItem('username', '');
+        // const username = params?.username || getLsItem('username', '');
 
-        const [status, profileData] = await UsersRequests.getProfile(username);
+        const [status, profileData] = await UsersRequests.getMyProfile();
+        // const [status, profileData] = await UsersRequests.getProfile(username);
         switch (status) {
             case 200:
                 this.cbOk(profileData);

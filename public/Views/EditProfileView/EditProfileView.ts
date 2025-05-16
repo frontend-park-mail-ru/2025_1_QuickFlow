@@ -57,7 +57,8 @@ class EditProfileView {
         const sectionData = forms[this.section];
 
         try {
-            const [status, profileData] = await UsersRequests.getProfile(getLsItem('username', ''));
+            const [status, profileData] = await UsersRequests.getMyProfile();
+            // const [status, profileData] = await UsersRequests.getProfile(getLsItem('username', ''));
             switch (status) {
                 case 200:
                     this.userData = profileData;

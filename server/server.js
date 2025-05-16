@@ -223,6 +223,17 @@ app.get('/api/profiles/:username', (req, res) => {
     res.status(200).json(users[queryUsername]);
 });
 
+app.get('/api/my_profile', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).json(users['rvasutenko']);
+});
+
 app.get('/api/communities/:pk', (req, res) => {
     const id = req.cookies['podvorot'];
     const username = ids[id];

@@ -2,7 +2,6 @@ import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import TextareaComponent from '@components/UI/TextareaComponent/TextareaComponent';
 import createElement from '@utils/createElement';
 import insertIcon from '@utils/insertIcon';
-import Ajax from '@modules/ajax';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
 import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';

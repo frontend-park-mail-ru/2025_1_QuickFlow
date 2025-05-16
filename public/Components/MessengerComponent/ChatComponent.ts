@@ -131,8 +131,8 @@ export default class ChatComponent {
                 // 1. Сохраняем текущий первый видимый элемент
                 const firstVisible = this.scroll.firstElementChild as HTMLElement;
                 const previousTop = firstVisible?.getBoundingClientRect().top || 0;
-                console.log(this.container.scrollTop);
-                console.log(previousTop);
+                // console.log(this.container.scrollTop);
+                // console.log(previousTop);
 
                 const msgsArr: Array<HTMLElement> = [];
 
@@ -167,13 +167,13 @@ export default class ChatComponent {
 
                 // 3. Сравниваем новую позицию первого видимого элемента
                 const newTop = firstVisible?.getBoundingClientRect().top || 0;
-                console.log(newTop);
+                // console.log(newTop);
                 const delta = newTop - previousTop;
-                console.log(delta);
+                // console.log(delta);
 
                 // 4. Компенсируем изменение
                 this.container.scrollTop += delta;
-                console.log(this.container.scrollTop);
+                // console.log(this.container.scrollTop);
             }
         });        
     }
@@ -208,10 +208,10 @@ export default class ChatComponent {
     }
 
     private handleIntersect = (entries: IntersectionObserverEntry[]) => {
-        console.log('handleIntersect');
+        // console.log('handleIntersect');
         for (const entry of entries) {
             if (entry.isIntersecting) {
-                console.log('handleIntersect isIntersecting=true');
+                // console.log('handleIntersect isIntersecting=true');
 
                 new ws().send('message_read', {
                     chat_id: this.config?.chatData?.id,
@@ -220,7 +220,7 @@ export default class ChatComponent {
 
                 this.observer.unobserve(entry.target);
 
-                console.log('handleIntersect isIntersecting=true ws-sended msg-unobserved');
+                // console.log('handleIntersect isIntersecting=true ws-sended msg-unobserved');
             }
         }
     };
@@ -280,7 +280,7 @@ export default class ChatComponent {
         if (!isMine) {
             if (msgTime > this.lastReadByMeTime) {
                 this.observer.observe(msg);
-                console.log('renderMsg msg-observed');
+                // console.log('renderMsg msg-observed');
             }
         }
 

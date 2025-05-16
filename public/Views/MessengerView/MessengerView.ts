@@ -19,7 +19,8 @@ class MessengerView {
             type: 'messenger',
         });
 
-        const [status, profileData] = await UsersRequests.getProfile(getLsItem('username', ''));
+        const [status, profileData] = await UsersRequests.getMyProfile();
+        // const [status, profileData] = await UsersRequests.getProfile(getLsItem('username', ''));
         switch (status) {
             case 200:
                 new MessengerComponent(this.containerObj, {

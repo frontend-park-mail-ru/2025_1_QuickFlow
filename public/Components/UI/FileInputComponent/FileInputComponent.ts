@@ -179,7 +179,11 @@ export default class FileInputComponent {
             const removeBtn = picWrapper.querySelector('.js-post-pic-delete');
             removeBtn.addEventListener('click', () => this.removeFile(file, picWrapper));
     
-            this.parent.insertBefore(picWrapper, this.config.imitator);
+            if (this.config?.insertPosition === 'end') {
+                this.parent.appendChild(picWrapper);
+            } else {
+                this.parent.insertBefore(picWrapper, this.config.imitator);
+            }
         }
     
         this.updateInputFiles();

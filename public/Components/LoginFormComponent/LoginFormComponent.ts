@@ -234,7 +234,8 @@ export default class LoginFormComponent {
                     setLsItem('is-general-feedback-ready', 'true');
 
                     (async () => {
-                        const [status, data] = await UsersRequests.getProfile(getLsItem('username', null));
+                        const [status, data] = await UsersRequests.getMyProfile();
+                        // const [status, data] = await UsersRequests.getProfile(getLsItem('username', null));
                         if (status === 200) setLsItem('user_id', data.id);
                     })();
 

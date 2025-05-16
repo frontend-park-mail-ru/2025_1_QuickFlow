@@ -216,7 +216,8 @@ export default class HeaderComponent {
             classes: ['header__right']
         });
 
-        const [status, profileData] = await UsersRequests.getProfile(getLsItem('username', ''));
+        // const [status, profileData] = await UsersRequests.getProfile(getLsItem('username', ''));
+        const [status, profileData] = await UsersRequests.getMyProfile();
         switch (status) {
             case 200:
                 this.renderAvatarCallback(profileData);

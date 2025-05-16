@@ -307,7 +307,8 @@ export default class SignupFormComponent {
                     router.menu.renderProfileMenuItem();
 
                     (async () => {
-                        const [status, data] = await UsersRequests.getProfile(getLsItem('username', null));
+                        const [status, data] = await UsersRequests.getMyProfile();
+                        // const [status, data] = await UsersRequests.getProfile(getLsItem('username', null));
                         if (status === 200) setLsItem('user_id', data.id);
                     })();
 

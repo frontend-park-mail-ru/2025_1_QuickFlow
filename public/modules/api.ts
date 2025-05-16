@@ -80,6 +80,15 @@ export class AuthRequests {
 
 
 export class UsersRequests {
+    static async getMyProfile(): Promise<[number, Record<string, any>]> {
+        return new Promise((resolve) => {
+            ajax.get({
+                url: '/my_profile',
+                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+            });
+        });
+    }
+    
     static async getProfile(username: string): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
             ajax.get({
