@@ -84,7 +84,11 @@ registerRoutes();
     router.menu = new MenuComponent(container, config);
     router.header = new HeaderComponent(container);
     
-    if (!router.path.startsWith('/scores')) {
+    if (
+        !router.path.startsWith('/scores') &&
+        !router.path.startsWith('/login') &&
+        !router.path.startsWith('/signup')
+    ) {
         new ws().subscribe('message', (payload: Record<string, any>) => {
             if (
                 router.path.startsWith('/messenger') ||
