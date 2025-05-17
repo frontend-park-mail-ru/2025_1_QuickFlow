@@ -13,7 +13,7 @@ export default class IFrameComponent {
         this.render();
     }
 
-    render() {
+    async render() {
         const currentIframe = this.parent.querySelector('iframe');
         if (currentIframe?.getAttribute('src') === this.config.src) return;
 
@@ -27,38 +27,46 @@ export default class IFrameComponent {
         }) as HTMLIFrameElement;
 
         this.iframe.addEventListener('load', () => {
-            try {
-                const doc = this.iframe?.contentDocument;
-                if (!doc) return;
-
+            const doc = this.iframe?.contentDocument;
+            if (!doc) return;
+        
+            // Периодически проверяем, появился ли нужный элемент
+            const waitForContainer = () => {
                 const container = doc.querySelector('.container_scores') as HTMLElement | null;
-                if (!container || !container.children.length) return;
+                if (container && container.children.length) {
+                    this.setupWithContainer(container);
+                } else {
+                    // Повторить проверку через requestAnimationFrame (или setTimeout)
+                    requestAnimationFrame(waitForContainer);
+                }
+            };
+        
+            waitForContainer();
+        });        
+    }
 
-                const content = container.children[0] as HTMLElement;
-
-                this.updateIframeSize(content);
-                this.resizeObserver = new ResizeObserver(() => {
-                    this.updateIframeSize(content);
-                });
-                this.resizeObserver.observe(content);
-
-                const observer = new MutationObserver(() => {
-                    if (!container.children.length) {
-                        this.iframe?.remove();
-                        this.disconnectObservers();
-                    }
-                });
-                observer.observe(container, {
-                    attributes: false,
-                    childList: true,
-                    subtree: false,
-                });
-
-            } catch (error) {
-                console.error('Ошибка при доступе к содержимому iframe:', error);
+    private setupWithContainer(container: HTMLElement) {
+        const content = container.children[0] as HTMLElement;
+    
+        this.updateIframeSize(content);
+    
+        this.resizeObserver = new ResizeObserver(() => {
+            this.updateIframeSize(content);
+        });
+        this.resizeObserver.observe(content);
+    
+        const observer = new MutationObserver(() => {
+            if (!container.children.length) {
+                this.iframe?.remove();
+                this.disconnectObservers();
             }
         });
-    }
+        observer.observe(container, {
+            attributes: false,
+            childList: true,
+            subtree: true,
+        });
+    }    
 
     private updateIframeSize(content: HTMLElement) {
         if (!this.iframe) return;
