@@ -67,7 +67,7 @@ export default class LsProfile {
     }
 
     public static set username(newUsername: string) {
-        const profileData = JSON.parse(getLsItem('my_profile_data', '{}')).id;
+        const profileData = JSON.parse(getLsItem('my_profile_data', '{}'));
         profileData.profile.username = newUsername;
         setLsItem('my_profile_data', JSON.stringify(profileData));
     }
