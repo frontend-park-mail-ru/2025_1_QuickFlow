@@ -10,6 +10,8 @@ import router from '@router';
 import { SEX } from '@config/config';
 import { UsersRequests } from '@modules/api';
 import LsProfile from '@modules/LsProfile';
+import ws from '@modules/WebSocketService';
+import NotificationComponent from '@components/NotificationComponent/NotificationComponent';
 
 
 const DEFAULT_INPUT_VALUE = '';
@@ -315,6 +317,19 @@ export default class SignupFormComponent {
                     //     // const [status, data] = await UsersRequests.getProfile(getLsItem('username', null));
                     //     if (status === 200) setLsItem('user_id', data.id);
                     // })();
+
+                    new ws().subscribe('message', (payload: Record<string, any>) => {
+                        if (
+                            router.path.startsWith('/messenger') ||
+                            payload?.sender?.username === LsProfile.username
+                        ) return;
+
+                        new NotificationComponent({
+                            type: 'msg',
+                            classes: ['notification_msg'],
+                            data: payload,
+                        });
+                    });
 
                     router.go({ path: '/feed' });
                     return;

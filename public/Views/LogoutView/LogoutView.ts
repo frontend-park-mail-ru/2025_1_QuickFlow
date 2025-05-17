@@ -1,6 +1,7 @@
 import createElement from '@utils/createElement';
 import router from '@router';
 import { AuthRequests } from '@modules/api';
+import ws from '@modules/WebSocketService';
 
 
 class LogoutView {
@@ -11,6 +12,7 @@ class LogoutView {
 
         switch (status) {
             case 200:
+                new ws().close();
                 router.go({ path: '/login' });
                 break;
         }

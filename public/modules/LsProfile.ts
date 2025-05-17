@@ -63,7 +63,7 @@ export default class LsProfile {
     }
 
     public static get username(): string {
-        return JSON.parse(getLsItem('my_profile_data', '{}')).profile.username;
+        return JSON.parse(getLsItem('my_profile_data', '{}'))?.profile?.username;
     }
 
     public static set username(newUsername: string) {
@@ -73,6 +73,6 @@ export default class LsProfile {
     }
 
     public static get id(): string {
-        return JSON.parse(getLsItem('my_profile_data', '{}')).id;
+        return JSON.parse(getLsItem('my_profile_data', '{}'))?.id;
     }
 };

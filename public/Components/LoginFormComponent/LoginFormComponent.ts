@@ -7,6 +7,8 @@ import router from '@router';
 import { setLsItem, getLsItem, removeLsItem } from '@utils/localStorage';
 import { UsersRequests } from '@modules/api';
 import LsProfile from '@modules/LsProfile';
+import ws from '@modules/WebSocketService';
+import NotificationComponent from '@components/NotificationComponent/NotificationComponent';
 
 
 export default class LoginFormComponent {
@@ -242,6 +244,19 @@ export default class LoginFormComponent {
                     //     // const [status, data] = await UsersRequests.getProfile(getLsItem('username', null));
                     //     if (status === 200) setLsItem('user_id', data.id);
                     // })();
+
+                    new ws().subscribe('message', (payload: Record<string, any>) => {
+                        if (
+                            router.path.startsWith('/messenger') ||
+                            payload?.sender?.username === LsProfile.username
+                        ) return;
+
+                        new NotificationComponent({
+                            type: 'msg',
+                            classes: ['notification_msg'],
+                            data: payload,
+                        });
+                    });
 
                     router.go({ path: '/feed' });
                     return;

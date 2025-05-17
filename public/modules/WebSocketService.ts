@@ -41,8 +41,10 @@ class WebSocketService {
         });
 
         this.socket.addEventListener('close', () => {
-            console.warn('[WebSocket] Connection closed. Reconnecting...');
-            setTimeout(() => this.connect(), RECONNECTION_TIMEOUT);
+            if (WebSocketService.__instance) {
+                console.warn('[WebSocket] Connection closed. Reconnecting...');
+                setTimeout(() => this.connect(), RECONNECTION_TIMEOUT);
+            }
         });
 
         this.socket.addEventListener('error', (error: any) => {
@@ -79,6 +81,7 @@ class WebSocketService {
 
     close() {
         this.socket?.close();
+        WebSocketService.__instance = null;
     }
 }
 
