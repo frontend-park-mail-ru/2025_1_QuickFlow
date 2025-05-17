@@ -66,6 +66,12 @@ export default class LsProfile {
         return JSON.parse(getLsItem('my_profile_data', '{}')).profile.username;
     }
 
+    public static set username(newUsername: string) {
+        const profileData = JSON.parse(getLsItem('my_profile_data', '{}')).id;
+        profileData.profile.username = newUsername;
+        setLsItem('my_profile_data', JSON.stringify(profileData));
+    }
+
     public static get id(): string {
         return JSON.parse(getLsItem('my_profile_data', '{}')).id;
     }
