@@ -262,8 +262,10 @@ class EditProfileView {
         });
     }
 
-    async postCbOk(newUsername: string | undefined) {
-        LsProfile.username = newUsername;
+    postCbOk(newUsername: string | undefined) {
+        if (newUsername) {
+            LsProfile.username = newUsername;
+        }
 
         router?.menu?.renderProfileMenuItem();
         router?.header?.renderAvatarMenu();
