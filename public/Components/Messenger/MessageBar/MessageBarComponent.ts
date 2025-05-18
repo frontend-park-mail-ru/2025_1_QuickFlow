@@ -88,8 +88,8 @@ export default class MessageBarComponent {
     
         el.dispatchEvent(new Event('input', { bubbles: true }));
         
-        if (!this.isMobile) el.focus();
-    }    
+        el.focus();
+    }
 
     private render() {
         this.wrapper = createElement({
