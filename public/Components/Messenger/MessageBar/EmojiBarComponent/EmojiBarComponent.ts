@@ -169,7 +169,7 @@ export default class EmojiBarComponent {
                 emojiSym = e.target.querySelector('.emoji-bar__emoji')?.textContent;
             } else if (e.target.classList.contains('emoji-bar__emoji')) {
                 emojiSym = e.target?.textContent;
-            }
+            } else return;
 
             this.config.addToMessage(emojiSym);
         });

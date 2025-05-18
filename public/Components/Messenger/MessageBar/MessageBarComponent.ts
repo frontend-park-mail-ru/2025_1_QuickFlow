@@ -87,7 +87,8 @@ export default class MessageBarComponent {
         el.selectionStart = el.selectionEnd = cursorPos;
     
         el.dispatchEvent(new Event('input', { bubbles: true }));
-        el.focus();
+        
+        if (!this.isMobile) el.focus();
     }    
 
     private render() {
