@@ -61,7 +61,7 @@ export default class PostMwComponent extends ModalWindowComponent {
             text: 'Добавьте фото',
         });
 
-        const fileInputConfig: Record<string, any> = {
+        const fileInputConfig = {
             imitator: addPicWrapper,
             preview: this.picWrapperTemplate(),
             id: 'post-pic-upload',
@@ -76,7 +76,7 @@ export default class PostMwComponent extends ModalWindowComponent {
         };
         
         if (hasPics) {
-            fileInputConfig.preloaded = this.config.data.pics;
+            fileInputConfig['preloaded'] = this.config.data.pics;
         }
 
         this.fileInput = new FileInputComponent(scrollWrapper, fileInputConfig);

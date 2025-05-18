@@ -19,6 +19,10 @@ export default class ContextMenuComponent {
         this.render();
     }
 
+    public getItem(name: string): HTMLElement {
+        return this.wrapper.querySelector(`.context-menu__option[data-href="${name}"]`);
+    }
+
     render() {
         if (Object.keys(this.config.data).length === 0) return;
 

@@ -1,4 +1,4 @@
-import ChatComponent from '@components/MessengerComponent/ChatComponent';
+import ChatComponent from '@components/Messenger/ChatComponent';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
 import ContextMenuComponent from '@components/ContextMenuComponent/ContextMenuComponent';
 import createElement from '@utils/createElement';
@@ -9,7 +9,7 @@ import router from '@router';
 import ChatsPanelComponent from './ChatsPanelComponent';
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 import { UsersRequests } from '@modules/api';
-import MessageInputComponent from './MessageInputComponent/MessageInputComponent';
+import MessageInputComponent from './MessageBar/MessageBarComponent';
 
 
 const MOBILE_MAX_WIDTH = 610;

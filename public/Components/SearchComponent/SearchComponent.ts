@@ -6,12 +6,43 @@ const DEBOUNCE_DELAY = 500;
 const RESULTS_ITEMS_COUNT = 25;
 
 
+interface SearchConfig {
+    classes: string[];
+    isResultsChild?: boolean;
+    results: HTMLElement;
+    placeholder?: string;
+    inputClasses?: string[];
+    elementToHide?: HTMLElement;
+    
+    // renderEmptyState может быть либо функцией, либо массивом функций
+    renderEmptyState: ((parent: HTMLElement) => void) | Array<(parent: HTMLElement) => void>;
+    
+    // renderResults — одиночная функция, которая рендерит список элементов
+    renderResults?: (parent: HTMLElement, items: Record<string, any>[]) => void;
+    
+    // searchResults — либо одна функция, либо массив функций
+    // Функция принимает строку и число (лимит) и возвращает Promise с [status: number, data: any]
+    searchResults: 
+        | ((query: string, limit: number) => Promise<[number, Record<string, any>]>)
+        | Array<(query: string, limit: number) => Promise<[number, Record<string, any>]>>;
+    
+    // renderTitle — либо одна функция, либо массив функций
+    renderTitle: ((parent: HTMLElement) => void) | Array<(parent: HTMLElement) => void>;
+    
+    // renderResult — либо одна функция, либо массив функций
+    renderResult: ((parent: HTMLElement, data: Record<string, any>) => void) | Array<(parent: HTMLElement, data: Record<string, any>) => void>;
+    
+    resultsCount?: number;
+}
+
+
 export default class SearchComponent {
     private parent: HTMLElement;
-    private config: Record<string, any>;
-    private search: HTMLElement | null = null;
+    private config: SearchConfig;
 
-    constructor(parent: HTMLElement, config: Record<string, any>) {
+    search: HTMLElement | null = null;
+
+    constructor(parent: HTMLElement, config: SearchConfig) {
         this.parent = parent;
         this.config = config;
         this.render();
@@ -35,7 +66,7 @@ export default class SearchComponent {
             type: 'search',
             placeholder: this.config.placeholder || 'Поиск',
             showRequired: false,
-            classes: [...this.config?.inputClasses],
+            classes: [...(Array.isArray(this.config?.inputClasses) ? this.config.inputClasses : [])],
         });
 
         input.addListener(() => this.handleSearch(input), DEBOUNCE_DELAY);
@@ -122,12 +153,31 @@ export default class SearchComponent {
 
     showNotFound() {
         this.config.results.innerHTML = '';
-        this.config.renderEmptyState?.(this.config.results);
+    
+        const renderEmptyState = this.config.renderEmptyState;
+        if (!renderEmptyState) return;
+    
+        if (Array.isArray(renderEmptyState)) {
+            for (const fn of renderEmptyState) {
+                fn(this.config.results);
+            }
+        } else {
+            renderEmptyState(this.config.results);
+        }
     }
+    
 
     renderResults(resultsList: any[]) {
+        const renderResult = this.config.renderResult;
+
         for (const result of resultsList) {
-            this.config.renderResult(this.config.results, result);
+            if (Array.isArray(renderResult)) {
+                for (const fn of renderResult) {
+                    fn(this.config.results, result);
+                }
+            } else {
+                renderResult(this.config.results, result);
+            }
         }
     }
 }

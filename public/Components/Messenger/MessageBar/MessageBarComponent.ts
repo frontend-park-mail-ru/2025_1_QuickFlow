@@ -1,4 +1,4 @@
-import ChatComponent from '@components/MessengerComponent/ChatComponent';
+import ChatComponent from '@components/Messenger/ChatComponent';
 import ContextMenuComponent from '@components/ContextMenuComponent/ContextMenuComponent';
 import createElement from '@utils/createElement';
 import focusInput from '@utils/focusInput';
@@ -8,6 +8,8 @@ import { FILE, MSG, POST } from '@config/config';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import { ChatsRequests } from '@modules/api';
+import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
+import EmojiBarComponent from './EmojiBarComponent/EmojiBarComponent';
 
 
 const MOBILE_MAX_WIDTH = 610;
@@ -52,7 +54,8 @@ export default class MessageBarComponent {
     private focusTimer: any = null;
     private element: HTMLTextAreaElement | null = null;
     private attachments: HTMLElement | null = null;
-    private attachmentInput: FileInputComponent | null = null;
+    private mediaInput: FileInputComponent | null = null;
+    private fileInput: FileInputComponent | null = null;
     private sendBtn: HTMLElement;
     private wrapper: HTMLElement;
 
@@ -62,6 +65,30 @@ export default class MessageBarComponent {
         this.isMobile = window.innerWidth <= MOBILE_MAX_WIDTH;
         this.render();
     }
+
+    private addEmoji(emoji: string) {
+        const el = this.element;
+        const start = el.selectionStart ?? 0;
+        const end = el.selectionEnd ?? 0;
+        const value = el.value;
+    
+        // Проверка на максимальную длину с учётом вставки
+        if (value.length - (end - start) + emoji.length > MSG.MAX_LEN) {
+            return;
+        }
+    
+        // Вставляем эмоджи на место выделения или курсора
+        const newValue = value.slice(0, start) + emoji + value.slice(end);
+    
+        el.value = newValue;
+    
+        // Перемещаем курсор сразу после вставленного эмоджи
+        const cursorPos = start + emoji.length;
+        el.selectionStart = el.selectionEnd = cursorPos;
+    
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.focus();
+    }    
 
     private render() {
         this.wrapper = createElement({
@@ -90,7 +117,7 @@ export default class MessageBarComponent {
             parent: msgBarText,
         });
 
-        new ContextMenuComponent(dropdown, {
+        const contextMenu = new ContextMenuComponent(dropdown, {
             data: MEDIA_CONTEXT_MENU_DATA,
             size: 'mini',
             position: 'above-start',
@@ -107,9 +134,12 @@ export default class MessageBarComponent {
 
 
 
-        const fileInputConfig: Record<string, any> = {
-            imitator: dropdown.querySelector('.context-menu__option[data-href="media"]'),
-            preview: this.mediaWrapperTemplate(),
+
+        this.mediaInput = new FileInputComponent(this.attachments, {
+            imitator: contextMenu.getItem('media'),
+            // preview: this.mediaWrapperTemplate(),
+            renderPreview: this.renderMediaPreview.bind(this),
+            accept: '.jpg, .jpeg, .png, .gif, .mov, .mp4',
             id: 'message-media-upload',
             insertPosition: 'end',
             multiple: true,
@@ -119,9 +149,24 @@ export default class MessageBarComponent {
             maxResolution: FILE.IMG_MAX_RES,
             maxSize: FILE.MAX_SIZE_TOTAL * FILE.MB_MULTIPLIER,
             maxSizeSingle: FILE.MAX_SIZE_SINGLE * FILE.MB_MULTIPLIER,
-        };
+        });
 
-        this.attachmentInput = new FileInputComponent(this.attachments, fileInputConfig);
+        this.fileInput = new FileInputComponent(this.attachments, {
+            imitator: contextMenu.getItem('file'),
+            // preview: this.mediaWrapperTemplate(),
+            renderPreview: this.renderFilePreview.bind(this),
+            accept: 'any',
+            id: 'message-file-upload',
+            insertPosition: 'end',
+            multiple: true,
+            required: true,
+            maxCount: POST.IMG_MAX_COUNT,
+            // compress: true,
+            maxResolution: FILE.IMG_MAX_RES,
+            maxSize: FILE.MAX_SIZE_TOTAL * FILE.MB_MULTIPLIER,
+            maxSizeSingle: FILE.MAX_SIZE_SINGLE * FILE.MB_MULTIPLIER,
+        });
+
         this.handleMediaUpload();
 
 
@@ -150,6 +195,11 @@ export default class MessageBarComponent {
         if (!this.isMobile) {
             this.focus();
         }
+
+        new EmojiBarComponent(msgBarText, {
+            addToMessage: this.addEmoji.bind(this),
+            sendSticker: this.sendSticker.bind(this),
+        });
 
         this.sendBtn = createElement({
             classes: [
@@ -190,32 +240,20 @@ export default class MessageBarComponent {
         this.element?.addEventListener("input", () => this.updateTextareaHeight());
     }
 
-    private mediaWrapperTemplate() {
-        const picWrapperTemplate = createElement({
-            classes: ['msg-bar__attachment'],
-        });
-        createElement({
-            tag: 'img',
-            parent: picWrapperTemplate,
-            classes: ['modal__img'],
-        });
-        const overlay = createElement({
-            parent: picWrapperTemplate,
-            classes: [
-                "modal__pic-overlay",
-                "js-post-pic-delete",
-            ],
-        });
-        createElement({
-            parent: overlay,
-            classes: ["modal__pic-delete"],
-        });
-        return picWrapperTemplate;
-    }
-
     private handleMediaUpload() {
-        this.attachmentInput.addListener(() => {
-            const filesCount = this.attachmentInput?.getFiles().length || 0;
+        this.mediaInput.addListener(() => {
+            const filesCount = this.mediaInput?.getFiles().length || 0;
+            if (!filesCount) {
+                this.attachments.classList.add('hidden');
+            } else {
+                this.attachments.classList.remove('hidden');
+            }
+            this.updateTextareaHeight();
+            this.updateSendBtnState();
+        });
+
+        this.fileInput.addListener(() => {
+            const filesCount = this.fileInput?.getFiles().length || 0;
             if (!filesCount) {
                 this.attachments.classList.add('hidden');
             } else {
@@ -229,7 +267,7 @@ export default class MessageBarComponent {
     private updateSendBtnState() {
         if (
             this.element?.value.trim() === '' &&
-            !this.attachmentInput.isValid()
+            !this.mediaInput.isValid()
         ) {
             return this.sendBtn.classList.add('msg-bar__send_disabled');
         }
@@ -238,7 +276,7 @@ export default class MessageBarComponent {
     }
 
     private get areAttachmentsValid(): boolean {
-        if (this.attachmentInput.isLarge) {
+        if (this.mediaInput.isLarge) {
             new PopUpComponent({
                 text: `Размер файлов суммарно не должен превышать ${FILE.MAX_SIZE_TOTAL}Мб`,
                 isError: true,
@@ -246,7 +284,7 @@ export default class MessageBarComponent {
             return false;
         }
 
-        if (this.attachmentInput.isAnyLarge) {
+        if (this.mediaInput.isAnyLarge) {
             new PopUpComponent({
                 text: `Размер каждого файла не должен превышать ${FILE.MAX_SIZE_SINGLE}Мб`,
                 isError: true,
@@ -271,17 +309,17 @@ export default class MessageBarComponent {
         }
         
         if (
-            this.attachmentInput &&
-            this.attachmentInput.input &&
-            this.attachmentInput.input.files &&
-            this.attachmentInput.input.files.length > 0
+            this.mediaInput &&
+            this.mediaInput.input &&
+            this.mediaInput.input.files &&
+            this.mediaInput.input.files.length > 0
         ) {
             if (!this.areAttachmentsValid) {
                 return;
             }
 
             const formData = new FormData();
-            for (const attachment of this.attachmentInput.input.files) {
+            for (const attachment of this.mediaInput.input.files) {
                 formData.append('attachments', attachment);
             }
 
@@ -310,6 +348,10 @@ export default class MessageBarComponent {
         if (this.element) {
             this.element.value = '';
         }
+    }
+
+    private sendSticker() {
+        console.log('Sticker is sent');
     }
 
     public updateTextareaHeight() {
@@ -341,5 +383,35 @@ export default class MessageBarComponent {
         if (this.element) {
             focusInput(this.element, this.focusTimer);
         }
+    }
+
+    private renderMediaPreview(file: File, dataUrl: string): HTMLElement {
+        const attachment = new FileAttachmentComponent(this.attachments, {
+            type: 'media',
+            file,
+            dataUrl,
+            classes: ['msg-bar__attachment'],
+        });
+
+        attachment.element.addEventListener('click', () => {
+            this.mediaInput.removeFile(file, attachment.element);
+        });
+
+        return attachment.element;
+    }
+
+    private renderFilePreview(file: File, dataUrl: string): HTMLElement {
+        const attachment = new FileAttachmentComponent(this.attachments, {
+            type: 'file',
+            file,
+            dataUrl,
+            classes: ['msg-bar__attachment_file'],
+        });
+
+        attachment.element.addEventListener('click', () => {
+            this.fileInput.removeFile(file, attachment.element);
+        });
+
+        return attachment.element;
     }
 }

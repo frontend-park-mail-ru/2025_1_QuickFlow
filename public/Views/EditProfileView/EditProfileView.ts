@@ -9,7 +9,7 @@ import FileInputComponent from '@components/UI/FileInputComponent/FileInputCompo
 
 import createElement from '@utils/createElement';
 import TextareaComponent from '@components/UI/TextareaComponent/TextareaComponent';
-import { getLsItem, setLsItem } from '@utils/localStorage';
+import { getLsItem } from '@utils/localStorage';
 import convertDate from '@utils/convertDate';
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 

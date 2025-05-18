@@ -18,10 +18,6 @@
 @use './Components/ContextMenuComponent/ContextMenuComponent';
 @use './Components/ProfileMenuComponent/ProfileMenuComponent';
 @use './Components/MainLayoutComponent/MainLayoutComponent';
-@use './Components/MessengerComponent/MessengerComponent';
-@use './Components/MessengerComponent/ChatWindowComponent';
-@use './Components/MessengerComponent/ChatsPanelComponent';
-@use './Components/MessengerComponent/ChatComponent';
 @use './Components/ResizerComponent/ResizerComponent';
 @use './Components/FeedComponent/FeedComponent';
 @use './Components/CSATComponent/CSATComponent';
@@ -31,7 +27,14 @@
 @use './Components/NotificationComponent/NotificationComponent';
 @use './Components/VirtualizedListComponent/VirtualizedListComponent';
 @use './Components/PicsViewerComponent/PicsViewerComponent';
-@use './Components/MessengerComponent/MessageInputComponent/MessageInputComponent';
+@use './Components/FileAttachmentComponent/FileAttachmentComponent';
+
+@use './Components/Messenger/MessengerComponent';
+@use './Components/Messenger/ChatWindowComponent';
+@use './Components/Messenger/ChatsPanelComponent';
+@use './Components/Messenger/ChatComponent';
+@use './Components/Messenger/MessageBar/MessageBarComponent';
+@use './Components/Messenger/MessageBar/EmojiBarComponent/EmojiBarComponent';
 
 @use './Views/FeedView/FeedView';
 @use './Views/ProfileView/ProfileView';

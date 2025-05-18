@@ -1,4 +1,4 @@
-import MessengerComponent from '@components/MessengerComponent/MessengerComponent';
+import MessengerComponent from '@components/Messenger/MessengerComponent';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import { getLsItem } from '@utils/localStorage';
 import router from '@router';

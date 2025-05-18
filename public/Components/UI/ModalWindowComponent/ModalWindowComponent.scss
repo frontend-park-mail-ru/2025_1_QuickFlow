@@ -193,6 +193,7 @@
     opacity: 0;
     transition: var(--trans-menu);
     border-radius: 8px;
+    z-index: 1;
 }
 
 .modal__pic-overlay:hover {
