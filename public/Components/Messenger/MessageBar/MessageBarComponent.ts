@@ -45,6 +45,14 @@ interface MessageBarConfig {
     chat: ChatComponent;
 }
 
+interface UploadData {
+    payload?: {
+        media: string[] | null;
+        audio: string[] | null;
+        files: string[] | null;
+    }
+}
+
 
 export default class MessageBarComponent {
     private parent: HTMLElement | null = null;
@@ -330,7 +338,7 @@ export default class MessageBarComponent {
                 formData.append('files', file);
             }
 
-            const [status, mediaData] = await FilesRequests.upload(formData);
+            const [status, mediaData]: [number, UploadData] = await FilesRequests.upload(formData);
             switch (status) {
                 case 200:
                     break;
@@ -341,8 +349,14 @@ export default class MessageBarComponent {
                     });
             }
 
-            if (mediaData?.payload?.length) {
-                wsPayload['media'] = mediaData?.payload;
+            if (mediaData?.payload?.media) {
+                wsPayload['media'] = mediaData.payload.media;
+            } else if (mediaData?.payload?.audio) {
+                wsPayload['files'] = mediaData.payload.files;
+            }
+
+            if (mediaData?.payload?.audio) {
+                wsPayload['audio'] = mediaData.payload.audio;
             }
         }
 
