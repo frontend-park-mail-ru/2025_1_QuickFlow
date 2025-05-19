@@ -7,7 +7,7 @@ import ws from '@modules/WebSocketService';
 import { FILE, MSG, POST } from '@config/config';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
-import { ChatsRequests } from '@modules/api';
+import { ChatsRequests, FilesRequests } from '@modules/api';
 import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
 import EmojiBarComponent from './EmojiBarComponent/EmojiBarComponent';
 
@@ -87,7 +87,6 @@ export default class MessageBarComponent {
         el.selectionStart = el.selectionEnd = cursorPos;
     
         el.dispatchEvent(new Event('input', { bubbles: true }));
-        
         el.focus();
     }
 
@@ -277,7 +276,10 @@ export default class MessageBarComponent {
     }
 
     private get areAttachmentsValid(): boolean {
-        if (this.mediaInput.isLarge) {
+        if (
+            this.mediaInput.isLarge ||
+            this.fileInput.isLarge
+        ) {
             new PopUpComponent({
                 text: `Размер файлов суммарно не должен превышать ${FILE.MAX_SIZE_TOTAL}Мб`,
                 isError: true,
@@ -285,7 +287,10 @@ export default class MessageBarComponent {
             return false;
         }
 
-        if (this.mediaInput.isAnyLarge) {
+        if (
+            this.mediaInput.isAnyLarge ||
+            this.fileInput.isAnyLarge
+        ) {
             new PopUpComponent({
                 text: `Размер каждого файла не должен превышать ${FILE.MAX_SIZE_SINGLE}Мб`,
                 isError: true,
@@ -310,22 +315,22 @@ export default class MessageBarComponent {
         }
         
         if (
-            this.mediaInput &&
-            this.mediaInput.input &&
-            this.mediaInput.input.files &&
-            this.mediaInput.input.files.length > 0
+            this.mediaInput?.input?.files?.length > 0 ||
+            this.fileInput?.input?.files?.length > 0
         ) {
             if (!this.areAttachmentsValid) {
                 return;
             }
 
             const formData = new FormData();
-            for (const attachment of this.mediaInput.input.files) {
-                formData.append('attachments', attachment);
+            for (const media of this.mediaInput.input.files) {
+                formData.append('media', media);
+            }
+            for (const file of this.fileInput.input.files) {
+                formData.append('files', file);
             }
 
-            // const [status, mediaData] = await ChatsRequests.uploadMedia();
-            const [status, mediaData] = [200, {} as Record<string, any>];
+            const [status, mediaData] = await FilesRequests.upload(formData);
             switch (status) {
                 case 200:
                     break;

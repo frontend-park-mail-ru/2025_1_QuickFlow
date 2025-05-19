@@ -79,6 +79,20 @@ export class AuthRequests {
 };
 
 
+export class FilesRequests {
+    static async upload(data: FormData): Promise<[number, Record<string, any>]> {
+        return new Promise((resolve) => {
+            ajax.post({
+                url: '/upload',
+                isFormData: true,
+                body: data,
+                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+            });
+        });
+    }
+};
+
+
 export class UsersRequests {
     static async getMyProfile(): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
