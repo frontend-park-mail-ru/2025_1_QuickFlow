@@ -83,9 +83,10 @@ export default class ChatWindowComponent {
                     this._chatData = {
                         name: `${profileData.profile.firstname} ${profileData.profile.lastname}`,
                         online: profileData.online,
+                        last_seen: profileData.last_seen,
                         avatar_url: profileData.profile.avatar_url,
                         receiver_id: profileData.id,
-                        username: this.config?.receiver_username,
+                        username: profileData.profile.username,
                     };
                     this.renderHeader();
                     // this.renderMessageInput();
