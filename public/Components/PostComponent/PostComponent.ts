@@ -4,7 +4,6 @@ import PostMwComponent from '@components/UI/ModalWindowComponent/PostMwComponent
 import DeleteMwComponent from '@components/UI/ModalWindowComponent/DeleteMwComponent';
 import getTimeDifference from '@utils/getTimeDifference';
 import createElement from '@utils/createElement';
-import { getLsItem } from '@utils/localStorage';
 import Ajax from '@modules/ajax';
 import router from '@router';
 import insertIcon from '@utils/insertIcon';
@@ -122,9 +121,14 @@ export default class PostComponent {
             });
         }
 
-        slider.addEventListener('click', () => {
+        slider.addEventListener('click', (e) => {
+            if (!(e.target instanceof HTMLImageElement)) {
+                return;
+            }
+
             new PicsViewerComponent({
                 picsWrapper: slider,
+                target: e.target,
             });
         });
 

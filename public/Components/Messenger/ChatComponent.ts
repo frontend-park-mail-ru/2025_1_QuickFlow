@@ -1,16 +1,15 @@
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import createElement from '@utils/createElement';
-import getTime from '@utils/getTime';
 import router from '@router';
 import ws from '@modules/WebSocketService';
-import { getLsItem } from '@utils/localStorage';
 import ExtraLoadComponent from '@components/ExtraLoadComponent/ExtraLoadComponent';
 import { ChatsRequests } from '@modules/api';
 import LsProfile from '@modules/LsProfile';
+import MessageComponent from './MessageComponent/MessageComponent';
 
 
-const MSG_AVATAR_SIZE = 'xs';
+const EXTRA_LOAD_MARGIN = 500;
 const EMPTY_STATE_AVATAR_SIZE = 'xxl';
 const EMPTY_STATE_BTN_SIZE = 'small';
 const EMPTY_STATE_BTN_VARIANT = 'secondary';
@@ -98,7 +97,15 @@ export default class ChatComponent {
                 }
             }
 
-            this.renderMsg(msg, classes);
+            new MessageComponent({
+                parent: this.scroll,
+                data: msg,
+                lastReadByMeTime: this.lastReadByMeTime,
+                lastReadByOtherTime: this.lastReadByOtherTime,
+                classes,
+                position: 'bottom',
+                observer: this.observer,
+            });
 
             prevMsg = msg;
             prevDay = this.formatDateTitle(msg.created_at);
@@ -116,13 +123,9 @@ export default class ChatComponent {
             }, 50);
         });
 
-
-
-
-
         new ExtraLoadComponent<any>({
             sentinelContainer: this.scroll!,
-            marginPx: 500,
+            marginPx: EXTRA_LOAD_MARGIN,
             position: 'top',
             fetchFn: this.fetchOlderMessages.bind(this),
             renderFn: (msgs) => {
@@ -132,8 +135,6 @@ export default class ChatComponent {
                 // 1. Сохраняем текущий первый видимый элемент
                 const firstVisible = this.scroll.firstElementChild as HTMLElement;
                 const previousTop = firstVisible?.getBoundingClientRect().top || 0;
-                // console.log(this.container.scrollTop);
-                // console.log(previousTop);
 
                 const msgsArr: Array<HTMLElement> = [];
 
@@ -143,19 +144,23 @@ export default class ChatComponent {
         
                     if (curDay !== prevDay) {
                         const date = createElement({
-                            // parent: this.scroll,
                             tag: 'div',
                             classes: ['chat__date'],
                             text: curDay,
-                            // insertBefore: this.scroll.firstChild,
                         });
-                        // this.scroll.prepend(date);
                         msgsArr.push(date);
                     } else if (msg.sender.username === prevSender) {
                         classes.push('chat__msg_nameless');
                     }
         
-                    this.prependMsg(msg, classes, msgsArr);
+                    const msgObj = new MessageComponent({
+                        data: msg,
+                        lastReadByMeTime: this.lastReadByMeTime,
+                        lastReadByOtherTime: this.lastReadByOtherTime,
+                        classes,
+                        observer: this.observer,
+                    });
+                    msgsArr.push(msgObj.element);
         
                     prevSender = msg.sender.username;
                     prevDay = curDay;
@@ -168,20 +173,26 @@ export default class ChatComponent {
 
                 // 3. Сравниваем новую позицию первого видимого элемента
                 const newTop = firstVisible?.getBoundingClientRect().top || 0;
-                // console.log(newTop);
                 const delta = newTop - previousTop;
-                // console.log(delta);
 
                 // 4. Компенсируем изменение
                 this.container.scrollTop += delta;
-                // console.log(this.container.scrollTop);
             }
         });        
     }
 
     pushMessage(payload: Record<string, any>) {
         this.msgsData?.messages?.push(payload);
-        this.renderMsg(payload, []);
+
+        new MessageComponent({
+            parent: this.scroll,
+            data: payload,
+            lastReadByMeTime: this.lastReadByMeTime,
+            lastReadByOtherTime: this.lastReadByOtherTime,
+            classes: [],
+            position: 'bottom',
+            observer: this.observer,
+        });
     }
 
     private scrollToTargetMsg() {
@@ -209,20 +220,17 @@ export default class ChatComponent {
     }
 
     private handleIntersect = (entries: IntersectionObserverEntry[]) => {
-        // console.log('handleIntersect');
         for (const entry of entries) {
-            if (entry.isIntersecting) {
-                // console.log('handleIntersect isIntersecting=true');
-
-                new ws().send('message_read', {
-                    chat_id: this.config?.chatData?.id,
-                    message_id: (entry.target as HTMLElement).dataset.msgId,
-                });
-
-                this.observer.unobserve(entry.target);
-
-                // console.log('handleIntersect isIntersecting=true ws-sended msg-unobserved');
+            if (!entry.isIntersecting) {
+                continue;
             }
+
+            new ws().send('message_read', {
+                chat_id: this.config?.chatData?.id,
+                message_id: (entry.target as HTMLElement).dataset.msgId,
+            });
+
+            this.observer.unobserve(entry.target);
         }
     };
 
@@ -264,90 +272,6 @@ export default class ChatComponent {
         });
     }
 
-    renderMsg(msgData: any, classes: Array<string>) {
-        const isMine = msgData.sender.username === LsProfile.username;
-        const msgTime = new Date(msgData.created_at).getTime();
-
-        const msg = createElement({
-            parent: this.scroll,
-            classes: ['chat__msg', ...classes],
-            attrs: {
-                'data-msg-id': msgData.id.toString(),
-                'data-msg-ts': msgData.created_at,
-                'data-msg-from': msgData.sender.username,
-            },
-        });
-
-        if (!isMine) {
-            if (msgTime > this.lastReadByMeTime) {
-                this.observer.observe(msg);
-                // console.log('renderMsg msg-observed');
-            }
-        }
-
-        new AvatarComponent(msg, {
-            size: MSG_AVATAR_SIZE,
-            src: msgData.sender?.avatar_url || '',
-            href: `/profiles/${msgData.sender?.username}`
-        });
-
-        const msgContent = createElement({
-            parent: msg,
-            classes: ['chat__msg-content'],
-        });
-
-        createElement({
-            parent: msgContent,
-            classes: ['chat__sender'],
-            text: `${msgData.sender.firstname} ${msgData.sender.lastname}`
-        });
-
-        createElement({
-            parent: msgContent,
-            text: msgData.text,
-        });
-
-        const msgInfo = createElement({
-            parent: msg,
-            classes: ['chat__msg-info'],
-        });
-
-        if (isMine) {
-            createElement({
-                parent: msgInfo,
-                classes: [
-                    'chat__msg-status',
-                    msgTime <= this.lastReadByOtherTime ? 'chat__msg-status_read' : 'chat__msg-status_unread'
-                ],
-            });
-        }
-
-        createElement({
-            parent: msgInfo,
-            classes: ['chat__msg-ts'],
-            text: getTime(msgData.created_at),
-        });
-    }
-
-    // private cbOk(feedData: any) {
-    //     feedData?.forEach((config: Record<string, any>) => {
-    //         this.renderPost(config);
-    //         this.lastTs = config.created_at;
-    //     });
-
-    //     new ExtraLoadComponent<any>({
-    //         sentinelContainer: this.posts!,
-    //         marginPx: OBSERVER_MARGIN,
-    //         fetchFn: this.fetchMorePosts.bind(this),
-    //         renderFn: (posts) => {
-    //             posts?.forEach((postConfig) => {
-    //                 this.renderPost(postConfig);
-    //                 this.lastTs = postConfig.created_at;
-    //             });
-    //         }
-    //     });
-    // }
-
     private async fetchOlderMessages(): Promise<any[]> {
         const firstMsg = this.scroll?.querySelector<HTMLElement>('[data-msg-ts]');
         const firstMsgTs = firstMsg?.dataset.msgTs;
@@ -362,76 +286,7 @@ export default class ChatComponent {
         return [];
     }
 
-    private prependMsg(msgData: any, classes: string[], msgsArr: Array<HTMLElement>) {
-        const isMine = msgData.sender.username === LsProfile.username;
-        const msgTime = new Date(msgData.created_at).getTime();
-    
-        const msg = createElement({
-            // parent: this.scroll,
-            classes: ['chat__msg', ...classes],
-            attrs: {
-                'data-msg-id': msgData.id.toString(),
-                'data-msg-ts': msgData.created_at,
-                'data-msg-from': msgData.sender.username,
-            },
-            // insertBefore: this.scroll.firstChild,
-        });
-
-        msgsArr.push(msg);
-
-        // this.scroll.prepend(msg);
-    
-        if (!isMine && msgTime > this.lastReadByMeTime) {
-            this.observer.observe(msg);
-        }
-    
-        new AvatarComponent(msg, {
-            size: MSG_AVATAR_SIZE,
-            src: msgData.sender?.avatar_url || '',
-            href: `/profiles/${msgData.sender?.username}`
-        });
-    
-        const msgContent = createElement({
-            parent: msg,
-            classes: ['chat__msg-content'],
-        });
-    
-        createElement({
-            parent: msgContent,
-            classes: ['chat__sender'],
-            text: `${msgData.sender.firstname} ${msgData.sender.lastname}`
-        });
-    
-        createElement({
-            parent: msgContent,
-            text: msgData.text,
-        });
-    
-        const msgInfo = createElement({
-            parent: msg,
-            classes: ['chat__msg-info'],
-        });
-    
-        if (isMine) {
-            createElement({
-                parent: msgInfo,
-                classes: [
-                    'chat__msg-status',
-                    msgTime <= this.lastReadByOtherTime ? 'chat__msg-status_read' : 'chat__msg-status_unread'
-                ],
-            });
-        }
-    
-        createElement({
-            parent: msgInfo,
-            classes: ['chat__msg-ts'],
-            text: getTime(msgData.created_at),
-        });
-    }
-    
-    
-
-    formatDateTitle(dateString: string) { // TODO: вынести в utils
+    private formatDateTitle(dateString: string) { // TODO: вынести в utils
         const date = new Date(dateString);
         const now = new Date();
 

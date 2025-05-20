@@ -57,6 +57,31 @@
     transition: var(--trans-menu);
 }
 
+.attachment__timing {
+    font-size: 12px;
+    line-height: var(--line-height-m);
+    color: var(--text-white);
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: var(--background-black-transparent);
+    padding: 0 4px;
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
+    bottom: 6px;
+    left: 6px;
+}
+
+.attachment__timing-icon {
+    color: var(--icon-white);
+    width: 8px;
+    height: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .attachment_file:hover {
     background: var(--background-error);
 

@@ -3,30 +3,33 @@ import createElement from '@utils/createElement';
 
 interface PicsViewerConfig<T> {
     picsWrapper: HTMLElement;
+    target: HTMLImageElement | HTMLVideoElement;
 }
 
 
 export default class PicsViewerComponent {
     private config: PicsViewerConfig<any>;
 
-    private pics: HTMLImageElement[];
-
+    private pics: (HTMLImageElement | HTMLVideoElement)[];
+    private currentIndex: number = 0;
+    private handleKeydownBinded: (e: KeyboardEvent) => void;
     public wrapper: HTMLElement | null = null;
     public element: HTMLElement | null = null;
 
     constructor(config: PicsViewerConfig<any>) {
         this.config = config;
-        this.pics = Array.from(this.config.picsWrapper.querySelectorAll('img')).map(img => img.cloneNode(true) as HTMLImageElement);
 
+        const array = Array.from(this.config.picsWrapper.querySelectorAll('img, video'));
+        this.pics = array.map(img => img.cloneNode(true) as HTMLImageElement | HTMLVideoElement);
+        this.currentIndex = array.indexOf(this.config.target);
 
-        this.handlePicsClick();
         this.render();
         this.addBgClickHandler();
     }
 
     render() {
         document.body.style.overflow = 'hidden';
-        const parent = document.querySelector('.main');
+        const parent = document.querySelector('.parent');
 
         this.wrapper = createElement({
             parent,
@@ -38,19 +41,34 @@ export default class PicsViewerComponent {
             classes: ['pics-viewer'],
         });
 
-        for (const pic of this.pics) {
-            pic.classList.value = 'pics-viewer__pic';
-            this.element.appendChild(pic);
-        }
+        this.renderSlide();
+        this.handleKeydownBinded = this.handleKeydown.bind(this);
+        document.addEventListener('keydown', this.handleKeydownBinded);
     }
 
-    private handlePicsClick() {
-        for (const pic of this.pics) {
-            pic.style.cursor = 'pointer';
-            pic.addEventListener('click', () => {
+    private renderSlide() {
+        this.element.innerHTML = '';
+        this.pics[this.currentIndex].classList.value = 'pics-viewer__pic';
+        this.element.appendChild(this.pics[this.currentIndex]);
+    }
 
-            });
+    private handleKeydown(e: KeyboardEvent) {
+        switch (e.key) {
+            case 'ArrowRight':
+                if (this.currentIndex === this.pics.length - 1) return;
+                this.currentIndex++;
+                break;
+            case 'ArrowLeft':
+                if (!this.currentIndex) return;
+                this.currentIndex--;
+                break;
+            case 'Escape':
+            case ' ':
+                e.preventDefault();
+                return this.close();
         }
+
+        this.renderSlide();
     }
 
     protected addBgClickHandler() {
@@ -71,5 +89,11 @@ export default class PicsViewerComponent {
         
         this.wrapper.remove();
         document.body.style.overflow = 'auto';
+        document.removeEventListener('keydown', this.handleKeydownBinded);
+
+        delete this.wrapper;
+        delete this.element;
+        delete this.pics;
+        delete this.config;
     }
 }

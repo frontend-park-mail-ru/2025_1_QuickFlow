@@ -354,7 +354,6 @@ export default class MessageBarComponent {
             } else if (mediaData?.payload?.audio) {
                 wsPayload['files'] = mediaData.payload.files;
             }
-
             if (mediaData?.payload?.audio) {
                 wsPayload['audio'] = mediaData.payload.audio;
             }

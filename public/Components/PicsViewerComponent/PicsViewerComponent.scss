@@ -1,5 +1,5 @@
 .pics-viewer__bg {
-    background: var(--background-black-transparent);
+    background: var(--background-black-transparent-dark);
     width: 100%;
     height: 100vh;
     position: fixed;
@@ -24,8 +24,8 @@
 }
 
 .pics-viewer__pic {
-    max-height: 80vh;
-    max-width: 100vh;
+    max-height: 90vh;
+    max-width: 90vw;
     height: 100%;
     width: 100%;
     object-fit: contain;

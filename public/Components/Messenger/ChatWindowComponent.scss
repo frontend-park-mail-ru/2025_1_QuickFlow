@@ -3,6 +3,7 @@
     height: 100%;
     background: var(--background-white);
     position: relative;
+    min-width: 0;
 }
 
 .chat-window__empty {

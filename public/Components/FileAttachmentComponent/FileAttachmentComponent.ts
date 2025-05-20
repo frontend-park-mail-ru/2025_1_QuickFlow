@@ -44,12 +44,6 @@ export default class FileAttachmentComponent {
     }
 
     private renderMedia() {
-        // createElement({
-        //     tag: 'img',
-        //     parent: this.element,
-        //     classes: ['modal__img'],
-        // });
-
         const isVideo = this.config.file.type.startsWith('video/');
             
         const mediaElement = createElement({
@@ -71,11 +65,26 @@ export default class FileAttachmentComponent {
         } else {
             mediaElement.src = this.config.dataUrl;
         }
+
+        if (mediaElement instanceof HTMLVideoElement) {
+            mediaElement.addEventListener('loadedmetadata', () => {
+                const timing = createElement({
+                    parent: this.element,
+                    classes: ["attachment__timing"],
+                });
     
-        // const originMedia = this.element.querySelector('img');
-        // mediaElement.classList.value = originMedia.classList.value;
-        // originMedia.parentElement.appendChild(mediaElement);
-        // originMedia.remove();
+                insertIcon(timing, {
+                    name: 'play-icon',
+                    classes: ['attachment__timing-icon'],
+                });
+    
+                const duration = Math.round(mediaElement.duration);
+                createElement({
+                    parent: timing,
+                    text: `0:${duration > 9 ? duration : `0${duration}`}`,
+                });
+            });
+        }
 
         const overlay = createElement({
             parent: this.element,
