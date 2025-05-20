@@ -246,6 +246,8 @@ export default class ChatWindowComponent {
             attrs: { href: `/profiles/${this._chatData?.username}` },
         });
 
+        console.log(this._chatData);
+
         createElement({
             parent: chatInfo,
             classes: ['chat-window__status'],

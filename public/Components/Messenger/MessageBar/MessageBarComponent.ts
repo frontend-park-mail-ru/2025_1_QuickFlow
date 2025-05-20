@@ -175,7 +175,8 @@ export default class MessageBarComponent {
             maxSizeSingle: FILE.MAX_SIZE_SINGLE * FILE.MB_MULTIPLIER,
         });
 
-        this.handleMediaUpload();
+        this.mediaInput.addListener(this.handleMediaUpload.bind(this));
+        this.fileInput.addListener(this.handleMediaUpload.bind(this));
 
 
 
@@ -249,27 +250,17 @@ export default class MessageBarComponent {
     }
 
     private handleMediaUpload() {
-        this.mediaInput.addListener(() => {
-            const filesCount = this.mediaInput?.getFiles().length || 0;
-            if (!filesCount) {
-                this.attachments.classList.add('hidden');
-            } else {
-                this.attachments.classList.remove('hidden');
-            }
-            this.updateTextareaHeight();
-            this.updateSendBtnState();
-        });
+        const mediaCount = this.mediaInput?.getFiles().length || 0;
+        const filesCount = this.fileInput?.getFiles().length || 0;
 
-        this.fileInput.addListener(() => {
-            const filesCount = this.fileInput?.getFiles().length || 0;
-            if (!filesCount) {
-                this.attachments.classList.add('hidden');
-            } else {
-                this.attachments.classList.remove('hidden');
-            }
-            this.updateTextareaHeight();
-            this.updateSendBtnState();
-        });
+        if (!mediaCount && !filesCount) {
+            this.attachments.classList.add('hidden');
+        } else {
+            this.attachments.classList.remove('hidden');
+        }
+
+        this.updateTextareaHeight();
+        this.updateSendBtnState();
     }
 
     private updateSendBtnState() {
