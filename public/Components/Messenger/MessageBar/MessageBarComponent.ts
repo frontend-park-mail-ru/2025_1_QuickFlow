@@ -275,7 +275,8 @@ export default class MessageBarComponent {
     private updateSendBtnState() {
         if (
             this.element?.value.trim() === '' &&
-            !this.mediaInput.isValid()
+            !this.mediaInput.isValid() &&
+            !this.fileInput.isValid()
         ) {
             return this.sendBtn.classList.add('msg-bar__send_disabled');
         }
@@ -351,7 +352,8 @@ export default class MessageBarComponent {
 
             if (mediaData?.payload?.media) {
                 wsPayload['media'] = mediaData.payload.media;
-            } else if (mediaData?.payload?.audio) {
+            }
+            if (mediaData?.payload?.files) {
                 wsPayload['files'] = mediaData.payload.files;
             }
             if (mediaData?.payload?.audio) {

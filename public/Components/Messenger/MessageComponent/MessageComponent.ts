@@ -3,6 +3,8 @@ import createElement from '@utils/createElement';
 import getTime from '@utils/getTime';
 import LsProfile from '@modules/LsProfile';
 import PicsViewerComponent from '@components/PicsViewerComponent/PicsViewerComponent';
+import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
+import downloadFile from '@utils/downloadFile';
 
 
 interface MessageConfig {
@@ -84,6 +86,9 @@ export default class MessageComponent {
         if (this.config.data?.media?.length) {
             this.renderMedia();
         }
+        if (this.config.data?.files?.length) {
+            this.renderFiles();
+        }
 
         createElement({
             parent: this.content,
@@ -114,6 +119,26 @@ export default class MessageComponent {
         return msg;
     }
 
+    private renderFiles() {
+        const files = createElement({
+            parent: this.content,
+            classes: ['msg__files'],
+        });
+
+        for (const fileUrl of this.config.data.files) {
+            const attachment = new FileAttachmentComponent(files, {
+                type: 'file_attached',
+                dataUrl: fileUrl,
+                classes: ['msg__file'],
+            });
+
+            attachment.element.addEventListener('click', async (e) => {
+                e.preventDefault();
+                await downloadFile(fileUrl);
+            });
+        }
+    }
+
     private renderMedia() {
         const media = createElement({
             parent: this.content,
@@ -122,20 +147,39 @@ export default class MessageComponent {
 
         const mediaItems: HTMLElement[] = [];
         for (const mediaUrl of this.config.data.media) {
+            const extension = mediaUrl.split('.').at(-1);
+
             const mediaItem = createElement({
+                tag: extension === 'mp4' ? 'video' : 'img',
                 classes: ['msg__media-item'],
-                attrs: { src: mediaUrl },
-            });
+                attrs: {
+                    src: mediaUrl,
+                },
+            }) as HTMLImageElement | HTMLVideoElement;
+
+            if (mediaItem instanceof HTMLVideoElement) {
+                mediaItem.loop = true;
+                mediaItem.muted = true;
+
+                mediaItem.addEventListener('loadeddata', () => {
+                    mediaItem.play();
+                });
+
+                mediaItem.load();
+            }
+
             mediaItems.push(mediaItem);
         }
 
         this.adjustMsgMediaGrid(media, mediaItems);
 
         media.addEventListener('click', (e) => {
-            if (!(e.target instanceof HTMLImageElement)) {
+            if (
+                !(e.target instanceof HTMLImageElement ||
+                e.target instanceof HTMLVideoElement)
+            ) {
                 return;
             }
-
             new PicsViewerComponent({
                 picsWrapper: media,
                 target: e.target,

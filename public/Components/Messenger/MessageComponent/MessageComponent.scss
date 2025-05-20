@@ -31,6 +31,33 @@
     border-radius: 4px;
 }
 
+.msg__files {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-width: 280px;
+    padding: 4px 0;
+}
+
+.msg__file {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    background: var(--background-light-gray);
+    border-radius: 8px;
+    padding: 8px;
+    position: relative;
+    cursor: pointer;
+    font-size: 12px;
+
+    & .attachment__icon-wrapper {
+        min-width: 32px;
+        min-height: 32px;
+        background: var(--button-primary-disabled);
+    }
+}
+
 @keyframes pulse {
     0% {
         background-color: #e0e0e0;

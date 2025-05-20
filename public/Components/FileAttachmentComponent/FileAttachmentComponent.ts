@@ -1,12 +1,13 @@
 import createElement from '@utils/createElement';
+import getFileSizeFromUrl from '@utils/getFileSizeFromUrl';
 import insertIcon from '@utils/insertIcon';
 
 
 interface FileAttachmentConfig {
-    file: File;
     dataUrl: string;
-    type: 'file' | 'media';
-
+    type: 'file' | 'media' | 'file_attached';
+    
+    file?: File;
     classes?: string[];
 }
 
@@ -28,7 +29,7 @@ export default class FileAttachmentComponent {
             classes: [
                 'attachment',
                 `attachment_${this.config.type}`,
-                ...this.config.classes
+                this.config.classes
             ],
             parent: this.parent,
         });
@@ -37,10 +38,43 @@ export default class FileAttachmentComponent {
             case 'file':
                 this.renderFile();
                 break;
+            case 'file_attached':
+                this.renderAttachedFile();
+                break;
             case 'media':
                 this.renderMedia();
                 break;
         }
+    }
+
+    private async renderAttachedFile() {
+        const iconWrapper = createElement({
+            parent: this.element,
+            classes: ['attachment__icon-wrapper'],
+        });
+
+        insertIcon(iconWrapper, {
+            name: 'file-icon',
+            classes: ['attachment__icon'],
+        });
+
+        const infoWrapper = createElement({
+            parent: this.element,
+            classes: ['attachment__info'],
+        });
+
+        const filename = this.config.dataUrl.split('/').pop();
+        createElement({
+            parent: infoWrapper,
+            text: filename,
+            classes: ['attachment__name'],
+        });
+
+        createElement({
+            parent: infoWrapper,
+            text: `${Math.round(await getFileSizeFromUrl(this.config.dataUrl) / 1024)}KB`,
+            classes: ['attachment__size'],
+        });
     }
 
     private renderMedia() {

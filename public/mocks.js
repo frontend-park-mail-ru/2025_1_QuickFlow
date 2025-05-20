@@ -725,7 +725,12 @@ export const messages = {
                     "created_at": "2025-04-10T19:15:42.323841+03:00",
                     "updated_at": "2025-04-10T19:15:42.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    "files": [
+                        'https://quickflowapp.ru/minio/posts/5ffc6da1-af7c-4484-8d7e-04ad01f4eecd.txt',
+                        'https://quickflowapp.ru/minio/posts/8b339c37-b2f4-406b-a234-2de419f14b33.jpeg',
+                        'https://quickflowapp.ru/minio/posts/15cd185e-0bdf-4939-8f8d-6da6f2c98d8c.jpeg',
+                        'https://quickflowapp.ru/minio/posts/be9e97e5-e7cb-415d-8bbe-0a3972a83993.mp4',
+                    ],
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -748,6 +753,7 @@ export const messages = {
                         'https://quickflowapp.ru/minio/posts/15cd185e-0bdf-4939-8f8d-6da6f2c98d8c.jpeg',
                         'https://quickflowapp.ru/minio/posts/557f5a12-c08b-4aac-af33-838a3fa4d354.jpeg',
                         'https://quickflowapp.ru/minio/posts/80ef5b8b-e93b-4f47-8fba-69912b75f02d.jpeg',
+                        'https://quickflowapp.ru/minio/posts/be9e97e5-e7cb-415d-8bbe-0a3972a83993.mp4',
                     ],
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",

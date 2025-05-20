@@ -48,8 +48,22 @@ export default class PicsViewerComponent {
 
     private renderSlide() {
         this.element.innerHTML = '';
-        this.pics[this.currentIndex].classList.value = 'pics-viewer__pic';
-        this.element.appendChild(this.pics[this.currentIndex]);
+        
+        const mediaItem = this.pics[this.currentIndex];
+        mediaItem.classList.value = 'pics-viewer__pic';
+        this.element.appendChild(mediaItem);
+
+        if (mediaItem instanceof HTMLVideoElement) {
+            mediaItem.loop = true;
+            mediaItem.muted = true;
+            mediaItem.controls = true;
+
+            mediaItem.addEventListener('loadeddata', () => {
+                mediaItem.play();
+            });
+
+            mediaItem.load();
+        }
     }
 
     private handleKeydown(e: KeyboardEvent) {
