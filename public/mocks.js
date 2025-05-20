@@ -711,11 +711,11 @@ export const messages = {
                     "is_read": true,
                     "attachment_urls": null,
                     "sender": {
-                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
-                        "username": "Nikita2",
-                        "firstname": "Никита",
-                        "lastname": "Могилин",
-                        "avatar_url": "/avatars/avatar4.jpg",
+                        "id": "48dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "rvasutenko",
+                        "firstname": "Roman",
+                        "lastname": "Vasyutenko",
+                        "avatar_url": "/avatars/avatar2.jpg",
                     },
                     "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
                 },
@@ -741,7 +741,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:16:27.926906+03:00",
                     "updated_at": "2025-04-10T19:16:27.926906+03:00",
                     "is_read": true,
-                    "media_urls": [
+                    "media": [
                         'https://quickflowapp.ru/minio/posts/88d75228-a2db-42c8-8987-3ab36ae8770d.jpeg',
                         // 'https://quickflowapp.ru/minio/posts/c239cf67-a4e5-4000-9c3d-34538bf903a8.jpeg',
                         'https://quickflowapp.ru/minio/posts/8b339c37-b2f4-406b-a234-2de419f14b33.jpeg',

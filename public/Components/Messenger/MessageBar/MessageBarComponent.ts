@@ -7,7 +7,7 @@ import ws from '@modules/WebSocketService';
 import { FILE, MSG, POST } from '@config/config';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
-import { ChatsRequests, FilesRequests } from '@modules/api';
+import { FilesRequests } from '@modules/api';
 import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
 import EmojiBarComponent from './EmojiBarComponent/EmojiBarComponent';
 

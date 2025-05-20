@@ -81,7 +81,7 @@ export default class MessageComponent {
             text: `${msgData.sender.firstname} ${msgData.sender.lastname}`
         });
 
-        if (this.config.data?.media_urls) {
+        if (this.config.data?.media?.length) {
             this.renderMedia();
         }
 
@@ -121,7 +121,7 @@ export default class MessageComponent {
         });
 
         const mediaItems: HTMLElement[] = [];
-        for (const mediaUrl of this.config.data.media_urls) {
+        for (const mediaUrl of this.config.data.media) {
             const mediaItem = createElement({
                 classes: ['msg__media-item'],
                 attrs: { src: mediaUrl },
