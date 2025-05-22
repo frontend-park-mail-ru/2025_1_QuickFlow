@@ -14,8 +14,8 @@ interface CommentConfig {
     like_count: number;
     is_liked: boolean;
     id: string;
-    replies: CommentConfig[];
 }
+
 
 const DIVIDER_SYMBOL = '•';
 const READ_MORE_BTN_TEXT = 'Показать ещё';

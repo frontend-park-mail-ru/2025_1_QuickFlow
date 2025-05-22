@@ -85,7 +85,7 @@ class CommunityView {
 
         createElement({
             parent: top,
-            text: data.length,
+            text: data.length.toString(),
             classes: ['profile__friends-count'],
         });
 
@@ -153,6 +153,7 @@ class CommunityView {
             size: 'xxxl',
             class: 'profile__avatar',
             src: data.payload.community.avatar_url,
+            hasViewer: true,
         });
 
         const profileBottom = createElement({

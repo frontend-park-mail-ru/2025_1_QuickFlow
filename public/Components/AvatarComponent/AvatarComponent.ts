@@ -1,3 +1,4 @@
+import PicsViewerComponent from '@components/PicsViewerComponent/PicsViewerComponent';
 import createElement from '@utils/createElement';
 import getTimeDifference from '@utils/getTimeDifference';
 
@@ -17,6 +18,7 @@ interface AvatarConfig {
         online?: boolean;
         lastSeen: string;
     };
+    hasViewer?: boolean;
 }
 
 
@@ -63,6 +65,15 @@ export default class AvatarComponent {
             this.renderStatus();
         } else if (this.config.type === 'edit') {
             this.renderEdit();
+        }
+
+        if (this.config.hasViewer) {
+            this.wrapper.addEventListener('click', () => {
+                new PicsViewerComponent({
+                    picsWrapper: this.wrapper,
+                    target: this.avatar as HTMLImageElement,
+                });
+            });
         }
     }
 

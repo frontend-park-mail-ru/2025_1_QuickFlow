@@ -38,7 +38,7 @@ export default class SwiperComponent {
         this.parent = parent;
         this.config = config;
 
-        this.picWidth = this.config.picsWrapper.getBoundingClientRect().width;
+        this.updatePicWidth();
         this.render();
     }
 
@@ -62,6 +62,10 @@ export default class SwiperComponent {
         this.config.slider.querySelectorAll('img').forEach(img => {
             img.setAttribute('draggable', 'false');
         });
+    }
+
+    private updatePicWidth() {
+        this.picWidth = this.config.picsWrapper.getBoundingClientRect().width;
     }
 
     private handleTouch() {
@@ -126,8 +130,15 @@ export default class SwiperComponent {
     
         const movedBy = this.currentTranslate - this.prevTranslate;
     
-        if (movedBy < -SLIDER_RESPONSIVITY && this.currentIndex < this.config.picsCount - 1) this.currentIndex++;
-        if (movedBy > SLIDER_RESPONSIVITY && this.currentIndex > 0) this.currentIndex--;
+        if (
+            movedBy < -SLIDER_RESPONSIVITY &&
+            this.currentIndex < this.config.picsCount - 1
+        ) this.currentIndex++;
+
+        if (
+            movedBy > SLIDER_RESPONSIVITY &&
+            this.currentIndex > 0
+        ) this.currentIndex--;
     
         this.config.slider.style.transition = 'var(--trans-swiper)';
         this.updateSlider();
@@ -191,10 +202,14 @@ export default class SwiperComponent {
     }
 
     private updateSlider() {
+        this.updatePicWidth();
         this.config.slider.style.transform = `translateX(-${this.currentIndex * this.picWidth}px)`;
-        this.paginator.innerText = `${this.currentIndex + 1}/${this.config.picsCount}`;
-        this.prevBtn.classList.toggle('hidden', this.currentIndex === 0);
-        this.nextBtn.classList.toggle('hidden', this.currentIndex === this.config.picsCount - 1);
+        
+        if (this.paginator) {
+            this.paginator.innerText = `${this.currentIndex + 1}/${this.config.picsCount}`;
+            this.prevBtn.classList.toggle('hidden', this.currentIndex === 0);
+            this.nextBtn.classList.toggle('hidden', this.currentIndex === this.config.picsCount - 1);
+        }
 
         this.prevTranslate = -this.currentIndex * this.picWidth;
     }

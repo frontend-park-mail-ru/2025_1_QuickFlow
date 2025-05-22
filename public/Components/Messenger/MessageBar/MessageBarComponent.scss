@@ -1,14 +1,17 @@
 .msg-bar__wrapper {
-    width: 100%;
+    width: 100vw;
     bottom: 0;
-    position: absolute;
+    left: 0;
+    right: 0;
+    position: fixed;
     padding: 0 16px 16px 16px;
+    z-index: 2;
     background: var(--background-white);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    -moz-backdrop-filter: blur(12px);
-    -o-backdrop-filter: blur(12px);
-    -ms-backdrop-filter: blur(12px);
+    // backdrop-filter: blur(12px);
+    // -webkit-backdrop-filter: blur(12px);
+    // -moz-backdrop-filter: blur(12px);
+    // -o-backdrop-filter: blur(12px);
+    // -ms-backdrop-filter: blur(12px);
 }
 
 .msg-bar {

@@ -59,3 +59,21 @@
         cursor: grabbing;
     }
 }
+
+@media screen and (max-width: 480px) {
+    .pics-viewer__wrapper {
+        background: var(--background-black);
+
+        & .post__nav {
+            display: none;
+        }
+
+        & .post__paginator {
+            display: none;
+        }
+    }
+
+    .pics-viewer {
+        padding: 0;
+    }
+}
