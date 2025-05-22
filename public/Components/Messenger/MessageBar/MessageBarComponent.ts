@@ -4,7 +4,7 @@ import createElement from '@utils/createElement';
 import focusInput from '@utils/focusInput';
 import { setLsItem, getLsItem, removeLsItem } from '@utils/localStorage';
 import ws from '@modules/WebSocketService';
-import { FILE, MSG, POST } from '@config/config';
+import { FILE, MEDIA, MSG, POST } from '@config/config';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import { FilesRequests } from '@modules/api';
@@ -145,9 +145,8 @@ export default class MessageBarComponent {
 
         this.mediaInput = new FileInputComponent(this.attachments, {
             imitator: contextMenu.getItem('media'),
-            // preview: this.mediaWrapperTemplate(),
             renderPreview: this.renderMediaPreview.bind(this),
-            accept: '.jpg, .jpeg, .png, .gif, .mov, .mp4',
+            accept: MEDIA.ACCEPT,
             id: 'message-media-upload',
             insertPosition: 'end',
             multiple: true,
@@ -161,9 +160,8 @@ export default class MessageBarComponent {
 
         this.fileInput = new FileInputComponent(this.attachments, {
             imitator: contextMenu.getItem('file'),
-            // preview: this.mediaWrapperTemplate(),
             renderPreview: this.renderFilePreview.bind(this),
-            accept: 'any',
+            accept: FILE.ACCEPT,
             id: 'message-file-upload',
             insertPosition: 'end',
             multiple: true,

@@ -1,3 +1,4 @@
+import SwiperComponent from '@components/SwiperComponent/SwiperComponent';
 import createElement from '@utils/createElement';
 
 
@@ -16,6 +17,9 @@ export default class PicsViewerComponent {
     public wrapper: HTMLElement | null = null;
     public element: HTMLElement | null = null;
 
+    private slider: HTMLElement | null = null;
+    private swiper: SwiperComponent | null = null;
+
     constructor(config: PicsViewerConfig<any>) {
         this.config = config;
 
@@ -27,79 +31,96 @@ export default class PicsViewerComponent {
         this.addBgClickHandler();
     }
 
-    render() {
+    private render() {
         document.body.style.overflow = 'hidden';
         const parent = document.querySelector('.parent');
 
         this.wrapper = createElement({
-            parent,
+            parent: parent as HTMLElement,
+            classes: ['pics-viewer__wrapper'],
+        });
+
+        this.slider = createElement({
+            parent: this.wrapper,
+            classes: ['pics-viewer__slider'],
+        });
+
+        this.pics.forEach(media => this.renderSlide(media));
+
+        this.swiper = new SwiperComponent(this.wrapper, {
+            picsWrapper: this.wrapper,
+            picsCount: this.pics.length,
+            slider: this.slider,
+            hasPaginator: true,
+            isHandlingMouse: true,
+            isHandlingTouch: true,
+        });
+        this.swiper.showSlide(this.currentIndex);
+
+        this.handleKeydownBinded = this.handleKeydown.bind(this);
+        document.addEventListener('keydown', this.handleKeydownBinded);
+        this.addBgClickHandler();
+    }
+
+    private renderSlide(media: HTMLImageElement | HTMLVideoElement) {
+        const bg = createElement({
+            parent: this.slider,
             classes: ['pics-viewer__bg'],
         });
 
-        this.element = createElement({
-            parent: this.wrapper,
+        const element = createElement({
+            parent: bg,
             classes: ['pics-viewer'],
         });
 
-        this.renderSlide();
-        this.handleKeydownBinded = this.handleKeydown.bind(this);
-        document.addEventListener('keydown', this.handleKeydownBinded);
-    }
+        media.classList.value = 'pics-viewer__pic';
+        element.appendChild(media);
 
-    private renderSlide() {
-        this.element.innerHTML = '';
-        
-        const mediaItem = this.pics[this.currentIndex];
-        mediaItem.classList.value = 'pics-viewer__pic';
-        this.element.appendChild(mediaItem);
+        if (media instanceof HTMLVideoElement) {
+            media.loop = true;
+            media.muted = true;
+            media.controls = true;
 
-        if (mediaItem instanceof HTMLVideoElement) {
-            mediaItem.loop = true;
-            mediaItem.muted = true;
-            mediaItem.controls = true;
-
-            mediaItem.addEventListener('loadeddata', () => {
-                mediaItem.play();
+            media.addEventListener('loadeddata', () => {
+                media.play();
             });
 
-            mediaItem.load();
+            media.load();
         }
     }
 
     private handleKeydown(e: KeyboardEvent) {
         switch (e.key) {
             case 'ArrowRight':
-                if (this.currentIndex === this.pics.length - 1) return;
-                this.currentIndex++;
+                this.swiper.next();
                 break;
             case 'ArrowLeft':
-                if (!this.currentIndex) return;
-                this.currentIndex--;
+                this.swiper.prev();
                 break;
             case 'Escape':
             case ' ':
                 e.preventDefault();
-                return this.close();
+                this.close();
+                return;
         }
-
-        this.renderSlide();
     }
 
     protected addBgClickHandler() {
-        if (!this.wrapper || !this.element) return;
+        if (!this.wrapper) {
+            return;
+        }
 
-        this.wrapper.addEventListener('click', (e: MouseEvent) => {
-            if (
-                e.target === this.wrapper ||
-                e.target === this.element
-            ) {
+        this.wrapper.addEventListener('click', (e) => {
+            if ((e.target as Element).classList.contains('pics-viewer')) {
                 this.close();
             }
         });
     }
 
-    close() {
-        if (!this.wrapper) return;
+    public close() {
+        if (!this.wrapper) {
+            return;
+        }
         
         this.wrapper.remove();
         document.body.style.overflow = 'auto';

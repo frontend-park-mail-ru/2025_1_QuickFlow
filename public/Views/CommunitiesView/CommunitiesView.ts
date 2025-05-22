@@ -5,7 +5,7 @@ import { getLsItem } from '@utils/localStorage';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
 import CommunityComponent from '@components/CommunityComponent/CommunityComponent';
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
-import CreateCommunityMwComponent from '@components/UI/ModalWindowComponent/CreateCommunityMwComponent';
+import CreateCommunityMwComponent from '@components/UI/Modals/CreateCommunityMwComponent';
 import SearchComponent from '@components/SearchComponent/SearchComponent';
 import router from '@router';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';

@@ -5,15 +5,16 @@ const DEFAULT_TYPE = 'file';
 const DEFAULT_NAME = '';
 const DEFAULT_ACCEPT_IMAGE = '.jpg, .jpeg, .png, .gif';
 
+
 interface FileInputConfig {
     imitator: HTMLElement;
     id: string;
-    maxResolution: number;
     maxSize: number;
 
     preview?: any;
     renderPreview?: (file: File, imageDataUrl: string) => HTMLElement;
     compress?: boolean;
+    maxResolution?: number;
     maxSizeSingle?: number;
     multiple?: boolean;
     required?: boolean;

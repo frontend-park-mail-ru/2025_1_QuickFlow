@@ -3,15 +3,19 @@ import TextareaComponent from '@components/UI/TextareaComponent/TextareaComponen
 import createElement from '@utils/createElement';
 import insertIcon from '@utils/insertIcon';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
-import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
+import ModalWindowComponent from '@components/UI/Modals/ModalWindowComponent';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
-import { FILE, POST } from '@config/config';
+import { FILE, MEDIA, POST } from '@config/config';
 import { PostsRequests } from '@modules/api';
+import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
 
 
 export default class PostMwComponent extends ModalWindowComponent {
-    fileInput: FileInputComponent | null = null;
-    button: ButtonComponent;
+    private mediaInput: FileInputComponent | null = null;
+    private filesInput: FileInputComponent | null = null;
+    private button: ButtonComponent;
+    private files: HTMLElement;
+    private scrollWrapper: HTMLElement;
 
     constructor(parent: HTMLElement, config: Record<string, any>) {
         super(parent, config);
@@ -31,7 +35,7 @@ export default class PostMwComponent extends ModalWindowComponent {
         }
     }
 
-    renderPicsUploader() {
+    private renderPicsUploader() {
         const hasPics = this.config?.data?.pics && this.config?.data?.pics.length > 0;
 
         const picsWrapper = createElement({
@@ -39,7 +43,7 @@ export default class PostMwComponent extends ModalWindowComponent {
             classes: ['modal__pics-wrapper'],
         });
 
-        const scrollWrapper = createElement({
+        this.scrollWrapper = createElement({
             parent: picsWrapper,
             classes: [
                 'modal__pics',
@@ -47,7 +51,7 @@ export default class PostMwComponent extends ModalWindowComponent {
             ],
         });
         const addPicWrapper = createElement({
-            parent: scrollWrapper,
+            parent: this.scrollWrapper,
             classes: ['modal__add-pic'],
         });
         createElement({
@@ -63,9 +67,10 @@ export default class PostMwComponent extends ModalWindowComponent {
 
         const fileInputConfig = {
             imitator: addPicWrapper,
-            preview: this.picWrapperTemplate(),
+            renderPreview: this.renderMediaPreview.bind(this),
+            accept: MEDIA.ACCEPT,
             id: 'post-pic-upload',
-            onUpload: () => this.handlePicUpload(scrollWrapper),
+            onUpload: () => this.handlePicUpload(this.scrollWrapper),
             multiple: true,
             required: true,
             maxCount: POST.IMG_MAX_COUNT,
@@ -79,16 +84,31 @@ export default class PostMwComponent extends ModalWindowComponent {
             fileInputConfig['preloaded'] = this.config.data.pics;
         }
 
-        this.fileInput = new FileInputComponent(scrollWrapper, fileInputConfig);
-        this.fileInput.addListener(() => {
-            const filesCount = this.fileInput?.getFiles().length || 0;
+        this.mediaInput = new FileInputComponent(this.scrollWrapper, fileInputConfig);
+        this.mediaInput.addListener(() => {
+            const filesCount = this.mediaInput?.getFiles().length || 0;
             addPicWrapper.style.display = filesCount >= POST.IMG_MAX_COUNT ? 'none' : 'flex';
         });
         if (this.config?.data?.pics?.length >= POST.IMG_MAX_COUNT) {
             addPicWrapper.style.display = 'none';
         }
 
-        this.renderPaginator(picsWrapper, scrollWrapper);
+        this.renderPaginator(picsWrapper, this.scrollWrapper);
+    }
+
+    private renderMediaPreview(file: File, dataUrl: string): HTMLElement {
+        const attachment = new FileAttachmentComponent(this.scrollWrapper, {
+            type: 'media',
+            file,
+            dataUrl,
+            classes: ['modal__pic'],
+        });
+
+        attachment.element.addEventListener('click', () => {
+            this.mediaInput.removeFile(file, attachment.element);
+        });
+
+        return attachment.element;
     }
 
     private renderPaginator(picsWrapper: HTMLElement, scrollWrapper: HTMLElement) {
@@ -173,13 +193,14 @@ export default class PostMwComponent extends ModalWindowComponent {
         });
     }
 
-    renderPostInner(isFilled = false) {
+    private renderPostInner(isFilled = false) {
         if (!this.modalWindow || !this.title) return;
 
         this.modalWindow.classList.add('modal_post');
         this.title.textContent = isFilled ? 'Редактирование поста' : 'Новый пост';
 
         this.renderPicsUploader();
+        this.renderFileUploader();
 
         const textarea = new TextareaComponent(this.modalWindow, {
             placeholder: 'Поделитесь своими мыслями',
@@ -199,57 +220,84 @@ export default class PostMwComponent extends ModalWindowComponent {
             },
             disabled: true,
             validationType: 'some',
-            stateUpdaters: [textarea, this.fileInput],
+            stateUpdaters: [textarea, this.mediaInput],
         });
     }
 
-    picWrapperTemplate() {
-        const picWrapperTemplate = createElement({
-            classes: ['modal__pic'],
+    private renderFileUploader() {
+        const fileUploaderWrapper = createElement({
+            parent: this.modalWindow,
+            classes: ['modal__file-uploader'],
         });
+
+        insertIcon(fileUploaderWrapper, {
+            name: 'clip-icon',
+            classes: ['modal__clip-icon'],
+        });
+
         createElement({
-            tag: 'img',
-            parent: picWrapperTemplate,
-            classes: ['modal__img'],
+            parent: fileUploaderWrapper,
+            text: 'Прикрепить файлы'
         });
-        const overlay = createElement({
-            parent: picWrapperTemplate,
-            classes: [
-                "modal__pic-overlay",
-                "js-post-pic-delete",
-            ],
+
+        this.files = createElement({
+            parent: this.modalWindow,
+            classes: ['modal__files'],
         });
-        createElement({
-            parent: overlay,
-            classes: ["modal__pic-delete"],
+
+        this.filesInput = new FileInputComponent(this.files, {
+            imitator: fileUploaderWrapper,
+            id: 'js-modal_post-file-uploader',
+            maxSize: FILE.MAX_SIZE_TOTAL * FILE.MB_MULTIPLIER,
+            accept: FILE.ACCEPT,
+            multiple: true,
+            maxSizeSingle: FILE.MAX_SIZE_SINGLE * FILE.MB_MULTIPLIER,
+            renderPreview: this.renderFilePreview.bind(this),
+            insertPosition: 'end',
+            required: true,
+            maxCount: POST.IMG_MAX_COUNT,
         });
-        return picWrapperTemplate;
     }
 
-    handlePicUpload(scrollWrapper: HTMLElement) {
+    private renderFilePreview(file: File, dataUrl: string): HTMLElement {
+        const attachment = new FileAttachmentComponent(this.files, {
+            type: 'file',
+            file,
+            dataUrl,
+            classes: ['msg__file'],
+        });
+
+        attachment.element.addEventListener('click', () => {
+            this.filesInput.removeFile(file, attachment.element);
+        });
+
+        return attachment.element;
+    }
+
+    private handlePicUpload(scrollWrapper: HTMLElement) {
         scrollWrapper.classList.remove('modal__pics_blank');
     }
 
-    async handlePostSubmit(text: string) {
+    private async handlePostSubmit(text: string) {
         this.button.disable();
 
         if (
             !text && (
-                !this.fileInput ||
-                !this.fileInput.input ||
-                !this.fileInput.input.files ||
-                !this.fileInput.input.files.length
+                !this.mediaInput ||
+                !this.mediaInput.input ||
+                !this.mediaInput.input.files ||
+                !this.mediaInput.input.files.length
             )
         ) return;
 
-        if (this.fileInput.isLarge) {
+        if (this.mediaInput.isLarge) {
             return new PopUpComponent({
                 text: `Размер фотографий суммарно не должен превышать ${FILE.MAX_SIZE_TOTAL}Мб`,
                 isError: true,
             });
         }
 
-        if (this.fileInput.isAnyLarge) {
+        if (this.mediaInput.isAnyLarge) {
             return new PopUpComponent({
                 text: `Размер каждой фотографии не должен превышать ${FILE.MAX_SIZE_SINGLE}Мб`,
                 isError: true,
@@ -266,12 +314,12 @@ export default class PostMwComponent extends ModalWindowComponent {
         }
 
         if (
-            this.fileInput &&
-            this.fileInput.input &&
-            this.fileInput.input.files &&
-            this.fileInput.input.files.length > 0
+            this.mediaInput &&
+            this.mediaInput.input &&
+            this.mediaInput.input.files &&
+            this.mediaInput.input.files.length > 0
         ) {
-            for (const file of this.fileInput.input.files) {
+            for (const file of this.mediaInput.input.files) {
                 formData.append('pics', file);
             }
         }
@@ -305,7 +353,7 @@ export default class PostMwComponent extends ModalWindowComponent {
         }
     }
 
-    cbFailed() {
+    private cbFailed() {
         new PopUpComponent({
             text: 'Не удалось сохранить изменения',
             size: "large",

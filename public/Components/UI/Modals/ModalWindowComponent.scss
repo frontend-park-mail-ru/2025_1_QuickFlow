@@ -294,6 +294,44 @@
     color: var(--text-secondary);
 }
 
+.modal__files {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    width: 100%;
+    overflow: scroll;
+    border-radius: 8px;
+    padding-bottom: 8px;
+}
+
+.modal__file-uploader {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: var(--font-size-s);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-m);
+    color: var(--text-primary);
+    gap: 8px;
+    transition: var(--trans-menu);
+    user-select: none;
+}
+
+.modal__file-uploader:hover {
+    color: var(--text-accent);
+}
+
+.modal__file-uploader:active {
+    color: var(--text-accent-hover);
+}
+
+.modal__clip-icon {
+    width: 16px;
+    color: var(--icon-primary);
+    display: flex;
+}
+
 @media screen and (max-width: 480px) {
     .modal__bg {
         width: 100vw;

@@ -1,6 +1,6 @@
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import createElement from '@utils/createElement';
-import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
+import ModalWindowComponent from '@components/UI/Modals/ModalWindowComponent';
 
 
 export default class DeleteMwComponent extends ModalWindowComponent {

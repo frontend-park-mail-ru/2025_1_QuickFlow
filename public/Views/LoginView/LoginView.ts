@@ -1,4 +1,4 @@
-import LoginFormComponent from '@components/LoginFormComponent/LoginFormComponent';
+import LoginFormComponent from '@components/Forms/LoginFormComponent/LoginFormComponent';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import { FeedRequests } from '@modules/api';
 import router from '@router';

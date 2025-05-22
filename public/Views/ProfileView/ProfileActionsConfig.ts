@@ -1,4 +1,4 @@
-import DeleteMwComponent from '@components/UI/ModalWindowComponent/DeleteMwComponent';
+import DeleteMwComponent from '@components/UI/Modals/DeleteMwComponent';
 import Ajax from '@modules/ajax';
 import router from '@router';
 

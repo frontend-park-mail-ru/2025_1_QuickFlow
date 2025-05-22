@@ -5,6 +5,7 @@ import createElement from '@utils/createElement';
 
 
 const DEFAULT_SRC = '/static/img/default-cover.jpg';
+const ACCEPT = '.jpg, .jpeg, .png, .gif';
 
 
 export default class CoverComponent {
@@ -54,6 +55,7 @@ export default class CoverComponent {
         
         this.fileInput = new FileInputComponent(this.parent.parentNode as HTMLElement, {
             imitator: coverUploadBtn.buttonElement,
+            accept: ACCEPT,
             preview: this.cover,
             id: 'profile-cover-upload',
             name: 'cover',

@@ -1,7 +1,7 @@
 import createElement from '@utils/createElement';
 import convertDate from '@utils/convertDate';
 import { INFO_ITEMS_LAYOUT } from '@views/ProfileView/ProfileActionsConfig';
-import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
+import ModalWindowComponent from '@components/UI/Modals/ModalWindowComponent';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
 
 

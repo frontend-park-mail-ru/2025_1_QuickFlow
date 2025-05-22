@@ -16,6 +16,16 @@ fieldset {
     margin: 0;
 }
 
+.auth-form__description {
+    max-width: 100%;
+    word-break: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+}
+
 .auth-form__username {
     display: flex;
     flex-direction: column;

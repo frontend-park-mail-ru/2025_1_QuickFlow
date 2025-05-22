@@ -16,8 +16,11 @@ import { forms } from './CommunityEditFormConfig';
 import { FILE } from '@config/config';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
 import FriendComponent from '@components/FriendComponent/FriendComponent';
-import DeleteMwComponent from '@components/UI/ModalWindowComponent/DeleteMwComponent';
+import DeleteMwComponent from '@components/UI/Modals/DeleteMwComponent';
 import { CommunitiesRequests } from '@modules/api';
+
+
+const ACCEPT = '.jpg, .jpeg, .png, .gif';
 
 
 class CommunityEditView {
@@ -386,6 +389,7 @@ class CommunityEditView {
         this.stateUpdaters.push(
             new FileInputComponent(this.containerObj.left, {
                 imitator: avatar.wrapper,
+                accept: ACCEPT,
                 preview: avatar.avatar,
                 id: 'profile-avatar-upload',
                 name: 'avatar',

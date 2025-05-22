@@ -3,7 +3,7 @@ import router from '@router';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import FeedComponent from '@components/FeedComponent/FeedComponent';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
-import ProfileInfoMwComponent from '@components/UI/ModalWindowComponent/ProfileInfoMwComponent';
+import ProfileInfoMwComponent from '@components/UI/Modals/ProfileInfoMwComponent';
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import CoverComponent from '@components/CoverComponent/CoverComponent';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';

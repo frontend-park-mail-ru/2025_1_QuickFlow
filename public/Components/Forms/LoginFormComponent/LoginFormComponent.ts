@@ -102,7 +102,7 @@ export default class LoginFormComponent {
 
         createElement({
             tag: 'p',
-            classes: ['p1'],
+            classes: ['p1', 'auth-form__description'],
             text: this.step === 1 ?
                 this.config.usernameDescription :
                 `${this.config.pwdDescription}@${this.usernameInput?.input?.value.trim()}`,
@@ -156,6 +156,7 @@ export default class LoginFormComponent {
             required: true,
             showRequired: false,
             value: getLsItem("username", ""),
+            maxLength: 20,
         });
         if (this.usernameInput.input) focusInput(this.usernameInput.input, this.focusTimer);
 

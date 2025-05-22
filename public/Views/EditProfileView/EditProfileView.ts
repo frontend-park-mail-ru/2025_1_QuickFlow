@@ -20,6 +20,9 @@ import { UsersRequests } from '@modules/api';
 import LsProfile from '@modules/LsProfile';
 
 
+const ACCEPT = '.jpg, .jpeg, .png, .gif';
+
+
 class EditProfileView {
     private containerObj: MainLayoutComponent;
     private section: string | null = null;
@@ -306,6 +309,7 @@ class EditProfileView {
         this.stateUpdaters.push(
             new FileInputComponent(this.containerObj.left, {
                 imitator: avatar.wrapper,
+                accept: ACCEPT,
                 preview: avatar.avatar,
                 id: 'profile-avatar-upload',
                 name: 'avatar',

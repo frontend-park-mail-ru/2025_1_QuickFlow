@@ -29,10 +29,13 @@ export default class FileAttachmentComponent {
             classes: [
                 'attachment',
                 `attachment_${this.config.type}`,
-                this.config.classes
             ],
             parent: this.parent,
         });
+
+        if (this.config.classes.length) {
+            this.element.classList.add(...this.config.classes);
+        }
         
         switch (this.config.type) {
             case 'file':

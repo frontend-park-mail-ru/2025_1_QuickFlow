@@ -1,5 +1,5 @@
-import ModalWindowComponent from '@components/UI/ModalWindowComponent/ModalWindowComponent';
-import CreateCommunityFormComponent from '@components/CreateCommunityFormComponent/CreateCommunityFormComponent';
+import ModalWindowComponent from '@components/UI/Modals/ModalWindowComponent';
+import CreateCommunityFormComponent from '@components/Forms/CreateCommunityFormComponent/CreateCommunityFormComponent';
 
 
 export default class CreateCommunityMwComponent extends ModalWindowComponent {

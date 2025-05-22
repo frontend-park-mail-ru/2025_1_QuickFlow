@@ -162,7 +162,7 @@ export default class FriendComponent {
 
         const dropdown = createElement({
             classes: ['js-dropdown', 'search-item__dropdown'],
-            parent: friendRight,
+            parent: friendRight as HTMLElement,
         });
 
         const optionsWrapper = createElement({

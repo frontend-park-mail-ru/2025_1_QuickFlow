@@ -1,7 +1,7 @@
 import ContextMenuComponent from '@components/ContextMenuComponent/ContextMenuComponent'
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
-import PostMwComponent from '@components/UI/ModalWindowComponent/PostMwComponent';
-import DeleteMwComponent from '@components/UI/ModalWindowComponent/DeleteMwComponent';
+import PostMwComponent from '@components/UI/Modals/PostMwComponent';
+import DeleteMwComponent from '@components/UI/Modals/DeleteMwComponent';
 import getTimeDifference from '@utils/getTimeDifference';
 import createElement from '@utils/createElement';
 import Ajax from '@modules/ajax';
@@ -12,6 +12,9 @@ import PicsViewerComponent from '@components/PicsViewerComponent/PicsViewerCompo
 import { PostsRequests } from '@modules/api';
 import copyToClipboard from '@utils/copyToClipboard';
 import LsProfile from '@modules/LsProfile';
+import CommentsComponent from '../CommentsComponent/CommentsComponent';
+import LikeComponent from '../LikeComponent/LikeComponent';
+import SwiperComponent from '@components/SwiperComponent/SwiperComponent';
 
 
 const AUTHOR_AVATAR_SIZE = 's';
@@ -28,7 +31,6 @@ const DISPLAYED_ACTIONS = [
 ];
 const RELATION_STRANGER = "stranger";
 const RELATION_FOLLOWED_BY = "followed_by";
-const SLIDER_RESPONSIVITY = 50;
 const DISPLAYED_RELATIONS = [RELATION_STRANGER, RELATION_FOLLOWED_BY];
 const ADMINS_USERNAMES = [
     "rvasutenko",
@@ -36,15 +38,27 @@ const ADMINS_USERNAMES = [
 ];
 
 
+interface PostConfig {
+    is_liked: boolean;
+    id: string;
+    position: 'top' | 'bottom' | 'same';
+    pics: string[];
+    like_count: number;
+    text: string;
+    author_type: string;
+    author: Record<string, any>;
+    created_at: string;
+}
+
+
 export default class PostComponent {
     private parent: HTMLElement;
-    private config: Record<string, any>;
-    private picWidth: number;
+    private config: PostConfig;
+
     private isLiked: boolean;
+    public wrapper: HTMLElement | null = null;
 
-    wrapper: HTMLElement | null = null;
-
-    constructor(parent: HTMLElement, config: Record<string, any>) {
+    constructor(parent: HTMLElement, config: PostConfig) {
         this.parent = parent;
         this.config = config;
         this.isLiked = this.config.is_liked;
@@ -81,16 +95,21 @@ export default class PostComponent {
         }
 
         this.renderTop();
-        if (this.renderPics()) {
-            this.renderActions();
-            this.renderText();
-        } else {
-            this.renderText();
-            this.renderActions();
-        }
+        this.renderPics();
+        this.renderFiles();
+        this.renderText();
+        this.renderActions();
+
+        new CommentsComponent(this.wrapper, {});
     }
 
-    renderPics(): boolean {
+    private renderFiles() {
+        // for (const file of this.config.files) {
+
+        // }
+    }
+
+    private renderPics() {
         if (!this.config.pics || this.config.pics.length === 0) return false;
 
         const picsWrapper = createElement({
@@ -104,7 +123,7 @@ export default class PostComponent {
         });
 
         if (this.config.pics && this.config.pics.length > 0) {
-            this.config.pics.forEach((pic: any) => {
+            this.config.pics.forEach((pic: string) => {
                 const slide = createElement({
                     parent: slider,
                     classes: ['post__slide'],
@@ -121,157 +140,29 @@ export default class PostComponent {
             });
         }
 
+        const swiper = new SwiperComponent(null, {
+            slider,
+            picsWrapper,
+            picsCount: this.config.pics.length,
+            hasPaginator: true,
+            isHandlingMouse: true,
+            isHandlingTouch: true,
+        });
+
         slider.addEventListener('click', (e) => {
-            if (!(e.target instanceof HTMLImageElement)) {
-                return;
-            }
+            if (
+                !(e.target instanceof HTMLImageElement) ||
+                swiper.wasDragging
+            ) return;
 
             new PicsViewerComponent({
                 picsWrapper: slider,
                 target: e.target,
             });
         });
-
-        this.renderPaginator(picsWrapper, slider);
-
-        return true;
     }
 
-    private renderPaginator(picsWrapper: HTMLElement, slider: HTMLElement) {
-        let currentIndex = 0;
-        const totalPics = this.config.pics.length;
-        this.picWidth = picsWrapper.clientWidth;
-
-        if (totalPics > 1) {
-            const paginator = createElement({
-                parent: picsWrapper,
-                classes: ['post__paginator'],
-                text: `${currentIndex + 1}/${totalPics}`
-            });
-
-            const prevBtn = createElement({
-                parent: picsWrapper,
-                classes: ['post__nav', 'post__nav_prev', 'hidden'],
-            });
-
-            createElement({
-                parent: prevBtn,
-                attrs: {src: '/static/img/prev-arrow-icon.svg'}
-            });
-
-            const nextBtn = createElement({
-                parent: picsWrapper,
-                classes: ['post__nav', 'post__nav_next'],
-            });
-
-            createElement({
-                parent: nextBtn,
-                attrs: {src: '/static/img/next-arrow-icon.svg'}
-            });
-
-            const updateSlider = () => {
-                slider.style.transform = `translateX(-${currentIndex * this.picWidth}px)`;
-                paginator.innerText = `${currentIndex + 1}/${totalPics}`;
-                prevBtn.classList.toggle('hidden', currentIndex === 0);
-                nextBtn.classList.toggle('hidden', currentIndex === totalPics - 1);
-                
-                prevTranslate = -currentIndex * this.picWidth;
-            };
-            
-            prevBtn.addEventListener('click', () => {
-                if (currentIndex > 0) {
-                    currentIndex--;
-                    updateSlider();
-                }
-            });
-    
-            nextBtn.addEventListener('click', () => {
-                if (currentIndex < totalPics - 1) {
-                    currentIndex++;
-                    updateSlider();
-                }
-            });
-
-            // --- SWIPE / DRAG HANDLING ---
-            let startX = 0;
-            let startY = 0;
-            let currentTranslate = 0;
-            let prevTranslate = 0;
-            let isDragging = false;
-            let isHorizontalSwipe = false;
-
-            const pointerDown = (x: number, y: number) => {
-                startX = x;
-                startY = y;
-                isDragging = true;
-                isHorizontalSwipe = false;
-                currentTranslate = prevTranslate;
-                slider.style.transition = 'none';
-            };
-            
-
-            const pointerMove = (x: number, y: number) => {
-                if (!isDragging) return;
-            
-                const dx = x - startX;
-                const dy = y - startY;
-            
-                // Определяем направление свайпа
-                if (!isHorizontalSwipe && Math.abs(dx) > 5) {
-                    isHorizontalSwipe = Math.abs(dx) > Math.abs(dy);
-                }
-            
-                // Если свайп вертикальный — ничего не делаем
-                if (!isHorizontalSwipe) return;
-            
-                currentTranslate = prevTranslate + dx;
-                slider.style.transform = `translateX(${currentTranslate}px)`;
-            };
-
-            const pointerUp = () => {
-                if (!isDragging) return;
-                isDragging = false;
-            
-                if (!isHorizontalSwipe) return;
-            
-                const movedBy = currentTranslate - prevTranslate;
-            
-                if (movedBy < -SLIDER_RESPONSIVITY && currentIndex < totalPics - 1) currentIndex++;
-                if (movedBy > SLIDER_RESPONSIVITY && currentIndex > 0) currentIndex--;
-            
-                slider.style.transition = 'transform 0.3s ease';
-                updateSlider();
-                prevTranslate = -currentIndex * this.picWidth;
-            };
-
-            // Mouse
-            slider.addEventListener('mousedown', (e) => pointerDown(e.clientX, e.clientY));
-            slider.addEventListener('mousemove', (e) => pointerMove(e.clientX, e.clientY));
-            slider.addEventListener('mouseup', pointerUp);
-            slider.addEventListener('mouseleave', pointerUp);
-
-            // Touch
-            picsWrapper.addEventListener('touchstart', (e) => 
-                pointerDown(e.touches[0].clientX, e.touches[0].clientY),
-            {
-                passive: false
-            });
-            
-            picsWrapper.addEventListener('touchmove', (e) => 
-                pointerMove(e.touches[0].clientX, e.touches[0].clientY)
-            );
-            
-            picsWrapper.addEventListener('touchend', pointerUp);
-            picsWrapper.addEventListener('touchcancel', pointerUp);
-
-            // Disable image dragging
-            slider.querySelectorAll('img').forEach(img => {
-                img.setAttribute('draggable', 'false');
-            });
-        }
-    }
-
-    renderActions() {
+    private renderActions() {
         const actionsWrapper = createElement({
             parent: this.wrapper,
             classes: ['post__actions'],
@@ -283,20 +174,29 @@ export default class PostComponent {
         });
 
         for (const key of DISPLAYED_ACTIONS) {
-            const isLiked = key === 'like' && this.isLiked;
+            if (key === 'like') {
+                new LikeComponent(countedActions, {
+                    isLiked: this.isLiked,
+                    targetId: this.config.id,
+                    likeCount: this.config.like_count,
+                    putMethod: PostsRequests.putLike,
+                    removeMethod: PostsRequests.removeLike,
+                });
+                continue;
+            }
 
             const actionWrapper = createElement({
                 parent: countedActions,
                 classes: [
-                    isLiked ? 'post__action_liked' : 'post__action',
+                    'post__action',
                     `js-post-action-${key}`,
                 ],
             });
 
             insertIcon(actionWrapper, {
-                name: isLiked ? `${key}-fill-icon` : `${key}-icon`,
+                name: `${key}-icon`,
                 classes: [
-                    isLiked ? 'post__action-icon_liked' : 'post__action-icon',
+                    'post__action-icon',
                     'post__action-icon',
                     `js-post-action-icon-${key}`,
                 ],
@@ -319,102 +219,9 @@ export default class PostComponent {
         //         'js-post-action-bookmark',
         //     ],
         // });
-
-        this.addActionsListeners(actionsWrapper);
     }
 
-    private addActionsListeners(actionsWrapper: HTMLElement) {
-        const like = actionsWrapper.querySelector('.js-post-action-like') as HTMLElement;
-        // const comment = actionsWrapper.querySelector('.js-post-action-comment');
-        // const repost = actionsWrapper.querySelector('.js-post-action-repost');
-        // const bookmark = actionsWrapper.querySelector('.js-post-action-bookmark');
-
-        like.addEventListener('click', () => this.handleLike(like));
-    }
-
-    private async handleLike(like: HTMLElement) {
-        let status: number;
-
-        const oldIsLiked = this.isLiked;
-
-        this.isLiked = !this.isLiked;
-        this.toggleLike(like);
-
-        if (oldIsLiked) {
-            status = await PostsRequests.removeLike(this.config.id)
-            switch (status) {
-                case 204:
-                    // this.isLiked = false;
-                    break;
-                default:
-                    this.isLiked = true;
-                    this.toggleLike(like);
-                    this.renderNetworkErrorPopUp();
-                    break;
-            }
-        } else {
-            status = await PostsRequests.putLike(this.config.id);
-            switch (status) {
-                case 204:
-                    // this.isLiked = true;
-                    break;
-                default:
-                    this.isLiked = false;
-                    this.toggleLike(like);
-                    this.renderNetworkErrorPopUp();
-                    break;
-            }
-        }
-    }
-
-    private renderNetworkErrorPopUp() {
-        new PopUpComponent({
-            icon: 'close-icon',
-            size: 'large',
-            text: 'Проверьте подключение к интернету',
-            isError: true,
-        });
-    }
-
-    private async toggleLike(like: HTMLElement) {
-        const icon: HTMLElement = like.querySelector('.js-post-action-icon-like');
-        icon.remove();
-
-        like.classList.toggle('post__action');
-        like.classList.toggle('post__action_liked');
-
-        const newIcon: HTMLElement = await insertIcon(like, {
-            name: this.isLiked ? 'like-fill-icon' : 'like-icon',
-            classes: [
-                'post__action-icon',
-                'js-post-action-icon-like',
-            ],
-        });
-
-        if (this.isLiked) {
-            newIcon.classList.add('post__action-icon_liked');
-            
-            newIcon.classList.add('post__action-icon_like-animating');
-
-            newIcon.addEventListener('animationend', () => {
-                newIcon.classList.remove('post__action-icon_like-animating');
-            }, { once: true });
-        }
-
-        const counter: HTMLElement = like.querySelector('.js-post-action-counter-like');
-
-        if (!this.config.is_liked) {
-            counter.innerText = this.isLiked ?
-                this.config.like_count + 1 :
-                this.config.like_count;
-        } else {
-            counter.innerText = this.isLiked ?
-                this.config.like_count :
-                this.config.like_count - 1;
-        }
-    }
-
-    renderText() {
+    private renderText() {
         const textWrapper = createElement({
             parent: this.wrapper,
             classes: ['post__content'],
@@ -454,7 +261,7 @@ export default class PostComponent {
         });
     }
 
-    renderTop() {
+    private renderTop() {
         const topWrapper = createElement({
             parent: this.wrapper,
             classes: ['post__header'],
@@ -646,7 +453,7 @@ export default class PostComponent {
         // new ContextMenuComponent(dropdown, { data });
     }
 
-    actionCbOk() {
+    private actionCbOk() {
         const actions = Array.from(
             document.getElementsByClassName(`js-post-action-${this.config?.author?.username}`)
         );
@@ -655,7 +462,7 @@ export default class PostComponent {
         };
     }
 
-    ajaxDeletePost(id: any) {
+    private ajaxDeletePost(id: string) {
         Ajax.delete({
             url: `/posts/${id}`,
             callback: (status: number) => {
@@ -673,7 +480,7 @@ export default class PostComponent {
         });
     }
 
-    onAjaxEditPost(config: any) {
+    private onAjaxEditPost(config: PostConfig) {
         this.config = config;
         this.config.position = "same";
         this.render();
