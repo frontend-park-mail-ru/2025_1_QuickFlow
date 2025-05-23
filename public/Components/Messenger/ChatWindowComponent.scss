@@ -74,8 +74,7 @@
 }
 
 .chat-window__dropdown {
-    right: 8px;
-    top: 9px;
+    margin-left: auto;
 }
 
 @media screen and (max-width: 480px) {
@@ -88,10 +87,10 @@
         padding: 0 16px;
     }
 
-    .chat-window__dropdown {
-        right: 16px;
-        top: 12px;
-    }
+    // .chat-window__dropdown {
+    //     right: 16px;
+    //     top: 12px;
+    // }
 
     .chat-window__header .avatar_xs {
         width: 36px;

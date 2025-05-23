@@ -58,12 +58,12 @@
     position: relative;
 }
 
-.msg-bar__dropdown {
-    top: unset;
-    right: unset;
-    left: 8px;
-    align-items: flex-start;
-}
+// .msg-bar__dropdown {
+//     top: unset;
+//     right: unset;
+//     left: 8px;
+//     align-items: flex-start;
+// }
 
 .msg-bar__add-media {
     background: url(./static/img/primary-add-icon.svg) no-repeat;
@@ -104,10 +104,8 @@
     width: 100%;
     outline: none;
     border-radius: 0;
-    padding: 0;
     background: none;
     padding: 8px 4px;
-    padding-left: 40px;
     resize: none;
     align-self: center;
     font-size: 14px;

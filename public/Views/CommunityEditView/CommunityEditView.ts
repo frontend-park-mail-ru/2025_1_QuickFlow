@@ -206,13 +206,14 @@ class CommunityEditView {
         this.containerObj.left.innerHTML = '';
 
         if (
-            ['contacts', 'members', 'managers', 'deletion']
+            ['contacts', 'managers']
             .includes(this.section)
         ) {
-            return new EmptyStateComponent(this.containerObj.left, {
+            new EmptyStateComponent(this.containerObj.left, {
                 text: 'Этот раздел пока в разработке',
                 icon: 'communities-icon',
             });
+            return;
         }
 
         const [status, communityData] = await CommunitiesRequests.getCommunity(this.params.address);
