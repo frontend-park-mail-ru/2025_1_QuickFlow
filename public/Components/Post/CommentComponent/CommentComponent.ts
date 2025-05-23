@@ -111,7 +111,7 @@ export default class CommentComponent {
             likeCount: this.config.data.like_count,
             classes: ['comment__action'],
             putMethod: CommentsRequests.putLike,
-            removeMethod: CommentsRequests.deleteComment,
+            removeMethod: CommentsRequests.removeLike,
         });
     }
 
