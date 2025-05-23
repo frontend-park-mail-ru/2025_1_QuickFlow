@@ -1,7 +1,6 @@
 import createElement from '@utils/createElement';
 import insertIcon from '@utils/insertIcon';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
-import { PostsRequests } from '@modules/api';
 import router from '@router';
 
 
@@ -77,8 +76,8 @@ export default class LikeComponent {
         }
 
         switch (status) {
+            case 200:
             case 204:
-                // this.isLiked = false;
                 break;
             case 401:
                 router.go({ path: '/login' });

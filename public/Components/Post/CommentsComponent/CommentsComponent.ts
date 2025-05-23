@@ -34,6 +34,7 @@ export default class CommentsComponent {
     private textarea: TextareaComponent | null = null;
     private lastTs: string | null = null;
     private sendBtn: HTMLElement;
+    private showMoreBtn: HTMLElement | null = null;
 
     constructor(parent: HTMLElement, config: CommentsConfig) {
         this.parent = parent;
@@ -58,12 +59,13 @@ export default class CommentsComponent {
 
         this.renderComment(this.config.lastData);
 
-        createElement({
+        this.showMoreBtn = createElement({
             parent: this.wrapper,
             classes: ['comments__more'],
             text: SHOW_NEXT_COMMENTS,
-        })
-        .addEventListener('click', () => this.fetchComment());
+        });
+
+        this.showMoreBtn.addEventListener('click', () => this.fetchComment());
     }
 
     private async fetchComment() {
@@ -71,9 +73,7 @@ export default class CommentsComponent {
 
         switch (status) {
             case 200:
-                for (const commentData of commentsData) {
-                    this.renderComment(commentData);   
-                }
+                this.renderFetchedComments(commentsData);
                 break;
             case 401:
                 Router.go({ path: '/login' });
@@ -81,6 +81,19 @@ export default class CommentsComponent {
             default:
                 this.renderNetworkErrorPopUp();
                 return;
+        }
+    }
+
+    private renderFetchedComments(commentsData: Comment[]) {
+        if (
+            !commentsData ||
+            commentsData.length < COMMENTS_FETCH_COUNT
+        ) {
+            this.showMoreBtn.remove();
+        }
+
+        for (const commentData of commentsData) {
+            this.renderComment(commentData);   
         }
     }
 
