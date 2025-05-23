@@ -27,6 +27,51 @@ export const post = {
     }
 };
 
+export const comments = [
+    {
+        "id": "1232cd4f-6be1-469f-8f9b-922dfd897620",
+        "text": "hihiuhihihihih!",
+        "created_at": "2025-05-22T21:53:33Z",
+        "updated_at": "2025-05-22T21:53:33Z",
+        "media": [
+            "media1",
+            "media2"
+        ],
+        "audio": [
+            "audio1",
+            "audio2"
+        ],
+        "files": [
+            "file1",
+            "file2"
+        ],
+        "author": {
+            "id": "f7c50459-8b74-4a41-9274-4fa1b06b4ca5",
+            "username": "Nikita",
+            "firstname": "Myname",
+            "lastname": "Mysurname"
+        },
+        "post_id": "e7ad70f8-ec51-45ea-9277-40a87410c956",
+        "like_count": 0,
+        "is_liked": false
+    },
+    {
+        "id": "f9dd79ef-ce8a-4cf3-974a-b118e6b09b75",
+        "text": "hi!",
+        "created_at": "2025-05-22T21:29:25Z",
+        "updated_at": "2025-05-22T21:29:34Z",
+        "author": {
+            "id": "f7c50459-8b74-4a41-9274-4fa1b06b4ca5",
+            "username": "Nikita",
+            "firstname": "Myname",
+            "lastname": "Mysurname"
+        },
+        "post_id": "e7ad70f8-ec51-45ea-9277-40a87410c956",
+        "like_count": 0,
+        "is_liked": false
+    }
+];
+
 export const posts = [
     {
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
@@ -53,6 +98,21 @@ export const posts = [
         comment_count: 0,
         is_repost: true,
         is_liked: true,
+        last_comment: {
+            "id": "490dcb23-e44c-403f-acdf-6808ecab1e86",
+            "text": "Последний оставленный коммент к этому посту. Что-то тестовое, чтобы понять как это будет отображаться.",
+            "created_at": "2025-05-22T22:09:26Z",
+            "updated_at": "2025-05-22T22:09:26Z",
+            "author": {
+                "id": "f7c50459-8b74-4a41-9274-4fa1b06b4ca5",
+                "username": "Nikita",
+                "firstname": "Myname",
+                "lastname": "Mysurname"
+            },
+            "post_id": "e7ad70f8-ec51-45ea-9277-40a87410c956",
+            "like_count": 0,
+            "is_liked": false,
+        }
     },
     {
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",

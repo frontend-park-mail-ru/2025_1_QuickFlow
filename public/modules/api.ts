@@ -1,5 +1,6 @@
 import ajax from '@modules/ajax';
 import convertToFormData from '@utils/convertToFormData';
+import { Comment, CommentRequest } from 'types/PostTypes';
 
 
 export class PostsRequests {
@@ -47,6 +48,66 @@ export class PostsRequests {
         return new Promise((resolve) => {
             ajax.delete({
                 url: `/posts/${post_id}/like`,
+                callback: (status: number) => resolve(status),
+            });
+        });
+    }
+};
+
+
+export class CommentsRequests {
+    static async createComment(post_id: string, body: CommentRequest): Promise<[number, Comment]> {
+        return new Promise((resolve) => {
+            ajax.post({
+                url: `/posts/${post_id}/comment`,
+                body,
+                callback: (status: number, data: Comment) => resolve([status, data]),
+            });
+        });
+    }
+
+    static async getComments(post_id: string, count: number, ts?: string): Promise<[number, Comment[]]> {
+        return new Promise((resolve) => {
+            ajax.get({
+                url: `/posts/${post_id}/comments`,
+                params: { count, ...(ts && { ts }) },
+                callback: (status: number, data: Comment[]) => resolve([status, data]),
+            });
+        });
+    }
+
+    static async editComment(comment_id: string, body: CommentRequest): Promise<[number, Comment]> {
+        return new Promise((resolve) => {
+            ajax.put({
+                url: `/comments/${comment_id}`,
+                body,
+                callback: (status: number, data: Comment) => resolve([status, data]),
+            });
+        });
+    }
+
+    static async deleteComment(comment_id: string): Promise<number> {
+        return new Promise((resolve) => {
+            ajax.delete({
+                url: `/comments/${comment_id}`,
+                callback: (status: number) => resolve(status),
+            });
+        });
+    }
+
+    static async putLike(comment_id: string): Promise<number> {
+        return new Promise((resolve) => {
+            ajax.post({
+                url: `/comments/${comment_id}/like`,
+                callback: (status: number) => resolve(status),
+            });
+        });
+    }
+
+    static async removeLike(comment_id: string): Promise<number> {
+        return new Promise((resolve) => {
+            ajax.delete({
+                url: `/comments/${comment_id}/like`,
                 callback: (status: number) => resolve(status),
             });
         });

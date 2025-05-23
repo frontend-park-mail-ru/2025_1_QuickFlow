@@ -1,25 +1,20 @@
 import AvatarComponent from "@components/AvatarComponent/AvatarComponent";
-import LsProfile from "@modules/LsProfile";
 import createElement from "@utils/createElement";
-import insertIcon from "@utils/insertIcon";
 import LikeComponent from "../LikeComponent/LikeComponent";
-import { PostsRequests } from "@modules/api";
-import TextareaComponent from "@components/UI/TextareaComponent/TextareaComponent";
+import { CommentsRequests } from "@modules/api";
+import { Comment } from "types/PostTypes";
+import formatTimeAgo from "@utils/formatTimeAgo";
 
 
 interface CommentConfig {
-    text: string;
-    ts: string;
-    author: Record<string, any>;
-    like_count: number;
-    is_liked: boolean;
-    id: string;
+    data: Comment;
 }
 
 
 const DIVIDER_SYMBOL = '•';
 const READ_MORE_BTN_TEXT = 'Показать ещё';
 const READ_LESS_BTN_TEXT = 'Скрыть';
+const AVATAR_SIZE = 'xxs';
 
 
 export default class CommentComponent {
@@ -27,9 +22,6 @@ export default class CommentComponent {
     private config: CommentConfig;
 
     public element: HTMLElement;
-    private wrapper: HTMLElement;
-    private textarea: TextareaComponent | null = null;
-    private sendBtn: HTMLElement;
 
     constructor(parent: HTMLElement, config: CommentConfig) {
         this.parent = parent;
@@ -38,21 +30,21 @@ export default class CommentComponent {
     }
 
     private render() {
-        if (this.element.innerHTML !== '') {
+        if (this.parent.innerHTML !== '') {
             createElement({
-                parent: this.element,
+                parent: this.parent,
                 classes: ['comments__divider', 'comments__divider_small'],
             });
         }
 
         const comment = createElement({
-            parent: this.element,
+            parent: this.parent,
             classes: ['comment'],
         });
 
         new AvatarComponent(comment, {
-            src: LsProfile.data.profile.avatar_url,
-            size: 'xxs',
+            src: this.config.data.author?.avatar_url,
+            size: AVATAR_SIZE,
         });
 
         const content = createElement({
@@ -62,48 +54,6 @@ export default class CommentComponent {
 
         this.renderHeader(content);
         this.renderText(content);
-    }
-
-    private renderText(parent: HTMLElement) {
-        const textWrapper = createElement({
-            parent,
-            classes: ['comment__text-wrapper'],
-        });
-    
-        const text = createElement({
-            parent: textWrapper,
-            classes: ['comment__text'],
-            text: 'Ваау! Не перестаю восхищаться природой этой страны) Ваау! Не перестаю восхищаться природой этой страны) Ваау! Не перестаю восхищаться природой этой страны)',
-        });
-    
-
-        const readMore = createElement({
-            tag: 'p',
-            parent: textWrapper,
-            classes: ['comment__more'],
-            text: READ_MORE_BTN_TEXT,
-            attrs: { style: 'display: none;' }
-        });
-
-        // После рендеринга проверяем, обрезается ли текст
-        requestAnimationFrame(() => {
-            if (text.scrollHeight > text.clientHeight) {
-                readMore.style.display = 'inline-block';
-            }
-        });
-
-        // Добавляем обработчик клика для разворачивания и сворачивания текста
-        readMore.addEventListener('click', () => {
-            if (text.classList.contains('comment__text_expanded')) {
-                text.classList.remove('comment__text_expanded');
-                readMore.textContent = READ_MORE_BTN_TEXT;
-                // readMore.style.position = 'absolute';
-            } else {
-                text.classList.add('comment__text_expanded');
-                readMore.textContent = READ_LESS_BTN_TEXT;
-                // readMore.style.position = 'static';
-            }
-        });
     }
     
     private renderHeader(parent: HTMLElement) {
@@ -120,7 +70,7 @@ export default class CommentComponent {
         createElement({
             parent: headerInfo,
             classes: ['comment__author'],
-            text: 'Roman Vasyutenko',
+            text: `${this.config.data.author.firstname} ${this.config.data.author.lastname}`,
         });
 
         createElement({
@@ -132,7 +82,7 @@ export default class CommentComponent {
         createElement({
             parent: headerInfo,
             classes: ['comment__time'],
-            text: '22мин',
+            text: formatTimeAgo(this.config.data.created_at),
         });
 
         const actions = createElement({
@@ -140,28 +90,65 @@ export default class CommentComponent {
             classes: ['comment__actions'],
         });
 
-        const replyAction = createElement({
-            parent: actions,
-            classes: ['comment__action'],
-        });
+        // const replyAction = createElement({
+        //     parent: actions,
+        //     classes: ['comment__action'],
+        // });
 
-        insertIcon(replyAction, {
-            name: 'reply-icon',
-            classes: ['comment__action-icon'],
-        });
+        // insertIcon(replyAction, {
+        //     name: 'reply-icon',
+        //     classes: ['comment__action-icon'],
+        // });
 
-        createElement({
-            parent: replyAction,
-            text: 'Ответить',
-        });
+        // createElement({
+        //     parent: replyAction,
+        //     text: 'Ответить',
+        // });
 
         new LikeComponent(actions, {
-            isLiked: false,
-            targetId: 'this.config.id',
-            likeCount: 12,
+            isLiked: this.config.data.is_liked,
+            targetId: this.config.data.id,
+            likeCount: this.config.data.like_count,
             classes: ['comment__action'],
-            putMethod: PostsRequests.putLike,
-            removeMethod: PostsRequests.removeLike,
+            putMethod: CommentsRequests.putLike,
+            removeMethod: CommentsRequests.deleteComment,
+        });
+    }
+
+    private renderText(parent: HTMLElement) {
+        const textWrapper = createElement({
+            parent,
+            classes: ['comment__text-wrapper'],
+        });
+    
+        const text = createElement({
+            parent: textWrapper,
+            classes: ['comment__text'],
+            text: this.config.data.text,
+        });
+    
+        const readMore = createElement({
+            tag: 'p',
+            parent: textWrapper,
+            classes: ['comment__more'],
+            text: READ_MORE_BTN_TEXT,
+            attrs: { style: 'display: none;' }
+        });
+
+        requestAnimationFrame(() => {
+            if (text.scrollHeight > text.clientHeight) {
+                readMore.style.display = 'inline-block';
+            }
+        });
+
+        readMore.addEventListener('click', () => {
+            if (text.classList.contains('comment__text_expanded')) {
+                text.classList.remove('comment__text_expanded');
+                readMore.textContent = READ_MORE_BTN_TEXT;
+            } else {
+                text.classList.add('comment__text_expanded');
+                readMore.textContent = READ_LESS_BTN_TEXT;
+            }
         });
     }
 }

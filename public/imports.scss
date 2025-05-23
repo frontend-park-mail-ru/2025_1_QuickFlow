@@ -10,10 +10,12 @@
 
 @use './Components/Post/PostComponent/PostComponent';
 @use './Components/Post/CommentsComponent/CommentsComponent';
+@use './Components/Post/CommentComponent/CommentComponent';
+
 @use './Components/MenuComponent/MenuComponent';
 @use './Components/HeaderComponent/HeaderComponent';
-@use './Components/RadioMenuComponent/RadioMenuComponent';
 
+@use './Components/RadioMenuComponent/RadioMenuComponent';
 @use './Components/Forms/LoginFormComponent/LoginFormComponent';
 @use './Components/Forms/SignupFormComponent/SignupFormComponent';
 @use './Components/AvatarComponent/AvatarComponent';

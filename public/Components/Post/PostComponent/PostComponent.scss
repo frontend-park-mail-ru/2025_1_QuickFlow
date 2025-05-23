@@ -3,8 +3,8 @@
     flex-direction: column;
     align-items: flex-start;
     max-width: 553px;
-    // width: 553px;
     gap: 16px;
+    user-select: none;
 
     width: 100%;
 
@@ -136,7 +136,6 @@
     &__pics {
         display: flex;
         overflow: hidden;
-        // width: 553px;
         position: relative;
         border-radius: 8px;
         margin-top: -4px;
@@ -146,7 +145,6 @@
     }
 
     &__slide {
-        // width: 553px;
         aspect-ratio: 4 / 5;
         display: flex;
 
@@ -156,7 +154,6 @@
     &__pic {
         border: 1px solid var(--stroke-primary);
         border-radius: 8px;
-        // width: 553px;
         height: 100%;
         object-fit: cover;
 
@@ -295,9 +292,6 @@
     }
 
     .post__pics {
-        // width: 100%;
-        // aspect-ratio: 4 / 5;
-
         width: 100vw;
         aspect-ratio: 4 / 5;
         align-self: center;
@@ -315,9 +309,6 @@
     }
 
     .post__pic {
-        // width: 100%;
-        // height: auto;
-
         width: 100%;
         height: auto;
         border: none;

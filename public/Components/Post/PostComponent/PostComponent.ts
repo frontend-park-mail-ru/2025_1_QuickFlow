@@ -15,6 +15,7 @@ import LsProfile from '@modules/LsProfile';
 import CommentsComponent from '../CommentsComponent/CommentsComponent';
 import LikeComponent from '../LikeComponent/LikeComponent';
 import SwiperComponent from '@components/SwiperComponent/SwiperComponent';
+import { Comment } from 'types/PostTypes';
 
 
 const AUTHOR_AVATAR_SIZE = 's';
@@ -26,7 +27,7 @@ const AUTHOR_NAME_DATE_DIVIDER = '•';
 const DEAFULT_IMG_ALT = 'post image';
 const DISPLAYED_ACTIONS = [
     'like',
-    // 'comment',
+    'comment',
     // 'repost'
 ];
 const RELATION_STRANGER = "stranger";
@@ -48,6 +49,8 @@ interface PostConfig {
     author_type: string;
     author: Record<string, any>;
     created_at: string;
+
+    last_comment: Comment;
 }
 
 
@@ -100,7 +103,10 @@ export default class PostComponent {
         this.renderText();
         this.renderActions();
 
-        new CommentsComponent(this.wrapper, {});
+        new CommentsComponent(this.wrapper, {
+            postId: this.config?.id,
+            lastData: this.config?.last_comment,
+        });
     }
 
     private renderFiles() {
