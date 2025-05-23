@@ -18,6 +18,7 @@ import { forms } from './EditProfileFormConfig';
 import { FILE } from '@config/config';
 import { UsersRequests } from '@modules/api';
 import LsProfile from '@modules/LsProfile';
+import networkErrorPopUp from '@utils/networkErrorPopUp';
 
 
 const ACCEPT = '.jpg, .jpeg, .png, .gif';
@@ -64,29 +65,8 @@ class EditProfileView {
             await LsProfile.update();
             this.userData = LsProfile.data;
             this.renderForm(sectionData);
-
-            // const [status, profileData] = await UsersRequests.getMyProfile();
-            // // const [status, profileData] = await UsersRequests.getProfile(getLsItem('username', ''));
-            // switch (status) {
-            //     case 200:
-            //         this.userData = profileData;
-            //         this.renderForm(sectionData);
-            //         break;
-            //     case 401:
-            //         router.go({ path: '/login' });
-            //         return;
-            //     default:
-            //         new PopUpComponent({
-            //             isError: true,
-            //             text: 'Не удалось получить данные профиля',
-            //         });
-            //         break;
-            // }
         } catch {
-            new PopUpComponent({
-                isError: true,
-                text: 'Проверьте подключение к интернету',
-            });
+            networkErrorPopUp();
         }
     }
 
@@ -249,20 +229,12 @@ class EditProfileView {
                         this.stateUpdaters[2].showError('Такой никнейм уже занят');
                     }
                 default:
-                    this.cbDefault();
+                    networkErrorPopUp();
                     break;
             }
         } catch {
-            this.cbDefault();
+            networkErrorPopUp();
         }
-    }
-
-    cbDefault() {
-        new PopUpComponent({
-            text: 'Не удалось сохранить изменеия',
-            size: "large",
-            isError: true,
-        });
     }
 
     postCbOk(newUsername: string | undefined) {

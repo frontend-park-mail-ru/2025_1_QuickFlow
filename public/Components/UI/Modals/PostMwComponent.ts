@@ -8,6 +8,7 @@ import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import { FILE, MEDIA, POST } from '@config/config';
 import { PostsRequests } from '@modules/api';
 import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
+import networkErrorPopUp from '@utils/networkErrorPopUp';
 
 
 export default class PostMwComponent extends ModalWindowComponent {
@@ -335,7 +336,7 @@ export default class PostMwComponent extends ModalWindowComponent {
                     alert('File is too large');
                     break;
                 default:
-                    this.cbFailed();
+                    networkErrorPopUp();
             }
         } else if (this.config.type === 'edit-post') {
             const [status, postData] = await PostsRequests.editPost(this.config.data.id, formData);
@@ -348,16 +349,8 @@ export default class PostMwComponent extends ModalWindowComponent {
                     alert('File is too large');
                     break;
                 default:
-                    this.cbFailed();
+                    networkErrorPopUp();
             }
         }
-    }
-
-    private cbFailed() {
-        new PopUpComponent({
-            text: 'Не удалось сохранить изменения',
-            size: "large",
-            isError: true,
-        });
     }
 }

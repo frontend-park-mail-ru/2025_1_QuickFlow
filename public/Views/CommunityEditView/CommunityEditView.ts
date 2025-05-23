@@ -18,6 +18,7 @@ import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateCompo
 import FriendComponent from '@components/FriendComponent/FriendComponent';
 import DeleteMwComponent from '@components/UI/Modals/DeleteMwComponent';
 import { CommunitiesRequests } from '@modules/api';
+import networkErrorPopUp from '@utils/networkErrorPopUp';
 
 
 const ACCEPT = '.jpg, .jpeg, .png, .gif';
@@ -117,10 +118,7 @@ class CommunityEditView {
                             case 401:
                                 return router.go({ path: '/login' });
                             default:
-                                new PopUpComponent({
-                                    isError: true,
-                                    text: 'Не удалось удалить сообщество, попробуйте позже',
-                                })
+                                networkErrorPopUp();
                                 break;
                         }
                     },
@@ -342,20 +340,12 @@ class CommunityEditView {
                     router.go({ path: '/login' });
                     break;
                 default:
-                    this.cbDefault();
+                    networkErrorPopUp();
                     break;
             }
         } catch {
-            this.cbDefault();
+            networkErrorPopUp();
         }
-    }
-
-    cbDefault() {
-        new PopUpComponent({
-            text: 'Не удалось сохранить изменеия',
-            size: "large",
-            isError: true,
-        });
     }
 
     postCbOk(newNickname: string | undefined) {

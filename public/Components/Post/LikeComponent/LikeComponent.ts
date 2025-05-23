@@ -2,6 +2,7 @@ import createElement from '@utils/createElement';
 import insertIcon from '@utils/insertIcon';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import router from '@router';
+import networkErrorPopUp from '@utils/networkErrorPopUp';
 
 
 interface LikeConfig {
@@ -85,18 +86,9 @@ export default class LikeComponent {
             default:
                 this.isLiked = oldIsLiked;
                 this.toggleLike();
-                this.renderNetworkErrorPopUp();
+                networkErrorPopUp();
                 break;
         }
-    }
-
-    private renderNetworkErrorPopUp() {
-        new PopUpComponent({
-            icon: 'close-icon',
-            size: 'large',
-            text: 'Проверьте подключение к интернету',
-            isError: true,
-        });
     }
 
     private async toggleLike() {

@@ -9,6 +9,7 @@ import { Comment, CommentRequest } from "types/PostTypes";
 import CommentComponent from "../CommentComponent/CommentComponent";
 import Router from "@router";
 import PopUpComponent from "@components/UI/PopUpComponent/PopUpComponent";
+import networkErrorPopUp from "@utils/networkErrorPopUp";
 
 
 interface CommentsConfig {
@@ -79,7 +80,7 @@ export default class CommentsComponent {
                 Router.go({ path: '/login' });
                 return;
             default:
-                this.renderNetworkErrorPopUp();
+                networkErrorPopUp();
                 return;
         }
     }
@@ -95,15 +96,6 @@ export default class CommentsComponent {
         for (const commentData of commentsData) {
             this.renderComment(commentData);   
         }
-    }
-
-    private renderNetworkErrorPopUp() {
-        new PopUpComponent({
-            icon: 'close-icon',
-            size: 'large',
-            text: 'Проверьте подключение к интернету',
-            isError: true,
-        });
     }
 
     private async renderTextareaBar() {

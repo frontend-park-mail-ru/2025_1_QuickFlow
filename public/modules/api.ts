@@ -1,6 +1,7 @@
 import ajax from '@modules/ajax';
 import convertToFormData from '@utils/convertToFormData';
 import { Comment, CommentRequest } from 'types/PostTypes';
+import { User } from 'types/UserTypes';
 
 
 export class PostsRequests {
@@ -164,11 +165,11 @@ export class UsersRequests {
         });
     }
     
-    static async getProfile(username: string): Promise<[number, Record<string, any>]> {
+    static async getProfile(username: string): Promise<[number, User]> {
         return new Promise((resolve) => {
             ajax.get({
                 url: `/profiles/${username}`,
-                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+                callback: (status: number, data: User) => resolve([status, data]),
             });
         });
     }

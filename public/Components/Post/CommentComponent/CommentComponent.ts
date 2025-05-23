@@ -147,12 +147,23 @@ export default class CommentComponent {
                     icon: 'trash-accent-icon',
                     text: 'Удалить',
                     isCritical: true,
-                    onClick: () => {
-                        CommentsRequests.deleteComment(this.config.data.id);
-                    },
+                    onClick: () => this.delete(),
                 },
             },
         });
+    }
+
+    private async delete() {
+        const status = await CommentsRequests.deleteComment(this.config.data.id);
+
+        switch (status) {
+            case 200:
+                this.element.remove();
+                break;
+            default:
+                
+                break;
+        }
     }
 
     private renderText(parent: HTMLElement) {

@@ -17,6 +17,7 @@ import { MOBILE_MAX_WIDTH } from '@config/config';
 import { FriendsRequests, UsersRequests } from '@modules/api';
 import copyToClipboard from '@utils/copyToClipboard';
 import LsProfile from '@modules/LsProfile';
+import { User } from 'types/UserTypes';
 
 
 const MOBILE_MAX_DISPLAYED_FRIENDS_COUNT = 3;
@@ -127,7 +128,7 @@ class ProfileView {
         }
     }
 
-    cbOk(data: Record<string, any>) {
+    cbOk(data: User) {
         const profileHeader = createElement({
             parent: this.containerObj?.top,
             classes: ['profile']

@@ -11,6 +11,7 @@ import router from '@router';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import { CommunitiesRequests } from '@modules/api';
 import LsProfile from '@modules/LsProfile';
+import networkErrorPopUp from '@utils/networkErrorPopUp';
 
 
 const enum Section {
@@ -126,10 +127,7 @@ class CommunitiesView {
                 router.go({ path: '/login' });
                 break;
             default:
-                new PopUpComponent({
-                    isError: true,
-                    text: 'Не удалось получить список сообществ',
-                });
+                networkErrorPopUp();
                 break;
         }
     }
