@@ -93,6 +93,10 @@ export default class CommentsComponent {
             this.showMoreBtn.remove();
         }
 
+        if (!commentsData) {
+            return;
+        }
+
         for (const commentData of commentsData) {
             this.renderComment(commentData);   
         }

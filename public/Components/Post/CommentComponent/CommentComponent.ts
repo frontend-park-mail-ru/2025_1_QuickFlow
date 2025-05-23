@@ -25,6 +25,7 @@ export default class CommentComponent {
     private parent: HTMLElement;
     private config: CommentConfig;
 
+    private divider: HTMLElement;
     public element: HTMLElement;
 
     constructor(parent: HTMLElement, config: CommentConfig) {
@@ -35,24 +36,24 @@ export default class CommentComponent {
 
     private render() {
         if (this.parent.innerHTML !== '') {
-            createElement({
+            this.divider = createElement({
                 parent: this.parent,
                 classes: ['comments__divider', 'comments__divider_small'],
             });
         }
 
-        const comment = createElement({
+        this.element = createElement({
             parent: this.parent,
             classes: ['comment'],
         });
 
-        new AvatarComponent(comment, {
+        new AvatarComponent(this.element, {
             src: this.config.data.author?.avatar_url,
             size: AVATAR_SIZE,
         });
 
         const content = createElement({
-            parent: comment,
+            parent: this.element,
             classes: ['comment__content'],
         });
 
@@ -158,10 +159,8 @@ export default class CommentComponent {
 
         switch (status) {
             case 200:
+                this.divider?.remove();
                 this.element.remove();
-                break;
-            default:
-                
                 break;
         }
     }
