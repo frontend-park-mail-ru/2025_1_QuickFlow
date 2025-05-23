@@ -15,7 +15,6 @@ import MessageInputComponent from './MessageBar/MessageBarComponent';
 const MOBILE_MAX_WIDTH = 610;
 const HEADER_AVATAR_SIZE = 'xs';
 const EMPTY_CHAT_WINDOW_TEXT = 'Выберите чат или создайте новый';
-// const CHAT_MSG_PREFIX = 'chat-msg-';
 
 const HEADER_CONTEXT_MENU_DATA = {
     disableNotify: {
@@ -260,7 +259,7 @@ export default class ChatWindowComponent {
 
     renderDropdown(parent: HTMLElement) {
         const dropdown = createElement({
-            classes: ['js-dropdown', 'dropdown', 'chat-window__dropdown'],
+            classes: ['dropdown', 'chat-window__dropdown'],
             parent,
         });
 

@@ -1,4 +1,4 @@
-import ContextMenuComponent from '@components/ContextMenuComponent/ContextMenuComponent'
+import ContextMenuComponent, { OptionConfig } from '@components/ContextMenuComponent/ContextMenuComponent'
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
 import PostMwComponent from '@components/UI/Modals/PostMwComponent';
 import DeleteMwComponent from '@components/UI/Modals/DeleteMwComponent';
@@ -116,7 +116,9 @@ export default class PostComponent {
     }
 
     private renderPics() {
-        if (!this.config.pics || this.config.pics.length === 0) return false;
+        if (!this.config.pics || !this.config.pics.length) {
+            return;
+        }
 
         const picsWrapper = createElement({
             parent: this.wrapper,
@@ -228,6 +230,10 @@ export default class PostComponent {
     }
 
     private renderText() {
+        if (!this.config.text) {
+            return;
+        }
+
         const textWrapper = createElement({
             parent: this.wrapper,
             classes: ['post__content'],
@@ -351,22 +357,7 @@ export default class PostComponent {
             });
         }
 
-        // const dropdown = createElement({
-        //     classes: ['js-dropdown', 'dropdown'],
-        //     parent: topWrapper,
-        // });
-
-        // const optionsWrapper = createElement({
-        //     classes: ['post__options'],
-        //     parent: dropdown,
-        // });
-
-        // createElement({
-        //     classes: ['post__options-icon'],
-        //     parent: optionsWrapper,
-        // });
-
-        const data: Record<string, object> = {
+        const data: Record<string, OptionConfig> = {
             copyLink: {
                 href: '/copy-link',
                 text: 'Скопировать ссылку',
@@ -391,7 +382,7 @@ export default class PostComponent {
             ADMINS_USERNAMES.includes(LsProfile.username)
         ) {
             const dropdown = createElement({
-                classes: ['js-dropdown', 'dropdown'],
+                classes: ['dropdown'],
                 parent: topWrapper,
             });
     

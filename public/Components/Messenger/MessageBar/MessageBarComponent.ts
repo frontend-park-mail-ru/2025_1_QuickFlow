@@ -121,7 +121,7 @@ export default class MessageBarComponent {
         });
 
         const dropdown = createElement({
-            classes: ['js-dropdown', 'dropdown', 'msg-bar__dropdown'],
+            classes: ['dropdown', 'msg-bar__dropdown'],
             parent: msgBarText,
         });
 

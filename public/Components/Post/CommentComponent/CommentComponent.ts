@@ -4,6 +4,10 @@ import LikeComponent from "../LikeComponent/LikeComponent";
 import { CommentsRequests } from "@modules/api";
 import { Comment } from "types/PostTypes";
 import formatTimeAgo from "@utils/formatTimeAgo";
+import getTimediff from "@utils/getTimeDifference";
+import insertIcon from "@utils/insertIcon";
+import ContextMenuComponent from "@components/ContextMenuComponent/ContextMenuComponent";
+import LsProfile from "@modules/LsProfile";
 
 
 interface CommentConfig {
@@ -82,7 +86,7 @@ export default class CommentComponent {
         createElement({
             parent: headerInfo,
             classes: ['comment__time'],
-            text: formatTimeAgo(this.config.data.created_at),
+            text: getTimediff(this.config.data.created_at, { mode: 'short' }),
         });
 
         const actions = createElement({
@@ -112,6 +116,42 @@ export default class CommentComponent {
             classes: ['comment__action'],
             putMethod: CommentsRequests.putLike,
             removeMethod: CommentsRequests.removeLike,
+        });
+
+        this.renderDropdown(actions);
+    }
+
+    private renderDropdown(parent: HTMLElement) {
+        if (this.config.data.author.id !== LsProfile.id) {
+            return;
+        }
+
+        const dropdown = createElement({
+            parent,
+            classes: [
+                'comment__action',
+                'dropdown',
+                'comment__dropdown'
+            ],
+        });
+
+        insertIcon(dropdown, {
+            name: 'options-icon',
+            classes: ['comment__action-icon'],
+        });
+
+        new ContextMenuComponent(dropdown, {
+            size: 'mini',
+            data: {
+                delete: {
+                    icon: 'trash-accent-icon',
+                    text: 'Удалить',
+                    isCritical: true,
+                    onClick: () => {
+                        CommentsRequests.deleteComment(this.config.data.id);
+                    },
+                },
+            },
         });
     }
 

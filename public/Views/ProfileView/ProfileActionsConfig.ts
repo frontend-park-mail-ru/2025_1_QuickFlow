@@ -1,20 +1,21 @@
 import DeleteMwComponent from '@components/UI/Modals/DeleteMwComponent';
 import Ajax from '@modules/ajax';
 import router from '@router';
+import { User } from 'types/UserTypes';
 
 
 export const ACTIONS_PROPERTIES = {
     stranger: [{
             text: "Добавить в друзья",
             variant: "primary",
-            onClick: function(data: any) {
+            onClick: function(data: User) {
                 Ajax.post({
                     url: '/follow',
                     body: { receiver_id: data.id },
                     callback: (status: number) => {
                         switch (status) {
                             case 200:
-                                data.relation = "following";
+                                data.relation = 'following';
                                 this.renderOtherActions(data)
                                 break;
                         }
@@ -24,7 +25,7 @@ export const ACTIONS_PROPERTIES = {
         },
         {
             icon: "/static/img/messenger-primary-icon.svg",
-            onClick: function(data: any) {
+            onClick: function(data: User) {
                 router.go({
                     path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
                 });
@@ -33,7 +34,7 @@ export const ACTIONS_PROPERTIES = {
     following: [{
             text: "Вы подписаны",
             variant: "secondary",
-            onClick: function(data: any) {
+            onClick: function(data: User) {
                 Ajax.delete({
                     url: '/follow',
                     body: { friend_id: data.id },
@@ -50,7 +51,7 @@ export const ACTIONS_PROPERTIES = {
         },
         {
             icon: "/static/img/messenger-primary-icon.svg",
-            onClick: function(data: any) {
+            onClick: function(data: User) {
                 router.go({
                     path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
                 });
@@ -59,7 +60,7 @@ export const ACTIONS_PROPERTIES = {
     followed_by: [{
             text: "Подписан на вас",
             variant: "primary",
-            onClick: function(data: any) {
+            onClick: function(data: User) {
                 Ajax.post({
                     url: '/followers/accept',
                     body: { receiver_id: data.id },
@@ -76,7 +77,7 @@ export const ACTIONS_PROPERTIES = {
         },
         {
             icon: "/static/img/messenger-primary-icon.svg",
-            onClick: function(data: any) {
+            onClick: function(data: User) {
                 router.go({
                     path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
                 });
@@ -85,7 +86,7 @@ export const ACTIONS_PROPERTIES = {
     friend: [{
             text: "Сообщение",
             variant: "primary",
-            onClick: function(data: any) {
+            onClick: function(data: User) {
                 router.go({
                     path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
                 });
@@ -93,7 +94,7 @@ export const ACTIONS_PROPERTIES = {
         },
         {
             icon: "/static/img/user-added-icon.svg",
-            onClick: function(data: any) {
+            onClick: function(data: User) {
                 const deleteFriend = () => Ajax.delete({
                     url: '/friends',
                     body: { friend_id: data.id },

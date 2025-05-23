@@ -58,7 +58,7 @@
         padding: 7px 0;
 
         &_disabled {
-            color: var(--icon-primary-disabled);
+            opacity: 0.4;
             cursor: not-allowed;
         }
     }
