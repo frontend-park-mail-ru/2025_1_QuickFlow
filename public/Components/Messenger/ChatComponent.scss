@@ -128,9 +128,13 @@
 }
 
 @media screen and (max-width: 480px) {
+    .chat {
+        height: calc(100% - 56px - 80px);
+    }
+
     .chat__msg {
         padding: 8px 16px;
-        font-size: var(--font-size-s);
+        font-size: var(--font-size-l);
         line-height: 140%;
     }
 

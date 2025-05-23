@@ -80,7 +80,17 @@
 
 @media screen and (max-width: 480px) {
     .chat-window__title {
-        font-size: var(--font-size-s);
+        font-size: var(--font-size-l);
+    }
+
+    .chat-window__header {
+        height: 56px;
+        padding: 0 16px;
+    }
+
+    .chat-window__dropdown {
+        right: 16px;
+        top: 12px;
     }
 
     .chat-window__header .avatar_xs {
