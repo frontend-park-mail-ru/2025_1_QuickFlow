@@ -14,14 +14,14 @@ const CSRF_FREE_URLS = [
 
 
 class Ajax {
-    develop: Boolean;
-    baseUrl: string;
+    private develop: boolean;
+    private baseUrl: string;
     constructor() {
         this.develop = true;
         this.baseUrl = this.detectEnvironment();
     }
 
-    detectEnvironment(): string {
+    private detectEnvironment(): string {
         if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
             return DEV_BASE_URL;
         }
@@ -29,21 +29,25 @@ class Ajax {
         return API_BASE_URL;
     }
 
-    async csrfRequest() {
+    private async csrfRequest() {
         let csrfToken = null;
 
         if (!this.develop) {
-            const csrfResponse = await fetch(`${this.baseUrl}/csrf`, {
-                method: HTTP_METHOD_GET,
-                credentials: 'include'
-            });
-            csrfToken = csrfResponse.headers.get('X-CSRF-Token');
+            try {
+                const csrfResponse = await fetch(`${this.baseUrl}/csrf`, {
+                    method: HTTP_METHOD_GET,
+                    credentials: 'include'
+                });
+                csrfToken = csrfResponse.headers.get('X-CSRF-Token');
+            } catch {
+                networkErrorPopUp();
+            }
         }
 
         return csrfToken;
     }
 
-    async fakeRequest(url: string, params: any, callback: Function) {
+    private async fakeRequest(url: string, params: any, callback: Function) {
         await new Promise(resolve => setTimeout(resolve, 30)); // Симуляция сетевой задержки
         if (!this.develop) {
             if (url === '/user') {
@@ -54,7 +58,7 @@ class Ajax {
         return false;
     }
 
-    async get({ url, params = {}, callback = () => {} }: any) {
+    public async get({ url, params = {}, callback = () => {} }: any) {
         try {
             if (await this.fakeRequest(url, params, callback)) return;
 
@@ -78,7 +82,7 @@ class Ajax {
         }
     }
 
-    async post({ url, body = {}, isFormData = false, callback = () => {} }: any) {
+    public async post({ url, body = {}, isFormData = false, callback = () => {} }: any) {
         let response;
         try {
             const headers: Record<string, any> = {};
@@ -112,7 +116,7 @@ class Ajax {
         }
     }
     
-    async delete({ url, params = {}, body = {}, callback = () => {} }: any) {
+    public async delete({ url, params = {}, body = {}, callback = () => {} }: any) {
         try {
             const headers: Record<string, any> = {};
             if (!CSRF_FREE_URLS.includes(url)) {
@@ -145,7 +149,7 @@ class Ajax {
         }
     }
 
-    async put({ url, body = {}, isFormData = false, callback = () => {} }: any) {
+    public async put({ url, body = {}, isFormData = false, callback = () => {} }: any) {
         let response;
         try {
             const headers: Record<string, any> = {};
