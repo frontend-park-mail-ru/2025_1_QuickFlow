@@ -159,7 +159,7 @@ export default class CommentComponent {
 
         switch (status) {
             case 200:
-                this.divider?.remove();
+                this?.divider?.remove();
                 this.element.remove();
                 break;
         }
