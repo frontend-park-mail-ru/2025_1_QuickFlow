@@ -1,9 +1,9 @@
 .msg-bar__wrapper {
-    width: 100vw;
+    width: 100%;
+    position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    position: fixed;
     padding: 0 16px 16px 16px;
     z-index: 2;
     background: var(--background-white);
@@ -165,6 +165,12 @@
 }
 
 @media screen and (max-width: 480px) {
+    .msg-bar__wrapper {
+        width: 100vw;
+        position: fixed;
+        padding-bottom: 34px;
+    }
+
     .msg-bar__msg {
         line-height: 140%;
     }
