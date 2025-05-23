@@ -35,12 +35,15 @@ export default class CommentComponent {
     }
 
     private render() {
-        if (this.parent.innerHTML !== '') {
-            this.divider = createElement({
-                parent: this.parent,
-                classes: ['comments__divider', 'comments__divider_small'],
-            });
-        }
+        this.divider = createElement({
+            parent: this.parent,
+            classes: [
+                'comments__divider',
+                this.parent.innerHTML !== '' ? 
+                    'comments__divider_small' :
+                    'comments__divider'
+            ],
+        });
 
         this.element = createElement({
             parent: this.parent,

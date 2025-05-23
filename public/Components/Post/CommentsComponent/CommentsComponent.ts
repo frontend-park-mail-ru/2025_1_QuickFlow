@@ -180,10 +180,6 @@ export default class CommentsComponent {
                 classes: ['comments'],
             });
             this.wrapper.prepend(this.element);
-
-            this.wrapper.prepend(createElement({
-                classes: ['comments__divider'],
-            }));
         }
 
         new CommentComponent(this.element, { data: commentData });
