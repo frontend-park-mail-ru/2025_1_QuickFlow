@@ -1,3 +1,4 @@
+import networkErrorPopUp from '@utils/networkErrorPopUp';
 import { users } from '../mocks'
 
 
@@ -56,7 +57,6 @@ class Ajax {
     async get({ url, params = {}, callback = () => {} }: any) {
         try {
             if (await this.fakeRequest(url, params, callback)) return;
-            // if (url === '/user-dev-false') url = '/feed';
 
             const queryString = new URLSearchParams(params).toString();
             const fullUrl = `${this.baseUrl}${url}${queryString ? `?${queryString}` : ''}`;
@@ -73,6 +73,7 @@ class Ajax {
 
             callback(response.status, data);
         } catch (error) {
+            networkErrorPopUp();
             console.error('GET request failed:', error);
         }
     }
@@ -105,6 +106,7 @@ class Ajax {
     
             callback(response.status, data);
         } catch (error) {
+            networkErrorPopUp();
             console.error('POST request failed:', error);
             callback(response?.status || 500);
         }
@@ -137,6 +139,7 @@ class Ajax {
     
             callback(response.status, data);
         } catch (error) {
+            networkErrorPopUp();
             console.error('DELETE request failed:', error);
             callback(500);
         }
@@ -170,6 +173,7 @@ class Ajax {
     
             callback(response.status, data);
         } catch (error) {
+            networkErrorPopUp();
             console.error('PUT request failed:', error);
             callback(response?.status || 500);
         }
