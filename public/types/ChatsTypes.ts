@@ -1,7 +1,9 @@
 import { UserPublic } from "./UserTypes";
 
 export interface UnreadChatsCountResponse {
-    chats_count: number;
+    payload: {
+        chats_count: number;
+    }
 }
 
 export interface Chat {

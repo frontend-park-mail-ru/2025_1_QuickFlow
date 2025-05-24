@@ -149,9 +149,9 @@ export default class MenuComponent {
                 return;
         }
 
-        if (unreadChatsData.chats_count) {
+        if (unreadChatsData.payload.chats_count) {
             new CounterComponent(this.menuElements.messenger, {
-                value: unreadChatsData.chats_count,
+                value: unreadChatsData.payload.chats_count,
                 classes: ['menu__counter'],
             });
         }
