@@ -1,37 +1,37 @@
 import ajax from '@modules/ajax';
 import convertToFormData from '@utils/convertToFormData';
-import { Comment, CommentRequest } from 'types/PostTypes';
+import { Comment, CommentRequest, Post, PostRequest, PostResponse } from 'types/PostTypes';
+import { UploadData, UploadRequest } from 'types/UploadTypes';
 import { User } from 'types/UserTypes';
 
 
 export class PostsRequests {
-    static async createPost(body: Record<string, any>): Promise<[number, Record<string, any>]> {
+    static async createPost(body: PostRequest): Promise<[number, PostResponse]> {
         return new Promise((resolve) => {
             ajax.post({
                 url: `/post`,
                 body,
-                isFormData: true,
-                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+                callback: (status: number, data: PostResponse) => resolve([status, data]),
             });
         });
     }
 
-    static async getPost(post_id: string): Promise<[number, Record<string, any>]> {
+    static async getPost(post_id: string): Promise<[number, Post]> {
         return new Promise((resolve) => {
             ajax.get({
                 url: `/posts/${post_id}`,
-                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+                callback: (status: number, data: Post) => resolve([status, data]),
             });
         });
     }
 
-    static async editPost(post_id: string, body: Record<string, any>): Promise<[number, Record<string, any>]> {
+    static async editPost(post_id: string, body: PostRequest): Promise<[number, PostResponse]> {
         return new Promise((resolve) => {
             ajax.put({
                 url: `/posts/${post_id}`,
                 body,
                 isFormData: true,
-                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+                callback: (status: number, data: PostResponse) => resolve([status, data]),
             });
         });
     }
@@ -142,13 +142,13 @@ export class AuthRequests {
 
 
 export class FilesRequests {
-    static async upload(data: FormData): Promise<[number, Record<string, any>]> {
+    static async upload(data: UploadRequest): Promise<[number, UploadData]> {
         return new Promise((resolve) => {
             ajax.post({
                 url: '/upload',
                 isFormData: true,
-                body: data,
-                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+                body: convertToFormData(data),
+                callback: (status: number, data: UploadData) => resolve([status, data]),
             });
         });
     }

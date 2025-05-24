@@ -6,9 +6,12 @@ import FileInputComponent from '@components/UI/FileInputComponent/FileInputCompo
 import ModalWindowComponent from '@components/UI/Modals/ModalWindowComponent';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import { FILE, MEDIA, POST } from '@config/config';
-import { PostsRequests } from '@modules/api';
+import { FilesRequests, PostsRequests } from '@modules/api';
 import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
 import networkErrorPopUp from '@utils/networkErrorPopUp';
+import { PostRequest } from 'types/PostTypes';
+import { UploadRequest } from 'types/UploadTypes';
+import Router from '@router';
 
 
 export default class PostMwComponent extends ModalWindowComponent {
@@ -283,12 +286,9 @@ export default class PostMwComponent extends ModalWindowComponent {
         this.button.disable();
 
         if (
-            !text && (
-                !this.mediaInput ||
-                !this.mediaInput.input ||
-                !this.mediaInput.input.files ||
-                !this.mediaInput.input.files.length
-            )
+            !text &&
+            !this?.mediaInput?.input?.files?.length &&
+            !this?.filesInput?.input?.files?.length
         ) return;
 
         if (this.mediaInput.isLarge) {
@@ -305,28 +305,49 @@ export default class PostMwComponent extends ModalWindowComponent {
             });
         }
 
-        const formData = new FormData();
-        formData.append('text', text);
+        const postReqData: PostRequest = {};
+        postReqData.text = text;
 
-        if (this.config.target === 'community') {
-            console.log(this.config?.params);
-            formData.append('author_id', this.config?.params?.author_id);
-            formData.append('author_type', 'community');
+        const uploadReqData: UploadRequest = {};
+
+        // const formData = new FormData();
+        // formData.append('text', text);
+
+        if (this?.mediaInput?.input?.files?.length) {
+            uploadReqData.media = this.mediaInput.input.files;
         }
 
-        if (
-            this.mediaInput &&
-            this.mediaInput.input &&
-            this.mediaInput.input.files &&
-            this.mediaInput.input.files.length > 0
-        ) {
-            for (const file of this.mediaInput.input.files) {
-                formData.append('pics', file);
+        if (this?.filesInput?.input?.files?.length) {
+            uploadReqData.files = this.filesInput.input.files;
+        }
+
+        if (Object.keys(uploadReqData).length) {
+            const [status, uploadData] = await FilesRequests.upload(uploadReqData);
+            switch (status) {
+                case 200:
+                    break;
+                case 401:
+                    Router.go({ path: '/login' });
+                    return;
+                default:
+                    networkErrorPopUp({
+                        text: 'Не удалось загрузить вложения',
+                    });
+                    return;
             }
+
+            postReqData.media = uploadData.payload.media;
+            postReqData.files = uploadData.payload.files;
+            postReqData.audio = uploadData.payload.audio;
+        }
+
+        if (this.config.target === 'community') {
+            postReqData.author_id = this.config?.params?.author_id;
+            postReqData.author_type = 'community';
         }
 
         if (this.config.type === 'create-post') {
-            const [status, postData] = await PostsRequests.createPost(formData);
+            const [status, postData] = await PostsRequests.createPost(postReqData);
             switch (status) {
                 case 200:
                     this.config.renderCreatedPost(postData?.payload);
@@ -339,7 +360,7 @@ export default class PostMwComponent extends ModalWindowComponent {
                     networkErrorPopUp();
             }
         } else if (this.config.type === 'edit-post') {
-            const [status, postData] = await PostsRequests.editPost(this.config.data.id, formData);
+            const [status, postData] = await PostsRequests.editPost(this.config.data.id, postReqData);
             switch (status) {
                 case 200:
                     this.config.onAjaxEditPost(postData?.payload);

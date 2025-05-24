@@ -11,6 +11,7 @@ import { FilesRequests } from '@modules/api';
 import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
 import EmojiBarComponent from './EmojiBarComponent/EmojiBarComponent';
 import insertSym from '@utils/insertSym';
+import { UploadRequest } from 'types/UploadTypes';
 
 
 const MOBILE_MAX_WIDTH = 610;
@@ -296,15 +297,20 @@ export default class MessageBarComponent {
                 return;
             }
 
-            const formData = new FormData();
-            for (const media of this.mediaInput.input.files) {
-                formData.append('media', media);
-            }
-            for (const file of this.fileInput.input.files) {
-                formData.append('files', file);
-            }
+            // const formData = new FormData();
+            // for (const media of this.mediaInput.input.files) {
+            //     formData.append('media', media);
+            // }
+            // for (const file of this.fileInput.input.files) {
+            //     formData.append('files', file);
+            // }
 
-            const [status, mediaData]: [number, UploadData] = await FilesRequests.upload(formData);
+            const dataToUpload: UploadRequest = {
+                media: this.mediaInput.input.files,
+                files: this.fileInput.input.files,
+            };
+
+            const [status, mediaData]: [number, UploadData] = await FilesRequests.upload(dataToUpload);
             switch (status) {
                 case 200:
                     break;

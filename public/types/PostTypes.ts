@@ -2,6 +2,15 @@ import { Community } from "./CommunityTypes";
 import { UserPublic } from "./UserTypes";
 
 
+export interface PostRequest {
+    text?: string;
+    media?: string[];
+    files?: string[];
+    audio?: string[];
+    author_id?: string;
+    author_type?: 'user' | 'community';
+}
+
 interface BasePost {
     id: string;
     text?: string;
@@ -30,6 +39,9 @@ export interface CommunityPost extends BasePost {
 
 export type Post = UserPost | CommunityPost;
 
+export interface PostResponse {
+    payload: Post;
+}
 
 export interface CommentRequest {
     text?: string;

@@ -103,7 +103,14 @@ export default class CommentsComponent {
             return;
         }
 
-        this.totalFetchedCount += commentsData.length;
+        for (const commentData of commentsData) {
+            if (commentData.id === this.config.lastData.id) {
+                continue;
+            }
+            this.renderComment(commentData);
+            this.lastTs = commentData.created_at;
+            this.totalFetchedCount++;
+        }
 
         if (
             commentsData.length < COMMENTS_FETCH_COUNT ||
@@ -111,12 +118,6 @@ export default class CommentsComponent {
         ) {
             this.showMoreBtn.remove();
         }
-
-        for (const commentData of commentsData) {
-            this.renderComment(commentData);
-        }
-
-        this.lastTs = commentsData[0].created_at;
     }
 
     private async renderTextareaBar() {
