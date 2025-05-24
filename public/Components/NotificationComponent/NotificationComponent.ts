@@ -15,13 +15,13 @@ export default class NotificationComponent {
     static container: HTMLElement | null = null;
 
     static initContainer() {
-        console.log(NotificationComponent.container);
         if (!NotificationComponent.container) {
             NotificationComponent.container = createElement({
-                parent: document.querySelector('.main'),
                 classes: ['notification__container']
             });
         }
+        NotificationComponent.container.remove();
+        document.querySelector('.main').appendChild(NotificationComponent.container);
     }
 
     constructor(config: Record<string, any>) {
