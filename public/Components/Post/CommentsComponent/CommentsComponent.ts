@@ -2,13 +2,11 @@ import AvatarComponent from "@components/AvatarComponent/AvatarComponent";
 import LsProfile from "@modules/LsProfile";
 import createElement from "@utils/createElement";
 import insertIcon from "@utils/insertIcon";
-import LikeComponent from "../LikeComponent/LikeComponent";
 import { CommentsRequests, PostsRequests } from "@modules/api";
 import TextareaComponent from "@components/UI/TextareaComponent/TextareaComponent";
 import { Comment, CommentRequest } from "types/PostTypes";
 import CommentComponent from "../CommentComponent/CommentComponent";
 import Router from "@router";
-import PopUpComponent from "@components/UI/PopUpComponent/PopUpComponent";
 import networkErrorPopUp from "@utils/networkErrorPopUp";
 import EmojiBarComponent from "@components/Messenger/MessageBar/EmojiBarComponent/EmojiBarComponent";
 import insertSym from "@utils/insertSym";
@@ -17,6 +15,7 @@ import insertSym from "@utils/insertSym";
 interface CommentsConfig {
     lastData: Comment;
     postId: string;
+    commentsCount: number;
 }
 
 
@@ -38,6 +37,7 @@ export default class CommentsComponent {
     private lastTs: string | null = null;
     private sendBtn: HTMLElement;
     private showMoreBtn: HTMLElement | null = null;
+    private totalFetchedCount: number = 0;
 
     constructor(parent: HTMLElement, config: CommentsConfig) {
         this.parent = parent;
@@ -61,12 +61,17 @@ export default class CommentsComponent {
         }
 
         this.renderComment(this.config.lastData);
+        this.totalFetchedCount++;
+
+        if (this.config.commentsCount === this.totalFetchedCount) {
+            return;
+        }
 
         this.showMoreBtn = createElement({
             parent: this.wrapper,
             classes: ['comments__more'],
             text: SHOW_NEXT_COMMENTS,
-        });
+        });   
 
         this.showMoreBtn.addEventListener('click', () => this.fetchComment());
     }
@@ -90,7 +95,8 @@ export default class CommentsComponent {
     private renderFetchedComments(commentsData: Comment[]) {
         if (
             !commentsData ||
-            commentsData.length < COMMENTS_FETCH_COUNT
+            commentsData.length < COMMENTS_FETCH_COUNT ||
+            this.totalFetchedCount === this.config.commentsCount
         ) {
             this.showMoreBtn.remove();
         }
@@ -100,7 +106,8 @@ export default class CommentsComponent {
         }
 
         for (const commentData of commentsData) {
-            this.renderComment(commentData);   
+            this.renderComment(commentData);
+            this.totalFetchedCount++;
         }
     }
 

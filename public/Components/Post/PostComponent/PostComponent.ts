@@ -15,7 +15,7 @@ import LsProfile from '@modules/LsProfile';
 import CommentsComponent from '../CommentsComponent/CommentsComponent';
 import LikeComponent from '../LikeComponent/LikeComponent';
 import SwiperComponent from '@components/SwiperComponent/SwiperComponent';
-import { Comment } from 'types/PostTypes';
+import { Comment, CommunityPost, Post, UserPost } from 'types/PostTypes';
 
 
 const AUTHOR_AVATAR_SIZE = 's';
@@ -39,19 +39,10 @@ const ADMINS_USERNAMES = [
 ];
 
 
-interface PostConfig {
-    is_liked: boolean;
-    id: string;
+type PostConfig = (UserPost | CommunityPost) & {
     position: 'top' | 'bottom' | 'same';
-    pics: string[];
-    like_count: number;
-    text: string;
-    author_type: string;
-    author: Record<string, any>;
-    created_at: string;
+};
 
-    last_comment: Comment;
-}
 
 
 export default class PostComponent {
@@ -106,6 +97,7 @@ export default class PostComponent {
         new CommentsComponent(this.wrapper, {
             postId: this.config?.id,
             lastData: this.config?.last_comment,
+            commentsCount: this.config?.comment_count,
         });
     }
 
@@ -330,7 +322,10 @@ export default class PostComponent {
             text: `${getTimeDifference(this.config?.created_at)}`,
         });
 
-        if (DISPLAYED_RELATIONS.includes(this.config?.author?.relation)) {
+        if (
+            this.config?.author_type === 'user' &&
+            DISPLAYED_RELATIONS.includes(this.config?.author?.relation)
+        ) {
             const isStranger = this.config?.author?.relation === RELATION_STRANGER;
             const actionBtn = createElement({
                 tag: 'a',
@@ -377,8 +372,8 @@ export default class PostComponent {
         };
 
         if (
-            this.config?.author?.username === LsProfile.username ||
-            this.config?.author?.owner?.username === LsProfile.username ||
+            (this.config.author_type === 'user' && this.config?.author?.username === LsProfile.username) ||
+            (this.config.author_type === 'community' && this.config?.author?.owner?.username === LsProfile.username) ||
             ADMINS_USERNAMES.includes(LsProfile.username)
         ) {
             const dropdown = createElement({
@@ -451,6 +446,10 @@ export default class PostComponent {
     }
 
     private actionCbOk() {
+        if (this.config?.author_type !== 'user') {
+            return;
+        }
+
         const actions = Array.from(
             document.getElementsByClassName(`js-post-action-${this.config?.author?.username}`)
         );
