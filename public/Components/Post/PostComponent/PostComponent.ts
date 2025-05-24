@@ -16,6 +16,7 @@ import CommentsComponent from '../CommentsComponent/CommentsComponent';
 import LikeComponent from '../LikeComponent/LikeComponent';
 import SwiperComponent from '@components/SwiperComponent/SwiperComponent';
 import { Comment, CommunityPost, Post, UserPost } from 'types/PostTypes';
+import VideoComponent from '@components/UI/VideoComponent/VideoComponent';
 
 
 const AUTHOR_AVATAR_SIZE = 's';
@@ -89,7 +90,7 @@ export default class PostComponent {
         }
 
         this.renderTop();
-        this.renderPics();
+        this.renderMedia();
         this.renderFiles();
         this.renderText();
         this.renderActions();
@@ -107,7 +108,7 @@ export default class PostComponent {
         // }
     }
 
-    private renderPics() {
+    private renderMedia() {
         if (!this.config.pics || !this.config.pics.length) {
             return;
         }
@@ -123,16 +124,29 @@ export default class PostComponent {
         });
 
         if (this.config.pics && this.config.pics.length > 0) {
-            this.config.pics.forEach((pic: string) => {
+            this.config.pics.forEach((mediaUrl: string) => {
                 const slide = createElement({
                     parent: slider,
                     classes: ['post__slide'],
                 });
+
+                if (mediaUrl.endsWith('.mp4')) {
+                    new VideoComponent(slide, {
+                        src: mediaUrl,
+                        classes: ['post__pic'],
+                        loop: true,
+                        autoplay: true,
+                        muted: true,
+                        playsInline: true,
+                    });
+                    return;
+                }
+
                 createElement({
                     parent: slide,
                     classes: ['post__pic'],
                     attrs: {
-                        src: pic,
+                        src: mediaUrl,
                         alt: DEAFULT_IMG_ALT,
                         loading: "lazy",
                     }
@@ -151,7 +165,8 @@ export default class PostComponent {
 
         slider.addEventListener('click', (e) => {
             if (
-                !(e.target instanceof HTMLImageElement) ||
+                (!(e.target instanceof HTMLImageElement) &&
+                !(e.target instanceof HTMLVideoElement)) ||
                 swiper.wasDragging
             ) return;
 
