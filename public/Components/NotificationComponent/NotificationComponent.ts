@@ -15,6 +15,7 @@ export default class NotificationComponent {
     static container: HTMLElement | null = null;
 
     static initContainer() {
+        console.log(NotificationComponent.container);
         if (!NotificationComponent.container) {
             NotificationComponent.container = createElement({
                 parent: document.querySelector('.main'),
