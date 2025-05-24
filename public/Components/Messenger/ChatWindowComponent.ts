@@ -88,6 +88,7 @@ export default class ChatWindowComponent {
                         receiver_id: profileData.id,
                         username: profileData.profile.username,
                     };
+                    setLsItem('active-chat', `chat-${this._chatData.id}`);
                     this.renderHeader();
                     // this.renderMessageInput();
                     this.renderChat();
