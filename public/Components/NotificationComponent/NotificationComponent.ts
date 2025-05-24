@@ -1,4 +1,5 @@
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
+import Router from '@router';
 import createElement from '@utils/createElement';
 
 
@@ -57,6 +58,10 @@ export default class NotificationComponent {
     }
 
     private renderMsg() {
+        this.element.onclick = () => {
+            Router.go({ path: `/messenger/${this.config?.data?.sender?.username}` });
+        }
+
         new AvatarComponent(this.element, {
             src: this.config?.data?.sender?.avatar_url || '',
             size: 'xs',
