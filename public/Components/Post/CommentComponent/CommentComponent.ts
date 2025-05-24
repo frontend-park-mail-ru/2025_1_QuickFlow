@@ -157,6 +157,17 @@ export default class CommentComponent {
         });
     }
 
+    private updateActionCounter() {
+        const counter = this.parent
+            .closest('.post')
+            .querySelector('.js-post-action-counter-comment');
+
+        if (!counter) {
+            return;
+        }
+        counter.textContent = `${+counter.textContent - 1}`;
+    }
+
     private async delete() {
         const status = await CommentsRequests.deleteComment(this.config.data.id);
 
@@ -164,6 +175,7 @@ export default class CommentComponent {
             case 200:
                 this?.divider?.remove();
                 this.element.remove();
+                this.updateActionCounter();
                 break;
         }
     }

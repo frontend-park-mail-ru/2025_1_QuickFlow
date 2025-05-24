@@ -42,6 +42,7 @@
         width: 100%;
         align-items: start;
         padding-top: 8px;
+        position: relative;
 
         &-avatar {
             padding: 4px 0;
@@ -67,5 +68,23 @@
         background: var(--background-white);
         height: 36px;
         min-height: 36px;
+        line-height: var(--line-height-m);
+        padding-right: 38px;
+    }
+
+    &__textarea-wrapper {
+        width: 100%;
+        position: relative;
+
+        & .emoji-bar__icon-wrapper {
+            position: absolute;
+            top: 0;
+            right: 2px;
+            background: none;
+
+            &:hover {
+                background: none;
+            }
+        }
     }
 }

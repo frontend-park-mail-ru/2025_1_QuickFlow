@@ -10,6 +10,7 @@ import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import { FilesRequests } from '@modules/api';
 import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
 import EmojiBarComponent from './EmojiBarComponent/EmojiBarComponent';
+import insertSym from '@utils/insertSym';
 
 
 const MOBILE_MAX_WIDTH = 610;
@@ -23,20 +24,13 @@ const MEDIA_CONTEXT_MENU_DATA = {
         icon: 'primary-photo-icon',
         href: 'media',
     },
-    // video: {
-    //     text: 'Видео',
-    //     icon: 'videocamera-icon',
-    // },
-    // music: {
-    //     text: 'Музыка',
-    //     icon: 'primary-music-icon',
-    // },
     file: {
         text: 'Файл',
         icon: 'file-icon',
         href: 'file',
     },
 };
+
 
 interface MessageBarConfig {
     chatData: Record<string, any>;
@@ -72,30 +66,6 @@ export default class MessageBarComponent {
         this.config = config;
         this.isMobile = window.innerWidth <= MOBILE_MAX_WIDTH;
         this.render();
-    }
-
-    private addEmoji(emoji: string) {
-        const el = this.element;
-        const start = el.selectionStart ?? 0;
-        const end = el.selectionEnd ?? 0;
-        const value = el.value;
-    
-        // Проверка на максимальную длину с учётом вставки
-        if (value.length - (end - start) + emoji.length > MSG.MAX_LEN) {
-            return;
-        }
-    
-        // Вставляем эмоджи на место выделения или курсора
-        const newValue = value.slice(0, start) + emoji + value.slice(end);
-    
-        el.value = newValue;
-    
-        // Перемещаем курсор сразу после вставленного эмоджи
-        const cursorPos = start + emoji.length;
-        el.selectionStart = el.selectionEnd = cursorPos;
-    
-        el.dispatchEvent(new Event('input', { bubbles: true }));
-        el.focus();
     }
 
     private render() {
@@ -218,6 +188,12 @@ export default class MessageBarComponent {
         this.sendBtn.addEventListener('click', () => this.sendMessage());
 
         this.handleMessageInput();
+    }
+
+    private addEmoji(emoji: string) {
+        insertSym(this.element, emoji, {
+            maxLength: MSG.MAX_LEN,
+        });
     }
 
     private handleMessageInput() {

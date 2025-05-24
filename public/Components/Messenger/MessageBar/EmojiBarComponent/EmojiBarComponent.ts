@@ -5,8 +5,8 @@ import insertIcon from "@utils/insertIcon";
 
 
 interface EmojiBarConfig {
-    addToMessage: (emojiSym: string) => void;
     sendSticker: (stickerUrl: string) => void;
+    addToMessage: (emojiSym: string) => void;
 }
 
 const STICKER_URLS = [

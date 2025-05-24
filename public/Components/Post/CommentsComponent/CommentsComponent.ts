@@ -10,6 +10,8 @@ import CommentComponent from "../CommentComponent/CommentComponent";
 import Router from "@router";
 import PopUpComponent from "@components/UI/PopUpComponent/PopUpComponent";
 import networkErrorPopUp from "@utils/networkErrorPopUp";
+import EmojiBarComponent from "@components/Messenger/MessageBar/EmojiBarComponent/EmojiBarComponent";
+import insertSym from "@utils/insertSym";
 
 
 interface CommentsConfig {
@@ -114,7 +116,12 @@ export default class CommentsComponent {
             class: 'comments__bar-avatar',
         });
 
-        this.textarea = new TextareaComponent(bar, {
+        const textareaWrapper = createElement({
+            parent: bar,
+            classes: ['comments__textarea-wrapper'],
+        });
+
+        this.textarea = new TextareaComponent(textareaWrapper, {
             placeholder: BAR_PLACEHOLDER,
             name: 'comment',
             maxLength: COMMENT_MAX_LENGTH,
@@ -123,11 +130,26 @@ export default class CommentsComponent {
         });
         this.textarea.addListener(this.handleInput.bind(this));
 
+        new EmojiBarComponent(textareaWrapper, {
+            addToMessage: this.addEmoji.bind(this),
+            sendSticker: this.sendSticker.bind(this),
+        });
+
         this.sendBtn = await insertIcon(bar, {
             name: 'plane-icon',
             classes: ['comments__send-icon', 'comments__send-icon_disabled'],
         });
         this.sendBtn.addEventListener('click', this.sendComment.bind(this));
+    }
+
+    private addEmoji(emoji: string) {
+        insertSym(this.textarea.textarea, emoji, {
+            maxLength: COMMENT_MAX_LENGTH,
+        });
+    }
+
+    private sendSticker() {
+        console.log('Sticker is sent');
     }
 
     private async sendComment() {
@@ -144,11 +166,20 @@ export default class CommentsComponent {
             case 200:
                 this.renderComment(commentData);
                 this.clearTextarea();
+                this.updateActionCounter();
                 break;
             case 401:
                 Router.go({ path: '/login' });
                 return;
         }
+    }
+
+    private updateActionCounter() {
+        const counter = this.parent.querySelector('.js-post-action-counter-comment');
+        if (!counter) {
+            return;
+        }
+        counter.textContent = `${+counter.textContent + 1}`;
     }
 
     private clearTextarea() {
@@ -169,10 +200,6 @@ export default class CommentsComponent {
         el.style.height = 'auto';
         el.style.height = `${this.textarea.textarea.scrollHeight + EXTRA_FIX_PX}px`;
     }
-
-    // private async fetchComments() {
-    //     const [status, commentsData] = await PostsRequests.getComments();
-    // }
 
     private renderComment(commentData: Comment) {
         if (!this.element) {

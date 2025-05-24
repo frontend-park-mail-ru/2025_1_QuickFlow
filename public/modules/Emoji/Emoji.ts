@@ -104,7 +104,6 @@ export default abstract class Emoji {
     // Найти эмодзи по части тега или части названия (поиск по подстроке)
     public static async search(query: string, limit: number): Promise<[number, Record<string, EmojiEntry[]>]> {
         const q = query.toLowerCase();
-        console.log(q);
 
         const result: [number, Record<string, EmojiEntry[]>] = [
             200,
@@ -115,8 +114,6 @@ export default abstract class Emoji {
                 )
             }
         ];
-
-        console.log(result);
 
         return result;
     }
