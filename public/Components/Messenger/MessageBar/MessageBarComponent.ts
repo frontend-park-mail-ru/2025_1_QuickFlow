@@ -12,6 +12,7 @@ import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAtt
 import EmojiBarComponent from './EmojiBarComponent/EmojiBarComponent';
 import insertSym from '@utils/insertSym';
 import { UploadRequest } from 'types/UploadTypes';
+import networkErrorPopUp from '@utils/networkErrorPopUp';
 
 
 const MOBILE_MAX_WIDTH = 610;
@@ -297,14 +298,6 @@ export default class MessageBarComponent {
                 return;
             }
 
-            // const formData = new FormData();
-            // for (const media of this.mediaInput.input.files) {
-            //     formData.append('media', media);
-            // }
-            // for (const file of this.fileInput.input.files) {
-            //     formData.append('files', file);
-            // }
-
             const dataToUpload: UploadRequest = {
                 media: this.mediaInput.input.files,
                 files: this.fileInput.input.files,
@@ -315,11 +308,12 @@ export default class MessageBarComponent {
                 case 200:
                     break;
                 default:
-                    return new PopUpComponent({
-                        text: 'Не удалось загрузить файлы, попробуйте снова позже',
-                        isError: true,
-                    });
+                    networkErrorPopUp({ text: 'Не удалось загрузить вложения, попробуйте позже' });
+                    return;
             }
+
+            this.mediaInput.clear();
+            this.fileInput.clear();
 
             if (mediaData?.payload?.media) {
                 wsPayload['media'] = mediaData.payload.media;

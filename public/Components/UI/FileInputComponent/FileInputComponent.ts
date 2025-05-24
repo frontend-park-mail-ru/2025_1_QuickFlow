@@ -336,7 +336,9 @@ export default class FileInputComponent {
         this.updateInputFiles();
         wrapper.remove();
     
-        if (!this.input) return;
+        if (!this.input) {
+            return;
+        }
     
         const maxCount = this.config.maxCount ?? Infinity;
         this.input.disabled = this.files.length >= maxCount;
@@ -346,11 +348,23 @@ export default class FileInputComponent {
         const event = new Event('change', { bubbles: true });
         this.input.dispatchEvent(event);
     }
+
+    public clear() {
+        this.files = [];
+        this.updateInputFiles();
+
+        if (!this.input) {
+            return;
+        }
     
+        const maxCount = this.config.maxCount ?? Infinity;
+        this.input.disabled = this.files.length >= maxCount;
+    
+        this.input.value = '';
 
-
-
-
+        const event = new Event('change', { bubbles: true });
+        this.input.dispatchEvent(event);
+    }
     
     addListener(listener: any) {
         if (!this.input) return;

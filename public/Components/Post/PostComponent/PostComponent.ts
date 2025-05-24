@@ -15,8 +15,10 @@ import LsProfile from '@modules/LsProfile';
 import CommentsComponent from '../CommentsComponent/CommentsComponent';
 import LikeComponent from '../LikeComponent/LikeComponent';
 import SwiperComponent from '@components/SwiperComponent/SwiperComponent';
-import { Comment, CommunityPost, Post, UserPost } from 'types/PostTypes';
+import { CommunityPost, UserPost } from 'types/PostTypes';
 import VideoComponent from '@components/UI/VideoComponent/VideoComponent';
+import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
+import downloadFile from '@utils/downloadFile';
 
 
 const AUTHOR_AVATAR_SIZE = 's';
@@ -103,9 +105,36 @@ export default class PostComponent {
     }
 
     private renderFiles() {
-        // for (const file of this.config.files) {
+        if (!this?.config?.files?.length) {
+            return;
+        }
 
-        // }
+        const files = createElement({
+            parent: this.wrapper,
+            classes: ['post__files'],
+        });
+
+        new SwiperComponent(null, {
+            picsWrapper: files,
+            picsCount: this.config.files.length,
+            slider: files,
+            hasPaginator: true,
+            isHandlingMouse: false,
+            isHandlingTouch: false,
+        });
+
+        for (const fileUrl of this.config.files) {
+            const attachment = new FileAttachmentComponent(files, {
+                type: 'file_attached',
+                dataUrl: fileUrl,
+                classes: ['msg__file'],
+            });
+
+            attachment.element.addEventListener('click', async (e) => {
+                e.preventDefault();
+                await downloadFile(fileUrl);
+            });
+        }
     }
 
     private renderMedia() {
@@ -113,13 +142,13 @@ export default class PostComponent {
             return;
         }
 
-        const picsWrapper = createElement({
+        const mediaWrapper = createElement({
             parent: this.wrapper,
             classes: ['post__pics'],
         });
 
         const slider = createElement({
-            parent: picsWrapper,
+            parent: mediaWrapper,
             classes: ['post__slider'],
         });
 
@@ -156,7 +185,7 @@ export default class PostComponent {
 
         const swiper = new SwiperComponent(null, {
             slider,
-            picsWrapper,
+            picsWrapper: mediaWrapper,
             picsCount: this.config.media.length,
             hasPaginator: true,
             isHandlingMouse: true,

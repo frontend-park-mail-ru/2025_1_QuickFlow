@@ -59,7 +59,7 @@ export default class SwiperComponent {
             this.handleTouch();
         }
 
-        this.config.slider.querySelectorAll('img').forEach(img => {
+        this.config.slider?.querySelectorAll('img')?.forEach(img => {
             img.setAttribute('draggable', 'false');
         });
     }

@@ -1,32 +1,3 @@
-export const post = {
-    payload: {
-        id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
-        author: {
-            id: "b143b529-9925-450f-9d26-1255658a0a8f",
-            username: "rvasutenko",
-            avatar_url: "/avatars/avatar.jpg",
-            firstname: "Илья",
-            lastname: "Мациевский"
-        },
-        text: 'Аԥсны (Абхазия) в переводе с абхазского — "страна души". И действительно, поездка туда впечаталась в душу и стала испытанием для тела: пока это наше единственное путешествие, где мы три дня не мылись, купались в море с коровами, все время от чего-нибудь лечились, шарахались от машин на переходах и от собак в подворотнях, сгоняли кошек со стульев в кафе и вырывали наших детей из рук прохожих. Но поскольку мы все же благополучно вернулись домой, я могу обо всем подробнейшим образом написать здесь (от души, так скажем). Сейчас — вводный пост, потом будет весь наш маршрут поэтапно, а в конце моих путевых заметок подведем итоги по стоимости поездки.',
-        pics: [
-            "/posts/IMG_6776.jpg",
-            "/posts/273153700_118738253861831_5906416883131394354_n.jpeg",
-            "/posts/272708814_1158833634855293_1743973316352152210_n.webp.jpg",
-            "/posts/272464515_147005761018515_3100264353239753904_n.webp.jpg",
-            "/posts/259096143_252774593424446_3292295880799640700_n.jpeg",
-            "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
-            "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
-        ],
-        created_at: "2005-05-02",
-        like_count: 1,
-        repost_count: 0,
-        comment_count: 0,
-        is_repost: true,
-        is_liked: true,
-    }
-};
-
 export const comments = [
     {
         "id": "1232cd4f-6be1-469f-8f9b-922dfd897620",
@@ -83,7 +54,7 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: 'Аԥсны (Абхазия) в переводе с абхазского — "страна души". И действительно, поездка туда впечаталась в душу и стала испытанием для тела: пока это наше единственное путешествие, где мы три дня не мылись, купались в море с коровами, все время от чего-нибудь лечились, шарахались от машин на переходах и от собак в подворотнях, сгоняли кошек со стульев в кафе и вырывали наших детей из рук прохожих. Но поскольку мы все же благополучно вернулись домой, я могу обо всем подробнейшим образом написать здесь (от души, так скажем). Сейчас — вводный пост, потом будет весь наш маршрут поэтапно, а в конце моих путевых заметок подведем итоги по стоимости поездки.',
-        pics: [
+        media: [
             "https://quickflowapp.ru/minio/posts/f4282087-f873-4028-b353-863c62e1de76.mp4",
             "/posts/IMG_6776.jpg",
             "/posts/273153700_118738253861831_5906416883131394354_n.jpeg",
@@ -92,6 +63,16 @@ export const posts = [
             "/posts/259096143_252774593424446_3292295880799640700_n.jpeg",
             "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
             "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
+        ],
+        files: [
+            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
         ],
         created_at: "2005-05-02",
         like_count: 1,
@@ -125,7 +106,7 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: "Hello, this is my first post",
-        pics: [
+        media: [
             "https://quickflowapp.ru/images/image1.jpg",
             "https://quickflowapp.ru/images/image2.jpg",
             "https://quickflowapp.ru/images/image3.jpg",
@@ -146,7 +127,7 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: "Hello, this is my first post",
-        pics: [
+        media: [
             "/posts/272464515_147005761018515_3100264353239753904_n.webp.jpg",
         ],
         created_at: "2005-03-12",
@@ -165,7 +146,7 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: "Hello, this is my first post",
-        pics: [
+        media: [
             "/posts/259096143_252774593424446_3292295880799640700_n.jpeg",
         ],
         created_at: "2005-01-01",
@@ -184,7 +165,7 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: "Hello, this is my first post",
-        pics: [
+        media: [
             "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
         ],
         created_at: "2005-02-07",
@@ -203,7 +184,7 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: "Hello, this is my first post",
-        pics: [
+        media: [
             "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
         ],
         created_at: "2025-04-02",
@@ -213,6 +194,8 @@ export const posts = [
         is_repost: true,
     },
 ];
+
+export const post = posts[0];
 
 export const users = {
     rvasutenko: {
