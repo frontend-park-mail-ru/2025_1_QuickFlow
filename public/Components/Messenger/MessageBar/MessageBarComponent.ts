@@ -312,9 +312,6 @@ export default class MessageBarComponent {
                     return;
             }
 
-            this.mediaInput.clear();
-            this.fileInput.clear();
-
             if (mediaData?.payload?.media) {
                 wsPayload['media'] = mediaData.payload.media;
             }
@@ -324,6 +321,10 @@ export default class MessageBarComponent {
             if (mediaData?.payload?.audio) {
                 wsPayload['audio'] = mediaData.payload.audio;
             }
+
+            this.mediaInput.clear();
+            this.fileInput.clear();
+            this.attachments.innerHTML = '';
         }
 
         new ws().send('message', wsPayload);
