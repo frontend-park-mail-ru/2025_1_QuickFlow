@@ -134,12 +134,7 @@ export default class ProfileMenuComponent {
             text: `Тема: ${ThemeManager.theme}`,
         });
 
-        const dropdown = createElement({
-            parent: menuItem,
-            classes: ['profile-menu__dropdown'],
-        });
-
-        new ContextMenuComponent(dropdown, {
+        new ContextMenuComponent(menuItem, {
             size: 'mini',
             data: {
                 system: {
@@ -166,33 +161,6 @@ export default class ProfileMenuComponent {
             },
         });
 
-        menuItem.addEventListener('mouseenter', (event: any) => {
-        });
-
-        // createElement({
-        //     tag: 'button',
-        //     parent: this.menuItems,
-        //     classes: ['theme-switcher'],
-        //     attrs: { id: 'theme-light' },
-        //     text: 'Светлая',
-        // });
-        
-        // createElement({
-        //     tag: 'button',
-        //     parent: this.menuItems,
-        //     classes: ['theme-switcher'],
-        //     attrs: { id: 'theme-dark' },
-        //     text: 'Тёмная',
-        // });
-        
-        // createElement({
-        //     tag: 'button',
-        //     parent: this.menuItems,
-        //     classes: ['theme-switcher'],
-        //     attrs: { id: 'theme-auto' },
-        //     text: 'Авто',
-        // });
-        
         document.getElementById('theme-light')?.addEventListener('click', () => {
             ThemeManager.setTheme('light');
         });
