@@ -109,7 +109,7 @@ export default class PostComponent {
     }
 
     private renderMedia() {
-        if (!this.config.pics || !this.config.pics.length) {
+        if (!this.config.media || !this.config.media.length) {
             return;
         }
 
@@ -123,8 +123,8 @@ export default class PostComponent {
             classes: ['post__slider'],
         });
 
-        if (this.config.pics && this.config.pics.length > 0) {
-            this.config.pics.forEach((mediaUrl: string) => {
+        if (this.config.media && this.config.media.length > 0) {
+            this.config.media.forEach((mediaUrl: string) => {
                 const slide = createElement({
                     parent: slider,
                     classes: ['post__slide'],
@@ -157,7 +157,7 @@ export default class PostComponent {
         const swiper = new SwiperComponent(null, {
             slider,
             picsWrapper,
-            picsCount: this.config.pics.length,
+            picsCount: this.config.media.length,
             hasPaginator: true,
             isHandlingMouse: true,
             isHandlingTouch: true,

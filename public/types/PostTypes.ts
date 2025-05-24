@@ -5,7 +5,9 @@ import { UserPublic } from "./UserTypes";
 interface BasePost {
     id: string;
     text?: string;
-    pics?: string[];
+    media?: string[];
+    audio?: string[];
+    files?: string[];
     created_at: string;
     updated_at: string;
     like_count: number;
