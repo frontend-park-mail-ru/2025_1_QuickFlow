@@ -77,8 +77,13 @@ export default class CommentsComponent {
     }
 
     private async fetchComment() {
-        const [status, commentsData] = await CommentsRequests.getComments(this.config.postId, COMMENTS_FETCH_COUNT, this.lastTs);
-
+        let status: number, commentsData: Comment[];
+        if (this.lastTs) {
+            [status, commentsData] = await CommentsRequests.getComments(this.config.postId, COMMENTS_FETCH_COUNT, this.lastTs);
+        } else {
+            [status, commentsData] = await CommentsRequests.getComments(this.config.postId, COMMENTS_FETCH_COUNT);
+        }
+        
         switch (status) {
             case 200:
                 this.renderFetchedComments(commentsData);
@@ -110,6 +115,8 @@ export default class CommentsComponent {
         for (const commentData of commentsData) {
             this.renderComment(commentData);
         }
+
+        this.lastTs = commentsData[0].created_at;
     }
 
     private async renderTextareaBar() {
@@ -218,6 +225,5 @@ export default class CommentsComponent {
         }
 
         new CommentComponent(this.element, { data: commentData });
-        this.lastTs = commentData.created_at;
     }
 }
