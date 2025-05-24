@@ -99,6 +99,7 @@ registerRoutes();
                 type: 'msg',
                 classes: ['notification_msg'],
                 data: payload,
+                href: `/messenger/${payload.sender.username}`,
             });
         });
     }

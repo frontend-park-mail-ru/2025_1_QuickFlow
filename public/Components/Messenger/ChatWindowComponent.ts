@@ -80,6 +80,7 @@ export default class ChatWindowComponent {
                         this.container.innerHTML = '';
                     }
                     this._chatData = {
+                        id: profileData?.chat_id,
                         name: `${profileData.profile.firstname} ${profileData.profile.lastname}`,
                         online: profileData.online,
                         last_seen: profileData.last_seen,
