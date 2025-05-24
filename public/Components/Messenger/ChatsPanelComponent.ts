@@ -5,8 +5,11 @@ import createElement from '@utils/createElement';
 import { setLsItem, getLsItem, removeLsItem } from '@utils/localStorage';
 import getTimeDifference from '@utils/getTimeDifference';
 import router from '@router';
+import { ChatsRequests } from '@modules/api';
+import networkErrorPopUp from '@utils/networkErrorPopUp';
 
 
+const REQUEST_CHATS_COUNT = 10;
 const MOBILE_MAX_WIDTH = 610;
 const DEFAULT_WIDTH = 300;
 const RESIZER_TO_DEFAULT_WIDTH = 200;
@@ -79,7 +82,7 @@ export default class ChatsPanelComponent {
         this._chatWindow = chatWindow;
     }
 
-    renderChatList() {
+    async renderChatList() {
         if (this.chats) {
             this.container?.removeChild(this.chats);
         }
@@ -89,32 +92,39 @@ export default class ChatsPanelComponent {
             classes: ['chats-panel__chats'],
         });
 
-        this.config.messenger.ajaxGetChats((status: number, chatsData: any) => {
-            if (!chatsData || chatsData.length === 0) {
-                this.chats.classList.add('chats-panel__chats_empty');
-                this.renderEmptyState();
+        const [status, chatsData] = await ChatsRequests.getChats(REQUEST_CHATS_COUNT);
+        switch (status) {
+            case 200:
+                break;
+            default:
+                networkErrorPopUp({ text: 'Не удалось загрузить чаты' });
                 return;
-            }
+        }
 
-            if (this.config.chat_id) {
-                setLsItem('active-chat', `chat-${this.config.chat_id}`);
-            }
+        if (!chatsData || !chatsData.length) {
+            this.chats.classList.add('chats-panel__chats_empty');
+            this.renderEmptyState();
+            return;
+        }
 
-            let activeChatId: string | null = null;
-            if (!this.isMobile) {
-                activeChatId = getLsItem('active-chat', null);
-            }
+        if (this.config.chat_id) {
+            setLsItem('active-chat', `chat-${this.config.chat_id}`);
+        }
 
-            for (const chatData of chatsData) {
-                const chatItem = this.renderChatItem(chatData);
-                this.chatItems.push(chatItem);
-                if (chatItem.id === activeChatId) {
-                    this.activeChatItem = chatItem;
-                    this.activeChatItem?.classList.add('chats-panel__chat_active');
-                    this._chatWindow.renderActiveChat(chatData);
-                }
+        let activeChatId: string | null = null;
+        if (!this.isMobile) {
+            activeChatId = getLsItem('active-chat', null);
+        }
+
+        for (const chatData of chatsData) {
+            const chatItem = this.renderChatItem(chatData);
+            this.chatItems.push(chatItem);
+            if (chatItem.id === activeChatId) {
+                this.activeChatItem = chatItem;
+                this.activeChatItem?.classList.add('chats-panel__chat_active');
+                this._chatWindow.renderActiveChat(chatData);
             }
-        });
+        }
     }
 
     renderEmptyState() {

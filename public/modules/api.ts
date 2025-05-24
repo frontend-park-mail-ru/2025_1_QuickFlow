@@ -1,5 +1,6 @@
 import ajax from '@modules/ajax';
 import convertToFormData from '@utils/convertToFormData';
+import { Chat, MessagesResponse, UnreadChatsCountResponse } from 'types/ChatsTypes';
 import { Comment, CommentRequest, Post, PostRequest, PostResponse } from 'types/PostTypes';
 import { UploadData, UploadRequest } from 'types/UploadTypes';
 import { User } from 'types/UserTypes';
@@ -117,12 +118,31 @@ export class CommentsRequests {
 
 
 export class ChatsRequests {
-    static async getMessages(chat_id: string, messages_count: number, ts?: string): Promise<[number, Record<string, any>]> {
+    static async getMessages(chat_id: string, messages_count: number, ts?: string): Promise<[number, MessagesResponse]> {
         return new Promise((resolve) => {
             ajax.get({
                 url: `/chats/${chat_id}/messages`,
                 params: { messages_count, ...(ts && { ts }) },
-                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+                callback: (status: number, data: MessagesResponse) => resolve([status, data]),
+            });
+        });
+    }
+
+    static async getUnreadChatsCount(): Promise<[number, UnreadChatsCountResponse]> {
+        return new Promise((resolve) => {
+            ajax.get({
+                url: `/chats/unread`,
+                callback: (status: number, data: UnreadChatsCountResponse) => resolve([status, data]),
+            });
+        });
+    }
+
+    static async getChats(chats_count: number): Promise<[number, Chat[]]> {
+        return new Promise((resolve) => {
+            ajax.get({
+                url: `/chats`,
+                params: { chats_count },
+                callback: (status: number, data: Chat[]) => resolve([status, data]),
             });
         });
     }
