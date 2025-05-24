@@ -93,21 +93,22 @@ export default class CommentsComponent {
     }
 
     private renderFetchedComments(commentsData: Comment[]) {
+        if (!commentsData) {
+            this.showMoreBtn.remove();
+            return;
+        }
+
+        this.totalFetchedCount += commentsData.length;
+
         if (
-            !commentsData ||
             commentsData.length < COMMENTS_FETCH_COUNT ||
-            this.totalFetchedCount === this.config.commentsCount
+            this.totalFetchedCount >= this.config.commentsCount
         ) {
             this.showMoreBtn.remove();
         }
 
-        if (!commentsData) {
-            return;
-        }
-
         for (const commentData of commentsData) {
             this.renderComment(commentData);
-            this.totalFetchedCount++;
         }
     }
 
