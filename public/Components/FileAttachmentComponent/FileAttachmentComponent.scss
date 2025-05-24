@@ -1,0 +1,100 @@
+.attachment {
+    transition: var(--trans-menu);
+}
+
+.attachment__name {
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    word-break: break-all;
+}
+
+.attachment__info {
+    display: flex;
+    flex-direction: column;
+}
+
+.attachment__size {
+    font-weight: var(--font-weight-regular);
+    color: var(--text-secondary);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+}
+
+.attachment__icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    min-height: 28px;
+    width: 28px;
+    height: 28px;
+    background: var(--button-primary-disabled);
+    border-radius: 6px;
+    transition: var(--trans-menu);
+}
+
+.attachment__icon {
+    color: var(--icon-white);
+    width: 16px;
+    height: 16px;
+    display: flex;
+    position: absolute;
+}
+
+.attachment__icon_delete {
+    color: var(--icon-white);
+    width: 16px;
+    height: 16px;
+    display: flex;
+    opacity: 0;
+    transition: var(--trans-menu);
+}
+
+.attachment__timing {
+    font-size: 12px;
+    line-height: var(--line-height-m);
+    color: var(--text-white);
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: var(--background-black-transparent);
+    padding: 0 4px;
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
+    bottom: 6px;
+    left: 6px;
+}
+
+.attachment__timing-icon {
+    color: var(--icon-white);
+    width: 8px;
+    height: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.attachment_file:hover {
+    background: var(--background-error);
+
+    & .attachment__icon-wrapper {
+        background: var(--icon-red);
+    }
+
+    & .attachment__icon {
+        opacity: 0;
+    }
+
+    & .attachment__icon_delete {
+        opacity: 1;
+    }
+}

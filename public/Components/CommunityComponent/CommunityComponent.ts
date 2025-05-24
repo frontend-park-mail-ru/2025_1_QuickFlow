@@ -1,6 +1,6 @@
 import createElement from '@utils/createElement';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
-import ContextMenuComponent from '@components/ContextMenuComponent/ContextMenuComponent';
+import ContextMenuComponent, { OptionConfig } from '@components/ContextMenuComponent/ContextMenuComponent';
 import { CommunitiesRequests } from '@modules/api';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 
@@ -77,7 +77,7 @@ export default class CommunityComponent {
 
         const dropdown = createElement({
             classes: ['js-dropdown', 'search-item__dropdown'],
-            parent: communityRight,
+            parent: communityRight as HTMLElement,
         });
 
         const optionsWrapper = createElement({
@@ -90,7 +90,7 @@ export default class CommunityComponent {
             parent: optionsWrapper,
         });
 
-        const contextMenuData: Record<string, object> = {
+        const contextMenuData: Record<string, OptionConfig> = {
             copyLink: {
                 text: 'Скопировать ссылку',
                 icon: 'copy-icon',

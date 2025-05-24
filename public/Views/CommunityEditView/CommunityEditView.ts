@@ -16,8 +16,12 @@ import { forms } from './CommunityEditFormConfig';
 import { FILE } from '@config/config';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
 import FriendComponent from '@components/FriendComponent/FriendComponent';
-import DeleteMwComponent from '@components/UI/ModalWindowComponent/DeleteMwComponent';
+import DeleteMwComponent from '@components/UI/Modals/DeleteMwComponent';
 import { CommunitiesRequests } from '@modules/api';
+import networkErrorPopUp from '@utils/networkErrorPopUp';
+
+
+const ACCEPT = '.jpg, .jpeg, .png, .gif';
 
 
 class CommunityEditView {
@@ -114,10 +118,7 @@ class CommunityEditView {
                             case 401:
                                 return router.go({ path: '/login' });
                             default:
-                                new PopUpComponent({
-                                    isError: true,
-                                    text: 'Не удалось удалить сообщество, попробуйте позже',
-                                })
+                                networkErrorPopUp();
                                 break;
                         }
                     },
@@ -205,13 +206,14 @@ class CommunityEditView {
         this.containerObj.left.innerHTML = '';
 
         if (
-            ['contacts', 'members', 'managers', 'deletion']
+            ['contacts', 'managers']
             .includes(this.section)
         ) {
-            return new EmptyStateComponent(this.containerObj.left, {
+            new EmptyStateComponent(this.containerObj.left, {
                 text: 'Этот раздел пока в разработке',
                 icon: 'communities-icon',
             });
+            return;
         }
 
         const [status, communityData] = await CommunitiesRequests.getCommunity(this.params.address);
@@ -339,20 +341,12 @@ class CommunityEditView {
                     router.go({ path: '/login' });
                     break;
                 default:
-                    this.cbDefault();
+                    networkErrorPopUp();
                     break;
             }
         } catch {
-            this.cbDefault();
+            networkErrorPopUp();
         }
-    }
-
-    cbDefault() {
-        new PopUpComponent({
-            text: 'Не удалось сохранить изменеия',
-            size: "large",
-            isError: true,
-        });
     }
 
     postCbOk(newNickname: string | undefined) {
@@ -386,6 +380,7 @@ class CommunityEditView {
         this.stateUpdaters.push(
             new FileInputComponent(this.containerObj.left, {
                 imitator: avatar.wrapper,
+                accept: ACCEPT,
                 preview: avatar.avatar,
                 id: 'profile-avatar-upload',
                 name: 'avatar',

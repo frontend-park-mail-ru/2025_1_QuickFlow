@@ -1,8 +1,7 @@
 import createElement from '@utils/createElement';
 import insertIcon from '@utils/insertIcon';
-import { getLsItem } from '@utils/localStorage';
 import router from '@router';
-import { FriendsRequests } from '@modules/api';
+import { ChatsRequests, FriendsRequests } from '@modules/api';
 import CounterComponent from '@components/CounterComponent/CounterComponent';
 import { MOBILE_MAX_WIDTH } from '@config/config';
 import LsProfile from '@modules/LsProfile';
@@ -125,12 +124,11 @@ export default class MenuComponent {
     }
 
     public async renderCounters() {
-        this.menuElements.friends.querySelector('.menu__counter')?.remove();
-
+        this.container.querySelectorAll('.menu__counter')?.forEach((counter) => counter.remove());
         const userId = LsProfile.id;
 
-        const [status, friendsData] = await FriendsRequests.getFriends(userId, 100, 0, 'incoming');
-        switch (status) {
+        const [friendsStatus, friendsData] = await FriendsRequests.getFriends(userId, 100, 0, 'incoming');
+        switch (friendsStatus) {
             case 401:
                 router.go({ path: '/login' });
                 return;
@@ -140,6 +138,20 @@ export default class MenuComponent {
         if (requestsCount) {
             new CounterComponent(this.menuElements.friends, {
                 value: requestsCount,
+                classes: ['menu__counter'],
+            });
+        }
+
+        const [chatsStatus, unreadChatsData] = await ChatsRequests.getUnreadChatsCount();
+        switch (chatsStatus) {
+            case 401:
+                router.go({ path: '/login' });
+                return;
+        }
+
+        if (unreadChatsData.payload.chats_count) {
+            new CounterComponent(this.menuElements.messenger, {
+                value: unreadChatsData.payload.chats_count,
                 classes: ['menu__counter'],
             });
         }
@@ -174,7 +186,6 @@ export default class MenuComponent {
     goToPage(menuElement: HTMLElement) {
         if (
             menuElement.getAttribute('href') === router.path.split('?')[0] &&
-            // menuElement.dataset.section === router.path.slice(1) &&
             this.activePageLink.getAttribute('href')
         ) return;
 

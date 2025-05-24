@@ -1,10 +1,18 @@
+interface CreateElementConfig {
+    parent?: HTMLElement | null;
+    attrs?: Record<string, any>;
+    tag?: string;
+    classes?: string[];
+    text?: string;
+}
+
 export default function createElement({
     parent = null,
     attrs = {},
     tag = attrs.src ? 'img' : 'div',
     classes = [],
     text = '',
-}: Record<string, any> = {}): HTMLElement {
+}: CreateElementConfig = {}): HTMLElement {
     const element = document.createElement(tag);
 
     for (const attr in attrs) {

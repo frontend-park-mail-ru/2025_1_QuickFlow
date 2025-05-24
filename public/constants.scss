@@ -17,6 +17,8 @@
     --background-white-transparent: rgba(255, 255, 255, 0.5);
     --background-white-transparent-hover: rgba(255, 255, 255, 0.8);
     --background-black-transparent: rgba(0, 0, 0, 0.5);
+    --background-black-transparent-dark: rgba(0, 0, 0, 0.8);
+    --background-black: #000;
     --background-error: #ffeceb;
     --background-grad: radial-gradient(331.49% 141.42% at 0% 0%, #ced8ff 0%, #4369fc 100%);
 
@@ -72,6 +74,8 @@ html.theme_dark {
     --background-white-transparent: rgba(255, 255, 255, 0.5);
     --background-white-transparent-hover: rgba(255, 255, 255, 0.8);
     --background-black-transparent: rgba(0, 0, 0, 0.5);
+    --background-black-transparent-dark: rgba(0, 0, 0, 0.8);
+    --background-black: #000;
     --background-error: #371a18;
     --background-grad: radial-gradient(331.49% 141.42% at 0% 0%, #849dff 0%, #1233b4 100%);
 
@@ -114,6 +118,7 @@ html.theme_dark {
     --trans-input: all 0.15s ease-out;
     --trans-btn: all 0.15s ease-out;
     --trans-menu: all 0.15s ease-out;
+    --trans-swiper: all 0.3s;
     --trans-dropdown: all 0.2s ease-out;
     --trans-post-slider: all 0.2s ease;
 }

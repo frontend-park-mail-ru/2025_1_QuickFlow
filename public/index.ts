@@ -90,6 +90,8 @@ registerRoutes();
         !router.path.startsWith('/signup')
     ) {
         new ws().subscribe('message', (payload: Record<string, any>) => {
+            console.log(router.path, payload?.sender?.username);
+
             if (
                 router.path.startsWith('/messenger') ||
                 payload?.sender?.username === LsProfile.username

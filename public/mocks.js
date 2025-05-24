@@ -1,31 +1,47 @@
-export const post = {
-    payload: {
-        id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
-        author: {
-            id: "b143b529-9925-450f-9d26-1255658a0a8f",
-            username: "rvasutenko",
-            avatar_url: "/avatars/avatar.jpg",
-            firstname: "Илья",
-            lastname: "Мациевский"
-        },
-        text: 'Аԥсны (Абхазия) в переводе с абхазского — "страна души". И действительно, поездка туда впечаталась в душу и стала испытанием для тела: пока это наше единственное путешествие, где мы три дня не мылись, купались в море с коровами, все время от чего-нибудь лечились, шарахались от машин на переходах и от собак в подворотнях, сгоняли кошек со стульев в кафе и вырывали наших детей из рук прохожих. Но поскольку мы все же благополучно вернулись домой, я могу обо всем подробнейшим образом написать здесь (от души, так скажем). Сейчас — вводный пост, потом будет весь наш маршрут поэтапно, а в конце моих путевых заметок подведем итоги по стоимости поездки.',
-        pics: [
-            "/posts/IMG_6776.jpg",
-            "/posts/273153700_118738253861831_5906416883131394354_n.jpeg",
-            "/posts/272708814_1158833634855293_1743973316352152210_n.webp.jpg",
-            "/posts/272464515_147005761018515_3100264353239753904_n.webp.jpg",
-            "/posts/259096143_252774593424446_3292295880799640700_n.jpeg",
-            "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
-            "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
+export const comments = [
+    {
+        "id": "1232cd4f-6be1-469f-8f9b-922dfd897620",
+        "text": "hihiuhihihihih!",
+        "created_at": "2025-05-22T21:53:33Z",
+        "updated_at": "2025-05-22T21:53:33Z",
+        "media": [
+            "media1",
+            "media2"
         ],
-        created_at: "2005-05-02",
-        like_count: 1,
-        repost_count: 0,
-        comment_count: 0,
-        is_repost: true,
-        is_liked: true,
+        "audio": [
+            "audio1",
+            "audio2"
+        ],
+        "files": [
+            "file1",
+            "file2"
+        ],
+        "author": {
+            "id": "f7c50459-8b74-4a41-9274-4fa1b06b4ca5",
+            "username": "Nikita",
+            "firstname": "Myname",
+            "lastname": "Mysurname"
+        },
+        "post_id": "e7ad70f8-ec51-45ea-9277-40a87410c956",
+        "like_count": 0,
+        "is_liked": false
+    },
+    {
+        "id": "f9dd79ef-ce8a-4cf3-974a-b118e6b09b75",
+        "text": "hi!",
+        "created_at": "2025-05-22T21:29:25Z",
+        "updated_at": "2025-05-22T21:29:34Z",
+        "author": {
+            "id": "f7c50459-8b74-4a41-9274-4fa1b06b4ca5",
+            "username": "Nikita",
+            "firstname": "Myname",
+            "lastname": "Mysurname"
+        },
+        "post_id": "e7ad70f8-ec51-45ea-9277-40a87410c956",
+        "like_count": 0,
+        "is_liked": false
     }
-};
+];
 
 export const posts = [
     {
@@ -38,7 +54,8 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: 'Аԥсны (Абхазия) в переводе с абхазского — "страна души". И действительно, поездка туда впечаталась в душу и стала испытанием для тела: пока это наше единственное путешествие, где мы три дня не мылись, купались в море с коровами, все время от чего-нибудь лечились, шарахались от машин на переходах и от собак в подворотнях, сгоняли кошек со стульев в кафе и вырывали наших детей из рук прохожих. Но поскольку мы все же благополучно вернулись домой, я могу обо всем подробнейшим образом написать здесь (от души, так скажем). Сейчас — вводный пост, потом будет весь наш маршрут поэтапно, а в конце моих путевых заметок подведем итоги по стоимости поездки.',
-        pics: [
+        media: [
+            "https://quickflowapp.ru/minio/posts/f4282087-f873-4028-b353-863c62e1de76.mp4",
             "/posts/IMG_6776.jpg",
             "/posts/273153700_118738253861831_5906416883131394354_n.jpeg",
             "/posts/272708814_1158833634855293_1743973316352152210_n.webp.jpg",
@@ -47,12 +64,37 @@ export const posts = [
             "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
             "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
         ],
+        files: [
+            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+        ],
         created_at: "2005-05-02",
         like_count: 1,
         repost_count: 0,
         comment_count: 0,
         is_repost: true,
         is_liked: true,
+        last_comment: {
+            "id": "490dcb23-e44c-403f-acdf-6808ecab1e86",
+            "text": "Последний оставленный коммент к этому посту. Что-то тестовое, чтобы понять как это будет отображаться.",
+            "created_at": "2025-05-22T22:09:26Z",
+            "updated_at": "2025-05-22T22:09:26Z",
+            "author": {
+                "id": "f7c50459-8b74-4a41-9274-4fa1b06b4ca5",
+                "username": "Nikita",
+                "firstname": "Myname",
+                "lastname": "Mysurname"
+            },
+            "post_id": "e7ad70f8-ec51-45ea-9277-40a87410c956",
+            "like_count": 0,
+            "is_liked": false,
+        }
     },
     {
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
@@ -64,7 +106,7 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: "Hello, this is my first post",
-        pics: [
+        media: [
             "https://quickflowapp.ru/images/image1.jpg",
             "https://quickflowapp.ru/images/image2.jpg",
             "https://quickflowapp.ru/images/image3.jpg",
@@ -85,7 +127,7 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: "Hello, this is my first post",
-        pics: [
+        media: [
             "/posts/272464515_147005761018515_3100264353239753904_n.webp.jpg",
         ],
         created_at: "2005-03-12",
@@ -104,7 +146,7 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: "Hello, this is my first post",
-        pics: [
+        media: [
             "/posts/259096143_252774593424446_3292295880799640700_n.jpeg",
         ],
         created_at: "2005-01-01",
@@ -123,7 +165,7 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: "Hello, this is my first post",
-        pics: [
+        media: [
             "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
         ],
         created_at: "2005-02-07",
@@ -142,7 +184,7 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: "Hello, this is my first post",
-        pics: [
+        media: [
             "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
         ],
         created_at: "2025-04-02",
@@ -152,6 +194,8 @@ export const posts = [
         is_repost: true,
     },
 ];
+
+export const post = posts[0];
 
 export const users = {
     rvasutenko: {
@@ -711,11 +755,11 @@ export const messages = {
                     "is_read": true,
                     "attachment_urls": null,
                     "sender": {
-                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
-                        "username": "Nikita2",
-                        "firstname": "Никита",
-                        "lastname": "Могилин",
-                        "avatar_url": "/avatars/avatar4.jpg",
+                        "id": "48dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "rvasutenko",
+                        "firstname": "Roman",
+                        "lastname": "Vasyutenko",
+                        "avatar_url": "/avatars/avatar2.jpg",
                     },
                     "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
                 },
@@ -725,7 +769,12 @@ export const messages = {
                     "created_at": "2025-04-10T19:15:42.323841+03:00",
                     "updated_at": "2025-04-10T19:15:42.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    "files": [
+                        'https://quickflowapp.ru/minio/posts/5ffc6da1-af7c-4484-8d7e-04ad01f4eecd.txt',
+                        'https://quickflowapp.ru/minio/posts/8b339c37-b2f4-406b-a234-2de419f14b33.jpeg',
+                        'https://quickflowapp.ru/minio/posts/15cd185e-0bdf-4939-8f8d-6da6f2c98d8c.jpeg',
+                        'https://quickflowapp.ru/minio/posts/be9e97e5-e7cb-415d-8bbe-0a3972a83993.mp4',
+                    ],
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -741,7 +790,15 @@ export const messages = {
                     "created_at": "2025-04-10T19:16:27.926906+03:00",
                     "updated_at": "2025-04-10T19:16:27.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    "media": [
+                        'https://quickflowapp.ru/minio/posts/88d75228-a2db-42c8-8987-3ab36ae8770d.jpeg',
+                        // 'https://quickflowapp.ru/minio/posts/c239cf67-a4e5-4000-9c3d-34538bf903a8.jpeg',
+                        'https://quickflowapp.ru/minio/posts/8b339c37-b2f4-406b-a234-2de419f14b33.jpeg',
+                        'https://quickflowapp.ru/minio/posts/15cd185e-0bdf-4939-8f8d-6da6f2c98d8c.jpeg',
+                        'https://quickflowapp.ru/minio/posts/557f5a12-c08b-4aac-af33-838a3fa4d354.jpeg',
+                        'https://quickflowapp.ru/minio/posts/80ef5b8b-e93b-4f47-8fba-69912b75f02d.jpeg',
+                        'https://quickflowapp.ru/minio/posts/be9e97e5-e7cb-415d-8bbe-0a3972a83993.mp4',
+                    ],
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",

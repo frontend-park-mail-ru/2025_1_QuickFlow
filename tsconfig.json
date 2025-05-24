@@ -1,6 +1,9 @@
 {
     "compilerOptions": {
-        "lib": ["ES2020", "DOM", "DOM.Iterable", "WebWorker"],
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+
+        "lib": ["ES2022", "DOM", "DOM.Iterable", "WebWorker"],
         "checkJs": false, 
         "target": "es6",
         "module": "es6",

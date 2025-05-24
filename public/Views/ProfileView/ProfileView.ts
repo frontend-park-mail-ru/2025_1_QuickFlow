@@ -3,14 +3,13 @@ import router from '@router';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import FeedComponent from '@components/FeedComponent/FeedComponent';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
-import ProfileInfoMwComponent from '@components/UI/ModalWindowComponent/ProfileInfoMwComponent';
+import ProfileInfoMwComponent from '@components/UI/Modals/ProfileInfoMwComponent';
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import CoverComponent from '@components/CoverComponent/CoverComponent';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import ProfileMenuComponent from '@components/ProfileMenuComponent/ProfileMenuComponent';
 
 import createElement from '@utils/createElement';
-import { getLsItem } from '@utils/localStorage';
 import insertIcon from '@utils/insertIcon';
 
 import { ACTIONS_PROPERTIES, INFO_ITEMS_LAYOUT } from './ProfileActionsConfig';
@@ -18,6 +17,7 @@ import { MOBILE_MAX_WIDTH } from '@config/config';
 import { FriendsRequests, UsersRequests } from '@modules/api';
 import copyToClipboard from '@utils/copyToClipboard';
 import LsProfile from '@modules/LsProfile';
+import { User } from 'types/UserTypes';
 
 
 const MOBILE_MAX_DISPLAYED_FRIENDS_COUNT = 3;
@@ -55,20 +55,19 @@ class ProfileView {
         return this.containerObj.container;
     }
 
-    renderFriends(user_id: string) {
-        FriendsRequests.getFriends(user_id, 8, 0).then(([status, friendsData]) => {
-            switch (status) {
-                case 200:
-                    this.friendsCbOk(friendsData.payload);
-                    break;
-                case 401:
-                    router.go({ path: '/login' });
-                    break;
-                case 404:
-                    router.go({ path: '/not-found' });
-                    break;
-            }
-        });
+    async renderFriends(user_id: string) {
+        const [status, friendsData] = await FriendsRequests.getFriends(user_id, 8, 0);
+        switch (status) {
+            case 200:
+                this.friendsCbOk(friendsData.payload);
+                break;
+            case 401:
+                router.go({ path: '/login' });
+                break;
+            case 404:
+                router.go({ path: '/not-found' });
+                break;
+        }
     }
 
     friendsCbOk(data: Record<string, any>) {
@@ -129,7 +128,7 @@ class ProfileView {
         }
     }
 
-    cbOk(data: Record<string, any>) {
+    cbOk(data: User) {
         const profileHeader = createElement({
             parent: this.containerObj?.top,
             classes: ['profile']
@@ -170,6 +169,7 @@ class ProfileView {
                 lastSeen: data.last_seen,
             },
             src: data.profile.avatar_url,
+            hasViewer: true,
         });
 
         const profileBottom = createElement({

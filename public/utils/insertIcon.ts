@@ -1,7 +1,13 @@
 import createElement from "@utils/createElement";
 
 
-export default async function insertIcon(parent: HTMLElement, config: Record<string, any>) {
+interface InsertIconConfig {
+    name: string;
+    classes?: string[];
+};
+
+
+export default async function insertIcon(parent: HTMLElement, config: InsertIconConfig) {
     if (!config.name) return;
 
     const icon = createElement({

@@ -1,20 +1,11 @@
 .dropdown {
-    display: flex;
-    position: absolute;
-    top: 4px;
-    right: 0;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
-}
-
-.js-dropdown:hover .context-menu {
+    // display: flex;
     position: relative;
-    opacity: 1;
-    transform: scale(1) translateY(0);
-    height: auto;
-    padding: 8px;
-    pointer-events: auto;
+    // top: 4px;
+    // right: 0;
+    // flex-direction: column;
+    // align-items: flex-end;
+    // gap: 4px;
 }
 
 .context-menu {
@@ -37,6 +28,15 @@
         transform 0.2s ease,
         height 0.2s ease,
         padding 0.2s ease;
+
+    &.context-menu_visible {
+        // position: relative;
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        height: auto;
+        padding: 8px;
+        pointer-events: auto;
+    }
 }
 
 .context-menu_below-end {

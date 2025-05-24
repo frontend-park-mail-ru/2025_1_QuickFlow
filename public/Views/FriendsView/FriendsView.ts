@@ -9,6 +9,7 @@ import router from '@router';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import { FriendsRequests, UsersRequests } from '@modules/api';
 import LsProfile from '@modules/LsProfile';
+import networkErrorPopUp from '@utils/networkErrorPopUp';
 
 
 const enum Section {
@@ -116,11 +117,7 @@ class FriendsView {
                 router.go({ path: '/login' });
                 break;
             default:
-                new PopUpComponent({
-                    isError: true,
-                    text: 'Не удалось получить список друзей',
-                });
-                break;
+                networkErrorPopUp();
         }
     }
 

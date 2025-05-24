@@ -1,7 +1,7 @@
 import router from '@router';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import { PostsRequests } from '@modules/api';
-import PostComponent from '@components/PostComponent/PostComponent';
+import PostComponent from '@components/Post/PostComponent/PostComponent';
 
 
 class ProfileView {

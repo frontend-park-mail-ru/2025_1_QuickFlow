@@ -2,6 +2,7 @@ import PopUpComponent from "@components/UI/PopUpComponent/PopUpComponent";
 import { UsersRequests } from "@modules/api";
 import Router from "@router";
 import { getLsItem, setLsItem } from "@utils/localStorage";
+import networkErrorPopUp from "@utils/networkErrorPopUp";
 
 
 interface ProfileData {
@@ -48,10 +49,7 @@ export default class LsProfile {
                 Router.go({ path: '/login' });
                 return;
             default:
-                new PopUpComponent({
-                    isError: true,
-                    text: 'Не удалось получить данные, проверьте подключение к интернету',
-                });
+                networkErrorPopUp();
                 return;
         }
     

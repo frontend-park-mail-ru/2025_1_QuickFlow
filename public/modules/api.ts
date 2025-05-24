@@ -1,35 +1,38 @@
 import ajax from '@modules/ajax';
 import convertToFormData from '@utils/convertToFormData';
+import { Chat, MessagesResponse, UnreadChatsCountResponse } from 'types/ChatsTypes';
+import { Comment, CommentRequest, Post, PostRequest, PostResponse } from 'types/PostTypes';
+import { UploadData, UploadRequest } from 'types/UploadTypes';
+import { User } from 'types/UserTypes';
 
 
 export class PostsRequests {
-    static async createPost(body: Record<string, any>): Promise<[number, Record<string, any>]> {
+    static async createPost(body: PostRequest): Promise<[number, PostResponse]> {
         return new Promise((resolve) => {
             ajax.post({
                 url: `/post`,
                 body,
-                isFormData: true,
-                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+                callback: (status: number, data: PostResponse) => resolve([status, data]),
             });
         });
     }
 
-    static async getPost(post_id: string): Promise<[number, Record<string, any>]> {
+    static async getPost(post_id: string): Promise<[number, Post]> {
         return new Promise((resolve) => {
             ajax.get({
                 url: `/posts/${post_id}`,
-                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+                callback: (status: number, data: Post) => resolve([status, data]),
             });
         });
     }
 
-    static async editPost(post_id: string, body: Record<string, any>): Promise<[number, Record<string, any>]> {
+    static async editPost(post_id: string, body: PostRequest): Promise<[number, PostResponse]> {
         return new Promise((resolve) => {
             ajax.put({
                 url: `/posts/${post_id}`,
                 body,
                 isFormData: true,
-                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+                callback: (status: number, data: PostResponse) => resolve([status, data]),
             });
         });
     }
@@ -54,13 +57,92 @@ export class PostsRequests {
 };
 
 
+export class CommentsRequests {
+    static async createComment(post_id: string, body: CommentRequest): Promise<[number, Comment]> {
+        return new Promise((resolve) => {
+            ajax.post({
+                url: `/posts/${post_id}/comment`,
+                body,
+                callback: (status: number, data: Comment) => resolve([status, data]),
+            });
+        });
+    }
+
+    static async getComments(post_id: string, count: number, ts?: string): Promise<[number, Comment[]]> {
+        return new Promise((resolve) => {
+            ajax.get({
+                url: `/posts/${post_id}/comments`,
+                params: { count, ...(ts && { ts }) },
+                callback: (status: number, data: Comment[]) => resolve([status, data]),
+            });
+        });
+    }
+
+    static async editComment(comment_id: string, body: CommentRequest): Promise<[number, Comment]> {
+        return new Promise((resolve) => {
+            ajax.put({
+                url: `/comments/${comment_id}`,
+                body,
+                callback: (status: number, data: Comment) => resolve([status, data]),
+            });
+        });
+    }
+
+    static async deleteComment(comment_id: string): Promise<number> {
+        return new Promise((resolve) => {
+            ajax.delete({
+                url: `/comments/${comment_id}`,
+                callback: (status: number) => resolve(status),
+            });
+        });
+    }
+
+    static async putLike(comment_id: string): Promise<number> {
+        return new Promise((resolve) => {
+            ajax.post({
+                url: `/comments/${comment_id}/like`,
+                callback: (status: number) => resolve(status),
+            });
+        });
+    }
+
+    static async removeLike(comment_id: string): Promise<number> {
+        return new Promise((resolve) => {
+            ajax.delete({
+                url: `/comments/${comment_id}/like`,
+                callback: (status: number) => resolve(status),
+            });
+        });
+    }
+};
+
+
 export class ChatsRequests {
-    static async getMessages(chat_id: string, messages_count: number, ts?: string): Promise<[number, Record<string, any>]> {
+    static async getMessages(chat_id: string, messages_count: number, ts?: string): Promise<[number, MessagesResponse]> {
         return new Promise((resolve) => {
             ajax.get({
                 url: `/chats/${chat_id}/messages`,
                 params: { messages_count, ...(ts && { ts }) },
-                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+                callback: (status: number, data: MessagesResponse) => resolve([status, data]),
+            });
+        });
+    }
+
+    static async getUnreadChatsCount(): Promise<[number, UnreadChatsCountResponse]> {
+        return new Promise((resolve) => {
+            ajax.get({
+                url: `/chats/unread`,
+                callback: (status: number, data: UnreadChatsCountResponse) => resolve([status, data]),
+            });
+        });
+    }
+
+    static async getChats(chats_count: number): Promise<[number, Chat[]]> {
+        return new Promise((resolve) => {
+            ajax.get({
+                url: `/chats`,
+                params: { chats_count },
+                callback: (status: number, data: Chat[]) => resolve([status, data]),
             });
         });
     }
@@ -79,6 +161,20 @@ export class AuthRequests {
 };
 
 
+export class FilesRequests {
+    static async upload(data: UploadRequest): Promise<[number, UploadData]> {
+        return new Promise((resolve) => {
+            ajax.post({
+                url: '/upload',
+                isFormData: true,
+                body: convertToFormData(data),
+                callback: (status: number, data: UploadData) => resolve([status, data]),
+            });
+        });
+    }
+};
+
+
 export class UsersRequests {
     static async getMyProfile(): Promise<[number, Record<string, any>]> {
         return new Promise((resolve) => {
@@ -89,11 +185,11 @@ export class UsersRequests {
         });
     }
     
-    static async getProfile(username: string): Promise<[number, Record<string, any>]> {
+    static async getProfile(username: string): Promise<[number, User]> {
         return new Promise((resolve) => {
             ajax.get({
                 url: `/profiles/${username}`,
-                callback: (status: number, data: Record<string, any>) => resolve([status, data]),
+                callback: (status: number, data: User) => resolve([status, data]),
             });
         });
     }

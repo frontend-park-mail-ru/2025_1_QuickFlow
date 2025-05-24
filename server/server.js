@@ -10,7 +10,7 @@ import crypto from 'crypto';
 import http from 'http';
 import { WebSocketServer } from 'ws';
 
-import { users, posts, chats, messages, search, community, post } from '../public/mocks.js';
+import { users, posts, chats, messages, search, community, post, comments } from '../public/mocks.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -232,6 +232,78 @@ app.get('/api/my_profile', (req, res) => {
     }
 
     res.status(200).json(users['rvasutenko']);
+});
+
+app.get('/api/posts/:post_id/comments', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).json(comments);
+});
+
+app.post('/api/posts/:post_id/comment', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    const comment = comments[0];
+    comment.text = req.body.text;
+
+    res.status(200).json(comment);
+});
+
+app.put('/api/comments/:comment_id', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    const comment = comments[0];
+    comment.text = req.body.text;
+
+    res.status(200).json(comment);
+});
+
+app.delete('/api/comments/:comment_id', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).end();
+});
+
+app.post('/api/comments/:comment_id/like', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).end();
+});
+
+app.delete('/api/comments/:comment_id/like', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).end();
 });
 
 app.get('/api/communities/:pk', (req, res) => {
