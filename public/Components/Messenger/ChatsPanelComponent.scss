@@ -159,6 +159,27 @@
     color: var(--text-error);
 }
 
+.chats-panel__counter-wrapper {
+    margin-left: auto;
+}
+
+.chats-panel__counter {
+    min-width: 20px;
+    background: var(--icon-accent);
+    margin-left: 4px;
+
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-m);
+    color: var(--text-white);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
 @media screen and (min-width: 611px) {
     .chats-panel_mini {
         max-width: 72px;

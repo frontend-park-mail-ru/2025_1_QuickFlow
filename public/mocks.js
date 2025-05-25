@@ -388,6 +388,7 @@ export const chats = {
                 "chat_id": "49dc794b-d8cf-404c-be69-4886bd78ada4"
             },
             last_read: "2025-04-10T19:11:36.19391+03:00",
+            unread_messages: 3,
         },
         {
             id: "13dc794b-d8cf-404c-be69-4886bd78ada4",
@@ -405,7 +406,8 @@ export const chats = {
                 attachment_urls: null,
                 sender_id: "02c314cb-19ae-40c8-a069-fb2c426a9cc9",
                 chat_id: "13dc794b-d8cf-404c-be69-4886bd78ada4"
-            }
+            },
+            unread_messages: 0,
         },
         {
             id: "85dc794b-d8cf-404c-be69-4886bd78ada4",
@@ -423,7 +425,8 @@ export const chats = {
                 attachment_urls: null,
                 sender_id: "42c314cb-19ae-40c8-a069-fb2c426a9cc9",
                 chat_id: "85dc794b-d8cf-404c-be69-4886bd78ada4"
-            }
+            },
+            unread_messages: 69,
         },
     ]
 };

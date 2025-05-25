@@ -7,6 +7,9 @@ import getTimeDifference from '@utils/getTimeDifference';
 import router from '@router';
 import { ChatsRequests } from '@modules/api';
 import networkErrorPopUp from '@utils/networkErrorPopUp';
+import ChatWindowComponent from './ChatWindowComponent';
+import { Chat } from 'types/ChatsTypes';
+import CounterComponent from '@components/CounterComponent/CounterComponent';
 
 
 const REQUEST_CHATS_COUNT = 10;
@@ -30,8 +33,8 @@ export default class ChatsPanelComponent {
     private parent: HTMLElement;
     private config: Record<string, any>;
 
-    private chats: any = null;
-    private _chatWindow: any = null;
+    private chats: HTMLElement = null;
+    private _chatWindow: ChatWindowComponent = null;
     private isMobile: boolean;
 
     container: HTMLElement | null = null;
@@ -78,7 +81,7 @@ export default class ChatsPanelComponent {
         });
     }
 
-    set chatWindow(chatWindow: any) {
+    set chatWindow(chatWindow: ChatWindowComponent) {
         this._chatWindow = chatWindow;
     }
 
@@ -156,7 +159,7 @@ export default class ChatsPanelComponent {
         removeLsItem('active-chat');
     }
 
-    renderChatItem(chatData: any) {
+    renderChatItem(chatData: Chat) {
         const chat = createElement({
             parent: this.chats,
             classes: ['chats-panel__chat'],
@@ -193,7 +196,7 @@ export default class ChatsPanelComponent {
         createElement({
             parent: chatInfo,
             classes: ['chats-panel__msg-info'],
-            attrs: {id: CHAT_INFO_PREFIX + chatData.id},
+            attrs: { id: CHAT_INFO_PREFIX + chatData.id },
         });
 
         this.renderLastMsg(chatData);
@@ -212,24 +215,35 @@ export default class ChatsPanelComponent {
         
         if (draftValue) {
             this.renderDraftMessage(lastMsgWrapper, draftValue);
-        } else {
-            createElement({
-                parent: lastMsgWrapper,
-                classes: ['chats-panel__msg'],
-                text: draftValue ? draftValue : chatData.last_message.text,
-            });
-    
-            createElement({
-                parent: lastMsgWrapper,
-                classes: ['chats-panel__msg-divider'],
-                text: LAST_MSG_TIME_DIVIDER,
-            });
-    
-            createElement({
-                parent: lastMsgWrapper,
-                text: getTimeDifference(chatData.last_message.created_at, { mode: 'short' }),
-            });
+            return;
         }
+
+        createElement({
+            parent: lastMsgWrapper,
+            classes: ['chats-panel__msg'],
+            text: draftValue ? draftValue : chatData.last_message.text,
+        });
+
+        createElement({
+            parent: lastMsgWrapper,
+            classes: ['chats-panel__msg-divider'],
+            text: LAST_MSG_TIME_DIVIDER,
+        });
+
+        createElement({
+            parent: lastMsgWrapper,
+            text: getTimeDifference(chatData.last_message.created_at, { mode: 'short' }),
+        });
+
+        const counterWrapper = createElement({
+            parent: lastMsgWrapper,
+            classes: ['chats-panel__counter-wrapper'],
+        });
+
+        new CounterComponent(counterWrapper, {
+            value: chatData.unread_messages,
+            classes: ['chats-panel__counter'],
+        });
     }
 
     renderDraftMessage(
