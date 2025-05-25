@@ -151,13 +151,20 @@ export default class ChatWindowComponent {
             this._chatsPanel.incrementMessagesCounter(message.chat_id);
         }
 
-        this._chatsPanel?.renderLastMsg({
-            id: message.chat_id,
-            last_message: {
-                text: message.text,
-                created_at: message.created_at,
-            }
-        });
+        this._chatData.id = message.chat_id;
+        this._chatData.last_message = message;
+        // this._chatData.last_message.text = message.text;
+        // this._chatData.last_message.created_at = message.created_at;
+
+        this._chatsPanel?.renderLastMsg(this._chatData);
+
+        // this._chatsPanel?.renderLastMsg({
+        //     id: message.chat_id,
+        //     last_message: {
+        //         text: message.text,
+        //         created_at: message.created_at,
+        //     }
+        // });
     }
 
     private onFirstMessageSent(message: Message) {
@@ -310,8 +317,6 @@ export default class ChatWindowComponent {
                 this._chatData.last_read_by_me = newLastReadByMe;
             },
         });
-
-        
 
         this.chatElement = this.chat.scroll;
     }
