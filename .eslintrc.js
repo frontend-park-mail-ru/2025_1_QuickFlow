@@ -73,7 +73,7 @@ export default {
         'import/resolver': {
             node: {
                 paths: ['src'],
-                extensions: ['.js']
+                extensions: ['.js', '.ts']
             }
         }
     }
