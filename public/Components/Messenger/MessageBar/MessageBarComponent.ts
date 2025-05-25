@@ -13,6 +13,7 @@ import EmojiBarComponent from './EmojiBarComponent/EmojiBarComponent';
 import insertSym from '@utils/insertSym';
 import { UploadRequest } from 'types/UploadTypes';
 import networkErrorPopUp from '@utils/networkErrorPopUp';
+import ChatsPanelComponent from '../ChatsPanelComponent';
 
 
 const MOBILE_MAX_WIDTH = 610;
@@ -36,7 +37,8 @@ const MEDIA_CONTEXT_MENU_DATA = {
 
 interface MessageBarConfig {
     chatData: Record<string, any>;
-    renderLastMsg: (chatData: Record<string, any>) => void;
+    chatsPanel: ChatsPanelComponent
+    // renderLastMsg: (chatData: Record<string, any>) => void;
     chatElement: HTMLElement;
     chat: ChatComponent;
 }
@@ -211,7 +213,7 @@ export default class MessageBarComponent {
                 return;
             }
             removeLsItem(CHAT_MSG_PREFIX + `${this.config.chatData?.id}`);
-            this.config.renderLastMsg(this.config.chatData);
+            this.config.chatsPanel.renderLastMsg(this.config.chatData);
         });
 
         this.element?.addEventListener('keypress', (event) => {
@@ -330,7 +332,7 @@ export default class MessageBarComponent {
         new ws().send('message', wsPayload);
 
         removeLsItem(CHAT_MSG_PREFIX + `${this.config.chatData?.id}`);
-        this.config.renderLastMsg(this.config.chatData);
+        this.config.chatsPanel.renderLastMsg(this.config.chatData);
 
         if (this.element) {
             this.element.value = '';
