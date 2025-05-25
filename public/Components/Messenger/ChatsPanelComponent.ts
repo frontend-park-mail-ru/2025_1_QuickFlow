@@ -123,6 +123,7 @@ export default class ChatsPanelComponent {
 
         for (const chatData of chatsData) {
             this.unreadMessages.set(chatData.id, chatData.unread_messages);
+            console.log(this.unreadMessages);
 
             const chatItem = this.renderChatItem(chatData);
             this.chatItems.push(chatItem);
@@ -177,16 +178,7 @@ export default class ChatsPanelComponent {
             attrs: {id: CHAT_PREFIX + chatData.id},
         });
 
-        const handleChatItemClick = () => {
-            if (chat === this.activeChatItem) return;
-            this.close();
-            chat.classList.add('chats-panel__chat_active');
-            setLsItem('active-chat', CHAT_PREFIX + chatData.id);
-            this.activeChatItem = chat;
-            this._chatWindow.renderActiveChat(chatData);
-        };
-
-        chat.addEventListener('pointerup', () => handleChatItemClick());
+        chat.addEventListener('pointerup', () => this.onChatItemClick(chat, chatData));
 
         new AvatarComponent(chat, {
             size: CHAT_ITEM_AVATAR_SIZE,
@@ -213,6 +205,18 @@ export default class ChatsPanelComponent {
         this.renderLastMsg(chatData);
 
         return chat;
+    }
+
+    private onChatItemClick(chat: HTMLElement, chatData: Chat) {
+        if (chat === this.activeChatItem) {
+            return;
+        }
+
+        this.close();
+        chat.classList.add('chats-panel__chat_active');
+        setLsItem('active-chat', CHAT_PREFIX + chatData.id);
+        this.activeChatItem = chat;
+        this._chatWindow.renderActiveChat(chatData);
     }
 
     renderLastMsg(chatData: any) {
@@ -264,6 +268,9 @@ export default class ChatsPanelComponent {
             parent: lastMsgWrapper,
             classes: ['chats-panel__counter-wrapper'],
         });
+
+        console.log(this.unreadMessages);
+        console.log(chatData.id);
 
         new CounterComponent(counterWrapper, {
             value: this.unreadMessages.get(chatData.id),
