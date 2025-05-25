@@ -10,7 +10,7 @@ import ChatsPanelComponent from './ChatsPanelComponent';
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 import { UsersRequests } from '@modules/api';
 import MessageInputComponent from './MessageBar/MessageBarComponent';
-import { Message } from 'types/ChatsTypes';
+import { Chat, Message } from 'types/ChatsTypes';
 
 
 const MOBILE_MAX_WIDTH = 610;
@@ -38,9 +38,15 @@ const HEADER_CONTEXT_MENU_DATA = {
 };
 
 
+interface ChatWindowConfig {
+    chat_id: string;
+    receiver_username: string;
+}
+
+
 export default class ChatWindowComponent {
     private parent: HTMLElement | null = null;
-    private config: Record<string, any> | null = null;
+    private config: ChatWindowConfig | null = null;
     
     private isMobile: boolean;
 
@@ -51,14 +57,14 @@ export default class ChatWindowComponent {
     private _chatsPanel: ChatsPanelComponent | null = null;
     private messageInput: MessageInputComponent | null = null;
 
-    constructor(parent: HTMLElement, config: Record<string, any>) {
+    constructor(parent: HTMLElement, config: ChatWindowConfig) {
         this.parent = parent;
         this.config = config;
         this.isMobile = window.innerWidth <= MOBILE_MAX_WIDTH;
         this.render();
     }
 
-    async render() {
+    private async render() {
         this.container = createElement({
             parent: this.parent,
             classes: ['chat-window'],
@@ -174,7 +180,7 @@ export default class ChatWindowComponent {
         this._chatsPanel = chatsPanel;
     }
 
-    renderActiveChat(chatData: Record<string, any>) {
+    public renderActiveChat(chatData: Chat) {
         this._chatData = chatData;
         if (this.container) this.container.innerHTML = '';
 
@@ -195,7 +201,7 @@ export default class ChatWindowComponent {
         });
     }
 
-    close() {
+    private close() {
         this._chatsPanel?.close();
         if (this.isMobile) {
             this._chatsPanel.container.classList.remove('hidden');
@@ -206,7 +212,7 @@ export default class ChatWindowComponent {
         this.renderEmptyState();
     }
 
-    renderEmptyState() {
+    private renderEmptyState() {
         if (this.container) this.container.innerHTML = '';
 
         const wrapper = createElement({
@@ -225,7 +231,7 @@ export default class ChatWindowComponent {
         });
     }
 
-    renderHeader() {
+    private renderHeader() {
         const chatHeader = createElement({
             parent: this.container,
             classes: ['chat-window__header'],
@@ -270,7 +276,7 @@ export default class ChatWindowComponent {
         this.renderDropdown(chatHeader);
     }
 
-    renderDropdown(parent: HTMLElement) {
+    private renderDropdown(parent: HTMLElement) {
         const dropdown = createElement({
             classes: ['dropdown', 'chat-window__dropdown'],
             parent,
@@ -291,14 +297,21 @@ export default class ChatWindowComponent {
         });
     }
 
-    renderChat() {
-        if (!this.container) return;
+    private renderChat() {
+        if (!this.container) {
+            return;
+        }
 
         this.chat = new ChatComponent(this.container, {
             chatData: this._chatData,
             // user: this.config?.user,
             chatsPanel: this._chatsPanel,
+            onMessageRead: (newLastReadByMe: string) => {
+                this._chatData.last_read_by_me = newLastReadByMe;
+            },
         });
+
+        
 
         this.chatElement = this.chat.scroll;
     }

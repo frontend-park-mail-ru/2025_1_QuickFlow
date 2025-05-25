@@ -21,16 +21,16 @@ export default class MessengerComponent {
         });
         
         const chatsPanel = new ChatsPanelComponent(messengerWrapper, {
-            user: this.config.user,
-            messenger: this,
+            // user: this.config.user,
+            // messenger: this,
             chat_id: this.config?.chat_id,
         });
         
         const chatWindow = new ChatWindowComponent(messengerWrapper, {
-            user: this.config.user,
+            // user: this.config.user,
             receiver_username: this.config?.receiver_username,
             chat_id: this.config?.chat_id,
-            messenger: this
+            // messenger: this
         });
 
         chatsPanel.chatWindow = chatWindow;

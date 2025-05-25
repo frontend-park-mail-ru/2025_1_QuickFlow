@@ -23,6 +23,7 @@ interface ChatConfig {
     chatData: Record<string, any>;
     // renderLastMsg: (chatData: Record<string, any>) => void;
     chatsPanel: ChatsPanelComponent;
+    onMessageRead: (newLastReadByMe: string) => void;
 }
 
 
@@ -234,16 +235,20 @@ export default class ChatComponent {
                 continue;
             }
 
+            const messageItem = entry.target as HTMLElement;
+
             // Помечаем сообщение у собеседника как прочитанное
             const messageRead: MessageReadPayload = {
                 chat_id: this.config?.chatData?.id,
-                message_id: (entry.target as HTMLElement).dataset.msgId,
+                message_id: messageItem.dataset.msgId,
             };
             new ws().send('message_read', messageRead);
 
             // Обновляем каунтер
             this.config.chatsPanel.decrementMessagesCounter(this.config?.chatData?.id);
             this.config.chatsPanel.renderLastMsg(this.config.chatData);
+            // Обновляем последнее прочитанное для этого чата
+            this.config.onMessageRead(messageItem.dataset.msgTs);
 
             this.observer.unobserve(entry.target);
         }
