@@ -1,6 +1,6 @@
 import createElement from '@utils/createElement';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
-import ContextMenuComponent from '@components/ContextMenuComponent/ContextMenuComponent';
+import ContextMenuComponent, { OptionConfig } from '@components/ContextMenuComponent/ContextMenuComponent';
 import insertIcon from '@utils/insertIcon';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import { FriendsRequests } from '@modules/api';
@@ -162,7 +162,7 @@ export default class FriendComponent {
 
         const dropdown = createElement({
             classes: ['js-dropdown', 'search-item__dropdown'],
-            parent: friendRight,
+            parent: friendRight as HTMLElement,
         });
 
         const optionsWrapper = createElement({
@@ -175,7 +175,7 @@ export default class FriendComponent {
             parent: optionsWrapper,
         });
 
-        const contextMenuData: Record<string, object> = {};
+        const contextMenuData: Record<string, OptionConfig> = {};
 
         switch (this.config.section) {
             case 'all':

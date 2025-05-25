@@ -5,6 +5,11 @@ export const FILE = {
     MAX_SIZE_TOTAL: 10,
     MAX_SIZE_SINGLE: 6,
     IMG_MAX_RES: 1680,
+    ACCEPT: 'any',
+};
+
+export const MEDIA = {
+    ACCEPT: '.jpg, .jpeg, .png, .gif, .mov, .mp4',
 };
 
 export const MSG = {

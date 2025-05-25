@@ -1,75 +1,134 @@
+import SwiperComponent from '@components/SwiperComponent/SwiperComponent';
 import createElement from '@utils/createElement';
 
 
 interface PicsViewerConfig<T> {
     picsWrapper: HTMLElement;
+    target: HTMLImageElement | HTMLVideoElement;
 }
 
 
 export default class PicsViewerComponent {
     private config: PicsViewerConfig<any>;
 
-    private pics: HTMLImageElement[];
-
+    private pics: (HTMLImageElement | HTMLVideoElement)[];
+    private currentIndex: number = 0;
+    private handleKeydownBinded: (e: KeyboardEvent) => void;
     public wrapper: HTMLElement | null = null;
     public element: HTMLElement | null = null;
 
+    private slider: HTMLElement | null = null;
+    private swiper: SwiperComponent | null = null;
+
     constructor(config: PicsViewerConfig<any>) {
         this.config = config;
-        this.pics = Array.from(this.config.picsWrapper.querySelectorAll('img')).map(img => img.cloneNode(true) as HTMLImageElement);
 
+        const array = Array.from(this.config.picsWrapper.querySelectorAll('img, video'));
+        this.pics = array.map(img => img.cloneNode(true) as HTMLImageElement | HTMLVideoElement);
+        this.currentIndex = array.indexOf(this.config.target);
 
-        this.handlePicsClick();
         this.render();
         this.addBgClickHandler();
     }
 
-    render() {
+    private render() {
         document.body.style.overflow = 'hidden';
-        const parent = document.querySelector('.main');
+        const parent = document.querySelector('.parent');
 
         this.wrapper = createElement({
-            parent,
+            parent: parent as HTMLElement,
+            classes: ['pics-viewer__wrapper'],
+        });
+
+        this.slider = createElement({
+            parent: this.wrapper,
+            classes: ['pics-viewer__slider'],
+        });
+
+        this.pics.forEach(media => this.renderSlide(media));
+
+        this.swiper = new SwiperComponent(this.wrapper, {
+            picsWrapper: this.wrapper,
+            picsCount: this.pics.length,
+            slider: this.slider,
+            hasPaginator: true,
+            isHandlingMouse: true,
+            isHandlingTouch: true,
+        });
+        this.swiper.showSlide(this.currentIndex);
+
+        this.handleKeydownBinded = this.handleKeydown.bind(this);
+        document.addEventListener('keydown', this.handleKeydownBinded);
+        this.addBgClickHandler();
+    }
+
+    private renderSlide(media: HTMLImageElement | HTMLVideoElement) {
+        const bg = createElement({
+            parent: this.slider,
             classes: ['pics-viewer__bg'],
         });
 
-        this.element = createElement({
-            parent: this.wrapper,
+        const element = createElement({
+            parent: bg,
             classes: ['pics-viewer'],
         });
 
-        for (const pic of this.pics) {
-            pic.classList.value = 'pics-viewer__pic';
-            this.element.appendChild(pic);
+        media.classList.value = 'pics-viewer__pic';
+        element.appendChild(media);
+
+        if (media instanceof HTMLVideoElement) {
+            media.loop = true;
+            media.muted = true;
+            media.controls = true;
+
+            media.addEventListener('loadeddata', () => {
+                media.play();
+            });
+
+            media.load();
         }
     }
 
-    private handlePicsClick() {
-        for (const pic of this.pics) {
-            pic.style.cursor = 'pointer';
-            pic.addEventListener('click', () => {
-
-            });
+    private handleKeydown(e: KeyboardEvent) {
+        switch (e.key) {
+            case 'ArrowRight':
+                this.swiper.next();
+                break;
+            case 'ArrowLeft':
+                this.swiper.prev();
+                break;
+            case 'Escape':
+            case ' ':
+                e.preventDefault();
+                this.close();
+                return;
         }
     }
 
     protected addBgClickHandler() {
-        if (!this.wrapper || !this.element) return;
+        if (!this.wrapper) {
+            return;
+        }
 
-        this.wrapper.addEventListener('click', (e: MouseEvent) => {
-            if (
-                e.target === this.wrapper ||
-                e.target === this.element
-            ) {
+        this.wrapper.addEventListener('click', (e) => {
+            if ((e.target as Element).classList.contains('pics-viewer')) {
                 this.close();
             }
         });
     }
 
-    close() {
-        if (!this.wrapper) return;
+    public close() {
+        if (!this.wrapper) {
+            return;
+        }
         
         this.wrapper.remove();
         document.body.style.overflow = 'auto';
+        document.removeEventListener('keydown', this.handleKeydownBinded);
+
+        delete this.wrapper;
+        delete this.element;
+        delete this.pics;
+        delete this.config;
     }
 }

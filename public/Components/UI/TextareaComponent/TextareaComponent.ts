@@ -7,16 +7,32 @@ const DEFAULT_NAME = '';
 const DEFAULT_MAX_LENGTH = 256;
 
 
+interface TextareaConfig {
+    placeholder: string;
+    maxLength: number;
+
+    name?: string;
+    label?: string;
+    value?: string;
+    classes?: string[];
+    textareaClasses?: string[];
+    attrs?: Record<string, any>;
+    description?: string;
+    showCharactersLeft?: boolean;
+    required?: boolean;
+}
+
+
 export default class TextareaComponent {
     private parent: HTMLElement;
-    private config: Record<string, any>;
+    private config: TextareaConfig;
 
-    wrapper: HTMLElement | null = null;
-    textarea: HTMLTextAreaElement | null = null;
+    public wrapper: HTMLElement | null = null;
+    public textarea: HTMLTextAreaElement | null = null;
 
-    constructor(parent: HTMLElement, config: Record<string, any>) {
+    constructor(parent: HTMLElement, config: TextareaConfig) {
         this.parent = parent;
-        this.config = config || {};
+        this.config = config;
         this.render();
     }
 
@@ -54,6 +70,13 @@ export default class TextareaComponent {
             text: this.config.value || DEFAULT_TEXT,
         }) as HTMLTextAreaElement;
 
+        if (this.config.textareaClasses) {
+            this.config.textareaClasses.forEach((className: any) => {
+                if (!this.textarea) return;
+                this.textarea.classList.add(className)
+            });
+        }
+
         for (const attr in this.config.attrs) {
             this.textarea.setAttribute(attr, this.config.attrs[attr]);
         }
@@ -62,7 +85,10 @@ export default class TextareaComponent {
             this.textarea.setAttribute("required", "");
         }
 
-        if (this.config.description || this.config.maxLength) {
+        if (
+            this.config.description ||
+            (this.config.maxLength && this.config.showCharactersLeft)
+        ) {
             const descWrapper = createElement({
                 parent: this.wrapper,
                 classes: ['textarea__description-wrapper'],

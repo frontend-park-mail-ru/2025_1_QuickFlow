@@ -3,25 +3,26 @@
 @use './Components/UI/ButtonComponent/ButtonComponent';
 @use './Components/UI/InputComponent/InputComponent';
 @use './Components/UI/RadioComponent/RadioComponent';
-@use './Components/UI/ModalWindowComponent/ModalWindowComponent';
+@use './Components/UI/Modals/ModalWindowComponent';
 @use './Components/UI/TextareaComponent/TextareaComponent';
 @use './Components/UI/PopUpComponent/PopUpComponent';
 @use './Components/UI/IFrameComponent/IFrameComponent';
+@use './Components/UI/VideoComponent/VideoComponent';
 
-@use './Components/PostComponent/PostComponent';
+@use './Components/Post/PostComponent/PostComponent';
+@use './Components/Post/CommentsComponent/CommentsComponent';
+@use './Components/Post/CommentComponent/CommentComponent';
+
 @use './Components/MenuComponent/MenuComponent';
 @use './Components/HeaderComponent/HeaderComponent';
+
 @use './Components/RadioMenuComponent/RadioMenuComponent';
-@use './Components/LoginFormComponent/LoginFormComponent';
-@use './Components/SignupFormComponent/SignupFormComponent';
+@use './Components/Forms/LoginFormComponent/LoginFormComponent';
+@use './Components/Forms/SignupFormComponent/SignupFormComponent';
 @use './Components/AvatarComponent/AvatarComponent';
 @use './Components/ContextMenuComponent/ContextMenuComponent';
 @use './Components/ProfileMenuComponent/ProfileMenuComponent';
 @use './Components/MainLayoutComponent/MainLayoutComponent';
-@use './Components/MessengerComponent/MessengerComponent';
-@use './Components/MessengerComponent/ChatWindowComponent';
-@use './Components/MessengerComponent/ChatsPanelComponent';
-@use './Components/MessengerComponent/ChatComponent';
 @use './Components/ResizerComponent/ResizerComponent';
 @use './Components/FeedComponent/FeedComponent';
 @use './Components/CSATComponent/CSATComponent';
@@ -31,7 +32,15 @@
 @use './Components/NotificationComponent/NotificationComponent';
 @use './Components/VirtualizedListComponent/VirtualizedListComponent';
 @use './Components/PicsViewerComponent/PicsViewerComponent';
-@use './Components/MessengerComponent/MessageInputComponent/MessageInputComponent';
+@use './Components/FileAttachmentComponent/FileAttachmentComponent';
+
+@use './Components/Messenger/MessengerComponent';
+@use './Components/Messenger/ChatWindowComponent';
+@use './Components/Messenger/ChatsPanelComponent';
+@use './Components/Messenger/ChatComponent';
+@use './Components/Messenger/MessageComponent/MessageComponent';
+@use './Components/Messenger/MessageBar/MessageBarComponent';
+@use './Components/Messenger/MessageBar/EmojiBarComponent/EmojiBarComponent';
 
 @use './Views/FeedView/FeedView';
 @use './Views/ProfileView/ProfileView';

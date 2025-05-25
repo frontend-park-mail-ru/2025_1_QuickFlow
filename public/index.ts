@@ -12,6 +12,7 @@ import registerRoutes from './registerRoutes';
 import ws from '@modules/WebSocketService';
 import NotificationComponent from '@components/NotificationComponent/NotificationComponent';
 import LsProfile from '@modules/LsProfile';
+import { Message } from 'types/ChatsTypes';
 
 
 registerSW();
@@ -89,7 +90,9 @@ registerRoutes();
         !router.path.startsWith('/login') &&
         !router.path.startsWith('/signup')
     ) {
-        new ws().subscribe('message', (payload: Record<string, any>) => {
+        new ws().subscribe('message', (payload: Message) => {
+            console.log(router.path, payload?.sender?.username);
+
             if (
                 router.path.startsWith('/messenger') ||
                 payload?.sender?.username === LsProfile.username

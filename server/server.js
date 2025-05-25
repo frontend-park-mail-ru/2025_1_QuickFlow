@@ -10,7 +10,7 @@ import crypto from 'crypto';
 import http from 'http';
 import { WebSocketServer } from 'ws';
 
-import { users, posts, chats, messages, search, community, post } from '../public/mocks.js';
+import { users, posts, chats, messages, search, community, post, comments, unread } from '../public/mocks.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -37,12 +37,10 @@ wss.on('connection', (ws) => {
             const response = {
                 type: 'message',
                 payload: {
-                    id: "uuidv4()",
+                    id: 'uuidv4()',
                     text: "hello!",
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString(),
-                    is_read: false,
-                    attachment_urls: null,
                     sender: {
                         id: "1eabe150-7b9e-42b3-a8d5-ad6ad900180c",
                         username: "Nikita2",
@@ -232,6 +230,89 @@ app.get('/api/my_profile', (req, res) => {
     }
 
     res.status(200).json(users['rvasutenko']);
+});
+
+app.get('/api/posts/:post_id/comments', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).json(comments);
+});
+
+app.get('/api/chats/unread', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).json(unread);
+});
+
+app.post('/api/posts/:post_id/comment', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    const comment = comments[0];
+    comment.text = req.body.text;
+
+    res.status(200).json(comment);
+});
+
+app.put('/api/comments/:comment_id', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    const comment = comments[0];
+    comment.text = req.body.text;
+
+    res.status(200).json(comment);
+});
+
+app.delete('/api/comments/:comment_id', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).end();
+});
+
+app.post('/api/comments/:comment_id/like', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).end();
+});
+
+app.delete('/api/comments/:comment_id/like', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).end();
 });
 
 app.get('/api/communities/:pk', (req, res) => {
@@ -462,7 +543,6 @@ app.post('/api/messages/:username', (req, res) => {
         created_at: "2025-04-10T19:08:42.323841+03:00",
         updated_at: "2025-04-10T19:08:42.323841+03:00",
         is_read: false,
-        attachment_urls: null,
         "sender": {
             "id": "0e146b4b-b28e-44b8-8c59-f0c182459756",
             "username": "rvasutenko",

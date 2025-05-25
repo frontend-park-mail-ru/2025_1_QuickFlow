@@ -1,6 +1,6 @@
 import Ajax from '@modules/ajax';
-import PostComponent from '@components/PostComponent/PostComponent';
-import PostMwComponent from '@components/UI/ModalWindowComponent/PostMwComponent';
+import PostComponent from '@components/Post/PostComponent/PostComponent';
+import PostMwComponent from '@components/UI/Modals/PostMwComponent';
 import createElement from '@utils/createElement';
 import router from '@router';
 import insertIcon from '@utils/insertIcon';
@@ -8,6 +8,7 @@ import { getLsItem } from '@utils/localStorage'
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 import ExtraLoadComponent from '@components/ExtraLoadComponent/ExtraLoadComponent';
 import VirtualizedListComponent from '@components/VirtualizedListComponent/VirtualizedListComponent';
+import { Post } from 'types/PostTypes';
 
 
 const POSTS_COUNT = 10;
@@ -103,9 +104,9 @@ export default class FeedComponent {
             console.log(this.config.params);
             new PostMwComponent(this.parent.parentNode as HTMLElement, {
                 type: 'create-post',
-                target: this.config?.params?.author_id ? 'community' : '',
+                target: this.config?.params?.author_id ? 'community' : 'user',
                 params: this.config.params,
-                renderCreatedPost: (config: any) => {
+                renderCreatedPost: (config: Post) => {
                     this.renderPost(config, "top");
 
                     if (getLsItem('is-post-feedback-given', 'false') === 'false') {
@@ -129,9 +130,13 @@ export default class FeedComponent {
 
     private renderPost(config: any, position: string | null = null): HTMLElement {
         const key = config.id; // предполагаем, что post_id уникален
-        if (!key) return;
+        if (!key) {
+            return;
+        }
     
-        if (position) config.position = "top";
+        if (position) {
+            config.position = "top";
+        }
     
         this.postKeyMap.set(String(key), config); // сохраняем config по ключу
         new PostComponent(this.posts, config);

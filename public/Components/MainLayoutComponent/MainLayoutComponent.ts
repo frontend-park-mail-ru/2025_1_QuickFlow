@@ -14,11 +14,11 @@ export default class MainLayoutComponent {
     right: HTMLElement | null = null;
 
     constructor() {
-        if (MainLayoutComponent.__instance) {
-            return MainLayoutComponent.__instance;
-        }
+        // if (MainLayoutComponent.__instance) {
+        //     return MainLayoutComponent.__instance;
+        // }
 
-        MainLayoutComponent.__instance = this;
+        // MainLayoutComponent.__instance = this;
     }
 
     render(config: Record<string, any>) {

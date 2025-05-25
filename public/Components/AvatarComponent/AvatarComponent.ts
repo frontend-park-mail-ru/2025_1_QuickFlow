@@ -1,3 +1,4 @@
+import PicsViewerComponent from '@components/PicsViewerComponent/PicsViewerComponent';
 import createElement from '@utils/createElement';
 import getTimeDifference from '@utils/getTimeDifference';
 
@@ -7,14 +8,28 @@ const DEFAULT_SIZE_CLASS = SIZE_PREFIX + 'm';
 const DEFAULT_SRC = '/static/img/default-avatar.jpg';
 
 
+interface AvatarConfig {
+    src: string;
+    size: 'xxs' | 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | 'xxxl';
+    href?: string;
+    class?: string;
+    type?: 'status' | 'edit';
+    status?: {
+        online?: boolean;
+        lastSeen: string;
+    };
+    hasViewer?: boolean;
+}
+
+
 export default class AvatarComponent {
     private parent: HTMLElement;
-    private config: Record<string, any>;
+    private config: AvatarConfig;
 
     wrapper: HTMLElement | null = null;
     avatar: HTMLElement | null = null;
 
-    constructor(parent: HTMLElement, config: Record<string, any>) {
+    constructor(parent: HTMLElement, config: AvatarConfig) {
         this.parent = parent;
         this.config = config;
         this.render();
@@ -50,6 +65,15 @@ export default class AvatarComponent {
             this.renderStatus();
         } else if (this.config.type === 'edit') {
             this.renderEdit();
+        }
+
+        if (this.config.hasViewer) {
+            this.wrapper.addEventListener('click', () => {
+                new PicsViewerComponent({
+                    picsWrapper: this.wrapper,
+                    target: this.avatar as HTMLImageElement,
+                });
+            });
         }
     }
 

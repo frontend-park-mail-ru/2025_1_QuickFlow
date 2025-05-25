@@ -1,4 +1,4 @@
-const VERSION = '1.0.48'; // Версия для управления кэшами
+const VERSION = '1.0.106'; // Версия для управления кэшами
 
 const STATIC_CACHE = 'STATIC_CACHE-' + VERSION;
 const MEDIA_CACHE = 'MEDIA_CACHE-' + VERSION;
@@ -20,6 +20,7 @@ const CACHE_ON_INSTALL = [
     '/index.html',
     '/bundle.js',
     '/styles/styles.css',
+    '/static/img/close-icon.svg',
 ];
 
 self.addEventListener('install', (event) => {

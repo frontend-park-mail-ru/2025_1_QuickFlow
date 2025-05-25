@@ -1,4 +1,4 @@
-import SignupFormComponent from '@components/SignupFormComponent/SignupFormComponent';
+import SignupFormComponent from '@components/Forms/SignupFormComponent/SignupFormComponent';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import createElement from '@utils/createElement';
 import router from '@router';
