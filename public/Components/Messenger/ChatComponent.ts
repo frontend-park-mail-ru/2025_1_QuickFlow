@@ -7,7 +7,8 @@ import ExtraLoadComponent from '@components/ExtraLoadComponent/ExtraLoadComponen
 import { ChatsRequests } from '@modules/api';
 import LsProfile from '@modules/LsProfile';
 import MessageComponent from './MessageComponent/MessageComponent';
-import { Message, MessagesResponse } from 'types/ChatsTypes';
+import { Message, MessageReadPayload, MessagesResponse } from 'types/ChatsTypes';
+import ChatsPanelComponent from './ChatsPanelComponent';
 
 
 const EXTRA_LOAD_MARGIN = 500;
@@ -18,9 +19,16 @@ const EMPTY_STATE_CALL_TO_ACTION_TEXT = 'Напишите или отправь�
 const OPEN_PROFILE_BTN_TEXT = 'Открыть профиль';
 
 
+interface ChatConfig {
+    chatData: Record<string, any>;
+    // renderLastMsg: (chatData: Record<string, any>) => void;
+    chatsPanel: ChatsPanelComponent;
+}
+
+
 export default class ChatComponent {
     private parent: HTMLElement;
-    private config: Record<string, any>;
+    private config: ChatConfig;
     private container: HTMLElement | null = null;
     private observer: IntersectionObserver;
 
@@ -29,7 +37,7 @@ export default class ChatComponent {
     private lastReadByOtherTime: number | null = null;
     private msgsData: MessagesResponse = null;
 
-    constructor(parent: HTMLElement, config: Record<string, any>) {
+    constructor(parent: HTMLElement, config: ChatConfig) {
         this.parent = parent;
         this.config = config;
 
@@ -226,10 +234,16 @@ export default class ChatComponent {
                 continue;
             }
 
-            new ws().send('message_read', {
+            // Помечаем сообщение у собеседника как прочитанное
+            const messageRead: MessageReadPayload = {
                 chat_id: this.config?.chatData?.id,
                 message_id: (entry.target as HTMLElement).dataset.msgId,
-            });
+            };
+            new ws().send('message_read', messageRead);
+
+            // Обновляем каунтер
+            this.config.chatsPanel.decrementMessagesCounter(this.config?.chatData?.id);
+            this.config.chatsPanel.renderLastMsg(this.config.chatData);
 
             this.observer.unobserve(entry.target);
         }

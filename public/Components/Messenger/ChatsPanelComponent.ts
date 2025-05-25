@@ -8,8 +8,9 @@ import router from '@router';
 import { ChatsRequests } from '@modules/api';
 import networkErrorPopUp from '@utils/networkErrorPopUp';
 import ChatWindowComponent from './ChatWindowComponent';
-import { Chat } from 'types/ChatsTypes';
+import { Chat, Message } from 'types/ChatsTypes';
 import CounterComponent from '@components/CounterComponent/CounterComponent';
+import ws from '@modules/WebSocketService';
 
 
 const REQUEST_CHATS_COUNT = 50;
@@ -39,7 +40,9 @@ export default class ChatsPanelComponent {
 
     container: HTMLElement | null = null;
     activeChatItem: HTMLElement | null = null;
-    chatItems: Array<any> = [];
+    chatItems: Array<HTMLElement> = [];
+
+    private unreadMessages: Map<string, number> = new Map();
 
     constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
@@ -120,6 +123,8 @@ export default class ChatsPanelComponent {
         }
 
         for (const chatData of chatsData) {
+            this.unreadMessages.set(chatData.id, chatData.unread_messages);
+
             const chatItem = this.renderChatItem(chatData);
             this.chatItems.push(chatItem);
             if (chatItem.id === activeChatId) {
@@ -128,6 +133,19 @@ export default class ChatsPanelComponent {
                 this._chatWindow.renderActiveChat(chatData);
             }
         }
+
+        // new ws().subscribe('message', (message: Message) => {
+        //     const oldCount = this.unreadMessages.get(message.chat_id);
+        //     this.unreadMessages.set(message.chat_id, oldCount + 1);
+        // });
+    }
+
+    public incrementMessagesCounter(chatId: string) {
+        this.unreadMessages.set(chatId, this.unreadMessages.get(chatId) + 1);
+    }
+
+    public decrementMessagesCounter(chatId: string) {
+        this.unreadMessages.set(chatId, this.unreadMessages.get(chatId) - 1);
     }
 
     renderEmptyState() {
@@ -205,8 +223,17 @@ export default class ChatsPanelComponent {
     }
 
     renderLastMsg(chatData: any) {
-        const lastMsgWrapper = document.getElementById(CHAT_INFO_PREFIX + chatData.id);
-        if (lastMsgWrapper) lastMsgWrapper.innerHTML = '';
+        const chatItem = this.chatItems.find(
+            (item) => item.id === CHAT_PREFIX + chatData.id
+        );
+
+        chatItem.remove();
+        this.chats.prepend(chatItem);
+
+        const lastMsgWrapper = chatItem.querySelector(`#${CHAT_INFO_PREFIX + chatData.id}`) as HTMLElement;
+        if (lastMsgWrapper) {
+            lastMsgWrapper.innerHTML = '';
+        }
 
         const draftValue = getLsItem(
             CHAT_MSG_PREFIX + `${chatData.id}`,
@@ -241,7 +268,7 @@ export default class ChatsPanelComponent {
         });
 
         new CounterComponent(counterWrapper, {
-            value: chatData.unread_messages,
+            value: this.unreadMessages.get(chatData.id),
             classes: ['chats-panel__counter'],
         });
     }

@@ -39,3 +39,8 @@ export interface MessagesResponse {
     messages?: Message[];
     last_read_ts?: string;
 }
+
+export interface MessageReadPayload {
+    chat_id: string;
+    message_id: string;
+}

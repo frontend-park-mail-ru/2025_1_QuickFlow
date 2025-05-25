@@ -91,7 +91,6 @@ export default class ChatWindowComponent {
                     };
                     setLsItem('active-chat', `chat-${this._chatData.id}`);
                     this.renderHeader();
-                    // this.renderMessageInput();
                     this.renderChat();
                     this.messageInput = new MessageInputComponent(this.container, {
                         chatData: this._chatData,
@@ -99,7 +98,6 @@ export default class ChatWindowComponent {
                         chatElement: this.chatElement,
                         chat: this.chat,
                     });
-                    // this.renderChat();
                     break;
 
                 case 401:
@@ -112,49 +110,59 @@ export default class ChatWindowComponent {
             }
         }
 
-        new ws().subscribe('message', (payload: Message) => {
+        new ws().subscribe('message', (message: Message) => {
+            this.renderFeedback();
 
-            if (getLsItem('is-messenger-feedback-given', 'false') === 'false') {
-                new IFrameComponent(this.parent.parentNode as HTMLElement, {
-                    src: '/scores?type=messenger',
-                    deleteOther: true,
-                });
-            }
-
-            // removeLsItem(CHAT_MSG_PREFIX + `${this._chatData?.id}`);
-
-            // Отправили первое сообщение
             if (!this._chatData?.id && this._chatData?.receiver_id) {
-                setLsItem('active-chat', `chat-${payload.chat_id}`);
-                this._chatsPanel?.renderChatList();
-
-                const newUrl =
-                    window.location.protocol +
-                    "//" + window.location.host +
-                    `/messenger/${this._chatData.username}?chat_id=${payload?.chat_id}`;
-
-                window.history.pushState({ path: newUrl }, '', newUrl);
-
-            // Отправили очередное сообщение
+                this.onFirstMessageSent(message);
             } else {
-                if (`chat-${payload.chat_id}` === getLsItem('active-chat', null)) {
-                    this.chat?.pushMessage(payload);
-                    this.messageInput.updateTextareaHeight();
-                    // this.updateTextareaHeight();
-                }
-                this._chatsPanel?.renderLastMsg({
-                    id: payload.chat_id,
-                    last_message: {
-                        text: payload.text,
-                        created_at: payload.created_at,
-                    }
-                });
+                this.onNewMessageSent(message);
             }
 
             if (!this.isMobile) {
                 this.messageInput?.focus();
             }
         });
+    }
+
+    private renderFeedback() {
+        if (getLsItem('is-messenger-feedback-given', 'false') !== 'false') {
+            return;
+        }
+
+        new IFrameComponent(this.parent.parentNode as HTMLElement, {
+            src: '/scores?type=messenger',
+            deleteOther: true,
+        });
+    }
+
+    private onNewMessageSent(message: Message) {
+        if (`chat-${message.chat_id}` === getLsItem('active-chat', null)) {
+            this.chat?.pushMessage(message);
+            this.messageInput.updateTextareaHeight();
+        } else {
+            this._chatsPanel.incrementMessagesCounter(message.chat_id);
+        }
+
+        this._chatsPanel?.renderLastMsg({
+            id: message.chat_id,
+            last_message: {
+                text: message.text,
+                created_at: message.created_at,
+            }
+        });
+    }
+
+    private onFirstMessageSent(message: Message) {
+        setLsItem('active-chat', `chat-${message.chat_id}`);
+        this._chatsPanel?.renderChatList();
+
+        const newUrl =
+            window.location.protocol +
+            "//" + window.location.host +
+            `/messenger/${this._chatData.username}?chat_id=${message?.chat_id}`;
+
+        window.history.pushState({ path: newUrl }, '', newUrl);
     }
 
     get chatData() {
@@ -286,7 +294,8 @@ export default class ChatWindowComponent {
 
         this.chat = new ChatComponent(this.container, {
             chatData: this._chatData,
-            user: this.config?.user,
+            // user: this.config?.user,
+            chatsPanel: this._chatsPanel,
         });
 
         this.chatElement = this.chat.scroll;
