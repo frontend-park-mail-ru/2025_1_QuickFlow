@@ -230,9 +230,12 @@ export default class ChatsPanelComponent {
         if (chatItem) {
             chatItem.remove();
             this.chats.prepend(chatItem);
+
+            // const lastMsgWrapper = chatItem.querySelector(`#${CHAT_INFO_PREFIX + chatData.id}`) as HTMLElement;
+            // lastMsgWrapper.innerHTML = '';
         }
 
-        const lastMsgWrapper = chatItem.querySelector(`#${CHAT_INFO_PREFIX + chatData.id}`) as HTMLElement;
+        const lastMsgWrapper = this.chats.querySelector(`#${CHAT_INFO_PREFIX + chatData.id}`) as HTMLElement;
         if (lastMsgWrapper) {
             lastMsgWrapper.innerHTML = '';
         }
