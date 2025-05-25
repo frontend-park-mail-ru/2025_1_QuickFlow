@@ -140,7 +140,11 @@ export default class ChatsPanelComponent {
     }
 
     public decrementMessagesCounter(chatId: string) {
-        this.unreadMessages.set(chatId, this.unreadMessages.get(chatId) - 1);
+        const oldCount = this.unreadMessages.get(chatId);
+        if (oldCount <= 0) {
+            return;
+        }
+        this.unreadMessages.set(chatId, oldCount - 1);
     }
 
     renderEmptyState() {
