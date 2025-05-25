@@ -11,3 +11,8 @@ export interface UploadData {
         files: string[] | null;
     }
 }
+
+export interface Attachment {
+    url: string;
+    name: string;
+}

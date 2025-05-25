@@ -9,6 +9,7 @@ import { UsersRequests } from '@modules/api';
 import LsProfile from '@modules/LsProfile';
 import ws from '@modules/WebSocketService';
 import NotificationComponent from '@components/NotificationComponent/NotificationComponent';
+import { Message } from 'types/ChatsTypes';
 
 
 export default class LoginFormComponent {
@@ -246,7 +247,7 @@ export default class LoginFormComponent {
                     //     if (status === 200) setLsItem('user_id', data.id);
                     // })();
 
-                    new ws().subscribe('message', (payload: Record<string, any>) => {
+                    new ws().subscribe('message', (payload: Message) => {
                         if (
                             router.path.startsWith('/messenger') ||
                             payload?.sender?.username === LsProfile.username

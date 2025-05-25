@@ -10,7 +10,7 @@ import crypto from 'crypto';
 import http from 'http';
 import { WebSocketServer } from 'ws';
 
-import { users, posts, chats, messages, search, community, post, comments } from '../public/mocks.js';
+import { users, posts, chats, messages, search, community, post, comments, unread } from '../public/mocks.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -243,6 +243,17 @@ app.get('/api/posts/:post_id/comments', (req, res) => {
     }
 
     res.status(200).json(comments);
+});
+
+app.get('/api/chats/unread', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).json(unread);
 });
 
 app.post('/api/posts/:post_id/comment', (req, res) => {

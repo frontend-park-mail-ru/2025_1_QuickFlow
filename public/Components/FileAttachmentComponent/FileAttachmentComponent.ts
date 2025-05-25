@@ -8,6 +8,7 @@ interface FileAttachmentConfig {
     type: 'file' | 'media' | 'file_attached';
     
     file?: File;
+    name?: string;
     classes?: string[];
 }
 
@@ -66,7 +67,7 @@ export default class FileAttachmentComponent {
             classes: ['attachment__info'],
         });
 
-        const filename = this.config.dataUrl.split('/').pop();
+        const filename = this.config?.name || this.config.dataUrl.split('/').pop();
         createElement({
             parent: infoWrapper,
             text: filename,

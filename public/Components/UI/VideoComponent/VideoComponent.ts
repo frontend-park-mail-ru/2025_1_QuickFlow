@@ -40,10 +40,13 @@ export default class VideoComponent {
         this.element = createElement({
             tag: 'video',
             parent: this.parent,
-            attrs: { src: this.config.src },
+            attrs: {
+                src: this.config.src,
+                style: 'display: none',
+            },
         }) as HTMLVideoElement;
 
-        if (this.config.classes.length) {
+        if (this.config?.classes?.length) {
             this.element.classList.add(...this.config.classes);
         }
     
@@ -55,6 +58,7 @@ export default class VideoComponent {
 
         this.element.addEventListener('loadeddata', () => {
             this.loader.remove();
+            this.element.style.display = 'unset';
             if (this.config.autoplay) {
                 this.element.play();
             }

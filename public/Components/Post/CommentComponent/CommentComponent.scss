@@ -27,7 +27,7 @@
 
 .comment__text {
     color: var(--text-secondary);
-    word-break: break-all;
+    word-break: break-word;
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;

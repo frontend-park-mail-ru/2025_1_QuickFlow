@@ -55,24 +55,72 @@ export const posts = [
         },
         text: 'Аԥсны (Абхазия) в переводе с абхазского — "страна души". И действительно, поездка туда впечаталась в душу и стала испытанием для тела: пока это наше единственное путешествие, где мы три дня не мылись, купались в море с коровами, все время от чего-нибудь лечились, шарахались от машин на переходах и от собак в подворотнях, сгоняли кошек со стульев в кафе и вырывали наших детей из рук прохожих. Но поскольку мы все же благополучно вернулись домой, я могу обо всем подробнейшим образом написать здесь (от души, так скажем). Сейчас — вводный пост, потом будет весь наш маршрут поэтапно, а в конце моих путевых заметок подведем итоги по стоимости поездки.',
         media: [
-            "https://quickflowapp.ru/minio/posts/f4282087-f873-4028-b353-863c62e1de76.mp4",
-            "/posts/IMG_6776.jpg",
-            "/posts/273153700_118738253861831_5906416883131394354_n.jpeg",
-            "/posts/272708814_1158833634855293_1743973316352152210_n.webp.jpg",
-            "/posts/272464515_147005761018515_3100264353239753904_n.webp.jpg",
-            "/posts/259096143_252774593424446_3292295880799640700_n.jpeg",
-            "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
-            "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
+            {
+                url: "https://quickflowapp.ru/minio/posts/f4282087-f873-4028-b353-863c62e1de76.mp4",
+                name: 'IMG_6776.jpg',
+            },
+            {
+                url: "/posts/IMG_6776.jpg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/273153700_118738253861831_5906416883131394354_n.jpeg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/272708814_1158833634855293_1743973316352152210_n.webp.jpg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/272464515_147005761018515_3100264353239753904_n.webp.jpg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/259096143_252774593424446_3292295880799640700_n.jpeg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
+                name: 'IMG_6778.jpg',
+            },
         ],
         files: [
-            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
-            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
-            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
-            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
-            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
-            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
-            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
-            "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
         ],
         created_at: "2005-05-02",
         like_count: 1,
@@ -107,9 +155,18 @@ export const posts = [
         },
         text: "Hello, this is my first post",
         media: [
-            "https://quickflowapp.ru/images/image1.jpg",
-            "https://quickflowapp.ru/images/image2.jpg",
-            "https://quickflowapp.ru/images/image3.jpg",
+            {
+                url: "https://quickflowapp.ru/images/image1.jpg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/images/image2.jpg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/images/image3.jpg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
         ],
         created_at: "2005-05-23",
         like_count: 0,
@@ -128,7 +185,10 @@ export const posts = [
         },
         text: "Hello, this is my first post",
         media: [
-            "/posts/272464515_147005761018515_3100264353239753904_n.webp.jpg",
+            {
+                url: "/posts/272464515_147005761018515_3100264353239753904_n.webp.jpg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
         ],
         created_at: "2005-03-12",
         like_count: 0,
@@ -147,7 +207,10 @@ export const posts = [
         },
         text: "Hello, this is my first post",
         media: [
-            "/posts/259096143_252774593424446_3292295880799640700_n.jpeg",
+            {
+                url: "/posts/259096143_252774593424446_3292295880799640700_n.jpeg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
         ],
         created_at: "2005-01-01",
         like_count: 0,
@@ -166,7 +229,10 @@ export const posts = [
         },
         text: "Hello, this is my first post",
         media: [
-            "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
+            {
+                url: "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
         ],
         created_at: "2005-02-07",
         like_count: 0,
@@ -185,7 +251,10 @@ export const posts = [
         },
         text: "Hello, this is my first post",
         media: [
-            "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
+            {
+                url: "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
         ],
         created_at: "2025-04-02",
         like_count: 0,
@@ -770,10 +839,22 @@ export const messages = {
                     "updated_at": "2025-04-10T19:15:42.323841+03:00",
                     "is_read": true,
                     "files": [
-                        'https://quickflowapp.ru/minio/posts/5ffc6da1-af7c-4484-8d7e-04ad01f4eecd.txt',
-                        'https://quickflowapp.ru/minio/posts/8b339c37-b2f4-406b-a234-2de419f14b33.jpeg',
-                        'https://quickflowapp.ru/minio/posts/15cd185e-0bdf-4939-8f8d-6da6f2c98d8c.jpeg',
-                        'https://quickflowapp.ru/minio/posts/be9e97e5-e7cb-415d-8bbe-0a3972a83993.mp4',
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/5ffc6da1-af7c-4484-8d7e-04ad01f4eecd.txt',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/8b339c37-b2f4-406b-a234-2de419f14b33.jpeg',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/15cd185e-0bdf-4939-8f8d-6da6f2c98d8c.jpeg',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/be9e97e5-e7cb-415d-8bbe-0a3972a83993.mp4',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
                     ],
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
@@ -791,13 +872,31 @@ export const messages = {
                     "updated_at": "2025-04-10T19:16:27.926906+03:00",
                     "is_read": true,
                     "media": [
-                        'https://quickflowapp.ru/minio/posts/88d75228-a2db-42c8-8987-3ab36ae8770d.jpeg',
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/88d75228-a2db-42c8-8987-3ab36ae8770d.jpeg',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/8b339c37-b2f4-406b-a234-2de419f14b33.jpeg',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/15cd185e-0bdf-4939-8f8d-6da6f2c98d8c.jpeg',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/557f5a12-c08b-4aac-af33-838a3fa4d354.jpeg',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/80ef5b8b-e93b-4f47-8fba-69912b75f02d.jpeg',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/be9e97e5-e7cb-415d-8bbe-0a3972a83993.mp4',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
                         // 'https://quickflowapp.ru/minio/posts/c239cf67-a4e5-4000-9c3d-34538bf903a8.jpeg',
-                        'https://quickflowapp.ru/minio/posts/8b339c37-b2f4-406b-a234-2de419f14b33.jpeg',
-                        'https://quickflowapp.ru/minio/posts/15cd185e-0bdf-4939-8f8d-6da6f2c98d8c.jpeg',
-                        'https://quickflowapp.ru/minio/posts/557f5a12-c08b-4aac-af33-838a3fa4d354.jpeg',
-                        'https://quickflowapp.ru/minio/posts/80ef5b8b-e93b-4f47-8fba-69912b75f02d.jpeg',
-                        'https://quickflowapp.ru/minio/posts/be9e97e5-e7cb-415d-8bbe-0a3972a83993.mp4',
                     ],
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
@@ -864,4 +963,10 @@ export const community = {
             "cover_url": "https://quickflowapp.ru/minio/posts/ed2cc61c-b3b4-460a-9ac0-10d7f66a8e52.png"
         }
     },
+}
+
+export const unread = {
+    payload: {
+        chats_count: 9,
+    }
 }

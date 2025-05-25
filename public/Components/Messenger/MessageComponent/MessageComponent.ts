@@ -5,10 +5,12 @@ import LsProfile from '@modules/LsProfile';
 import PicsViewerComponent from '@components/PicsViewerComponent/PicsViewerComponent';
 import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
 import downloadFile from '@utils/downloadFile';
+import { Message } from 'types/ChatsTypes';
+import VideoComponent from '@components/UI/VideoComponent/VideoComponent';
 
 
 interface MessageConfig {
-    data: Record<string, any>;
+    data: Message;
     classes: string[];
     lastReadByMeTime: number;
     lastReadByOtherTime: number;
@@ -125,16 +127,17 @@ export default class MessageComponent {
             classes: ['msg__files'],
         });
 
-        for (const fileUrl of this.config.data.files) {
+        for (const file of this.config.data.files) {
             const attachment = new FileAttachmentComponent(files, {
                 type: 'file_attached',
-                dataUrl: fileUrl,
+                dataUrl: file.url,
+                name: file.name,
                 classes: ['msg__file'],
             });
 
             attachment.element.addEventListener('click', async (e) => {
                 e.preventDefault();
-                await downloadFile(fileUrl);
+                await downloadFile(file.url);
             });
         }
     }
@@ -146,26 +149,34 @@ export default class MessageComponent {
         });
 
         const mediaItems: HTMLElement[] = [];
-        for (const mediaUrl of this.config.data.media) {
-            const extension = mediaUrl.split('.').at(-1);
+        for (const media of this.config.data.media) {
+            const extension = media.url.split('.').pop();
 
-            const mediaItem = createElement({
-                tag: extension === 'mp4' ? 'video' : 'img',
-                classes: ['msg__media-item'],
-                attrs: {
-                    src: mediaUrl,
-                },
-            }) as HTMLImageElement | HTMLVideoElement;
-
-            if (mediaItem instanceof HTMLVideoElement) {
-                mediaItem.loop = true;
-                mediaItem.muted = true;
-
-                mediaItem.addEventListener('loadeddata', () => {
-                    mediaItem.play();
+            let mediaItem: HTMLImageElement | HTMLVideoElement;
+            if (extension !== 'mp4') {
+                mediaItem = createElement({
+                    tag: extension === 'mp4' ? 'video' : 'img',
+                    classes: ['msg__media-item'],
+                    attrs: { src: media.url },
+                }) as HTMLImageElement | HTMLVideoElement;
+            } else {
+                const video = new VideoComponent(mediaItem, {
+                    src: media.url,
+                    classes: ['msg__media-item'],
+                    loop: true,
+                    muted: true,
+                    autoplay: true,
+                    playsInline: true,
                 });
+                // mediaItem.loop = true;
+                // mediaItem.muted = true;
 
-                mediaItem.load();
+                // mediaItem.addEventListener('loadeddata', () => {
+                //     mediaItem.play();
+                // });
+
+                // mediaItem.load();
+                mediaItem = video.element;
             }
 
             mediaItems.push(mediaItem);

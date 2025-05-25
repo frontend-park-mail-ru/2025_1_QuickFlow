@@ -7,6 +7,7 @@ import ExtraLoadComponent from '@components/ExtraLoadComponent/ExtraLoadComponen
 import { ChatsRequests } from '@modules/api';
 import LsProfile from '@modules/LsProfile';
 import MessageComponent from './MessageComponent/MessageComponent';
+import { Message, MessagesResponse } from 'types/ChatsTypes';
 
 
 const EXTRA_LOAD_MARGIN = 500;
@@ -26,7 +27,7 @@ export default class ChatComponent {
     scroll: HTMLElement | null = null;
     private lastReadByMeTime: number | null = null;
     private lastReadByOtherTime: number | null = null;
-    private msgsData: Record<string, any> = null;
+    private msgsData: MessagesResponse = null;
 
     constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
@@ -181,7 +182,7 @@ export default class ChatComponent {
         });        
     }
 
-    pushMessage(payload: Record<string, any>) {
+    public pushMessage(payload: Message) {
         this.msgsData?.messages?.push(payload);
 
         new MessageComponent({

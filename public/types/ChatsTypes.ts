@@ -1,3 +1,4 @@
+import { Attachment } from "./UploadTypes";
 import { UserPublic } from "./UserTypes";
 
 export interface UnreadChatsCountResponse {
@@ -29,9 +30,9 @@ export interface Message {
     updated_at: string;
     sender: UserPublic;
     chat_id: string;
-    files?: string[];
-    media?: string[];
-    audio?: string[];
+    files?: Attachment[];
+    media?: Attachment[];
+    audio?: Attachment[];
 }
 
 export interface MessagesResponse {

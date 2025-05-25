@@ -19,6 +19,7 @@ import { CommunityPost, UserPost } from 'types/PostTypes';
 import VideoComponent from '@components/UI/VideoComponent/VideoComponent';
 import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
 import downloadFile from '@utils/downloadFile';
+import { Attachment } from 'types/UploadTypes';
 
 
 const AUTHOR_AVATAR_SIZE = 's';
@@ -114,25 +115,26 @@ export default class PostComponent {
             classes: ['post__files'],
         });
 
-        new SwiperComponent(null, {
-            picsWrapper: files,
-            picsCount: this.config.files.length,
-            slider: files,
-            hasPaginator: true,
-            isHandlingMouse: false,
-            isHandlingTouch: false,
-        });
+        // new SwiperComponent(null, {
+        //     picsWrapper: files,
+        //     picsCount: this.config.files.length,
+        //     slider: files,
+        //     hasPaginator: true,
+        //     isHandlingMouse: false,
+        //     isHandlingTouch: false,
+        // });
 
-        for (const fileUrl of this.config.files) {
+        for (const file of this.config.files) {
             const attachment = new FileAttachmentComponent(files, {
                 type: 'file_attached',
-                dataUrl: fileUrl,
+                dataUrl: file.url,
+                name: file.name,
                 classes: ['msg__file'],
             });
 
             attachment.element.addEventListener('click', async (e) => {
                 e.preventDefault();
-                await downloadFile(fileUrl);
+                await downloadFile(file.url);
             });
         }
     }
@@ -153,15 +155,15 @@ export default class PostComponent {
         });
 
         if (this.config.media && this.config.media.length > 0) {
-            this.config.media.forEach((mediaUrl: string) => {
+            this.config.media.forEach((media: Attachment) => {
                 const slide = createElement({
                     parent: slider,
                     classes: ['post__slide'],
                 });
 
-                if (mediaUrl.endsWith('.mp4')) {
+                if (media.url.endsWith('.mp4')) {
                     new VideoComponent(slide, {
-                        src: mediaUrl,
+                        src: media.url,
                         classes: ['post__pic'],
                         loop: true,
                         autoplay: true,
@@ -175,7 +177,7 @@ export default class PostComponent {
                     parent: slide,
                     classes: ['post__pic'],
                     attrs: {
-                        src: mediaUrl,
+                        src: media.url,
                         alt: DEAFULT_IMG_ALT,
                         loading: "lazy",
                     }

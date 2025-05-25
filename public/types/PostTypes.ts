@@ -1,4 +1,5 @@
 import { Community } from "./CommunityTypes";
+import { Attachment } from "./UploadTypes";
 import { UserPublic } from "./UserTypes";
 
 
@@ -14,9 +15,9 @@ export interface PostRequest {
 interface BasePost {
     id: string;
     text?: string;
-    media?: string[];
-    audio?: string[];
-    files?: string[];
+    media?: Attachment[];
+    audio?: Attachment[];
+    files?: Attachment[];
     created_at: string;
     updated_at: string;
     like_count: number;
@@ -45,9 +46,9 @@ export interface PostResponse {
 
 export interface CommentRequest {
     text?: string;
-    files?: string[];
-    media?: string[];
-    audio?: string[];
+    files?: Attachment[];
+    media?: Attachment[];
+    audio?: Attachment[];
 }
 
 export interface Comment {

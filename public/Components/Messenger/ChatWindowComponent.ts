@@ -10,6 +10,7 @@ import ChatsPanelComponent from './ChatsPanelComponent';
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 import { UsersRequests } from '@modules/api';
 import MessageInputComponent from './MessageBar/MessageBarComponent';
+import { Message } from 'types/ChatsTypes';
 
 
 const MOBILE_MAX_WIDTH = 610;
@@ -111,7 +112,7 @@ export default class ChatWindowComponent {
             }
         }
 
-        new ws().subscribe('message', (payload: Record<string, any>) => {
+        new ws().subscribe('message', (payload: Message) => {
 
             if (getLsItem('is-messenger-feedback-given', 'false') === 'false') {
                 new IFrameComponent(this.parent.parentNode as HTMLElement, {
