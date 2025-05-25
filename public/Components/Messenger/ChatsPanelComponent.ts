@@ -223,7 +223,7 @@ export default class ChatsPanelComponent {
     }
 
     renderLastMsg(chatData: any) {
-        const chatItem = this.chatItems.find(
+        const chatItem = this.chatItems?.find(
             (item) => item.id === CHAT_PREFIX + chatData.id
         );
 
