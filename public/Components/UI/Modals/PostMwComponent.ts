@@ -9,9 +9,21 @@ import { FILE, MEDIA, POST } from '@config/config';
 import { FilesRequests, PostsRequests } from '@modules/api';
 import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
 import networkErrorPopUp from '@utils/networkErrorPopUp';
-import { PostRequest } from 'types/PostTypes';
+import { Post, PostRequest } from 'types/PostTypes';
 import { UploadRequest } from 'types/UploadTypes';
 import Router from '@router';
+
+
+export interface PostMwConfig {
+    type: 'create-post' | 'edit-post';
+    data?: Post;
+    target?: 'community' | 'user';
+    params?: {
+        author_id: string;
+    };
+    renderCreatedPost?: (config: Post) => void;
+    onAjaxEditPost?: (config: any) => void;
+}
 
 
 export default class PostMwComponent extends ModalWindowComponent {
@@ -21,7 +33,7 @@ export default class PostMwComponent extends ModalWindowComponent {
     private files: HTMLElement;
     private scrollWrapper: HTMLElement;
 
-    constructor(parent: HTMLElement, config: Record<string, any>) {
+    constructor(parent: HTMLElement, config: PostMwConfig) {
         super(parent, config);
         this.render();
     }
@@ -40,7 +52,7 @@ export default class PostMwComponent extends ModalWindowComponent {
     }
 
     private renderPicsUploader() {
-        const hasPics = this.config?.data?.pics && this.config?.data?.pics.length > 0;
+        const hasPics = this.config?.data?.media?.length;
 
         const picsWrapper = createElement({
             parent: this.modalWindow,
@@ -54,15 +66,18 @@ export default class PostMwComponent extends ModalWindowComponent {
                 hasPics ? 'modal__pics' : 'modal__pics_blank',
             ],
         });
+
         const addPicWrapper = createElement({
             parent: this.scrollWrapper,
             classes: ['modal__add-pic'],
         });
+
         createElement({
             parent: addPicWrapper,
             classes: ['modal__camera'],
             attrs: { src: '/static/img/camera-dark-icon.svg' },
         });
+
         createElement({
             tag: 'h4',
             parent: addPicWrapper,
@@ -83,17 +98,18 @@ export default class PostMwComponent extends ModalWindowComponent {
             maxSize: FILE.MAX_SIZE_TOTAL * FILE.MB_MULTIPLIER,
             maxSizeSingle: FILE.MAX_SIZE_SINGLE * FILE.MB_MULTIPLIER,
         };
-        
+
         if (hasPics) {
-            fileInputConfig['preloaded'] = this.config.data.pics;
+            fileInputConfig['preloaded'] = this.config.data.media.map(obj => obj.url);
         }
+        console.log(fileInputConfig['preloaded']);
 
         this.mediaInput = new FileInputComponent(this.scrollWrapper, fileInputConfig);
         this.mediaInput.addListener(() => {
             const filesCount = this.mediaInput?.getFiles().length || 0;
             addPicWrapper.style.display = filesCount >= POST.IMG_MAX_COUNT ? 'none' : 'flex';
         });
-        if (this.config?.data?.pics?.length >= POST.IMG_MAX_COUNT) {
+        if (this.config?.data?.media?.length >= POST.IMG_MAX_COUNT) {
             addPicWrapper.style.display = 'none';
         }
 
@@ -224,7 +240,7 @@ export default class PostMwComponent extends ModalWindowComponent {
             },
             disabled: true,
             validationType: 'some',
-            stateUpdaters: [textarea, this.mediaInput],
+            stateUpdaters: [textarea, this.mediaInput, this.filesInput],
         });
     }
 

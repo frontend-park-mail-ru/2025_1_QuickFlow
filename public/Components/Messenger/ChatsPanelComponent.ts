@@ -12,7 +12,7 @@ import { Chat } from 'types/ChatsTypes';
 import CounterComponent from '@components/CounterComponent/CounterComponent';
 
 
-const REQUEST_CHATS_COUNT = 10;
+const REQUEST_CHATS_COUNT = 50;
 const MOBILE_MAX_WIDTH = 610;
 const DEFAULT_WIDTH = 300;
 const RESIZER_TO_DEFAULT_WIDTH = 200;

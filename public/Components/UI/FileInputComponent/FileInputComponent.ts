@@ -24,7 +24,7 @@ interface FileInputConfig {
     name?: string;
     classes?: string[];
     onUpload?: () => void;
-    preloaded?: File[];
+    preloaded?: string[];
 };
 
 
@@ -153,7 +153,7 @@ export default class FileInputComponent {
             };
         }
 
-        if (Array.isArray(this.config.preloaded) && this.config.preloaded.length > 0) {
+        if (Array.isArray(this.config.preloaded) && this.config.preloaded.length) {
             this.loadPreloadedFiles(this.config.preloaded);
         }
     }
@@ -261,15 +261,25 @@ export default class FileInputComponent {
         this.input.files = dataTransfer.files;
     }
 
-    async loadPreloadedFiles(srcList: any) {
-        const preloadedFiles = await Promise.all(
-            srcList.map(this.fetchImageAsFile)
-        );
+    async loadPreloadedFiles(srcList: string[]) {
+        const results = await Promise.allSettled(srcList.map(this.fetchImageAsFile));
+
+        const preloadedFiles: File[] = [];
+        const imageDataUrls: string[] = [];
+    
+        results.forEach((result, i) => {
+            if (result.status === 'fulfilled' && result.value) {
+                preloadedFiles.push(result.value);
+                imageDataUrls.push(srcList[i]);
+            } else {
+                console.warn(`Не удалось загрузить файл: ${srcList[i]}`);
+            }
+        });
 
         this.files.push(...preloadedFiles);
         this.updateInputFiles();
 
-        if (this.config.preview) {
+        if (this.config.preview || this.config.renderPreview) {
             for (let i = 0; i < preloadedFiles.length; i++) {
                 const imageDataUrl = srcList[i];
                 const file = preloadedFiles[i];
@@ -282,23 +292,19 @@ export default class FileInputComponent {
                 }
                 
                 this.parent.insertBefore(wrapper, this.config.imitator);
-            
-                // const picWrapper = this.config.preview.cloneNode(true);
-                // picWrapper.querySelector('img').src = imageDataUrl;
-            
-                // const removeBtn = picWrapper.querySelector('.js-post-pic-delete');
-                // removeBtn.addEventListener('click', () => this.removeFile(file, picWrapper));
-            
-                // this.parent.insertBefore(picWrapper, this.config.imitator);
             }
         }
     }
 
-    async fetchImageAsFile(src: any) {
-        const response = await fetch(src);
-        const blob = await response.blob();
-        const filename = src.split('/').pop().split('?')[0] || 'image.jpg';
-        return new File([blob], filename, { type: blob.type });
+    async fetchImageAsFile(src: string) {
+        try {
+            const response = await fetch(src);
+            const blob = await response.blob();
+            const filename = src.split('/').pop().split('?')[0] || 'image.jpg';
+            return new File([blob], filename, { type: blob.type });
+        } catch (error) {
+            console.error("Ошибка при чтении файла", error);
+        }
     }
 
     private async resizeImage(file: File, maxResolution: number = this.config.maxResolution ?? 1680): Promise<File> {

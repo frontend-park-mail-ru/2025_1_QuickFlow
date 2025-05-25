@@ -1,15 +1,19 @@
 import createElement from "@utils/createElement";
+import { PostMwConfig } from "./PostMwComponent";
+
+
+export type ModalWindowConfig = PostMwConfig;
 
 
 export default class ModalWindowComponent {
     protected parent: HTMLElement;
-    protected config: Record<string, any>;
+    protected config: ModalWindowConfig;
 
     protected wrapper: HTMLElement | null = null;
     protected modalWindow: HTMLElement | null = null;
     protected title: HTMLElement | null = null;
     
-    constructor(parent: HTMLElement, config: Record<string, any>) {
+    constructor(parent: HTMLElement, config: ModalWindowConfig) {
         this.parent = parent;
         this.config = config;
     }
