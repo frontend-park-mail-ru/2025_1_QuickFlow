@@ -227,8 +227,10 @@ export default class ChatsPanelComponent {
             (item) => item.id === CHAT_PREFIX + chatData.id
         );
 
-        chatItem.remove();
-        this.chats.prepend(chatItem);
+        if (chatItem) {
+            chatItem.remove();
+            this.chats.prepend(chatItem);
+        }
 
         const lastMsgWrapper = chatItem.querySelector(`#${CHAT_INFO_PREFIX + chatData.id}`) as HTMLElement;
         if (lastMsgWrapper) {
