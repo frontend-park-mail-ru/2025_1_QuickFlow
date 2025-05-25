@@ -1,8 +1,6 @@
-import Ajax from '@modules/ajax';
 import ChatsPanelComponent from '@components/Messenger/ChatsPanelComponent';
 import ChatWindowComponent from '@components/Messenger/ChatWindowComponent';
 import createElement from '@utils/createElement';
-import router from '@router';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 
 
@@ -37,45 +35,5 @@ export default class MessengerComponent {
 
         chatsPanel.chatWindow = chatWindow;
         chatWindow.chatsPanel = chatsPanel;
-    }
-
-    // ajaxGetMessages(params: Record<string, any>, cb: any) {
-    //     Ajax.get({
-    //         url: `/chats/${params.chatId}/messages`,
-    //         params: {
-    //             messages_count: params.count,
-    //             ...(params?.ts && { ts: params.ts })
-    //         },
-    //         callback: (status: number, chatMsgs: any) => {
-    //             this.ajaxCallbackAuth(status);
-    //             cb(status, chatMsgs);
-    //         }
-    //     });
-    // }
-
-    // ajaxGetChats(cb: any) {
-    //     Ajax.get({
-    //         url: '/chats',
-    //         params: { chats_count: 10 },
-    //         callback: (status: number, chatsData: any) => {
-    //             this.ajaxCallbackAuth(status);
-    //             cb(status, chatsData);
-    //         }
-    //     });
-    // }
-
-    // ajaxPostMessages(params: Record<string, any>, cb: any) {
-    //     Ajax.post({
-    //         url: `/messages/${params.username}`,
-    //         body: params.request,
-    //         callback: (status: number, msgData: any) => {
-    //             this.ajaxCallbackAuth(status);
-    //             cb(status, msgData);
-    //         }
-    //     });
-    // }
-
-    ajaxCallbackAuth(status: number) {
-        status === 401 ? router.go({ path: '/login' }) : null;
     }
 }

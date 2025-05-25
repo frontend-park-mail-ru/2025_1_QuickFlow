@@ -37,12 +37,10 @@ wss.on('connection', (ws) => {
             const response = {
                 type: 'message',
                 payload: {
-                    id: "uuidv4()",
+                    id: 'uuidv4()',
                     text: "hello!",
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString(),
-                    is_read: false,
-                    attachment_urls: null,
                     sender: {
                         id: "1eabe150-7b9e-42b3-a8d5-ad6ad900180c",
                         username: "Nikita2",
@@ -545,7 +543,6 @@ app.post('/api/messages/:username', (req, res) => {
         created_at: "2025-04-10T19:08:42.323841+03:00",
         updated_at: "2025-04-10T19:08:42.323841+03:00",
         is_read: false,
-        attachment_urls: null,
         "sender": {
             "id": "0e146b4b-b28e-44b8-8c59-f0c182459756",
             "username": "rvasutenko",

@@ -383,7 +383,7 @@ export const chats = {
                 "created_at": "2025-04-10T19:08:27.926906+03:00",
                 "updated_at": "2025-04-10T19:08:27.926906+03:00",
                 "is_read": false,
-                "attachment_urls": null,
+                
                 "sender_id": "0e146b4b-b28e-44b8-8c59-f0c182459756",
                 "chat_id": "49dc794b-d8cf-404c-be69-4886bd78ada4"
             },
@@ -403,7 +403,6 @@ export const chats = {
                 created_at: "2025-04-10T16:46:33.373724+03:00",
                 updated_at: "2025-04-11T16:46:33.373724+03:00",
                 is_read: false,
-                attachment_urls: null,
                 sender_id: "02c314cb-19ae-40c8-a069-fb2c426a9cc9",
                 chat_id: "13dc794b-d8cf-404c-be69-4886bd78ada4"
             },
@@ -422,7 +421,6 @@ export const chats = {
                 created_at: "2025-03-11T16:46:33.373724+03:00",
                 updated_at: "2025-04-11T16:46:33.373724+03:00",
                 is_read: true,
-                attachment_urls: null,
                 sender_id: "42c314cb-19ae-40c8-a069-fb2c426a9cc9",
                 chat_id: "85dc794b-d8cf-404c-be69-4886bd78ada4"
             },
@@ -441,7 +439,6 @@ export const messages = {
                     "created_at": "2025-04-10T19:00:36.19391+03:00",
                     "updated_at": "2025-04-10T19:00:36.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -457,7 +454,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:42.323841+03:00",
                     "updated_at": "2025-04-10T19:08:42.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -473,7 +470,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:43.926906+03:00",
                     "updated_at": "2025-04-10T19:08:43.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -489,7 +486,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:00:44.19391+03:00",
                     "updated_at": "2025-04-10T19:00:44.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -505,7 +502,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:45.323841+03:00",
                     "updated_at": "2025-04-10T19:08:45.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -521,7 +518,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:46.926906+03:00",
                     "updated_at": "2025-04-10T19:08:46.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -537,7 +534,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:00:47.19391+03:00",
                     "updated_at": "2025-04-10T19:00:47.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -553,7 +550,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:48.323841+03:00",
                     "updated_at": "2025-04-10T19:08:48.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -569,7 +566,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:49.926906+03:00",
                     "updated_at": "2025-04-10T19:08:49.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -585,7 +582,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:00:50.19391+03:00",
                     "updated_at": "2025-04-10T19:00:50.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -601,7 +598,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:51.323841+03:00",
                     "updated_at": "2025-04-10T19:08:51.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -617,7 +614,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:52.926906+03:00",
                     "updated_at": "2025-04-10T19:08:52.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -633,7 +630,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:00:53.19391+03:00",
                     "updated_at": "2025-04-10T19:00:53.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -649,7 +646,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:54.323841+03:00",
                     "updated_at": "2025-04-10T19:08:54.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -665,7 +662,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:55.926906+03:00",
                     "updated_at": "2025-04-10T19:08:55.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -681,7 +678,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:00:56.19391+03:00",
                     "updated_at": "2025-04-10T19:00:56.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -697,7 +694,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:57.323841+03:00",
                     "updated_at": "2025-04-10T19:08:57.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -713,7 +710,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:58.926906+03:00",
                     "updated_at": "2025-04-10T19:08:58.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -729,7 +726,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:00:59.19391+03:00",
                     "updated_at": "2025-04-10T19:00:59.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -745,7 +742,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:09:42.323841+03:00",
                     "updated_at": "2025-04-10T19:09:42.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -761,7 +758,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:10:27.926906+03:00",
                     "updated_at": "2025-04-10T19:10:27.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -777,7 +774,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:11:36.19391+03:00",
                     "updated_at": "2025-04-10T19:11:36.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -793,7 +790,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:12:42.323841+03:00",
                     "updated_at": "2025-04-10T19:12:42.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -809,7 +806,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:13:27.926906+03:00",
                     "updated_at": "2025-04-10T19:13:27.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -825,7 +822,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:14:36.19391+03:00",
                     "updated_at": "2025-04-10T19:14:36.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "48dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "rvasutenko",
