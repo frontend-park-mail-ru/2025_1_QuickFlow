@@ -342,9 +342,11 @@ export default class MessageBarComponent {
     }
 
     public updateTextareaHeight() {
-        console.log(this.config.chatElement);
-
-        if (!this.config.chatElement || !this.element || !this.wrapper) return;
+        if (
+            !this.config.chatElement ||
+            !this.element ||
+            !this.wrapper
+        ) return;
     
         this.element.style.height = 'auto';
         this.element.style.height = this.element.scrollHeight + 'px';

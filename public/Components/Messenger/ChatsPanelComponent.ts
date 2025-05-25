@@ -8,9 +8,8 @@ import router from '@router';
 import { ChatsRequests } from '@modules/api';
 import networkErrorPopUp from '@utils/networkErrorPopUp';
 import ChatWindowComponent from './ChatWindowComponent';
-import { Chat, Message } from 'types/ChatsTypes';
+import { Chat } from 'types/ChatsTypes';
 import CounterComponent from '@components/CounterComponent/CounterComponent';
-import ws from '@modules/WebSocketService';
 
 
 const REQUEST_CHATS_COUNT = 50;
@@ -133,11 +132,6 @@ export default class ChatsPanelComponent {
                 this._chatWindow.renderActiveChat(chatData);
             }
         }
-
-        // new ws().subscribe('message', (message: Message) => {
-        //     const oldCount = this.unreadMessages.get(message.chat_id);
-        //     this.unreadMessages.set(message.chat_id, oldCount + 1);
-        // });
     }
 
     public incrementMessagesCounter(chatId: string) {
@@ -173,7 +167,6 @@ export default class ChatsPanelComponent {
         this.activeChatItem.classList.remove('chats-panel__chat_active');
         this.activeChatItem = null;
         this.renderDraftMessage();
-        // this.renderLastMsg(this._chatWindow.chatData);
         removeLsItem('active-chat');
     }
 
@@ -235,7 +228,7 @@ export default class ChatsPanelComponent {
             // lastMsgWrapper.innerHTML = '';
         }
 
-        const lastMsgWrapper = this.chats.querySelector(`#${CHAT_INFO_PREFIX + chatData.id}`) as HTMLElement;
+        const lastMsgWrapper = this.chats?.querySelector(`#${CHAT_INFO_PREFIX + chatData.id}`) as HTMLElement;
         if (lastMsgWrapper) {
             lastMsgWrapper.innerHTML = '';
         }
