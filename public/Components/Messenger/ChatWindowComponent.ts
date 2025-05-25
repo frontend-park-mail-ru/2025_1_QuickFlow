@@ -94,7 +94,7 @@ export default class ChatWindowComponent {
                     this.renderChat();
                     this.messageInput = new MessageInputComponent(this.container, {
                         chatData: this._chatData,
-                        renderLastMsg: this._chatsPanel?.renderLastMsg,
+                        renderLastMsg: this._chatsPanel?.renderLastMsg.bind(this),
                         chatElement: this.chatElement,
                         chat: this.chat,
                     });
@@ -187,7 +187,7 @@ export default class ChatWindowComponent {
         this.renderChat();
         this.messageInput = new MessageInputComponent(this.container, {
             chatData: this._chatData,
-            renderLastMsg: this._chatsPanel?.renderLastMsg,
+            renderLastMsg: this._chatsPanel?.renderLastMsg.bind(this),
             chatElement: this.chatElement,
             chat: this.chat,
         });
