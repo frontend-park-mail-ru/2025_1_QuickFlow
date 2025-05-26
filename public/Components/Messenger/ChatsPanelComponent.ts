@@ -11,6 +11,7 @@ import ChatWindowComponent from './ChatWindowComponent';
 import { Chat } from 'types/ChatsTypes';
 import CounterComponent from '@components/CounterComponent/CounterComponent';
 import Router from '@router';
+import { VIDEO_EXTENSIONS } from '@config/config';
 
 
 const REQUEST_CHATS_COUNT = 50;
@@ -260,10 +261,27 @@ export default class ChatsPanelComponent {
             return;
         }
 
+        let lastMessageText: string;
+        const message = chatData?.last_message;
+
+        if (message?.text) {
+            lastMessageText = message?.text;
+        } else if (message?.stickers?.length) {
+            lastMessageText = "📄 Стикер"
+        } else if (message?.media?.length) {
+            const extension: string = message?.media[0]?.url.split('.').pop();
+            const isVideo = VIDEO_EXTENSIONS.includes(extension);
+            lastMessageText = `🖼 ${message?.media?.length} ${isVideo ? 'Видео' : 'Фото'}`;
+        } else if (message?.files?.length) {
+            lastMessageText = `📂 ${message?.files?.pop()?.name || 'Файл'}`
+        } else if (message?.audio?.length) {
+            lastMessageText = "🔊 Голосовое сообщение"
+        }
+
         createElement({
             parent: lastMsgWrapper,
             classes: ['chats-panel__msg'],
-            text: draftValue ? draftValue : chatData.last_message.text,
+            text: lastMessageText,
         });
 
         createElement({
@@ -274,16 +292,13 @@ export default class ChatsPanelComponent {
 
         createElement({
             parent: lastMsgWrapper,
-            text: getTimeDifference(chatData.last_message.created_at, { mode: 'short' }),
+            text: getTimeDifference(message?.created_at, { mode: 'short' }),
         });
 
         const counterWrapper = createElement({
             parent: lastMsgWrapper,
             classes: ['chats-panel__counter-wrapper'],
         });
-
-        console.log(this.unreadMessages);
-        console.log(chatData.id);
 
         new CounterComponent(counterWrapper, {
             value: this.unreadMessages.get(chatData.id),
