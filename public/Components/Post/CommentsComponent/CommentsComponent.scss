@@ -52,7 +52,9 @@
     &__send-icon {
         min-width: 22px;
         min-height: 22px;
-        display: flex;
+        height: 36px;
+        width: 22px;
+        // display: flex;
         color: var(--icon-primary);
         cursor: pointer;
         transition: var(--trans-menu);
