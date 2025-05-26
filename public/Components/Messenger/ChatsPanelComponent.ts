@@ -10,6 +10,7 @@ import networkErrorPopUp from '@utils/networkErrorPopUp';
 import ChatWindowComponent from './ChatWindowComponent';
 import { Chat } from 'types/ChatsTypes';
 import CounterComponent from '@components/CounterComponent/CounterComponent';
+import Router from '@router';
 
 
 const REQUEST_CHATS_COUNT = 50;
@@ -137,6 +138,10 @@ export default class ChatsPanelComponent {
 
     public incrementMessagesCounter(chatId: string) {
         this.unreadMessages.set(chatId, this.unreadMessages.get(chatId) + 1);
+
+        if (this.unreadMessages.get(chatId) === 1) {
+            Router.menu.renderCounters('messenger');
+        }
     }
 
     public decrementMessagesCounter(chatId: string) {
@@ -145,6 +150,10 @@ export default class ChatsPanelComponent {
             return;
         }
         this.unreadMessages.set(chatId, oldCount - 1);
+
+        if (this.unreadMessages.get(chatId) === 0) {
+            Router.menu.renderCounters('messenger');
+        }
     }
 
     renderEmptyState() {

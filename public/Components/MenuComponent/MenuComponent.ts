@@ -123,8 +123,24 @@ export default class MenuComponent {
         this.renderCounters();
     }
 
-    public async renderCounters() {
-        this.container.querySelectorAll('.menu__counter')?.forEach((counter) => counter.remove());
+    public renderCounters(section: 'friends' | 'messenger' = null) {
+        if (!section) {
+            this.container.querySelectorAll('.menu__counter')?.forEach((counter) => counter.remove());
+            this.updateFriendsCounter();
+            this.updateMessengerCounter();
+            return;
+        }
+
+        this.container.querySelector(`[data-section="${section}"] .menu__counter`)?.remove();
+
+        if (section === 'friends') {
+            return this.updateFriendsCounter();
+        } else if (section === 'messenger') {
+            return this.updateMessengerCounter();
+        }
+    }
+
+    private async updateFriendsCounter() {
         const userId = LsProfile.id;
 
         const [friendsStatus, friendsData] = await FriendsRequests.getFriends(userId, 100, 0, 'incoming');
@@ -141,7 +157,9 @@ export default class MenuComponent {
                 classes: ['menu__counter'],
             });
         }
+    }
 
+    private async updateMessengerCounter() {
         const [chatsStatus, unreadChatsData] = await ChatsRequests.getUnreadChatsCount();
         switch (chatsStatus) {
             case 401:
