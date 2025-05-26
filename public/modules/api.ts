@@ -33,7 +33,6 @@ export class PostsRequests {
             ajax.put({
                 url: `/posts/${post_id}`,
                 body,
-                isFormData: true,
                 callback: (status: number, data: PostResponse) => resolve([status, data]),
             });
         });
