@@ -8,6 +8,7 @@ import downloadFile from '@utils/downloadFile';
 import { Message } from 'types/ChatsTypes';
 import VideoComponent from '@components/UI/VideoComponent/VideoComponent';
 import ImageComponent from '@components/UI/ImageComponent/ImageComponent';
+import { VIDEO_EXTENSIONS } from '@config/config';
 
 
 interface MessageConfig {
@@ -172,12 +173,7 @@ export default class MessageComponent {
             const extension = media.url.split('.').pop();
 
             let mediaItem: HTMLImageElement | HTMLVideoElement;
-            if (extension !== 'mp4') {
-                // new ImageComponent(mediaItem, {
-                //     src: media.url,
-                //     classes: ['msg__media-item'],
-                //     hasSkeleton: true,
-                // });
+            if (!VIDEO_EXTENSIONS.includes(extension)) {
                 mediaItem = createElement({
                     classes: ['msg__media-item'],
                     attrs: { src: media.url },
