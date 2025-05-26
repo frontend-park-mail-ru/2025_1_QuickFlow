@@ -51,7 +51,7 @@ export default class PostMwComponent extends ModalWindowComponent {
         }
     }
 
-    private renderPicsUploader() {
+    private renderMediaUploader() {
         const hasPics = this.config?.data?.media?.length;
 
         const picsWrapper = createElement({
@@ -94,9 +94,9 @@ export default class PostMwComponent extends ModalWindowComponent {
             required: true,
             maxCount: POST.IMG_MAX_COUNT,
             compress: true,
-            maxResolution: FILE.IMG_MAX_RES,
-            maxSize: FILE.MAX_SIZE_TOTAL * FILE.MB_MULTIPLIER,
-            maxSizeSingle: FILE.MAX_SIZE_SINGLE * FILE.MB_MULTIPLIER,
+            maxResolution: MEDIA.IMG_MAX_RES,
+            maxSize: MEDIA.MAX_SIZE_TOTAL,
+            maxSizeSingle: MEDIA.MAX_SIZE_SINGLE,
         };
 
         if (hasPics) {
@@ -218,8 +218,8 @@ export default class PostMwComponent extends ModalWindowComponent {
         this.modalWindow.classList.add('modal_post');
         this.title.textContent = isFilled ? 'Редактирование поста' : 'Новый пост';
 
-        this.renderPicsUploader();
-        this.renderFileUploader();
+        this.renderMediaUploader();
+        this.renderFilesUploader();
 
         const textarea = new TextareaComponent(this.modalWindow, {
             placeholder: 'Поделитесь своими мыслями',
@@ -243,7 +243,7 @@ export default class PostMwComponent extends ModalWindowComponent {
         });
     }
 
-    private renderFileUploader() {
+    private renderFilesUploader() {
         const hasFiles = this.config?.data?.files?.length;
 
         const fileUploaderWrapper = createElement({
@@ -269,14 +269,14 @@ export default class PostMwComponent extends ModalWindowComponent {
         const fileInputConfig = {
             imitator: fileUploaderWrapper,
             id: 'js-modal_post-file-uploader',
-            maxSize: FILE.MAX_SIZE_TOTAL * FILE.MB_MULTIPLIER,
+            maxSize: FILE.MAX_SIZE_TOTAL,
             accept: FILE.ACCEPT,
             multiple: true,
-            maxSizeSingle: FILE.MAX_SIZE_SINGLE * FILE.MB_MULTIPLIER,
+            maxSizeSingle: FILE.MAX_SIZE_SINGLE,
             renderPreview: this.renderFilePreview.bind(this),
             insertPosition: 'end',
             required: true,
-            maxCount: POST.IMG_MAX_COUNT,
+            maxCount: POST.FILE_MAX_COUNT,
         };
 
         if (hasFiles) {

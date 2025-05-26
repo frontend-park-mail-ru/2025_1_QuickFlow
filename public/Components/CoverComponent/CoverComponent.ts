@@ -1,6 +1,6 @@
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
-import { FILE } from '@config/config';
+import { COVER, FILE } from '@config/config';
 import createElement from '@utils/createElement';
 
 
@@ -55,13 +55,13 @@ export default class CoverComponent {
         
         this.fileInput = new FileInputComponent(this.parent.parentNode as HTMLElement, {
             imitator: coverUploadBtn.buttonElement,
-            accept: ACCEPT,
+            accept: COVER.ACCEPT,
             preview: this.cover,
             id: 'profile-cover-upload',
             name: 'cover',
             compress: true,
-            maxResolution: FILE.IMG_MAX_RES,
-            maxSize: FILE.MAX_SIZE_SINGLE * FILE.MB_MULTIPLIER,
+            maxResolution: COVER.IMG_MAX_RES,
+            maxSize: COVER.MAX_SIZE_SINGLE,
         })
     }
 }

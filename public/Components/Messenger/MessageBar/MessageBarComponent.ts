@@ -61,7 +61,7 @@ export default class MessageBarComponent {
     private element: HTMLTextAreaElement | null = null;
     private attachments: HTMLElement | null = null;
     private mediaInput: FileInputComponent | null = null;
-    private fileInput: FileInputComponent | null = null;
+    private filesInput: FileInputComponent | null = null;
     private sendBtn: HTMLElement;
     private wrapper: HTMLElement;
 
@@ -125,14 +125,14 @@ export default class MessageBarComponent {
             insertPosition: 'end',
             multiple: true,
             required: true,
-            maxCount: POST.IMG_MAX_COUNT,
+            maxCount: MSG.IMG_MAX_COUNT,
             compress: true,
-            maxResolution: FILE.IMG_MAX_RES,
-            maxSize: FILE.MAX_SIZE_TOTAL * FILE.MB_MULTIPLIER,
-            maxSizeSingle: FILE.MAX_SIZE_SINGLE * FILE.MB_MULTIPLIER,
+            maxResolution: MEDIA.IMG_MAX_RES,
+            maxSize: MEDIA.MAX_SIZE_TOTAL,
+            maxSizeSingle: MEDIA.MAX_SIZE_SINGLE,
         });
 
-        this.fileInput = new FileInputComponent(this.attachments, {
+        this.filesInput = new FileInputComponent(this.attachments, {
             imitator: contextMenu.getItem('file'),
             renderPreview: this.renderFilePreview.bind(this),
             accept: FILE.ACCEPT,
@@ -140,15 +140,13 @@ export default class MessageBarComponent {
             insertPosition: 'end',
             multiple: true,
             required: true,
-            maxCount: POST.IMG_MAX_COUNT,
-            // compress: true,
-            maxResolution: FILE.IMG_MAX_RES,
-            maxSize: FILE.MAX_SIZE_TOTAL * FILE.MB_MULTIPLIER,
-            maxSizeSingle: FILE.MAX_SIZE_SINGLE * FILE.MB_MULTIPLIER,
+            maxCount: MSG.FILE_MAX_COUNT,
+            maxSize: FILE.MAX_SIZE_TOTAL,
+            maxSizeSingle: FILE.MAX_SIZE_SINGLE,
         });
 
         this.mediaInput.addListener(this.handleMediaUpload.bind(this));
-        this.fileInput.addListener(this.handleMediaUpload.bind(this));
+        this.filesInput.addListener(this.handleMediaUpload.bind(this));
 
 
 
@@ -229,7 +227,7 @@ export default class MessageBarComponent {
 
     private handleMediaUpload() {
         const mediaCount = this.mediaInput?.getFiles().length || 0;
-        const filesCount = this.fileInput?.getFiles().length || 0;
+        const filesCount = this.filesInput?.getFiles().length || 0;
 
         if (!mediaCount && !filesCount) {
             this.attachments.classList.add('hidden');
@@ -245,7 +243,7 @@ export default class MessageBarComponent {
         if (
             this.element?.value.trim() === '' &&
             !this.mediaInput.isValid() &&
-            !this.fileInput.isValid()
+            !this.filesInput.isValid()
         ) {
             return this.sendBtn.classList.add('msg-bar__send_disabled');
         }
@@ -256,7 +254,7 @@ export default class MessageBarComponent {
     private get areAttachmentsValid(): boolean {
         if (
             this.mediaInput.isLarge ||
-            this.fileInput.isLarge
+            this.filesInput.isLarge
         ) {
             new PopUpComponent({
                 text: `Размер файлов суммарно не должен превышать ${FILE.MAX_SIZE_TOTAL}Мб`,
@@ -267,7 +265,7 @@ export default class MessageBarComponent {
 
         if (
             this.mediaInput.isAnyLarge ||
-            this.fileInput.isAnyLarge
+            this.filesInput.isAnyLarge
         ) {
             new PopUpComponent({
                 text: `Размер каждого файла не должен превышать ${FILE.MAX_SIZE_SINGLE}Мб`,
@@ -294,7 +292,7 @@ export default class MessageBarComponent {
         
         if (
             this.mediaInput?.input?.files?.length > 0 ||
-            this.fileInput?.input?.files?.length > 0
+            this.filesInput?.input?.files?.length > 0
         ) {
             if (!this.areAttachmentsValid) {
                 return;
@@ -302,7 +300,7 @@ export default class MessageBarComponent {
 
             const dataToUpload: UploadRequest = {
                 media: this.mediaInput.input.files,
-                files: this.fileInput.input.files,
+                files: this.filesInput.input.files,
             };
 
             const [status, mediaData]: [number, UploadData] = await FilesRequests.upload(dataToUpload);
@@ -325,7 +323,7 @@ export default class MessageBarComponent {
             }
 
             this.mediaInput.clear();
-            this.fileInput.clear();
+            this.filesInput.clear();
             this.attachments.innerHTML = '';
         }
 
@@ -405,7 +403,7 @@ export default class MessageBarComponent {
         });
 
         attachment.element.addEventListener('click', () => {
-            this.fileInput.removeFile(file, attachment.element);
+            this.filesInput.removeFile(file, attachment.element);
         });
 
         return attachment.element;

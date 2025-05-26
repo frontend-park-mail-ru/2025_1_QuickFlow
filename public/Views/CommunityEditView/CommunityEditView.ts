@@ -13,7 +13,7 @@ import convertDate from '@utils/convertDate';
 
 import router from '@router';
 import { forms } from './CommunityEditFormConfig';
-import { FILE } from '@config/config';
+import { AVATAR, FILE, MEDIA } from '@config/config';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
 import FriendComponent from '@components/FriendComponent/FriendComponent';
 import DeleteMwComponent from '@components/UI/Modals/DeleteMwComponent';
@@ -380,13 +380,13 @@ class CommunityEditView {
         this.stateUpdaters.push(
             new FileInputComponent(this.containerObj.left, {
                 imitator: avatar.wrapper,
-                accept: ACCEPT,
+                accept: AVATAR.ACCEPT,
                 preview: avatar.avatar,
                 id: 'profile-avatar-upload',
                 name: 'avatar',
                 compress: true,
-                maxResolution: FILE.IMG_MAX_RES,
-                maxSize: FILE.MAX_SIZE_SINGLE * FILE.MB_MULTIPLIER,
+                maxResolution: AVATAR.IMG_MAX_RES,
+                maxSize: AVATAR.MAX_SIZE_SINGLE,
             })
         );
     }
