@@ -8,6 +8,7 @@ export const VIDEO_EXTENSIONS = ['mp4', 'mov'];
 
 export const UPLOAD_DATA = {
     MAX_SIZE: 200 * CONSTS.MB_MULTIPLIER,
+    MAX_SINGLE_SIZE: 100 * CONSTS.MB_MULTIPLIER,
 };
 
 export const FILE = {

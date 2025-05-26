@@ -12,8 +12,24 @@ interface ValidateUploadDataConfig {
 export default function validateUploadData(config: ValidateUploadDataConfig): boolean {
     let totalDataSize = 0;
 
-    config?.mediaInputs?.forEach(mediaInput => totalDataSize += mediaInput.size);
-    config?.filesInputs?.forEach(fileInput => totalDataSize += fileInput.size);
+    // config?.mediaInputs?.forEach(mediaInput => totalDataSize += mediaInput.size);
+    
+    for (const mediaInput of config?.mediaInputs) {
+        if (mediaInput.isAnyLarge) {
+            networkErrorPopUp({ text: `Размер каждого вложения не должен превышать ${UPLOAD_DATA.MAX_SINGLE_SIZE / CONSTS.MB_MULTIPLIER}Мб` });
+            return false;
+        }
+        totalDataSize += mediaInput.size;
+    }
+    
+    for (const fileInput of config?.filesInputs) {
+        if (fileInput.isAnyLarge) {
+            networkErrorPopUp({ text: `Размер каждого файла не должен превышать ${UPLOAD_DATA.MAX_SINGLE_SIZE / CONSTS.MB_MULTIPLIER}Мб` });
+            return false;
+        }
+        totalDataSize += fileInput.size;
+    }
+    // config?.filesInputs?.forEach(fileInput => totalDataSize += fileInput.size);
 
     if (totalDataSize > UPLOAD_DATA.MAX_SIZE) {
         networkErrorPopUp({ text: `Размер вложений суммарно не должен превышать ${UPLOAD_DATA.MAX_SIZE / CONSTS.MB_MULTIPLIER}Мб` });

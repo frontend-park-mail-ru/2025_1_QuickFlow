@@ -13,7 +13,7 @@ import convertDate from '@utils/convertDate';
 
 import router from '@router';
 import { forms } from './CommunityEditFormConfig';
-import { AVATAR, FILE, MEDIA } from '@config/config';
+import { AVATAR, FILE, MEDIA, UPLOAD_DATA } from '@config/config';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
 import FriendComponent from '@components/FriendComponent/FriendComponent';
 import DeleteMwComponent from '@components/UI/Modals/DeleteMwComponent';
@@ -386,7 +386,8 @@ class CommunityEditView {
                 name: 'avatar',
                 compress: true,
                 maxResolution: AVATAR.IMG_MAX_RES,
-                maxSize: AVATAR.MAX_SIZE_SINGLE,
+                maxSize: UPLOAD_DATA.MAX_SIZE,
+                maxSizeSingle: UPLOAD_DATA.MAX_SINGLE_SIZE,
             })
         );
     }

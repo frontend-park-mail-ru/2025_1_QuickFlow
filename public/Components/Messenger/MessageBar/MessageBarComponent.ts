@@ -4,7 +4,7 @@ import createElement from '@utils/createElement';
 import focusInput from '@utils/focusInput';
 import { setLsItem, getLsItem, removeLsItem } from '@utils/localStorage';
 import ws from '@modules/WebSocketService';
-import { FILE, MEDIA, MSG, POST } from '@config/config';
+import { FILE, MEDIA, MSG, POST, UPLOAD_DATA } from '@config/config';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import { ChatsRequests, FilesRequests } from '@modules/api';
@@ -129,8 +129,8 @@ export default class MessageBarComponent {
             maxCount: MSG.IMG_MAX_COUNT,
             compress: true,
             maxResolution: MEDIA.IMG_MAX_RES,
-            maxSize: MEDIA.MAX_SIZE_TOTAL,
-            maxSizeSingle: MEDIA.MAX_SIZE_SINGLE,
+            maxSize: UPLOAD_DATA.MAX_SIZE,
+            maxSizeSingle: UPLOAD_DATA.MAX_SINGLE_SIZE,
         });
 
         this.filesInput = new FileInputComponent(this.attachments, {
@@ -142,8 +142,8 @@ export default class MessageBarComponent {
             multiple: true,
             required: true,
             maxCount: MSG.FILE_MAX_COUNT,
-            maxSize: FILE.MAX_SIZE_TOTAL,
-            maxSizeSingle: FILE.MAX_SIZE_SINGLE,
+            maxSize: UPLOAD_DATA.MAX_SIZE,
+            maxSizeSingle: UPLOAD_DATA.MAX_SINGLE_SIZE,
         });
 
         this.mediaInput.addListener(this.handleMediaUpload.bind(this));

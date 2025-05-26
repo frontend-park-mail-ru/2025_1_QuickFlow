@@ -1,6 +1,6 @@
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
-import { COVER, FILE } from '@config/config';
+import { COVER, FILE, UPLOAD_DATA } from '@config/config';
 import createElement from '@utils/createElement';
 
 
@@ -61,7 +61,8 @@ export default class CoverComponent {
             name: 'cover',
             compress: true,
             maxResolution: COVER.IMG_MAX_RES,
-            maxSize: COVER.MAX_SIZE_SINGLE,
+            maxSize: UPLOAD_DATA.MAX_SIZE,
+            maxSizeSingle: UPLOAD_DATA.MAX_SINGLE_SIZE,
         })
     }
 }

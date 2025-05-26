@@ -4,7 +4,7 @@ import createElement from '@utils/createElement';
 import insertIcon from '@utils/insertIcon';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
 import ModalWindowComponent from '@components/UI/Modals/ModalWindowComponent';
-import { CONSTS, FILE, MEDIA, POST } from '@config/config';
+import { CONSTS, FILE, MEDIA, POST, UPLOAD_DATA } from '@config/config';
 import { FilesRequests, PostsRequests } from '@modules/api';
 import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
 import networkErrorPopUp from '@utils/networkErrorPopUp';
@@ -95,8 +95,8 @@ export default class PostMwComponent extends ModalWindowComponent {
             maxCount: POST.IMG_MAX_COUNT,
             compress: true,
             maxResolution: MEDIA.IMG_MAX_RES,
-            maxSize: MEDIA.MAX_SIZE_TOTAL,
-            maxSizeSingle: MEDIA.MAX_SIZE_SINGLE,
+            maxSize: UPLOAD_DATA.MAX_SIZE,
+            maxSizeSingle: UPLOAD_DATA.MAX_SINGLE_SIZE,
         };
 
         if (hasPics) {
@@ -269,14 +269,14 @@ export default class PostMwComponent extends ModalWindowComponent {
         const fileInputConfig = {
             imitator: fileUploaderWrapper,
             id: 'js-modal_post-file-uploader',
-            maxSize: FILE.MAX_SIZE_TOTAL,
             accept: FILE.ACCEPT,
             multiple: true,
-            maxSizeSingle: FILE.MAX_SIZE_SINGLE,
             renderPreview: this.renderFilePreview.bind(this),
             insertPosition: 'end',
             required: true,
             maxCount: POST.FILE_MAX_COUNT,
+            maxSize: UPLOAD_DATA.MAX_SIZE,
+            maxSizeSingle: UPLOAD_DATA.MAX_SINGLE_SIZE,
         };
 
         if (hasFiles) {
