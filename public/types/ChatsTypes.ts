@@ -33,7 +33,7 @@ export interface Message {
     files?: Attachment[];
     media?: Attachment[];
     audio?: Attachment[];
-    stickers?: string[];
+    stickers?: Attachment[];
 }
 
 export interface MessagesResponse {

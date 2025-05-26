@@ -102,7 +102,6 @@ export default class PostMwComponent extends ModalWindowComponent {
         if (hasPics) {
             fileInputConfig['preloaded'] = this.config.data.media.map(obj => obj.url);
         }
-        console.log(fileInputConfig['preloaded']);
 
         this.mediaInput = new FileInputComponent(this.scrollWrapper, fileInputConfig);
         this.mediaInput.addListener(() => {
@@ -245,6 +244,8 @@ export default class PostMwComponent extends ModalWindowComponent {
     }
 
     private renderFileUploader() {
+        const hasFiles = this.config?.data?.files?.length;
+
         const fileUploaderWrapper = createElement({
             parent: this.modalWindow,
             classes: ['modal__file-uploader'],
@@ -265,7 +266,7 @@ export default class PostMwComponent extends ModalWindowComponent {
             classes: ['modal__files'],
         });
 
-        this.filesInput = new FileInputComponent(this.files, {
+        const fileInputConfig = {
             imitator: fileUploaderWrapper,
             id: 'js-modal_post-file-uploader',
             maxSize: FILE.MAX_SIZE_TOTAL * FILE.MB_MULTIPLIER,
@@ -273,10 +274,16 @@ export default class PostMwComponent extends ModalWindowComponent {
             multiple: true,
             maxSizeSingle: FILE.MAX_SIZE_SINGLE * FILE.MB_MULTIPLIER,
             renderPreview: this.renderFilePreview.bind(this),
-            insertPosition: 'end',
+            // insertPosition: 'end',
             required: true,
             maxCount: POST.IMG_MAX_COUNT,
-        });
+        };
+
+        if (hasFiles) {
+            fileInputConfig['preloaded'] = this.config.data.files;
+        }
+
+        this.filesInput = new FileInputComponent(this.files, fileInputConfig);
     }
 
     private renderFilePreview(file: File, dataUrl: string): HTMLElement {
@@ -326,9 +333,6 @@ export default class PostMwComponent extends ModalWindowComponent {
 
         const uploadReqData: UploadRequest = {};
 
-        // const formData = new FormData();
-        // formData.append('text', text);
-
         if (this?.mediaInput?.input?.files?.length) {
             uploadReqData.media = this.mediaInput.input.files;
         }
@@ -346,9 +350,7 @@ export default class PostMwComponent extends ModalWindowComponent {
                     Router.go({ path: '/login' });
                     return;
                 default:
-                    networkErrorPopUp({
-                        text: 'Не удалось загрузить вложения',
-                    });
+                    networkErrorPopUp({ text: 'Не удалось загрузить вложения' });
                     return;
             }
 

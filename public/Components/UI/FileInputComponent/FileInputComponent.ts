@@ -1,4 +1,5 @@
 import createElement from '@utils/createElement';
+import { Attachment } from 'types/UploadTypes';
 
 
 const DEFAULT_TYPE = 'file';
@@ -24,7 +25,7 @@ interface FileInputConfig {
     name?: string;
     classes?: string[];
     onUpload?: () => void;
-    preloaded?: string[];
+    preloaded?: string[] | Attachment[];
 };
 
 
@@ -261,7 +262,7 @@ export default class FileInputComponent {
         this.input.files = dataTransfer.files;
     }
 
-    async loadPreloadedFiles(srcList: string[]) {
+    async loadPreloadedFiles(srcList: string[] | Attachment[]) {
         const results = await Promise.allSettled(srcList.map(this.fetchImageAsFile));
 
         const preloadedFiles: File[] = [];
@@ -270,7 +271,11 @@ export default class FileInputComponent {
         results.forEach((result, i) => {
             if (result.status === 'fulfilled' && result.value) {
                 preloadedFiles.push(result.value);
-                imageDataUrls.push(srcList[i]);
+                if (typeof srcList[i] === 'string') {
+                    imageDataUrls.push(srcList[i]);
+                } else {
+                    imageDataUrls.push(srcList[i].url);
+                }
             } else {
                 console.warn(`Не удалось загрузить файл: ${srcList[i]}`);
             }
@@ -281,7 +286,8 @@ export default class FileInputComponent {
 
         if (this.config.preview || this.config.renderPreview) {
             for (let i = 0; i < preloadedFiles.length; i++) {
-                const imageDataUrl = srcList[i];
+                const src = srcList[i];
+                const imageDataUrl = typeof src === 'string' ? src : src.url;
                 const file = preloadedFiles[i];
 
                 let wrapper: HTMLElement;
@@ -291,16 +297,28 @@ export default class FileInputComponent {
                     wrapper = this.createPreviewElement(file, imageDataUrl);
                 }
                 
-                this.parent.insertBefore(wrapper, this.config.imitator);
+                if (this.parent === this.config.imitator.parentElement) {
+                    this.parent.insertBefore(wrapper, this.config.imitator);
+                } else {
+                    this.parent.append(wrapper);
+                }
             }
         }
     }
 
-    async fetchImageAsFile(src: string) {
+    async fetchImageAsFile(src: string | Attachment) {
         try {
-            const response = await fetch(src);
+            let response: Response, filename: string;
+
+            if (typeof src === 'string') {
+                response = await fetch(src);
+                filename = src.split('/').pop().split('?')[0] || 'image.jpg';
+            } else {
+                response = await fetch(src.url);
+                filename = src.name;
+            }
+
             const blob = await response.blob();
-            const filename = src.split('/').pop().split('?')[0] || 'image.jpg';
             return new File([blob], filename, { type: blob.type });
         } catch (error) {
             console.error("Ошибка при чтении файла", error);

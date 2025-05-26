@@ -133,7 +133,7 @@ export default class MessageComponent {
 
         for (const sticker of this.config.data.stickers) {
             new ImageComponent(stickers, {
-                src: sticker,
+                src: sticker.url,
                 hasSkeleton: true,
                 classes: ['msg__sticker'],
             });
