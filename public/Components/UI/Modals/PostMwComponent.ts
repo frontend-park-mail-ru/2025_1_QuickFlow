@@ -4,14 +4,14 @@ import createElement from '@utils/createElement';
 import insertIcon from '@utils/insertIcon';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
 import ModalWindowComponent from '@components/UI/Modals/ModalWindowComponent';
-import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
-import { FILE, MEDIA, POST } from '@config/config';
+import { CONSTS, FILE, MEDIA, POST } from '@config/config';
 import { FilesRequests, PostsRequests } from '@modules/api';
 import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
 import networkErrorPopUp from '@utils/networkErrorPopUp';
 import { Post, PostRequest } from 'types/PostTypes';
 import { UploadRequest } from 'types/UploadTypes';
 import Router from '@router';
+import validateUploadData from '@utils/validateUploadData';
 
 
 export interface PostMwConfig {
@@ -305,6 +305,25 @@ export default class PostMwComponent extends ModalWindowComponent {
         scrollWrapper.classList.remove('modal__pics_blank');
     }
 
+    // private get areAttachmentsValid(): boolean {
+    //     if (this.mediaInput.isLarge) {
+    //         networkErrorPopUp({ text: `Размер вложений суммарно не должен превышать ${this.mediaInput.conf.maxSize / CONSTS.MB_MULTIPLIER}Мб` });
+    //         return false;
+    //     }
+
+    //     if (this.mediaInput.isAnyLarge) {
+    //         networkErrorPopUp({ text: `Размер каждого вложения не должен превышать ${this.mediaInput.conf.maxSizeSingle / CONSTS.MB_MULTIPLIER}Мб` });
+    //         return false;
+    //     }
+
+    //     if (this.filesInput.isLarge) {
+    //         networkErrorPopUp({ text: `Размер файлов суммарно не должен превышать ${this.filesInput.conf.maxSize / CONSTS.MB_MULTIPLIER}Мб` });
+    //         return false;
+    //     }
+
+    //     return true;
+    // }
+
     private async handlePostSubmit(text: string) {
         this.button.disable();
 
@@ -314,18 +333,17 @@ export default class PostMwComponent extends ModalWindowComponent {
             !this?.filesInput?.input?.files?.length
         ) return;
 
-        if (this.mediaInput.isLarge) {
-            return new PopUpComponent({
-                text: `Размер фотографий суммарно не должен превышать ${FILE.MAX_SIZE_TOTAL}Мб`,
-                isError: true,
-            });
-        }
+        // if (!this.areAttachmentsValid) {
+        //     return;
+        // };
 
-        if (this.mediaInput.isAnyLarge) {
-            return new PopUpComponent({
-                text: `Размер каждой фотографии не должен превышать ${FILE.MAX_SIZE_SINGLE}Мб`,
-                isError: true,
-            });
+        if (
+            !validateUploadData({
+                mediaInputs: [this.mediaInput],
+                filesInputs: [this.filesInput],
+            })
+        ) {
+            return;
         }
 
         const postReqData: PostRequest = {};

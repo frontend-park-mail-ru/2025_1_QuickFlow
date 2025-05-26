@@ -43,6 +43,10 @@ export default class FileInputComponent {
         this.render();
     }
 
+    get conf(): FileInputConfig {
+        return this.config;
+    }
+
     get name(): string {
         return this.config.name?.trim();
     }

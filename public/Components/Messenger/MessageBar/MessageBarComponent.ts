@@ -14,6 +14,7 @@ import insertSym from '@utils/insertSym';
 import { UploadRequest } from 'types/UploadTypes';
 import networkErrorPopUp from '@utils/networkErrorPopUp';
 import ChatsPanelComponent from '../ChatsPanelComponent';
+import validateUploadData from '@utils/validateUploadData';
 
 
 const MOBILE_MAX_WIDTH = 610;
@@ -251,31 +252,31 @@ export default class MessageBarComponent {
         this.sendBtn.classList.remove('msg-bar__send_disabled');   
     }
 
-    private get areAttachmentsValid(): boolean {
-        if (
-            this.mediaInput.isLarge ||
-            this.filesInput.isLarge
-        ) {
-            new PopUpComponent({
-                text: `Размер файлов суммарно не должен превышать ${FILE.MAX_SIZE_TOTAL}Мб`,
-                isError: true,
-            });
-            return false;
-        }
+    // private get areAttachmentsValid(): boolean {
+    //     if (
+    //         this.mediaInput.isLarge ||
+    //         this.filesInput.isLarge
+    //     ) {
+    //         new PopUpComponent({
+    //             text: `Размер файлов суммарно не должен превышать ${FILE.MAX_SIZE_TOTAL}Мб`,
+    //             isError: true,
+    //         });
+    //         return false;
+    //     }
 
-        if (
-            this.mediaInput.isAnyLarge ||
-            this.filesInput.isAnyLarge
-        ) {
-            new PopUpComponent({
-                text: `Размер каждого файла не должен превышать ${FILE.MAX_SIZE_SINGLE}Мб`,
-                isError: true,
-            });
-            return false;
-        }
+    //     if (
+    //         this.mediaInput.isAnyLarge ||
+    //         this.filesInput.isAnyLarge
+    //     ) {
+    //         new PopUpComponent({
+    //             text: `Размер каждого файла не должен превышать ${FILE.MAX_SIZE_SINGLE}Мб`,
+    //             isError: true,
+    //         });
+    //         return false;
+    //     }
 
-        return true;
-    }
+    //     return true;
+    // }
 
     private async sendMessage() {
         if (this.sendBtn.classList.contains('msg-bar__send_disabled')) {
@@ -294,7 +295,16 @@ export default class MessageBarComponent {
             this.mediaInput?.input?.files?.length > 0 ||
             this.filesInput?.input?.files?.length > 0
         ) {
-            if (!this.areAttachmentsValid) {
+            // if (!this.areAttachmentsValid) {
+            //     return;
+            // }
+
+            if (
+                !validateUploadData({
+                    mediaInputs: [this.mediaInput],
+                    filesInputs: [this.filesInput],
+                })
+            ) {
                 return;
             }
 
