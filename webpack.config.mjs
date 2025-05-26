@@ -1,24 +1,27 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
+import ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default {
-	// entry: './public/index.ts',
 	entry: {
 		main: './public/index.ts',
 		sw: './public/sw.ts',
 	},
 	output: {
-		// filename: 'bundle.js',
 		filename: (pathData) => {
 			return pathData.chunk.name === 'sw' ? '[name].js' : 'bundle.js';
 		},
 		path: path.resolve(__dirname, 'public'),
+		// clean: true, // очищать папку output перед сборкой
 	},
-  	mode: 'development',
+	mode: 'development',
+	watch: true,
 	module: {
 		rules: [
 			{
@@ -33,39 +36,77 @@ export default {
 					{
 						loader: 'css-loader',
 						options: {
-						  	url: true,
-							sourceMap: true,
+							url: true,
+							sourceMap: false,
 						},
 					},
 					{
 						loader: 'sass-loader',
 						options: {
-							sourceMap: true,
+							sourceMap: false,
 						},
 					},
 				],
 			},
 			{
-				test: /\.svg$/i,
+				test: /\.(png|jpe?g|gif|svg)$/i,
 				type: 'asset/resource',
 				generator: {
-				  	filename: 'assets/icons/[name][ext]',
+					filename: 'assets/images/[name][ext]',
 				},
 			},
 			{
 				test: /\.ttf$/i,
 				type: 'asset/resource',
 				generator: {
-				  	filename: 'assets/fonts/[name][ext]',
+					filename: 'assets/fonts/[name][ext]',
 				},
 			},
 			{
 				test: /\.woff2$/i,
 				type: 'asset/resource',
 				generator: {
-				  	filename: 'assets/fonts/[name][ext]',
+					filename: 'assets/fonts/[name][ext]',
 				},
 			},
+		],
+	},
+	optimization: {
+		minimize: true,
+		minimizer: [
+			new TerserPlugin({
+				parallel: true,
+				terserOptions: {
+					format: {
+						comments: false,
+					},
+				},
+				extractComments: false,
+			}),
+			new CssMinimizerPlugin(),
+			new ImageMinimizerPlugin({
+				minimizer: {
+					implementation: ImageMinimizerPlugin.imageminMinify,
+					options: {
+						plugins: [
+							['gifsicle', { interlaced: true }],
+							['jpegtran', { progressive: true }],
+							['optipng', { optimizationLevel: 5 }],
+							[
+								'svgo',
+								{
+									plugins: [
+										{
+											name: 'removeViewBox',
+											active: false,
+										},
+									],
+								},
+							],
+						],
+					},
+				},
+			}),
 		],
 	},
 	plugins: [
@@ -89,5 +130,4 @@ export default {
 		}
 	},
 	devtool: 'source-map',
-	watch: true,
 };
