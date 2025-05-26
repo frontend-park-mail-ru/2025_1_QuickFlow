@@ -313,12 +313,6 @@ export default class SignupFormComponent {
                     router.menu.renderProfileMenuItem();
                     router?.menu?.renderCounters();
 
-                    // (async () => {
-                    //     const [status, data] = await UsersRequests.getMyProfile();
-                    //     // const [status, data] = await UsersRequests.getProfile(getLsItem('username', null));
-                    //     if (status === 200) setLsItem('user_id', data.id);
-                    // })();
-
                     new ws().subscribe('message', (payload: Message) => {
                         if (
                             router.path.startsWith('/messenger') ||
@@ -330,6 +324,8 @@ export default class SignupFormComponent {
                             classes: ['notification_msg'],
                             data: payload,
                         });
+
+                        router.menu.renderCounters('messenger');
                     });
 
                     router.go({ path: '/feed' });

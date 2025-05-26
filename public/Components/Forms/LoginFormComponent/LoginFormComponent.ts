@@ -258,6 +258,8 @@ export default class LoginFormComponent {
                             classes: ['notification_msg'],
                             data: payload,
                         });
+
+                        router.menu.renderCounters('messenger');
                     });
 
                     router.go({ path: '/feed' });
