@@ -343,6 +343,7 @@ export default class MessageBarComponent {
         ChatsRequests.sendMessage({
             receiver_id: this.config.chatData?.receiver_id,
             chat_id: this.config.chatData?.id,
+            text: '',
             stickers: [stickerUrl],
         });
     }

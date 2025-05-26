@@ -49,7 +49,7 @@ export interface MessageReadPayload {
 export interface MessageWsSend {
     chat_id: string;
     receiver_id: string;
-    text?: string;
+    text: string;
 
     media?: string[];
     files?: string[];
