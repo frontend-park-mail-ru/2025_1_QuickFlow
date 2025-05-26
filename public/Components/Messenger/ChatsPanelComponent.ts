@@ -271,7 +271,7 @@ export default class ChatsPanelComponent {
         } else if (message?.media?.length) {
             const extension: string = message?.media[0]?.url.split('.').pop();
             const isVideo = VIDEO_EXTENSIONS.includes(extension);
-            lastMessageText = `🖼 ${message?.media?.length} ${isVideo ? 'Видео' : 'Фото'}`;
+            lastMessageText = `${isVideo ? '📹' : '🖼'} ${message?.media?.length} ${isVideo ? 'видео' : 'фото'}`;
         } else if (message?.files?.length) {
             lastMessageText = `📂 ${message?.files?.pop()?.name || 'Файл'}`
         } else if (message?.audio?.length) {
