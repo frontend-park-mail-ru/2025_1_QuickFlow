@@ -274,7 +274,7 @@ export default class PostMwComponent extends ModalWindowComponent {
             multiple: true,
             maxSizeSingle: FILE.MAX_SIZE_SINGLE * FILE.MB_MULTIPLIER,
             renderPreview: this.renderFilePreview.bind(this),
-            // insertPosition: 'end',
+            insertPosition: 'end',
             required: true,
             maxCount: POST.IMG_MAX_COUNT,
         };
