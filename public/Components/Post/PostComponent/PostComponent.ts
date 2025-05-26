@@ -20,6 +20,7 @@ import VideoComponent from '@components/UI/VideoComponent/VideoComponent';
 import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
 import downloadFile from '@utils/downloadFile';
 import { Attachment } from 'types/UploadTypes';
+import { VIDEO_EXTENSIONS } from '@config/config';
 
 
 const AUTHOR_AVATAR_SIZE = 's';
@@ -147,12 +148,14 @@ export default class PostComponent {
 
         if (this.config.media && this.config.media.length > 0) {
             this.config.media.forEach((media: Attachment) => {
+                const extension = media.url.split('.').pop();
+                
                 const slide = createElement({
                     parent: slider,
                     classes: ['post__slide'],
                 });
 
-                if (media.url.endsWith('.mp4')) {
+                if (VIDEO_EXTENSIONS.includes(extension)) {
                     new VideoComponent(slide, {
                         src: media.url,
                         classes: ['post__pic'],
