@@ -33,6 +33,7 @@ export interface Message {
     files?: Attachment[];
     media?: Attachment[];
     audio?: Attachment[];
+    stickers?: string[];
 }
 
 export interface MessagesResponse {
@@ -43,4 +44,15 @@ export interface MessagesResponse {
 export interface MessageReadPayload {
     chat_id: string;
     message_id: string;
+}
+
+export interface MessageWsSend {
+    chat_id: string;
+    receiver_id: string;
+    text?: string;
+
+    media?: string[];
+    files?: string[];
+    audio?: string[];
+    stickers?: string[];
 }

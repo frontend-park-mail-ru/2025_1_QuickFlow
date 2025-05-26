@@ -58,6 +58,21 @@
     }
 }
 
+.msg__stickers {
+    max-height: 180px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.msg__sticker {
+    width: 180px;
+    height: 180px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
 @keyframes pulse {
     0% {
         background-color: #e0e0e0;

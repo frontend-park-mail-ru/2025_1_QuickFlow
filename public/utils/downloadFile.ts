@@ -1,4 +1,4 @@
-export default async function downloadFile(url: string) {
+export default async function downloadFile(url: string, filename?: string) {
     try {
         const response = await fetch(url, { mode: 'cors' });
 
@@ -12,8 +12,7 @@ export default async function downloadFile(url: string) {
         const link = document.createElement('a');
         link.href = blobUrl;
 
-        const filename = url.split('/').pop() || 'download';
-        link.download = filename;
+        link.download = filename || url.split('/').pop() || 'download';
 
         document.body.appendChild(link);
         link.click();

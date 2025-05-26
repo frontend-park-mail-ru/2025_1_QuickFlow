@@ -7,7 +7,7 @@ import ws from '@modules/WebSocketService';
 import { FILE, MEDIA, MSG, POST } from '@config/config';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
 import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
-import { FilesRequests } from '@modules/api';
+import { ChatsRequests, FilesRequests } from '@modules/api';
 import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
 import EmojiBarComponent from './EmojiBarComponent/EmojiBarComponent';
 import insertSym from '@utils/insertSym';
@@ -339,8 +339,12 @@ export default class MessageBarComponent {
         }
     }
 
-    private sendSticker() {
-        console.log('Sticker is sent');
+    private sendSticker(stickerUrl: string) {
+        ChatsRequests.sendMessage({
+            receiver_id: this.config.chatData?.receiver_id,
+            chat_id: this.config.chatData?.id,
+            stickers: [stickerUrl],
+        });
     }
 
     public updateTextareaHeight() {

@@ -7,6 +7,7 @@ import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAtt
 import downloadFile from '@utils/downloadFile';
 import { Message } from 'types/ChatsTypes';
 import VideoComponent from '@components/UI/VideoComponent/VideoComponent';
+import ImageComponent from '@components/UI/ImageComponent/ImageComponent';
 
 
 interface MessageConfig {
@@ -91,6 +92,9 @@ export default class MessageComponent {
         if (this.config.data?.files?.length) {
             this.renderFiles();
         }
+        if (this.config.data?.stickers?.length) {
+            this.renderStickers();
+        }
 
         createElement({
             parent: this.content,
@@ -121,6 +125,21 @@ export default class MessageComponent {
         return msg;
     }
 
+    private renderStickers() {
+        const stickers = createElement({
+            parent: this.content,
+            classes: ['msg__stickers'],
+        });
+
+        for (const sticker of this.config.data.stickers) {
+            new ImageComponent(stickers, {
+                src: sticker,
+                hasSkeleton: true,
+                classes: ['msg__sticker'],
+            });
+        }
+    }
+
     private renderFiles() {
         const files = createElement({
             parent: this.content,
@@ -137,7 +156,7 @@ export default class MessageComponent {
 
             attachment.element.addEventListener('click', async (e) => {
                 e.preventDefault();
-                await downloadFile(file.url);
+                await downloadFile(file.url, file.name);
             });
         }
     }
@@ -154,8 +173,12 @@ export default class MessageComponent {
 
             let mediaItem: HTMLImageElement | HTMLVideoElement;
             if (extension !== 'mp4') {
+                // new ImageComponent(mediaItem, {
+                //     src: media.url,
+                //     classes: ['msg__media-item'],
+                //     hasSkeleton: true,
+                // });
                 mediaItem = createElement({
-                    tag: extension === 'mp4' ? 'video' : 'img',
                     classes: ['msg__media-item'],
                     attrs: { src: media.url },
                 }) as HTMLImageElement | HTMLVideoElement;
@@ -168,14 +191,6 @@ export default class MessageComponent {
                     autoplay: true,
                     playsInline: true,
                 });
-                // mediaItem.loop = true;
-                // mediaItem.muted = true;
-
-                // mediaItem.addEventListener('loadeddata', () => {
-                //     mediaItem.play();
-                // });
-
-                // mediaItem.load();
                 mediaItem = video.element;
             }
 

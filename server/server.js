@@ -10,7 +10,7 @@ import crypto from 'crypto';
 import http from 'http';
 import { WebSocketServer } from 'ws';
 
-import { users, posts, chats, messages, search, community, post, comments, unread } from '../public/mocks.js';
+import { users, posts, chats, messages, search, community, post, comments, unread, stickerPacks } from '../public/mocks.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -34,24 +34,24 @@ wss.on('connection', (ws) => {
             const { type, payload } = JSON.parse(data);
             console.log(`[WS] Message received:`, type, payload);
 
-            const response = {
-                type: 'message',
-                payload: {
-                    id: 'uuidv4()',
-                    text: "hello!",
-                    created_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString(),
-                    sender: {
-                        id: "1eabe150-7b9e-42b3-a8d5-ad6ad900180c",
-                        username: "Nikita2",
-                        firstname: "Myname",
-                        lastname: "Mysurname"
-                    },
-                    chat_id: "99f9d7dd-e955-4eda-97ec-91c958208b3b"
-                }
-            };
+            // const response = {
+            //     type: 'message',
+            //     payload: {
+            //         id: 'uuidv4()',
+            //         text: "hello!",
+            //         created_at: new Date().toISOString(),
+            //         updated_at: new Date().toISOString(),
+            //         sender: {
+            //             id: "1eabe150-7b9e-42b3-a8d5-ad6ad900180c",
+            //             username: "Nikita2",
+            //             firstname: "Myname",
+            //             lastname: "Mysurname"
+            //         },
+            //         chat_id: "49dc794b-d8cf-404c-be69-4886bd78ada4"
+            //     }
+            // };
 
-            ws.send(JSON.stringify(response));
+            // ws.send(JSON.stringify(response));
         } catch (err) {
             console.error('[WS] Failed to parse message', data);
         }
@@ -154,6 +154,17 @@ app.get('/api/feed', (req, res) => {
     });
 
     res.status(200).json(posts);
+});
+
+app.get('/api/sticker_packs', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).json(stickerPacks);
 });
 
 app.get('/api/profiles/:username/posts', (req, res) => {

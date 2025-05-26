@@ -907,6 +907,24 @@ export const messages = {
                     },
                     "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
                 },
+                {
+                    "id": "dcbe8d04-95c3-48c1-ac1f-2d4ab726733d",
+                    "text": "",
+                    "created_at": "2025-04-10T19:16:27.926906+03:00",
+                    "updated_at": "2025-04-10T19:16:27.926906+03:00",
+                    "is_read": true,
+                    "stickers": [
+                        "https://quickflowapp.ru/minio/posts/bf93498b-8671-4d40-9987-303c0540b4c9.gif"
+                    ],
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011",
+                },
             ],
             last_read_ts: "2025-04-10T19:11:36.19391+03:00",
         }
@@ -969,4 +987,37 @@ export const unread = {
     payload: {
         chats_count: 9,
     }
+}
+
+export const stickerPacks = {
+    "payload": [
+        {
+            "id": "40798417-c2af-45d3-a7e0-0e9edaa2ba9f",
+            "name": "Official QuickFlow StickerPack",
+            "creator_id": "846ccb16-f2cc-4d69-a440-7c3149b43227",
+            "created_at": "2025-05-25T13:55:12Z",
+            "updated_at": "2025-05-25T13:55:12Z",
+            "stickers": [
+                "https://quickflowapp.ru/minio/posts/e6fd1fd0-f4d2-4501-a746-783e039aee8f.jpg",
+                "https://quickflowapp.ru/minio/posts/1849af60-d971-4a1b-a91f-7dacd2331cef.gif",
+                "https://quickflowapp.ru/minio/posts/bf93498b-8671-4d40-9987-303c0540b4c9.gif",
+                "https://quickflowapp.ru/minio/posts/b03ae18a-7394-4691-b454-8bfb8af0293c.gif",
+                "https://quickflowapp.ru/minio/posts/364ac3b5-dc3d-4ff3-af29-e309da1a475d.jpeg"
+            ]
+        },
+        {
+            "id": "40798417-c2af-45d3-a7e0-0e9edaa2ba9f",
+            "name": "Другой тестовый",
+            "creator_id": "846ccb16-f2cc-4d69-a440-7c3149b43227",
+            "created_at": "2025-05-25T13:55:12Z",
+            "updated_at": "2025-05-25T13:55:12Z",
+            "stickers": [
+                "https://quickflowapp.ru/minio/posts/e6fd1fd0-f4d2-4501-a746-783e039aee8f.jpg",
+                "https://quickflowapp.ru/minio/posts/1849af60-d971-4a1b-a91f-7dacd2331cef.gif",
+                "https://quickflowapp.ru/minio/posts/bf93498b-8671-4d40-9987-303c0540b4c9.gif",
+                "https://quickflowapp.ru/minio/posts/b03ae18a-7394-4691-b454-8bfb8af0293c.gif",
+                "https://quickflowapp.ru/minio/posts/364ac3b5-dc3d-4ff3-af29-e309da1a475d.jpeg"
+            ]
+        }
+    ]
 }

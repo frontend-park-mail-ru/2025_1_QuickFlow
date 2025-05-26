@@ -1,5 +1,7 @@
 import SearchComponent from "@components/SearchComponent/SearchComponent";
+import { StickersRequests } from "@modules/api";
 import Emoji from "@modules/Emoji/Emoji";
+import Router from "@router";
 import createElement from "@utils/createElement";
 import insertIcon from "@utils/insertIcon";
 
@@ -35,7 +37,7 @@ export default class EmojiBarComponent {
         this.render();
     }
 
-    private render() {
+    private async render() {
         this.wrapper = createElement({
             parent: this.parent,
             classes: ['emoji-bar__wrapper'],
@@ -60,7 +62,7 @@ export default class EmojiBarComponent {
         });
 
         const emojiSection = this.renderEmojis();
-        const stickerSection = this.renderStickers();
+        const stickerSection = await this.renderStickers();
         this.renderToggle(emojiSection, stickerSection);
         this.handleHover();
     }
@@ -211,7 +213,7 @@ export default class EmojiBarComponent {
         });
     }
 
-    private renderStickers(): HTMLElement {
+    private async renderStickers(): Promise<HTMLElement> {
         const section = createElement({
             parent: this.element,
             classes: [
@@ -233,9 +235,28 @@ export default class EmojiBarComponent {
             classes: ['emoji-bar__title'],
             text: 'Все стикеры',
         });
+
+        const [status, stickerPacksData] = await StickersRequests.getStickerPacks(50);
+        switch (status) {
+            case 200:
+                break;
+            case 401:
+                Router.go({ path: '/login' });
+                return;
+        }
+
+        if (!stickerPacksData || !stickerPacksData?.payload?.length) {
+            return section;
+        }
         
-        for (let i = 0; i < 5; i++) {
-            for (const stickerUrl of STICKER_URLS) {
+        for (const stickerPack of stickerPacksData.payload) {
+            createElement({
+                parent: emojiList,
+                classes: ['emoji-bar__title'],
+                text: stickerPack.name,
+            });
+
+            for (const sticker of stickerPack.stickers) {
                 const stickerWrapper = createElement({
                     parent: emojiList,
                     classes: ['emoji-bar__sticker-wrapper'],
@@ -244,10 +265,10 @@ export default class EmojiBarComponent {
                 createElement({
                     parent: stickerWrapper,
                     classes: ['emoji-bar__sticker'],
-                    attrs: { src: stickerUrl },
+                    attrs: { src: sticker },
                 })
                 .addEventListener('click', () => {
-                    this.config.sendSticker(stickerUrl);
+                    this.config.sendSticker(sticker);
                 });
             }
         }

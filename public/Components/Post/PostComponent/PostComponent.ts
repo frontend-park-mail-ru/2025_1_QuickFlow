@@ -115,15 +115,6 @@ export default class PostComponent {
             classes: ['post__files'],
         });
 
-        // new SwiperComponent(null, {
-        //     picsWrapper: files,
-        //     picsCount: this.config.files.length,
-        //     slider: files,
-        //     hasPaginator: true,
-        //     isHandlingMouse: false,
-        //     isHandlingTouch: false,
-        // });
-
         for (const file of this.config.files) {
             const attachment = new FileAttachmentComponent(files, {
                 type: 'file_attached',
@@ -134,7 +125,7 @@ export default class PostComponent {
 
             attachment.element.addEventListener('click', async (e) => {
                 e.preventDefault();
-                await downloadFile(file.url);
+                await downloadFile(file.url, file.name);
             });
         }
     }
@@ -257,14 +248,6 @@ export default class PostComponent {
                 text: this.config[`${key}_count`].toString(),
             });
         }
-
-        // insertIcon(actionsWrapper, {
-        //     name: 'bookmark-icon',
-        //     classes: [
-        //         'post__action-icon',
-        //         'js-post-action-bookmark',
-        //     ],
-        // });
     }
 
     private renderText() {

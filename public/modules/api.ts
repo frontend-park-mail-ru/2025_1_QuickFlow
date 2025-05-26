@@ -1,9 +1,11 @@
 import ajax from '@modules/ajax';
 import convertToFormData from '@utils/convertToFormData';
-import { Chat, MessagesResponse, UnreadChatsCountResponse } from 'types/ChatsTypes';
+import { Chat, MessagesResponse, MessageWsSend, UnreadChatsCountResponse } from 'types/ChatsTypes';
 import { Comment, CommentRequest, Post, PostRequest, PostResponse } from 'types/PostTypes';
+import { StickerPackRequest, StickerPackResponse, StickerPacksResponse } from 'types/StickersTypes';
 import { UploadData, UploadRequest } from 'types/UploadTypes';
 import { User } from 'types/UserTypes';
+import ws from './WebSocketService';
 
 
 export class PostsRequests {
@@ -128,6 +130,10 @@ export class ChatsRequests {
         });
     }
 
+    static sendMessage(payload: MessageWsSend): void {
+        new ws().send('message', payload);
+    }
+
     static async getUnreadChatsCount(): Promise<[number, UnreadChatsCountResponse]> {
         return new Promise((resolve) => {
             ajax.get({
@@ -155,6 +161,47 @@ export class AuthRequests {
             ajax.post({
                 url: '/logout',
                 callback: (status: number) => resolve(status),
+            });
+        });
+    }
+};
+
+
+export class StickersRequests {
+    static async createStickerPack(body: StickerPackRequest): Promise<[number, StickerPackResponse]> {
+        return new Promise((resolve) => {
+            ajax.post({
+                url: '/sticker_packs/add',
+                body,
+                callback: (status: number, data: StickerPackResponse) => resolve([status, data]),
+            });
+        });
+    }
+
+    static async getStickerPacks(count: number, offset: number = 0): Promise<[number, StickerPacksResponse]> {
+        return new Promise((resolve) => {
+            ajax.get({
+                url: '/sticker_packs',
+                params: { count, offset },
+                callback: (status: number, data: StickerPacksResponse) => resolve([status, data]),
+            });
+        });
+    }
+
+    static async deleteStickerPack(id: string): Promise<number> {
+        return new Promise((resolve) => {
+            ajax.delete({
+                url: `/sticker_packs/${id}`,
+                callback: (status: number) => resolve(status),
+            });
+        });
+    }
+
+    static async getStickerPack(id: string): Promise<[number, StickerPackResponse]> {
+        return new Promise((resolve) => {
+            ajax.get({
+                url: `/sticker_packs/${id}`,
+                callback: (status: number, data: StickerPackResponse) => resolve([status, data]),
             });
         });
     }

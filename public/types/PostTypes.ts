@@ -5,19 +5,18 @@ import { UserPublic } from "./UserTypes";
 
 export interface PostRequest {
     text?: string;
+    author_id?: string;
+    author_type?: 'user' | 'community';
+
     media?: string[];
     files?: string[];
     audio?: string[];
-    author_id?: string;
-    author_type?: 'user' | 'community';
+    stickers?: string[];
 }
 
 interface BasePost {
     id: string;
     text?: string;
-    media?: Attachment[];
-    audio?: Attachment[];
-    files?: Attachment[];
     created_at: string;
     updated_at: string;
     like_count: number;
@@ -26,6 +25,11 @@ interface BasePost {
     is_repost: boolean;
     is_liked: boolean;
     last_comment?: Comment;
+
+    media?: Attachment[];
+    audio?: Attachment[];
+    files?: Attachment[];
+    stickers?: string[];
 }
 
 export interface UserPost extends BasePost {
@@ -46,9 +50,11 @@ export interface PostResponse {
 
 export interface CommentRequest {
     text?: string;
+
     files?: Attachment[];
     media?: Attachment[];
     audio?: Attachment[];
+    stickers?: string[];
 }
 
 export interface Comment {
@@ -64,4 +70,5 @@ export interface Comment {
     media?: string[];
     audio?: string[];
     files?: string[];
+    stickers?: string[];
 }
