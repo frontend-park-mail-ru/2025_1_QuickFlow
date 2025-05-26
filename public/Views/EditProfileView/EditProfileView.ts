@@ -1,5 +1,3 @@
-import Ajax from '@modules/ajax';
-
 import RadioMenuComponent from '@components/RadioMenuComponent/RadioMenuComponent';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
@@ -11,31 +9,31 @@ import FileInputComponent from '@components/UI/FileInputComponent/FileInputCompo
 
 import createElement from '@utils/createElement';
 import TextareaComponent from '@components/UI/TextareaComponent/TextareaComponent';
-import { getLsItem, setLsItem } from '@utils/localStorage';
+import { getLsItem } from '@utils/localStorage';
 import convertDate from '@utils/convertDate';
-import convertToFormData from '@utils/convertToFormData';
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 
 import router from '@router';
 import { forms } from './EditProfileFormConfig';
+import { AVATAR, FILE, MEDIA, UPLOAD_DATA } from '@config/config';
+import { UsersRequests } from '@modules/api';
+import LsProfile from '@modules/LsProfile';
+import networkErrorPopUp from '@utils/networkErrorPopUp';
 
 
-const AVATAR_MAX_RESOLUTION = 1680;
+const ACCEPT = '.jpg, .jpeg, .png, .gif';
 
 
 class EditProfileView {
     private containerObj: MainLayoutComponent;
-    private section: string;
-    private userData: Record<string, any>;
+    private section: string | null = null;
+    private userData: Record<string, any> | null = null;
     private stateUpdaters: Array<any> = [];
     private submitButton: ButtonComponent;
 
-    constructor() {
-        this.userData = null;
-        this.section = null;
-    }
+    constructor() {}
 
-    render(params: any, section: string = 'profile') {
+    render(params: Record<string, any>, section: string = 'profile') {
         this.containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
@@ -55,44 +53,31 @@ class EditProfileView {
                     onClick: () => this.renderSection('education')
                 },
             },
-            active: section,
+            active: params?.section || section,
         });
-
-        this.renderSection(section);
     }
 
-    renderSection(sectionName: string) {
+    async renderSection(sectionName: string) {
         this.section = sectionName;
-        this.stateUpdaters = [];
         const sectionData = forms[this.section];
+
+        try {
+            await LsProfile.update();
+            this.userData = LsProfile.data;
+            this.renderForm(sectionData);
+        } catch {
+            networkErrorPopUp();
+        }
+    }
+
+    renderForm(sectionData: Record<string, any>) {
         this.containerObj.left.innerHTML = '';
+        this.stateUpdaters = [];
 
-        Ajax.get({
-            url: `/profiles/${getLsItem('username', '')}`,
-            callback: (status, userData) => {
-                switch (status) {
-                    case 200:
-                        this.getCbOk(userData, sectionData);
-                        break;
-                    case 401:
-                        this.cbUnauthorized();
-                        break;
-                }
-            }
-        });
-    }
+        if (sectionData.header) {
+            this.renderHeader();
+        }
 
-    cbUnauthorized() {
-        router.go({ path: '/login' });
-    }
-
-    getCbOk(userData, sectionData) {
-        this.userData = userData;
-        if (sectionData.header) this.renderHeader();
-        this.renderForm(sectionData);
-    }
-
-    renderForm(sectionData) {
         const fields = sectionData.fields;
 
         const form = createElement({
@@ -165,21 +150,31 @@ class EditProfileView {
         });
     }
 
-    handleFormSubmit() {
+    async handleFormSubmit() {
         this.submitButton.disable();
 
         const body: Record<string, any> = {};
 
-        this.stateUpdaters.forEach(({ name, value }) => {
+        for (const stateUpdater of this.stateUpdaters) {
+            let { name, value } = stateUpdater;
+
             if (name === 'birth_date') value = convertDate(value, 'ts');
+
+            if ((name === 'avatar' || name === 'cover') && stateUpdater.isLarge) {
+                return new PopUpComponent({
+                    text: `Размер файла не должен превышать ${FILE.MAX_SIZE_SINGLE}Мб`,
+                    isError: true,
+                });
+            }
+
             const sections = {
                 profile: () => {
                     body.profile ??= {};
-                    if (name === 'avatar' || name === 'cover') {
-                        body[name] = value instanceof File || (value instanceof FileList && value.length > 0) ? value : '';
-                        return;
-                    }
-                    body.profile[name] = value;
+                    value instanceof File ?
+                        body[name] = value :
+                        value instanceof FileList ?
+                            body[name] = '' :
+                            body.profile[name] = value;
                 },
                 contacts: () => {
                     body.contact_info ??= {};
@@ -191,8 +186,9 @@ class EditProfileView {
                     body[key][name] = name === 'grad_year' ? Number(value) : value;
                 }
             };
+
             sections[this.section]?.();
-        })
+        }
 
         const newUsername = body?.profile?.username;
 
@@ -205,6 +201,8 @@ class EditProfileView {
         if (body.university) body.university = JSON.stringify(body.university);
 
         for (const key in this.userData) {
+            if (!['profile', 'school', 'university', 'contact_info'].includes(key)) continue;
+
             if (!body[key] || body[key].length === 0) {
                 if (typeof this.userData[key] === 'object') {
                     body[key] = JSON.stringify(this.userData[key]);
@@ -214,48 +212,40 @@ class EditProfileView {
             }
         }
 
-        if (!body['cover']) body['cover'] = '';
-        if (!body['avatar']) body['avatar'] = '';
-
-        const fd = convertToFormData(body);
-
         try {
-            Ajax.post({
-                url: '/profile',
-                body: fd,
-                isFormData: true,
-                callback: (status: number) => {
-                    switch (status) {
-                        case 200:
-                            this.postCbOk(newUsername);
-                            break;
-                        case 401:
-                            this.cbUnauthorized();
-                            break;
-                        default:
-                            this.cbDefault();
-                            break;
+            const [status, profileData] = await UsersRequests.editProfile(body);
+            switch (status) {
+                case 200:
+                    this.postCbOk(newUsername);
+                    break;
+                case 401:
+                    router.go({ path: '/login' });
+                    break;
+                case 500:
+                    if (
+                        profileData?.error_code.includes('ALREADY_EXISTS') ||
+                        profileData?.message.includes('ALREADY_EXISTS')
+                    ) {
+                        this.stateUpdaters[2].showError('Такой никнейм уже занят');
                     }
-                }
-            });
+                default:
+                    networkErrorPopUp();
+                    break;
+            }
         } catch {
-            this.cbDefault();
+            networkErrorPopUp();
         }
     }
 
-    cbDefault() {
-        new PopUpComponent({
-            text: 'Не удалось сохранить изменеия',
-            size: "large",
-            isError: true,
-        });
-    }
-
     postCbOk(newUsername: string | undefined) {
-        if (newUsername) setLsItem('username', newUsername);
+        if (newUsername) {
+            LsProfile.username = newUsername;
+        }
+
         router?.menu?.renderProfileMenuItem();
         router?.header?.renderAvatarMenu();
         this.render(null, this.section);
+
         new PopUpComponent({
             text: 'Изменения сохранены',
             icon: "check-icon",
@@ -291,11 +281,13 @@ class EditProfileView {
         this.stateUpdaters.push(
             new FileInputComponent(this.containerObj.left, {
                 imitator: avatar.wrapper,
+                accept: AVATAR.ACCEPT,
                 preview: avatar.avatar,
                 id: 'profile-avatar-upload',
                 name: 'avatar',
                 compress: true,
-                maxSize: AVATAR_MAX_RESOLUTION,
+                maxSize: UPLOAD_DATA.MAX_SIZE,
+                maxSizeSingle: UPLOAD_DATA.MAX_SINGLE_SIZE,
             })
         );
     }

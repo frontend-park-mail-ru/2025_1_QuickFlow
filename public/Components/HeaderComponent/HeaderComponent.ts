@@ -1,16 +1,10 @@
-import Ajax from '@modules/ajax';
-import InputComponent from '@components/UI/InputComponent/InputComponent';
 import ProfileMenuComponent from '@components/ProfileMenuComponent/ProfileMenuComponent';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
-import router from '@router';
 import createElement from '@utils/createElement';
 import { getLsItem } from '@utils/localStorage';
 import SearchComponent from '@components/SearchComponent/SearchComponent';
-import API from '@utils/api';
-
-
-const DEBOUNCE_DELAY = 500;
-const REQUEST_USERS_COUNT = 10;
+import { CommunitiesRequests, FriendsRequests, UsersRequests } from '@modules/api';
+import LsProfile from '@modules/LsProfile';
 
 
 export default class HeaderComponent {
@@ -22,9 +16,9 @@ export default class HeaderComponent {
     wrapper: HTMLElement | null = null;
     rightWrapper: HTMLElement | null = null;
 
-    constructor(parent: any) {
-        this.parent = parent;
 
+    constructor(parent: HTMLElement) {
+        this.parent = parent;
         this.render();
     }
 
@@ -64,11 +58,23 @@ export default class HeaderComponent {
             inputClasses: ['header__search'],
             results,
             isResultsChild: true,
-            searchResults: API.searchFriends,
             resultsCount: 3,
-            renderEmptyState: this.renderEmptyState,
-            renderTitle: this.renderTitle,
-            renderResult: this.renderResult,
+            searchResults: [
+                UsersRequests.searchUsers,
+                CommunitiesRequests.searchCommunities,
+            ],
+            renderEmptyState: [
+                this.renderEmptyState,
+                this.renderCommunityEmptyState,
+            ],
+            renderTitle: [
+                this.renderTitle,
+                this.renderCommunityTitle,
+            ],
+            renderResult: [
+                this.renderResult,
+                this.renderCommunityResult,
+            ]
         });
     }
 
@@ -77,6 +83,14 @@ export default class HeaderComponent {
             parent,
             classes: ['header__results-title'],
             text: 'Люди'
+        });
+    }
+
+    private renderCommunityTitle(parent: HTMLElement) {
+        createElement({
+            parent,
+            classes: ['header__results-title'],
+            text: 'Cообщества'
         });
     }
 
@@ -109,16 +123,47 @@ export default class HeaderComponent {
         resultsList.appendChild(result);
     }
 
-    private renderEmptyState(parent: HTMLElement) {
-        createElement({
-            parent,
-            classes: ['header__results-title'],
-            text: 'Люди'
+    private renderCommunityResult(parent: HTMLElement, communityData: Record<string, any>) {
+        const result = createElement({
+            tag: 'a',
+            classes: ['header__result'],
+            attrs: { href: `/communities/${communityData?.community?.nickname}` },
+        });
+
+        new AvatarComponent(result, {
+            src: communityData?.community?.avatar_url,
+            size: 'xs',
         });
 
         createElement({
+            parent: result,
+            classes: ['header__result-name'],
+            text: communityData?.community?.name,
+        });
+
+        let resultsList = parent.querySelector('.header__results-items');
+        if (!resultsList) {
+            resultsList = createElement({
+                parent,
+                classes: ['header__results-items'],
+            });
+        }
+
+        resultsList.appendChild(result);
+    }
+
+    private renderEmptyState(parent: HTMLElement) {
+        createElement({
             parent,
             text: 'Пользователи не найдены',
+            classes: ['header__result_empty'],
+        });
+    }
+
+    private renderCommunityEmptyState(parent: HTMLElement) {
+        createElement({
+            parent,
+            text: 'Cообщества не найдены',
             classes: ['header__result_empty'],
         });
     }
@@ -134,7 +179,7 @@ export default class HeaderComponent {
         });
     }
 
-    cdOk(users: any) {
+    cdOk(users: Record<string, any>) {
         if (!this.searchResults) {
             this.searchResults = createElement({
                 parent: this.search,
@@ -161,31 +206,34 @@ export default class HeaderComponent {
         }
     }
 
-    renderAvatarMenu() {
-        if (this.rightWrapper) this.rightWrapper.innerHTML = '';
+    async renderAvatarMenu() {
+        if (this.rightWrapper) {
+            this.rightWrapper.remove();
+            this.rightWrapper.innerHTML = '';
+        }
 
         this.rightWrapper = createElement({
             parent: this.wrapper,
             classes: ['header__right']
         });
 
-        Ajax.get({
-            url: `/profiles/${getLsItem('username', '')}`,
-            callback: (status: number, userData: any) => {
-                switch (status) {
-                    case 200:
-                        this.renderAvatarCallback(userData);
-                        break;
-                }
-            }
-        });
+        // const [status, profileData] = await UsersRequests.getMyProfile();
+        // switch (status) {
+        //     case 200:
+        //         this.renderAvatarCallback(profileData);
+        //         break;
+        // }
+
+        this.renderAvatarCallback(LsProfile.data);
     }
 
-    renderAvatarCallback(userData: any) {
-        if (userData && this.rightWrapper) {
+    renderAvatarCallback(profileData: Record<string, any>) {
+        this.rightWrapper.innerHTML = '';
+
+        if (profileData && this.rightWrapper) {
             new AvatarComponent(this.rightWrapper, {
                 size: 'xs',
-                src: userData.profile.avatar_url,
+                src: profileData.profile.avatar_url,
             });
 
             createElement({
@@ -195,7 +243,7 @@ export default class HeaderComponent {
             });
 
             new ProfileMenuComponent(this.rightWrapper, {
-                userData,
+                userData: profileData,
             });
         }
     }

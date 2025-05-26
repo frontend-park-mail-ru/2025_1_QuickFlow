@@ -1,7 +1,10 @@
 import createElement from '@utils/createElement';
 import insertIcon from '@utils/insertIcon';
-import { getLsItem } from '@utils/localStorage';
 import router from '@router';
+import { ChatsRequests, FriendsRequests } from '@modules/api';
+import CounterComponent from '@components/CounterComponent/CounterComponent';
+import { MOBILE_MAX_WIDTH } from '@config/config';
+import LsProfile from '@modules/LsProfile';
 
 
 const LOGO = 'annotated-logo';
@@ -11,9 +14,12 @@ export default class MenuComponent {
     static __instance: MenuComponent;
     private config: Record<string, any>;
     private parent: HTMLElement;
-    private container: HTMLElement | null = null;
+
+    private isMobile: boolean;
+    container: HTMLElement | null = null;
     menuElements: Record<string, any> = {};
-    activePageLink: any = null;
+    activePageLink: HTMLElement = null;
+
     constructor(parent: HTMLElement, config: Record<string, any>) {
         if (MenuComponent.__instance) {
             return MenuComponent.__instance;
@@ -21,6 +27,7 @@ export default class MenuComponent {
 
         this.parent = parent;
         this.config = config;
+        this.isMobile = window.innerWidth <= MOBILE_MAX_WIDTH;
         this.render();
 
         MenuComponent.__instance = this;
@@ -57,15 +64,34 @@ export default class MenuComponent {
                 attrs: {'data-section': key}
             });
 
-            if (href) menuElement.setAttribute('href', href);
+            if (href) {
+                menuElement.setAttribute('href', href);
+            }
 
-            insertIcon(menuElement, {
+            const itemLeft = createElement({
+                parent: menuElement,
+                classes: ['menu__item-left'],
+            });
+
+            insertIcon(itemLeft, {
                 name: icon,
                 classes: ['menu__icon'],
+            }).then((menuIcon) => {
+                if (this.isMobile) {
+                    menuElement.addEventListener('click', (e) => {
+                        menuIcon.classList.remove('menu__icon-animating');
+                        void menuIcon.offsetWidth;
+
+                        menuIcon.classList.add('menu__icon-animating');
+                        menuIcon.addEventListener('animationend', () => {
+                            menuIcon.classList.remove('menu__icon-animating');
+                        }, { once: true });
+                    });   
+                }
             });
 
             createElement({
-                parent: menuElement,
+                parent: itemLeft,
                 text,
                 classes: ['menu__text'],
             });
@@ -93,12 +119,48 @@ export default class MenuComponent {
                 this.goToPage(event.target.closest('a'));
             }
         });
+
+        this.renderCounters();
     }
 
-    renderProfileMenuItem() {
+    public async renderCounters() {
+        this.container.querySelectorAll('.menu__counter')?.forEach((counter) => counter.remove());
+        const userId = LsProfile.id;
+
+        const [friendsStatus, friendsData] = await FriendsRequests.getFriends(userId, 100, 0, 'incoming');
+        switch (friendsStatus) {
+            case 401:
+                router.go({ path: '/login' });
+                return;
+        }
+
+        const requestsCount = friendsData?.payload?.friends?.length;
+        if (requestsCount) {
+            new CounterComponent(this.menuElements.friends, {
+                value: requestsCount,
+                classes: ['menu__counter'],
+            });
+        }
+
+        const [chatsStatus, unreadChatsData] = await ChatsRequests.getUnreadChatsCount();
+        switch (chatsStatus) {
+            case 401:
+                router.go({ path: '/login' });
+                return;
+        }
+
+        if (unreadChatsData.payload.chats_count) {
+            new CounterComponent(this.menuElements.messenger, {
+                value: unreadChatsData.payload.chats_count,
+                classes: ['menu__counter'],
+            });
+        }
+    }
+
+    public renderProfileMenuItem() {
         const profileMenuItem = this.container?.getElementsByClassName('js-profile-menu-item')[0] as HTMLAnchorElement | undefined;
         if (profileMenuItem) {
-            profileMenuItem.href = `/profiles/${getLsItem('username', '')}`;
+            profileMenuItem.href = `/profiles/${LsProfile.username}`;
         }
     }
 
@@ -112,7 +174,7 @@ export default class MenuComponent {
         this.menuElements.signup.classList.remove('hidden');
     }
 
-    setActive(section: any) {
+    setActive(section: string) {
         const menuElement = this.menuElements[section];
         if (this.activePageLink) {
             this.activePageLink.classList.remove('menu__item_active');
@@ -123,8 +185,7 @@ export default class MenuComponent {
 
     goToPage(menuElement: HTMLElement) {
         if (
-            menuElement.getAttribute('href') === router.path &&
-            // menuElement.dataset.section === router.path.slice(1) &&
+            menuElement.getAttribute('href') === router.path.split('?')[0] &&
             this.activePageLink.getAttribute('href')
         ) return;
 

@@ -1,13 +1,17 @@
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import RadioMenuComponent from '@components/RadioMenuComponent/RadioMenuComponent';
 import createElement from '@utils/createElement';
-import API from '@utils/api';
 import { getLsItem } from '@utils/localStorage';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
 import CommunityComponent from '@components/CommunityComponent/CommunityComponent';
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
-import CreateCommunityMwComponent from '@components/UI/ModalWindowComponent/CreateCommunityMwComponent';
+import CreateCommunityMwComponent from '@components/UI/Modals/CreateCommunityMwComponent';
 import SearchComponent from '@components/SearchComponent/SearchComponent';
+import router from '@router';
+import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
+import { CommunitiesRequests } from '@modules/api';
+import LsProfile from '@modules/LsProfile';
+import networkErrorPopUp from '@utils/networkErrorPopUp';
 
 
 const enum Section {
@@ -24,7 +28,7 @@ class CommunitiesView {
 
     constructor() {}
 
-    render() {
+    render(params: Record<string, any>) {
         this.containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
@@ -52,8 +56,8 @@ class CommunitiesView {
                 'communities__search',
             ],
             results,
-            searchResults: API.searchCommunities,
-            title: 'Результаты поиска',
+            searchResults: CommunitiesRequests.searchCommunities,
+            renderTitle: this.renderTitle,
             renderEmptyState: this.renderEmptyState,
             renderResult: this.renderCommunity,
             elementToHide: this.communities,
@@ -77,12 +81,20 @@ class CommunitiesView {
                     title: 'Управляемые',
                     onClick: () => this.renderSection(Section.Managed),
                 },
-            }
+            },
+            active: params?.section || 'communities',
         });
 
-        this.renderSection(Section.Communities);
-
         return this.containerObj.container;
+    }
+
+    private renderTitle(parent: HTMLElement) {
+        createElement({
+            tag: 'h2',
+            parent,
+            classes: ['search__title'],
+            text: 'Результаты поиска',
+        });
     }
 
     private renderEmptyState(parent: HTMLElement) {
@@ -93,22 +105,36 @@ class CommunitiesView {
     }
 
     async renderSection(section = Section.Communities) {
-        this.communities.innerHTML = '';
-
         switch (section) {
             case Section.Communities:
-                this.renderCommunities(API.getUserCommunities);
+                this.fetchCommunities(CommunitiesRequests.getUserCommunities);
                 break;
             case Section.Managed:
-                this.renderCommunities(API.getManagedCommunities);
+                this.fetchCommunities(CommunitiesRequests.getManagedCommunities);
                 break;
         }
     }
 
-    async renderCommunities(getMethod: Function) {
-        const username = getLsItem('username', null);
+    async fetchCommunities(getMethod: Function) {
+        const username = LsProfile.username;
 
-        const [communitiesStatus, data] = await getMethod(username, COMMUNITIES_COUNT);
+        const [status, data] = await getMethod(username, COMMUNITIES_COUNT);
+        switch (status) {
+            case 200:
+                this.renderCommunities(data);
+                break;
+            case 401:
+                router.go({ path: '/login' });
+                break;
+            default:
+                networkErrorPopUp();
+                break;
+        }
+    }
+
+    private renderCommunities(data: Record<string, any>) {
+        this.communities.innerHTML = '';
+
         const communitiesData = data?.payload;
 
         if (!communitiesData || !communitiesData.length) {

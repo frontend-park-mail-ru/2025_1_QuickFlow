@@ -1,12 +1,15 @@
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import RadioMenuComponent from '@components/RadioMenuComponent/RadioMenuComponent';
 import createElement from '@utils/createElement';
-import API from '@utils/api';
 import FriendComponent from '@components/FriendComponent/FriendComponent';
 import { getLsItem } from '@utils/localStorage';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
-import InputComponent from '@components/UI/InputComponent/InputComponent';
 import SearchComponent from '@components/SearchComponent/SearchComponent';
+import router from '@router';
+import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
+import { FriendsRequests, UsersRequests } from '@modules/api';
+import LsProfile from '@modules/LsProfile';
+import networkErrorPopUp from '@utils/networkErrorPopUp';
 
 
 const enum Section {
@@ -22,7 +25,7 @@ class FriendsView {
 
     constructor() {}
 
-    render() {
+    render(params: Record<string, any>) {
         this.containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
@@ -50,9 +53,9 @@ class FriendsView {
                 'friends__search',
             ],
             results,
-            searchResults: API.searchFriends,
+            searchResults: UsersRequests.searchUsers,
             renderEmptyState: this.renderEmptyState,
-            title: 'Результаты поиска',
+            renderTitle: this.renderTitle,
             renderResult: this.renderFriend,
             elementToHide: this.friends,
         });
@@ -71,34 +74,55 @@ class FriendsView {
                     title: 'Исходящие заявки',
                     onClick: () => this.renderSection(Section.Outcoming),
                 },
-            }
+            },
+            active: params?.section || 'friends',
         });
-
-        this.renderSection(Section.All);
 
         return this.containerObj.container;
     }
 
-    async renderSection(section = Section.All) {
-        this.friends.innerHTML = '';
+    private renderTitle(parent: HTMLElement) {
+        createElement({
+            tag: 'h2',
+            parent,
+            classes: ['search__title'],
+            text: 'Результаты поиска',
+        });
+    }
 
+    async renderSection(section = Section.All) {
         switch (section) {
             case Section.All:
-                this.renderFriends('all');
+                this.fetchFriends('all');
                 break;
             case Section.Incoming:
-                this.renderFriends('incoming');
+                this.fetchFriends('incoming');
                 break;
             case Section.Outcoming:
-                this.renderFriends('outcoming');
+                this.fetchFriends('outcoming');
                 break;
         }
     }
 
-    async renderFriends(section: string) {
-        const userId = getLsItem('user_id', null);
+    async fetchFriends(section: string) {
+        const userId = LsProfile.id;
+        // const userId = getLsItem('user_id', null);
 
-        const [friendsStatus, data] = await API.getFriends(userId, 100, 0, section);
+        const [status, data] = await FriendsRequests.getFriends(userId, 100, 0, section);
+        switch (status) {
+            case 200: 
+                this.renderFriends(data, section);
+                break;
+            case 401:
+                router.go({ path: '/login' });
+                break;
+            default:
+                networkErrorPopUp();
+        }
+    }
+
+    private renderFriends(data: Record<string, any>, section: string) {
+        this.friends.innerHTML = '';
         const friendsData = data?.payload?.friends;
 
         if (!friendsData || !friendsData.length) {

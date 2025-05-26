@@ -1,6 +1,7 @@
 import MenuComponent from "@components/MenuComponent/MenuComponent";
 import HeaderComponent from "@components/HeaderComponent/HeaderComponent";
 
+
 const DEFAULT_PATH = '/feed';
 const NOT_FOUND_PATH = '/not-found';
 const AUTH_PATHS = [
@@ -11,45 +12,42 @@ const AUTH_PATHS = [
 
 
 class Router {
-    #routes: Record<string, any> = {};
-    #menu: MenuComponent | null = null;
-    #header: HeaderComponent | null = null;
-    static __instance: any = null;
-    constructor() {
-        if (Router.__instance) return Router.__instance;
-        Router.__instance = this;
-    }
+    private routes: Record<string, any> = {};
+    private _menu: MenuComponent | null = null;
+    private _header: HeaderComponent | null = null;
+
+    constructor() {}
 
     set menu(menu: MenuComponent) {
-        this.#menu = menu;
+        this._menu = menu;
     }
 
     set header(header: HeaderComponent) {
-        this.#header = header;
+        this._header = header;
     }
 
-    get menu(): any {
-        return this.#menu;
+    get menu(): MenuComponent {
+        return this._menu;
     }
 
-    get header(): any {
-        return this.#header;
+    get header(): HeaderComponent {
+        return this._header;
     }
 
-    register(view: any, config: any) {
+    register(view: any, config: Record<string, any>) {
         const { path, section }: Record<string, string> = config;
-        this.#routes[path] = {
+        this.routes[path] = {
             view,
             path,
             section: section === null ? null : (section || path).slice(1),
         };
     }
 
-    #matchRoute(path: string) {
+    private matchRoute(path: string) {
         const [pathname] = path.split('?');
         const pathSegments = pathname.split('/').filter(Boolean);
 
-        for (const route in this.#routes) {
+        for (const route in this.routes) {
             const routeSegments = route.split('/').filter(Boolean);
             if (pathSegments.length !== routeSegments.length) continue;
 
@@ -70,7 +68,7 @@ class Router {
             }
 
             if (matched) {
-                const { view, section } = this.#routes[route];
+                const { view, section } = this.routes[route];
                 return { view, params, section };
             }
         }
@@ -80,20 +78,22 @@ class Router {
 
     start() {
         this.go({ path: this.path });
-        window.addEventListener('popstate', () => this.#renderPath({ path: this.path }));
+        window.addEventListener('popstate', () => this.renderPath({ path: this.path }));
     }
 
-    go(data: any) {
-        // const pathWithoutQuery = data.path.split('?')[0];
-
-        if (AUTH_PATHS.includes(this.path)) { // TODO
-            this.#header?.renderAvatarMenu();
+    go(data: Record<string, any>) {
+        if (AUTH_PATHS.includes(this.path)) {
+            this._header?.renderAvatarMenu();
         }
+
+        // if (AUTH_PATHS.includes(data.path)) {
+        //     this.historyPush(data.path);
+        // }
  
         if (data.path === '/') data.path = DEFAULT_PATH;
-        if (data.path !== NOT_FOUND_PATH) this.#historyPush(data.path);
+        if (data.path !== NOT_FOUND_PATH) this.historyPush(data.path);
 
-        this.#renderPath(data);
+        this.renderPath(data);
     }
 
     get path() {
@@ -108,7 +108,7 @@ class Router {
         window.history.forward();
     }
 
-    #historyPush(path: string, state = {}, title = '') {
+    private historyPush(path: string, state = {}, title = '') {
         window.history.pushState(
             state,
             title,
@@ -124,7 +124,7 @@ class Router {
     //     );
     // }
 
-    #parseQueryParams(queryString: string) {
+    private parseQueryParams(queryString: string) {
         const params: Record<string, any> = {};
         const query = new URLSearchParams(queryString);
         for (const [key, value] of query.entries()) {
@@ -133,21 +133,21 @@ class Router {
         return params;
     }
 
-    #renderPath(data: any) {
+    private renderPath(data: Record<string, any>) {
         const [pathname, queryString] = data.path.split('?');
         if (pathname) null; // for linter
 
-        const matchResult = this.#matchRoute(data.path);
+        const matchResult = this.matchRoute(data.path);
         if (!matchResult) {
             console.error(`No view registered for path: ${data.path}`);
             return this.go({ path: NOT_FOUND_PATH });
         }
         // const { view, params, section } = matchResult;
         const { view, params: routeParams, section } = matchResult;
-        const queryParams = queryString ? this.#parseQueryParams(queryString) : {};
+        const queryParams = queryString ? this.parseQueryParams(queryString) : {};
 
-        if (section && this.#menu) {
-            this.#menu.setActive(section);
+        if (section && this._menu) {
+            this._menu.setActive(section);
         }
 
         view.render({ ...routeParams, ...queryParams });

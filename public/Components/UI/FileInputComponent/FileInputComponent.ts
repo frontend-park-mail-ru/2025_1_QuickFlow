@@ -1,4 +1,5 @@
 import createElement from '@utils/createElement';
+import { Attachment } from 'types/UploadTypes';
 
 
 const DEFAULT_TYPE = 'file';
@@ -6,25 +7,92 @@ const DEFAULT_NAME = '';
 const DEFAULT_ACCEPT_IMAGE = '.jpg, .jpeg, .png, .gif';
 
 
+interface FileInputConfig {
+    imitator: HTMLElement;
+    id: string;
+    maxSize: number;
+
+    preview?: any;
+    renderPreview?: (file: File, imageDataUrl: string) => HTMLElement;
+    compress?: boolean;
+    maxResolution?: number;
+    maxSizeSingle?: number;
+    multiple?: boolean;
+    required?: boolean;
+    maxCount?: number;
+    accept?: string;
+    insertPosition?: string;
+    name?: string;
+    classes?: string[];
+    onUpload?: () => void;
+    preloaded?: string[] | Attachment[];
+};
+
+
 export default class FileInputComponent {
     private parent: HTMLElement;
-    private config: Record<string, any>;
+    private config: FileInputConfig;
     private files: Array<File> = [];
     private readyCallbacks: Array<() => void> = [];
 
     input: HTMLInputElement | null = null;
 
-    constructor(parent: HTMLElement, config: Record<string, any>) {
+    constructor(parent: HTMLElement, config: FileInputConfig) {
         this.config = config;
         this.parent = parent;
         this.render();
     }
 
-    get name() {
+    get conf(): FileInputConfig {
+        return this.config;
+    }
+
+    get name(): string {
         return this.config.name?.trim();
     }
 
-    get value() {
+    get size(): number {
+        const files = this.value;
+
+        if (files instanceof File) {
+            return files.size;
+        }
+
+        let totalSize: number = 0;
+        for (const file of files) {
+            totalSize += file.size;
+        }
+
+        return totalSize;
+    }
+
+    get isLarge(): boolean {
+        if (this.config)
+        return this.size > this.config.maxSize;
+    }
+
+    get isAnyLarge(): boolean {
+        const files = this.value;
+
+        if (files instanceof File) {
+            return files.size > this.config.maxSizeSingle;
+        }
+
+        for (const file of files) {
+            if (file.size > this.config.maxSizeSingle) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    isValid(): boolean {
+        if (!this.required) return true;
+        return this.files.length > 0;
+    }
+
+    get value(): File | FileList {
         if (
             !this.input ||
             !this.input.files
@@ -50,7 +118,7 @@ export default class FileInputComponent {
         return !this.input.files || this.input.files.length === 0;
     }
 
-    render() {
+    async render() {
         this.input = createElement({
             parent: this.parent,
             tag: 'input',
@@ -79,7 +147,7 @@ export default class FileInputComponent {
             });
         }
         
-        if (this.config.preview) {
+        if (this.config.preview || this.config.renderPreview) {
             this.input.onchange = async (event) => {
                 try {
                     await this.config.multiple ? this.multipleOnchange(event) : this.singleOnchange(event);
@@ -90,37 +158,102 @@ export default class FileInputComponent {
             };
         }
 
-        if (Array.isArray(this.config.preloaded) && this.config.preloaded.length > 0) {
+        if (Array.isArray(this.config.preloaded) && this.config.preloaded.length) {
             this.loadPreloadedFiles(this.config.preloaded);
         }
     }
 
     async singleOnchange(event: any) {
+        this.files = [];
         let file = event.target.files[0];
-        if (this.config.compress) {
+        if (this.config.compress && file.type.startsWith('image/')) {
             file = await this.resizeImage(file);
         }
-        this.files.push(file);
 
-        const imageDataUrl = await this.readImageFile(file);
-        this.config.preview.src = imageDataUrl;
-        
+        this.files.push(file);
+        this.updateInputFiles();
+
+        const imageDataUrl = await this.readFileAsDataURL(file);
+
+        if (this.config.renderPreview) {
+            this.config.renderPreview(file, imageDataUrl);
+        } else {
+            this.createPreviewElement(file, imageDataUrl);
+        }
+
         this.triggerReady();
     }
 
-    async readImageFile(file: File) {
-        const reader = new FileReader();
+    async multipleOnchange(event: any) {
+        const newFiles: Array<File> = Array.from(event.target.files);
+    
+        const maxCount = this.config.maxCount ?? Infinity;
+        const remainingSlots = maxCount - this.files.length;
+        if (remainingSlots <= 0) return;
+
+        let acceptedFiles = newFiles.slice(0, remainingSlots);
+        if (this.config.compress) {
+            acceptedFiles = await Promise.all(
+                acceptedFiles.map(file =>
+                    file.type.startsWith('image/') ? this.resizeImage(file) : file
+                )
+            );
+        }
         
-        return new Promise((resolve, reject) => {
-            reader.onload = (event) => {
-                if (!event.target) return;
-                resolve(event.target.result);
+        this.files.push(...acceptedFiles);
+    
+        const imageDataUrls = await Promise.all(acceptedFiles.map(this.readFileAsDataURL));
+        for (let i = 0; i < imageDataUrls.length; i++) {
+            const file = acceptedFiles[i];
+            const dataUrl = imageDataUrls[i];
+
+            let wrapper: HTMLElement;
+            if (this.config.renderPreview) {
+                wrapper = this.config.renderPreview(file, dataUrl);
+            } else {
+                wrapper = this.createPreviewElement(file, dataUrl);
             }
+
+            if (this.config?.insertPosition === 'end') {
+                this.parent.appendChild(wrapper);
+            } else {
+                this.parent.insertBefore(wrapper, this.config.imitator);
+            }
+        }        
+    
+        this.updateInputFiles();
+    
+        this.input.disabled = this.files.length >= maxCount;
+        this.triggerReady();
+    }
+
+    createPreviewElement(file: File, dataUrl: string): HTMLElement {
+        if (!this.config.multiple) {
+            this.config.preview.src = dataUrl;
+            return this.config.preview;
+        }
+        
+        const picWrapper = this.config.preview.cloneNode(true);
+        picWrapper.querySelector('img').src = dataUrl;
+
+        const removeBtn = picWrapper.querySelector('.js-post-pic-delete');
+        removeBtn.addEventListener('click', () => this.removeFile(file, picWrapper));
+
+        return picWrapper;
+    }
+
+    async readFileAsDataURL(file: File): Promise<string> {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                if (!event.target) return reject('Empty result');
+                resolve(event.target.result as string);
+            };
             reader.onerror = reject;
             reader.readAsDataURL(file);
         });
     }
-
+    
     updateInputFiles() {
         if (!this.input) return;
 
@@ -133,42 +266,78 @@ export default class FileInputComponent {
         this.input.files = dataTransfer.files;
     }
 
-    async loadPreloadedFiles(srcList: any) {
-        const preloadedFiles = await Promise.all(
-            srcList.map(this.fetchImageAsFile)
-        );
+    async loadPreloadedFiles(srcList: string[] | Attachment[]) {
+        const results = await Promise.allSettled(srcList.map(this.fetchImageAsFile));
+
+        const preloadedFiles: File[] = [];
+        const imageDataUrls: string[] = [];
+    
+        results.forEach((result, i) => {
+            if (result.status === 'fulfilled' && result.value) {
+                preloadedFiles.push(result.value);
+                if (typeof srcList[i] === 'string') {
+                    imageDataUrls.push(srcList[i]);
+                } else {
+                    imageDataUrls.push(srcList[i].url);
+                }
+            } else {
+                console.warn(`Не удалось загрузить файл: ${srcList[i]}`);
+            }
+        });
 
         this.files.push(...preloadedFiles);
         this.updateInputFiles();
 
-        if (this.config.preview) {
+        if (this.config.preview || this.config.renderPreview) {
             for (let i = 0; i < preloadedFiles.length; i++) {
-                const imageDataUrl = srcList[i];
+                const src = srcList[i];
+                const imageDataUrl = typeof src === 'string' ? src : src.url;
                 const file = preloadedFiles[i];
-            
-                const picWrapper = this.config.preview.cloneNode(true);
-                picWrapper.querySelector('img').src = imageDataUrl;
-            
-                const removeBtn = picWrapper.querySelector('.js-post-pic-delete');
-                removeBtn.addEventListener('click', () => this.removeFile(file, picWrapper));
-            
-                this.parent.insertBefore(picWrapper, this.config.imitator);
+
+                let wrapper: HTMLElement;
+                if (this.config.renderPreview) {
+                    wrapper = this.config.renderPreview(file, imageDataUrl);
+                } else {
+                    wrapper = this.createPreviewElement(file, imageDataUrl);
+                }
+                
+                if (this.parent === this.config.imitator.parentElement) {
+                    this.parent.insertBefore(wrapper, this.config.imitator);
+                } else {
+                    this.parent.append(wrapper);
+                }
             }
         }
     }
 
-    async fetchImageAsFile(src: any) {
-        const response = await fetch(src);
-        const blob = await response.blob();
-        const filename = src.split('/').pop().split('?')[0] || 'image.jpg';
-        return new File([blob], filename, { type: blob.type });
+    async fetchImageAsFile(src: string | Attachment) {
+        try {
+            let response: Response, filename: string;
+
+            if (typeof src === 'string') {
+                response = await fetch(src);
+                filename = src.split('/').pop().split('?')[0] || 'image.jpg';
+            } else {
+                response = await fetch(src.url);
+                filename = src.name;
+            }
+
+            const blob = await response.blob();
+            return new File([blob], filename, { type: blob.type });
+        } catch (error) {
+            console.error("Ошибка при чтении файла", error);
+        }
     }
 
-    private async resizeImage(file: File, maxSize: number = this.config.maxSize ?? 1680): Promise<File> {
+    private async resizeImage(file: File, maxResolution: number = this.config.maxResolution ?? 1680): Promise<File> {
+        if (file.type === 'image/gif') {
+            return file;
+        }
+
         const imageBitmap = await createImageBitmap(file);
         const { width, height } = imageBitmap;
     
-        const scale = Math.min(maxSize / width, maxSize / height, 1);
+        const scale = Math.min(maxResolution / width, maxResolution / height, 1);
         const newWidth = Math.round(width * scale);
         const newHeight = Math.round(height * scale);
     
@@ -190,48 +359,31 @@ export default class FileInputComponent {
         });
     }    
 
-    async multipleOnchange(event: any) {
-        const newFiles: Array<File> = Array.from(event.target.files);
-    
-        const maxCount = this.config.maxCount ?? Infinity;
-        const remainingSlots = maxCount - this.files.length;
-        if (remainingSlots <= 0) return;
-
-        let acceptedFiles = newFiles.slice(0, remainingSlots);
-        if (this.config.compress) {
-            acceptedFiles = await Promise.all(
-                acceptedFiles.map(file => this.resizeImage(file))
-            );
-        }
-
-        this.files.push(...acceptedFiles);
-    
-        const imageDataUrls = await Promise.all(acceptedFiles.map(this.readImageFile));
-        for (let i = 0; i < imageDataUrls.length; i++) {
-            const imageDataUrl = imageDataUrls[i];
-            const file = acceptedFiles[i];
-    
-            const picWrapper = this.config.preview.cloneNode(true);
-            picWrapper.querySelector('img').src = imageDataUrl;
-    
-            const removeBtn = picWrapper.querySelector('.js-post-pic-delete');
-            removeBtn.addEventListener('click', () => this.removeFile(file, picWrapper));
-    
-            this.parent.insertBefore(picWrapper, this.config.imitator);
-        }
-    
-        this.updateInputFiles();
-    
-        this.input.disabled = this.files.length >= maxCount;
-        this.triggerReady();
-    }
-
-    async removeFile(fileToRemove: File, wrapper: HTMLElement) {
+    public async removeFile(fileToRemove: File, wrapper: HTMLElement) {
         this.files = this.files.filter(file => file !== fileToRemove);
         this.updateInputFiles();
         wrapper.remove();
     
-        if (!this.input) return;
+        if (!this.input) {
+            return;
+        }
+    
+        const maxCount = this.config.maxCount ?? Infinity;
+        this.input.disabled = this.files.length >= maxCount;
+    
+        this.input.value = '';
+
+        const event = new Event('change', { bubbles: true });
+        this.input.dispatchEvent(event);
+    }
+
+    public clear() {
+        this.files = [];
+        this.updateInputFiles();
+
+        if (!this.input) {
+            return;
+        }
     
         const maxCount = this.config.maxCount ?? Infinity;
         this.input.disabled = this.files.length >= maxCount;
@@ -242,11 +394,6 @@ export default class FileInputComponent {
         this.input.dispatchEvent(event);
     }
     
-
-
-
-
-    
     addListener(listener: any) {
         if (!this.input) return;
         this.input.addEventListener('change', () => {
@@ -256,11 +403,6 @@ export default class FileInputComponent {
 
     getFiles() {
         return this.files;
-    }
-
-    isValid() {
-        if (!this.required) return true;
-        return this.files.length > 0;
     }
 
     onReady(callback: () => void) {

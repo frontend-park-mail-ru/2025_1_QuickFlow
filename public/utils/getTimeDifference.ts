@@ -1,4 +1,9 @@
-export default function getTimediff(ts: string, config: Record<string, any> = {}) {
+interface GetTimediffConfig {
+    mode: 'short' | 'long';
+}
+
+
+export default function getTimediff(ts: string, config?: GetTimediffConfig) {
     const msPerMinute = 60 * 1000;
     const msPerHour = msPerMinute * 60;
     const msPerDay = msPerHour * 24;
@@ -12,25 +17,25 @@ export default function getTimediff(ts: string, config: Record<string, any> = {}
 
     if (diff < msPerMinute) {
         value = Math.round(diff / 1000);
-        unit = config.mode === 'short' ? 'с' : pluralize(value, ['секунду', 'секунды', 'секунд']);
+        unit = config?.mode === 'short' ? 'с' : pluralize(value, ['секунду', 'секунды', 'секунд']);
     } else if (diff < msPerHour) {
         value = Math.round(diff / msPerMinute);
-        unit = config.mode === 'short' ? 'мин' : pluralize(value, ['минуту', 'минуты', 'минут']);
+        unit = config?.mode === 'short' ? 'мин' : pluralize(value, ['минуту', 'минуты', 'минут']);
     } else if (diff < msPerDay) {
         value = Math.round(diff / msPerHour);
-        unit = config.mode === 'short' ? 'ч' : pluralize(value, ['час', 'часа', 'часов']);
+        unit = config?.mode === 'short' ? 'ч' : pluralize(value, ['час', 'часа', 'часов']);
     } else if (diff < msPerMonth) {
         value = Math.round(diff / msPerDay);
-        unit = config.mode === 'short' ? 'д' : pluralize(value, ['день', 'дня', 'дней']);
+        unit = config?.mode === 'short' ? 'д' : pluralize(value, ['день', 'дня', 'дней']);
     } else if (diff < msPerYear) {
         value = Math.round(diff / msPerMonth);
-        unit = config.mode === 'short' ? 'мес' : pluralize(value, ['месяц', 'месяца', 'месяцев']);
+        unit = config?.mode === 'short' ? 'мес' : pluralize(value, ['месяц', 'месяца', 'месяцев']);
     } else {
         value = Math.round(diff / msPerYear);
-        unit = config.mode === 'short' ? pluralize(value, ['г', 'г', 'лет']) : pluralize(value, ['год', 'года', 'лет']);
+        unit = config?.mode === 'short' ? pluralize(value, ['г', 'г', 'лет']) : pluralize(value, ['год', 'года', 'лет']);
     }
 
-    return config.mode === 'short' ? `${value}${unit}` : `${value} ${unit} назад`;
+    return config?.mode === 'short' ? `${value}${unit}` : `${value} ${unit} назад`;
 }
 
 function pluralize(count: number, forms: [string, string, string]) {

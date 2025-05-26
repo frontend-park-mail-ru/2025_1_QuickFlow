@@ -1,6 +1,9 @@
 {
     "compilerOptions": {
-        "lib": ["ES2020", "DOM", "DOM.Iterable", "WebWorker"],
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+
+        "lib": ["ES2022", "DOM", "DOM.Iterable", "WebWorker"],
         "checkJs": false, 
         "target": "es6",
         "module": "es6",
@@ -19,7 +22,7 @@
             "@assets/*": ["assets/*"],
             "@constants": ["constants.scss"],
             "@router": ["Router.ts"],
-            "@config": ["config.ts"]
+            "@config/*": ["config/*"]
         },
         "allowImportingTsExtensions": true,
     },

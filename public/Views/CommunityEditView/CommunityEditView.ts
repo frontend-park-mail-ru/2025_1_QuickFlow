@@ -1,5 +1,3 @@
-import Ajax from '@modules/ajax';
-
 import RadioMenuComponent from '@components/RadioMenuComponent/RadioMenuComponent';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
@@ -11,75 +9,214 @@ import FileInputComponent from '@components/UI/FileInputComponent/FileInputCompo
 
 import createElement from '@utils/createElement';
 import TextareaComponent from '@components/UI/TextareaComponent/TextareaComponent';
-import { getLsItem, setLsItem } from '@utils/localStorage';
 import convertDate from '@utils/convertDate';
-import convertToFormData from '@utils/convertToFormData';
-import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
 
 import router from '@router';
 import { forms } from './CommunityEditFormConfig';
-import API from '@utils/api';
+import { AVATAR, FILE, MEDIA, UPLOAD_DATA } from '@config/config';
+import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
+import FriendComponent from '@components/FriendComponent/FriendComponent';
+import DeleteMwComponent from '@components/UI/Modals/DeleteMwComponent';
+import { CommunitiesRequests } from '@modules/api';
+import networkErrorPopUp from '@utils/networkErrorPopUp';
 
 
-const AVATAR_MAX_RESOLUTION = 1680;
+const ACCEPT = '.jpg, .jpeg, .png, .gif';
 
 
 class CommunityEditView {
     private containerObj: MainLayoutComponent;
-    private section: string;
-    private communityData: Record<string, any>;
+    private section: string = null;
+    private communityData: Record<string, any> = null;
     private stateUpdaters: Array<any> = [];
     private submitButton: ButtonComponent;
     private params: Record<string, any>;
 
-    constructor() {
-        this.communityData = null;
-        this.section = null;
-    }
+    constructor() {}
 
-    render(params: any, section: string = 'settings') {
+    async render(params: Record<string, any>) {
         this.params = params;
 
         this.containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
 
+        const [status, communityData] = await CommunitiesRequests.getCommunity(this.params.address);
+
+        switch (status) {
+            case 200:
+                this.communityData = communityData;
+                break;
+            case 401:
+                return router.go({ path: '/login' });
+            case 404:
+                return router.go({ path: '/not-found' });
+        }
+
         new RadioMenuComponent(this.containerObj.right, {
             items: {
                 settings: {
                     title: 'Настройка',
-                    onClick: () => this.renderSection('settings')
+                    onClick: () => this.renderFormSection('settings')
                 },
                 contacts: {
                     title: 'Контакты',
-                    onClick: () => this.renderSection('contacts')
+                    onClick: () => this.renderFormSection('contacts')
                 },
                 members: {
                     title: 'Подписчики',
-                    onClick: () => this.renderSection('members')
+                    onClick: () => this.renderMembersSection(),
                 },
                 managers: {
                     title: 'Управляющие',
-                    onClick: () => this.renderSection('managers')
+                    onClick: () => this.renderFormSection('managers')
                 },
                 deletion: {
                     title: 'Удаление сообщества',
-                    onClick: () => this.renderSection('deletion')
+                    onClick: () => this.renderDeletionSection(),
                 },
             },
-            active: section,
+            active: this.params?.section,
         });
-
-        this.renderSection(section);
     }
 
-    private async renderSection(sectionName: string) {
+    private async renderDeletionSection() {
+        this.containerObj.left.innerHTML = '';
+
+        createElement({
+            tag: 'h1',
+            parent: this.containerObj.left,
+            text: 'Удаление сообщества',
+        });
+
+        createElement({
+            parent: this.containerObj.left,
+            classes: ['community_edit__text'],
+            text: 'Все связанные данные, включая посты, комментарии и подписчиков, будут безвозвратно удалены. Пожалуйста, убедитесь, что хотите продолжить, так как восстановить информацию будет невозможно.',
+        });
+
+        new ButtonComponent(this.containerObj.left, {
+            text: 'Удалить сообщество',
+            variant: 'primary',
+            onClick: () => {
+                new DeleteMwComponent(this.containerObj.left, {
+                    data: {
+                        title: 'Удаление сообщества',
+                        text: 'Вы уверены, что хотите удалить сообщество? После подтверждения удаления, действие нельзя будет отменить.',
+                        cancel: 'Отмена',
+                        confirm: 'Удалить',
+                    },
+                    delete: async () => {
+                        const status = await CommunitiesRequests.deleteCommunity(this.communityData?.payload?.id);
+                        switch (status) {
+                            case 200:
+                                router.go({ path: '/feed' });
+                                new PopUpComponent({
+                                    text: 'Сообщество было удалено',
+                                })
+                                break;
+                            case 401:
+                                return router.go({ path: '/login' });
+                            default:
+                                networkErrorPopUp();
+                                break;
+                        }
+                    },
+                })
+            },
+        });
+    }
+
+
+
+
+    private renderMembersSection() {
+        this.containerObj.left.innerHTML = '';
+
+        const results = createElement({
+            parent: this.containerObj.left,
+            classes: [
+                'communities',
+                'communities__search-results',
+                'hidden',
+            ],
+        });
+
+        const members = createElement({
+            parent: this.containerObj.left,
+            classes: ['communities'],
+        });
+
+        this.renderMembersList(members);
+    }
+
+    async renderMembersList(parent: HTMLElement) {
+        const [status, membersData] = await CommunitiesRequests.getCommunityMembers(this.communityData?.payload?.id, 100);
+
+        switch (status) {
+            case 401:
+                return router.go({ path: '/login' });
+        }
+
+        if (!membersData?.payload || !membersData?.payload?.length) {
+            return new EmptyStateComponent(parent, {
+                icon: 'friends-icon',
+                text: 'На сообщество пока никто не подписан',
+            });
+        }
+
+        for (const friendData of membersData?.payload) {
+            this.renderMember(parent, friendData);
+        }
+    }
+
+    private renderEmptyState(parent: HTMLElement) {
+        new EmptyStateComponent(parent, {
+            icon: 'friends-icon',
+            text: 'Пользователи не найдены',
+        });
+    }
+
+    private renderMember(parent: HTMLElement, friendData: Record<string, any>, section?: string) {
+        new FriendComponent(parent, {
+            data: friendData,
+            section: 'all',
+        });
+    }
+
+    private renderTitle(parent: HTMLElement) {
+        createElement({
+            tag: 'h2',
+            parent,
+            classes: ['search__title'],
+            text: 'Результаты поиска',
+        });
+    }
+
+
+
+
+
+
+
+    private async renderFormSection(sectionName: string) {
         this.section = sectionName;
         this.stateUpdaters = [];
         const sectionData = forms[this.section];
         this.containerObj.left.innerHTML = '';
 
-        const [status, communityData] = await API.getCommunity(this.params.address);
+        if (
+            ['contacts', 'managers']
+            .includes(this.section)
+        ) {
+            new EmptyStateComponent(this.containerObj.left, {
+                text: 'Этот раздел пока в разработке',
+                icon: 'communities-icon',
+            });
+            return;
+        }
+
+        const [status, communityData] = await CommunitiesRequests.getCommunity(this.params.address);
 
         switch (status) {
             case 200:
@@ -93,7 +230,9 @@ class CommunityEditView {
 
     getCbOk(communityData: Record<string, any>, sectionData: Record<string, any>) {
         this.communityData = communityData;
-        if (sectionData.header) this.renderHeader();
+        if (sectionData.header) {
+            this.renderHeader();
+        }
         this.renderForm(sectionData);
     }
 
@@ -193,7 +332,7 @@ class CommunityEditView {
         const newNickname = body?.nickname;
 
         try {
-            const [status, communityData] = await API.editCommunity(this.communityData?.payload?.id, body);
+            const [status, communityData] = await CommunitiesRequests.editCommunity(this.communityData?.payload?.id, body);
             switch (status) {
                 case 200:
                     this.postCbOk(newNickname);
@@ -202,20 +341,12 @@ class CommunityEditView {
                     router.go({ path: '/login' });
                     break;
                 default:
-                    this.cbDefault();
+                    networkErrorPopUp();
                     break;
             }
         } catch {
-            this.cbDefault();
+            networkErrorPopUp();
         }
-    }
-
-    cbDefault() {
-        new PopUpComponent({
-            text: 'Не удалось сохранить изменеия',
-            size: "large",
-            isError: true,
-        });
     }
 
     postCbOk(newNickname: string | undefined) {
@@ -249,11 +380,14 @@ class CommunityEditView {
         this.stateUpdaters.push(
             new FileInputComponent(this.containerObj.left, {
                 imitator: avatar.wrapper,
+                accept: AVATAR.ACCEPT,
                 preview: avatar.avatar,
                 id: 'profile-avatar-upload',
                 name: 'avatar',
                 compress: true,
-                maxSize: AVATAR_MAX_RESOLUTION,
+                maxResolution: AVATAR.IMG_MAX_RES,
+                maxSize: UPLOAD_DATA.MAX_SIZE,
+                maxSizeSingle: UPLOAD_DATA.MAX_SINGLE_SIZE,
             })
         );
     }

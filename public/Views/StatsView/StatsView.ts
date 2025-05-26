@@ -1,7 +1,5 @@
 import Ajax from '@modules/ajax';
-import MessengerComponent from '@components/MessengerComponent/MessengerComponent';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
-import { getLsItem } from '@utils/localStorage';
 import router from '@router';
 import createElement from '@utils/createElement';
 import insertIcon from '@utils/insertIcon';
@@ -13,7 +11,7 @@ class StatsView {
 
     constructor() {}
 
-    render(params: any) {
+    render(params: Record<string, any>) {
         this.containerObj = new MainLayoutComponent().render({
             type: 'stats',
         });

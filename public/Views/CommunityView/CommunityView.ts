@@ -1,19 +1,15 @@
-import Ajax from '@modules/ajax';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import FeedComponent from '@components/FeedComponent/FeedComponent';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
-import ProfileInfoMwComponent from '@components/UI/ModalWindowComponent/ProfileInfoMwComponent';
+import ProfileInfoMwComponent from '@components/UI/Modals/ProfileInfoMwComponent';
 import ButtonComponent from '@components/UI/ButtonComponent/ButtonComponent';
 import createElement from '@utils/createElement';
-import { getLsItem } from '@utils/localStorage';
 import CoverComponent from '@components/CoverComponent/CoverComponent';
 import router from '@router';
 import { ACTIONS_PROPERTIES, INFO_ITEMS_LAYOUT } from './CommunityConfig';
-import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
-import ProfileMenuComponent from '@components/ProfileMenuComponent/ProfileMenuComponent';
 import insertIcon from '@utils/insertIcon';
-import { MOBILE_MAX_WIDTH } from '@config';
-import API from '@utils/api';
+import { MOBILE_MAX_WIDTH } from '@config/config';
+import { CommunitiesRequests } from '@modules/api';
 
 
 const MOBILE_MAX_DISPLAYED_FRIENDS_COUNT = 3;
@@ -25,7 +21,7 @@ class CommunityView {
 
     constructor() {}
 
-    render(params: any) {
+    render(params: Record<string, any>) {
         this.containerObj = new MainLayoutComponent().render({
             type: 'profile',
         });
@@ -35,7 +31,7 @@ class CommunityView {
         const address = params?.address;
 
         (async () => {
-            const [status, communityData] = await API.getCommunity(address);
+            const [status, communityData] = await CommunitiesRequests.getCommunity(address);
             switch (status) {
                 case 200:
                     this.cbOk(communityData);
@@ -52,9 +48,8 @@ class CommunityView {
         return this.containerObj.container;
     }
 
-    private async renderMembers(communityId: any) {
-        // const [status, membersData] = await API.getCommunityMembers(communityId, 8);
-        const [status, membersData] = await API.getCommunityMembers(communityId, 100);
+    private async renderMembers(communityId: string) {
+        const [status, membersData] = await CommunitiesRequests.getCommunityMembers(communityId, 100);
 
         console.log(membersData);
         switch (status) {
@@ -90,7 +85,7 @@ class CommunityView {
 
         createElement({
             parent: top,
-            text: data.length,
+            text: data.length.toString(),
             classes: ['profile__friends-count'],
         });
 
@@ -158,6 +153,7 @@ class CommunityView {
             size: 'xxxl',
             class: 'profile__avatar',
             src: data.payload.community.avatar_url,
+            hasViewer: true,
         });
 
         const profileBottom = createElement({

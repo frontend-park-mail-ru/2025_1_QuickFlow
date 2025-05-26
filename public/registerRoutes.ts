@@ -14,12 +14,14 @@ import FriendsView from '@views/FriendsView/FriendsView';
 import CommunityView from '@views/CommunityView/CommunityView';
 import CommunitiesView from '@views/CommunitiesView/CommunitiesView';
 import CommunityEditView from '@views/CommunityEditView/CommunityEditView';
+import PostView from '@views/PostView/PostView';
 
 
 export default function registerRoutes() {
     router.register(FriendsView, { path: '/friends', section: '/friends' });
     router.register(ProfileView, { path: '/profiles/{username}', section: '/profiles' });
     router.register(FeedView, { path: '/feed' });
+    router.register(PostView, { path: '/posts/{post_id}', section: '/feed' });
     router.register(MessengerView, { path: '/messenger', section: '/messenger' });
     router.register(MessengerView, { path: '/messenger/{username}', section: '/messenger' });
     router.register(CommunitiesView, { path: '/communities', section: '/communities' });

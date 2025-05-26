@@ -3,13 +3,47 @@
     "short_name": "QuickFlow",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#ffffff",
+    "background_color": "#fff",
+    "theme_color": "#fff",
     "icons": [
         {
-            "src": "public/favicon.svg",
-            "sizes": "24x24",
+            "src": "/icons/icon-128x128.svg",
+            "sizes": "128x128",
             "type": "image/svg"
+        },
+        {
+            "src": "/icons/icon-144x144.svg",
+            "sizes": "144x144",
+            "type": "image/svg"
+        },
+        {
+            "src": "/icons/icon-152x152.svg",
+            "sizes": "152x152",
+            "type": "image/svg"
+        },
+        {
+            "src": "/icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "/screenshots/screen-desktop.jpg",
+            "sizes": "1920x1080",
+            "type": "image/jpg",
+            "form_factor": "wide"
+        },
+        {
+            "src": "/screenshots/screen-mobile.jpg",
+            "sizes": "1080x1920",
+            "type": "image/jpg"
         }
     ]
 }

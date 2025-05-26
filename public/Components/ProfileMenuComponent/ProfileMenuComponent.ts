@@ -4,6 +4,7 @@ import router from '@router';
 import ThemeManager from '@modules/ThemeManager';
 import ContextMenuComponent from '@components/ContextMenuComponent/ContextMenuComponent';
 import insertIcon from '@utils/insertIcon';
+import { User } from 'types/UserTypes';
 
 
 const AVATAR_SIZE = 'xl';
@@ -32,20 +33,27 @@ const MENU_ITEMS = {
 };
 
 
+interface ProfileMenuConfig {
+    userData: User;
+}
+
+
 export default class ProfileMenuComponent {
-    #parent;
-    #config;
+    private parent: HTMLElement;
+    private config: ProfileMenuConfig;
+
     private menuItems: HTMLElement;
-    wrapper: HTMLElement | null = null;
-    constructor(parent: any, config: any) {
-        this.#config = config;
-        this.#parent = parent;
+    private wrapper: HTMLElement | null = null;
+
+    constructor(parent: HTMLElement, config: ProfileMenuConfig) {
+        this.config = config;
+        this.parent = parent;
         this.render();
     }
 
     render() {
         this.wrapper = createElement({
-            parent: this.#parent,
+            parent: this.parent,
             classes: ['profile-menu'],
         });
         
@@ -56,7 +64,7 @@ export default class ProfileMenuComponent {
 
         new AvatarComponent(topWrapper, {
             size: AVATAR_SIZE,
-            src: this.#config.userData.profile.avatar_url,
+            src: this.config.userData.profile.avatar_url,
         });
 
         const userData = createElement({
@@ -67,13 +75,13 @@ export default class ProfileMenuComponent {
         createElement({
             parent: userData,
             classes: ['profile-menu__name'],
-            text: `${this.#config.userData.profile.firstname} ${this.#config.userData.profile.lastname}`
+            text: `${this.config.userData.profile.firstname} ${this.config.userData.profile.lastname}`
         });
 
         createElement({
             parent: userData,
             classes: ['profile-menu__username'],
-            text: `${USERNAME_PREFIX}${this.#config.userData.profile.username}`
+            text: `${USERNAME_PREFIX}${this.config.userData.profile.username}`
         });
 
         this.menuItems = createElement({
@@ -113,7 +121,7 @@ export default class ProfileMenuComponent {
         const menuItem = createElement({
             tag: 'a',
             parent: this.menuItems,
-            classes: ['profile-menu__item', 'js-dropdown'],
+            classes: ['profile-menu__item'],
         });
 
         insertIcon(menuItem, {
@@ -126,12 +134,7 @@ export default class ProfileMenuComponent {
             text: `Тема: ${ThemeManager.theme}`,
         });
 
-        const dropdown = createElement({
-            parent: menuItem,
-            classes: ['profile-menu__dropdown'],
-        });
-
-        new ContextMenuComponent(dropdown, {
+        new ContextMenuComponent(menuItem, {
             size: 'mini',
             data: {
                 system: {
@@ -157,35 +160,7 @@ export default class ProfileMenuComponent {
                 },
             },
         });
-        // .wrapper.classList.add('js-dropdown');
 
-        menuItem.addEventListener('mouseenter', (event: any) => {
-        });
-
-        // createElement({
-        //     tag: 'button',
-        //     parent: this.menuItems,
-        //     classes: ['theme-switcher'],
-        //     attrs: { id: 'theme-light' },
-        //     text: 'Светлая',
-        // });
-        
-        // createElement({
-        //     tag: 'button',
-        //     parent: this.menuItems,
-        //     classes: ['theme-switcher'],
-        //     attrs: { id: 'theme-dark' },
-        //     text: 'Тёмная',
-        // });
-        
-        // createElement({
-        //     tag: 'button',
-        //     parent: this.menuItems,
-        //     classes: ['theme-switcher'],
-        //     attrs: { id: 'theme-auto' },
-        //     text: 'Авто',
-        // });
-        
         document.getElementById('theme-light')?.addEventListener('click', () => {
             ThemeManager.setTheme('light');
         });

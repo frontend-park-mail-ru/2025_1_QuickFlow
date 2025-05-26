@@ -11,7 +11,6 @@ export default class RadioMenuComponent {
     constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
         this.config = config;
-
         this.render();
     }
 
@@ -35,7 +34,7 @@ export default class RadioMenuComponent {
                 (!this.config.active && index === 0)
             ) {
                 menuItem.classList.add('radio-menu__item_active');
-                this.activePage = menuItem;
+                this.goToPage(menuItem);
             }
 
             menuItem.addEventListener('click', (event: any) => {
@@ -58,5 +57,13 @@ export default class RadioMenuComponent {
         if (this.config.items[section as string].onClick) {
             this.config.items[section as string].onClick();
         }
+
+        const newUrl =
+            window.location.protocol +
+            "//" + window.location.host +
+            window.location.pathname +
+            `?section=${section}`;
+
+        window.history.pushState({ path: newUrl }, '', newUrl);
     }
 }

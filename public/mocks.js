@@ -1,3 +1,48 @@
+export const comments = [
+    {
+        "id": "1232cd4f-6be1-469f-8f9b-922dfd897620",
+        "text": "hihiuhihihihih!",
+        "created_at": "2025-05-22T21:53:33Z",
+        "updated_at": "2025-05-22T21:53:33Z",
+        "media": [
+            "media1",
+            "media2"
+        ],
+        "audio": [
+            "audio1",
+            "audio2"
+        ],
+        "files": [
+            "file1",
+            "file2"
+        ],
+        "author": {
+            "id": "f7c50459-8b74-4a41-9274-4fa1b06b4ca5",
+            "username": "Nikita",
+            "firstname": "Myname",
+            "lastname": "Mysurname"
+        },
+        "post_id": "e7ad70f8-ec51-45ea-9277-40a87410c956",
+        "like_count": 0,
+        "is_liked": false
+    },
+    {
+        "id": "f9dd79ef-ce8a-4cf3-974a-b118e6b09b75",
+        "text": "hi!",
+        "created_at": "2025-05-22T21:29:25Z",
+        "updated_at": "2025-05-22T21:29:34Z",
+        "author": {
+            "id": "f7c50459-8b74-4a41-9274-4fa1b06b4ca5",
+            "username": "Nikita",
+            "firstname": "Myname",
+            "lastname": "Mysurname"
+        },
+        "post_id": "e7ad70f8-ec51-45ea-9277-40a87410c956",
+        "like_count": 0,
+        "is_liked": false
+    }
+];
+
 export const posts = [
     {
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
@@ -9,14 +54,73 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: 'Аԥсны (Абхазия) в переводе с абхазского — "страна души". И действительно, поездка туда впечаталась в душу и стала испытанием для тела: пока это наше единственное путешествие, где мы три дня не мылись, купались в море с коровами, все время от чего-нибудь лечились, шарахались от машин на переходах и от собак в подворотнях, сгоняли кошек со стульев в кафе и вырывали наших детей из рук прохожих. Но поскольку мы все же благополучно вернулись домой, я могу обо всем подробнейшим образом написать здесь (от души, так скажем). Сейчас — вводный пост, потом будет весь наш маршрут поэтапно, а в конце моих путевых заметок подведем итоги по стоимости поездки.',
-        pics: [
-            "/posts/IMG_6776.jpg",
-            "/posts/273153700_118738253861831_5906416883131394354_n.jpeg",
-            "/posts/272708814_1158833634855293_1743973316352152210_n.webp.jpg",
-            "/posts/272464515_147005761018515_3100264353239753904_n.webp.jpg",
-            "/posts/259096143_252774593424446_3292295880799640700_n.jpeg",
-            "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
-            "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
+        media: [
+            {
+                url: "https://quickflowapp.ru/minio/posts/d26b082e-6bc7-42a6-8207-65015bbee99f.mp4",
+                name: 'IMG_6776.jpg',
+            },
+            {
+                url: "/posts/IMG_6776.jpg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/273153700_118738253861831_5906416883131394354_n.jpeg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/272708814_1158833634855293_1743973316352152210_n.webp.jpg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/272464515_147005761018515_3100264353239753904_n.webp.jpg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/259096143_252774593424446_3292295880799640700_n.jpeg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
+                name: 'IMG_6778.jpg',
+            },
+        ],
+        files: [
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
         ],
         created_at: "2005-05-02",
         like_count: 1,
@@ -24,6 +128,21 @@ export const posts = [
         comment_count: 0,
         is_repost: true,
         is_liked: true,
+        last_comment: {
+            "id": "490dcb23-e44c-403f-acdf-6808ecab1e86",
+            "text": "Последний оставленный коммент к этому посту. Что-то тестовое, чтобы понять как это будет отображаться.",
+            "created_at": "2025-05-22T22:09:26Z",
+            "updated_at": "2025-05-22T22:09:26Z",
+            "author": {
+                "id": "f7c50459-8b74-4a41-9274-4fa1b06b4ca5",
+                "username": "Nikita",
+                "firstname": "Myname",
+                "lastname": "Mysurname"
+            },
+            "post_id": "e7ad70f8-ec51-45ea-9277-40a87410c956",
+            "like_count": 0,
+            "is_liked": false,
+        }
     },
     {
         id: "1674ca65-83dc-4dd7-a5ca-adc0298b54a3",
@@ -35,10 +154,19 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: "Hello, this is my first post",
-        pics: [
-            "https://quickflowapp.ru/images/image1.jpg",
-            "https://quickflowapp.ru/images/image2.jpg",
-            "https://quickflowapp.ru/images/image3.jpg",
+        media: [
+            {
+                url: "https://quickflowapp.ru/images/image1.jpg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/images/image2.jpg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/images/image3.jpg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
         ],
         created_at: "2005-05-23",
         like_count: 0,
@@ -56,8 +184,11 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: "Hello, this is my first post",
-        pics: [
-            "/posts/272464515_147005761018515_3100264353239753904_n.webp.jpg",
+        media: [
+            {
+                url: "/posts/272464515_147005761018515_3100264353239753904_n.webp.jpg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
         ],
         created_at: "2005-03-12",
         like_count: 0,
@@ -75,8 +206,11 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: "Hello, this is my first post",
-        pics: [
-            "/posts/259096143_252774593424446_3292295880799640700_n.jpeg",
+        media: [
+            {
+                url: "/posts/259096143_252774593424446_3292295880799640700_n.jpeg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
         ],
         created_at: "2005-01-01",
         like_count: 0,
@@ -94,8 +228,11 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: "Hello, this is my first post",
-        pics: [
-            "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
+        media: [
+            {
+                url: "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
         ],
         created_at: "2005-02-07",
         like_count: 0,
@@ -113,8 +250,11 @@ export const posts = [
             lastname: "Мациевский"
         },
         text: "Hello, this is my first post",
-        pics: [
-            "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
+        media: [
+            {
+                url: "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
         ],
         created_at: "2025-04-02",
         like_count: 0,
@@ -123,6 +263,8 @@ export const posts = [
         is_repost: true,
     },
 ];
+
+export const post = posts[0];
 
 export const users = {
     rvasutenko: {
@@ -241,11 +383,12 @@ export const chats = {
                 "created_at": "2025-04-10T19:08:27.926906+03:00",
                 "updated_at": "2025-04-10T19:08:27.926906+03:00",
                 "is_read": false,
-                "attachment_urls": null,
+                
                 "sender_id": "0e146b4b-b28e-44b8-8c59-f0c182459756",
                 "chat_id": "49dc794b-d8cf-404c-be69-4886bd78ada4"
             },
             last_read: "2025-04-10T19:11:36.19391+03:00",
+            unread_messages: 3,
         },
         {
             id: "13dc794b-d8cf-404c-be69-4886bd78ada4",
@@ -260,10 +403,10 @@ export const chats = {
                 created_at: "2025-04-10T16:46:33.373724+03:00",
                 updated_at: "2025-04-11T16:46:33.373724+03:00",
                 is_read: false,
-                attachment_urls: null,
                 sender_id: "02c314cb-19ae-40c8-a069-fb2c426a9cc9",
                 chat_id: "13dc794b-d8cf-404c-be69-4886bd78ada4"
-            }
+            },
+            unread_messages: 0,
         },
         {
             id: "85dc794b-d8cf-404c-be69-4886bd78ada4",
@@ -278,10 +421,10 @@ export const chats = {
                 created_at: "2025-03-11T16:46:33.373724+03:00",
                 updated_at: "2025-04-11T16:46:33.373724+03:00",
                 is_read: true,
-                attachment_urls: null,
                 sender_id: "42c314cb-19ae-40c8-a069-fb2c426a9cc9",
                 chat_id: "85dc794b-d8cf-404c-be69-4886bd78ada4"
-            }
+            },
+            unread_messages: 69,
         },
     ]
 };
@@ -296,7 +439,6 @@ export const messages = {
                     "created_at": "2025-04-10T19:00:36.19391+03:00",
                     "updated_at": "2025-04-10T19:00:36.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -312,7 +454,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:42.323841+03:00",
                     "updated_at": "2025-04-10T19:08:42.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -328,7 +470,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:43.926906+03:00",
                     "updated_at": "2025-04-10T19:08:43.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -344,7 +486,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:00:44.19391+03:00",
                     "updated_at": "2025-04-10T19:00:44.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -360,7 +502,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:45.323841+03:00",
                     "updated_at": "2025-04-10T19:08:45.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -376,7 +518,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:46.926906+03:00",
                     "updated_at": "2025-04-10T19:08:46.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -392,7 +534,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:00:47.19391+03:00",
                     "updated_at": "2025-04-10T19:00:47.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -408,7 +550,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:48.323841+03:00",
                     "updated_at": "2025-04-10T19:08:48.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -424,7 +566,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:49.926906+03:00",
                     "updated_at": "2025-04-10T19:08:49.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -440,7 +582,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:00:50.19391+03:00",
                     "updated_at": "2025-04-10T19:00:50.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -456,7 +598,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:51.323841+03:00",
                     "updated_at": "2025-04-10T19:08:51.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -472,7 +614,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:52.926906+03:00",
                     "updated_at": "2025-04-10T19:08:52.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -488,7 +630,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:00:53.19391+03:00",
                     "updated_at": "2025-04-10T19:00:53.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -504,7 +646,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:54.323841+03:00",
                     "updated_at": "2025-04-10T19:08:54.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -520,7 +662,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:55.926906+03:00",
                     "updated_at": "2025-04-10T19:08:55.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -536,7 +678,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:00:56.19391+03:00",
                     "updated_at": "2025-04-10T19:00:56.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -552,7 +694,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:57.323841+03:00",
                     "updated_at": "2025-04-10T19:08:57.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -568,7 +710,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:08:58.926906+03:00",
                     "updated_at": "2025-04-10T19:08:58.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -584,7 +726,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:00:59.19391+03:00",
                     "updated_at": "2025-04-10T19:00:59.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -600,7 +742,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:09:42.323841+03:00",
                     "updated_at": "2025-04-10T19:09:42.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -616,7 +758,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:10:27.926906+03:00",
                     "updated_at": "2025-04-10T19:10:27.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -632,7 +774,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:11:36.19391+03:00",
                     "updated_at": "2025-04-10T19:11:36.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -648,7 +790,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:12:42.323841+03:00",
                     "updated_at": "2025-04-10T19:12:42.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -664,7 +806,7 @@ export const messages = {
                     "created_at": "2025-04-10T19:13:27.926906+03:00",
                     "updated_at": "2025-04-10T19:13:27.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -680,13 +822,13 @@ export const messages = {
                     "created_at": "2025-04-10T19:14:36.19391+03:00",
                     "updated_at": "2025-04-10T19:14:36.19391+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    
                     "sender": {
-                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
-                        "username": "Nikita2",
-                        "firstname": "Никита",
-                        "lastname": "Могилин",
-                        "avatar_url": "/avatars/avatar4.jpg",
+                        "id": "48dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "rvasutenko",
+                        "firstname": "Roman",
+                        "lastname": "Vasyutenko",
+                        "avatar_url": "/avatars/avatar2.jpg",
                     },
                     "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
                 },
@@ -696,7 +838,24 @@ export const messages = {
                     "created_at": "2025-04-10T19:15:42.323841+03:00",
                     "updated_at": "2025-04-10T19:15:42.323841+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    "files": [
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/5ffc6da1-af7c-4484-8d7e-04ad01f4eecd.txt',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/8b339c37-b2f4-406b-a234-2de419f14b33.jpeg',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/15cd185e-0bdf-4939-8f8d-6da6f2c98d8c.jpeg',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/be9e97e5-e7cb-415d-8bbe-0a3972a83993.mp4',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                    ],
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -712,7 +871,33 @@ export const messages = {
                     "created_at": "2025-04-10T19:16:27.926906+03:00",
                     "updated_at": "2025-04-10T19:16:27.926906+03:00",
                     "is_read": true,
-                    "attachment_urls": null,
+                    "media": [
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/88d75228-a2db-42c8-8987-3ab36ae8770d.jpeg',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/8b339c37-b2f4-406b-a234-2de419f14b33.jpeg',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/15cd185e-0bdf-4939-8f8d-6da6f2c98d8c.jpeg',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/557f5a12-c08b-4aac-af33-838a3fa4d354.jpeg',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/80ef5b8b-e93b-4f47-8fba-69912b75f02d.jpeg',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                        {
+                            url: 'https://quickflowapp.ru/minio/posts/be9e97e5-e7cb-415d-8bbe-0a3972a83993.mp4',
+                            name: 'Tipa_Orig_Imya.svg',
+                        },
+                        // 'https://quickflowapp.ru/minio/posts/c239cf67-a4e5-4000-9c3d-34538bf903a8.jpeg',
+                    ],
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
                         "username": "Nikita2",
@@ -721,6 +906,24 @@ export const messages = {
                         "avatar_url": "/avatars/avatar4.jpg",
                     },
                     "chat_id": "c828ab93-88dd-4855-a309-940b064e9011"
+                },
+                {
+                    "id": "dcbe8d04-95c3-48c1-ac1f-2d4ab726733d",
+                    "text": "",
+                    "created_at": "2025-04-10T19:16:27.926906+03:00",
+                    "updated_at": "2025-04-10T19:16:27.926906+03:00",
+                    "is_read": true,
+                    "stickers": [
+                        "https://quickflowapp.ru/minio/posts/bf93498b-8671-4d40-9987-303c0540b4c9.gif"
+                    ],
+                    "sender": {
+                        "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",
+                        "username": "Nikita2",
+                        "firstname": "Никита",
+                        "lastname": "Могилин",
+                        "avatar_url": "/avatars/avatar4.jpg",
+                    },
+                    "chat_id": "c828ab93-88dd-4855-a309-940b064e9011",
                 },
             ],
             last_read_ts: "2025-04-10T19:11:36.19391+03:00",
@@ -778,4 +981,43 @@ export const community = {
             "cover_url": "https://quickflowapp.ru/minio/posts/ed2cc61c-b3b4-460a-9ac0-10d7f66a8e52.png"
         }
     },
+}
+
+export const unread = {
+    payload: {
+        chats_count: 9,
+    }
+}
+
+export const stickerPacks = {
+    "payload": [
+        {
+            "id": "40798417-c2af-45d3-a7e0-0e9edaa2ba9f",
+            "name": "Official QuickFlow StickerPack",
+            "creator_id": "846ccb16-f2cc-4d69-a440-7c3149b43227",
+            "created_at": "2025-05-25T13:55:12Z",
+            "updated_at": "2025-05-25T13:55:12Z",
+            "stickers": [
+                "https://quickflowapp.ru/minio/posts/e6fd1fd0-f4d2-4501-a746-783e039aee8f.jpg",
+                "https://quickflowapp.ru/minio/posts/1849af60-d971-4a1b-a91f-7dacd2331cef.gif",
+                "https://quickflowapp.ru/minio/posts/bf93498b-8671-4d40-9987-303c0540b4c9.gif",
+                "https://quickflowapp.ru/minio/posts/b03ae18a-7394-4691-b454-8bfb8af0293c.gif",
+                "https://quickflowapp.ru/minio/posts/364ac3b5-dc3d-4ff3-af29-e309da1a475d.jpeg"
+            ]
+        },
+        {
+            "id": "40798417-c2af-45d3-a7e0-0e9edaa2ba9f",
+            "name": "Другой тестовый",
+            "creator_id": "846ccb16-f2cc-4d69-a440-7c3149b43227",
+            "created_at": "2025-05-25T13:55:12Z",
+            "updated_at": "2025-05-25T13:55:12Z",
+            "stickers": [
+                "https://quickflowapp.ru/minio/posts/e6fd1fd0-f4d2-4501-a746-783e039aee8f.jpg",
+                "https://quickflowapp.ru/minio/posts/1849af60-d971-4a1b-a91f-7dacd2331cef.gif",
+                "https://quickflowapp.ru/minio/posts/bf93498b-8671-4d40-9987-303c0540b4c9.gif",
+                "https://quickflowapp.ru/minio/posts/b03ae18a-7394-4691-b454-8bfb8af0293c.gif",
+                "https://quickflowapp.ru/minio/posts/364ac3b5-dc3d-4ff3-af29-e309da1a475d.jpeg"
+            ]
+        }
+    ]
 }

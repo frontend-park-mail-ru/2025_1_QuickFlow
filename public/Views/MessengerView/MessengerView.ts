@@ -1,37 +1,33 @@
-import Ajax from '@modules/ajax';
-import MessengerComponent from '@components/MessengerComponent/MessengerComponent';
+import MessengerComponent from '@components/Messenger/MessengerComponent';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import { getLsItem } from '@utils/localStorage';
 import router from '@router';
+import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
+import { UsersRequests } from '@modules/api';
+import LsProfile from '@modules/LsProfile';
 
 
 class MessengerView {
+    private params: Record<string, any>;
+    private containerObj: MainLayoutComponent;
+
     constructor() {}
 
-    render(params) {
-        const containerObj = new MainLayoutComponent().render({
+    async render(params: Record<string, any>) {
+        this.params = params;
+
+        this.containerObj = new MainLayoutComponent().render({
             type: 'messenger',
         });
 
-        Ajax.get({
-            url: `/profiles/${getLsItem('username', '')}`,
-            callback: (status: number, userData: any) => {
-                switch (status) {
-                    case 200:
-                        new MessengerComponent(containerObj, {
-                            user: userData,
-                            receiver_username: params?.username,
-                            chat_id: params?.chat_id,
-                        });
-                        break;
-                    case 401:
-                        router.go({ path: '/login' });
-                        break;
-                }
-            }
+        await LsProfile.update();
+        new MessengerComponent(this.containerObj, {
+            user: LsProfile.data,
+            receiver_username: this.params?.username,
+            chat_id: this.params?.chat_id,
         });
 
-        return containerObj.container;
+        return this.containerObj.container;
     }
 }
 

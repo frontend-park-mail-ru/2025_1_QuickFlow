@@ -10,7 +10,7 @@ import crypto from 'crypto';
 import http from 'http';
 import { WebSocketServer } from 'ws';
 
-import { users, posts, chats, messages, search, community } from '../public/mocks.js';
+import { users, posts, chats, messages, search, community, post, comments, unread, stickerPacks } from '../public/mocks.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -34,26 +34,24 @@ wss.on('connection', (ws) => {
             const { type, payload } = JSON.parse(data);
             console.log(`[WS] Message received:`, type, payload);
 
-            const response = {
-                type: 'message',
-                payload: {
-                    id: "uuidv4()",
-                    text: "hello!",
-                    created_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString(),
-                    is_read: false,
-                    attachment_urls: null,
-                    sender: {
-                        id: "1eabe150-7b9e-42b3-a8d5-ad6ad900180c",
-                        username: "Nikita2",
-                        firstname: "Myname",
-                        lastname: "Mysurname"
-                    },
-                    chat_id: "99f9d7dd-e955-4eda-97ec-91c958208b3b"
-                }
-            };
+            // const response = {
+            //     type: 'message',
+            //     payload: {
+            //         id: 'uuidv4()',
+            //         text: "hello!",
+            //         created_at: new Date().toISOString(),
+            //         updated_at: new Date().toISOString(),
+            //         sender: {
+            //             id: "1eabe150-7b9e-42b3-a8d5-ad6ad900180c",
+            //             username: "Nikita2",
+            //             firstname: "Myname",
+            //             lastname: "Mysurname"
+            //         },
+            //         chat_id: "49dc794b-d8cf-404c-be69-4886bd78ada4"
+            //     }
+            // };
 
-            ws.send(JSON.stringify(response));
+            // ws.send(JSON.stringify(response));
         } catch (err) {
             console.error('[WS] Failed to parse message', data);
         }
@@ -140,6 +138,7 @@ app.post('/api/logout', (req, res) => {
     res.status(200).end();
 });
 
+let counter = 1;
 app.get('/api/feed', (req, res) => {
     const id = req.cookies['podvorot'];
     const usernameSession = ids[id];
@@ -148,7 +147,24 @@ app.get('/api/feed', (req, res) => {
         return res.status(401).end();
     }
 
+    posts.forEach((post) => {
+        post.id = crypto.randomUUID();
+        post.text = counter;
+        counter++;
+    });
+
     res.status(200).json(posts);
+});
+
+app.get('/api/sticker_packs', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).json(stickerPacks);
 });
 
 app.get('/api/profiles/:username/posts', (req, res) => {
@@ -160,6 +176,17 @@ app.get('/api/profiles/:username/posts', (req, res) => {
     }
 
     res.status(200).json(posts);
+});
+
+app.get('/api/posts/:post_id', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).json(post);
 });
 
 app.get('/api/communities/:address/posts', (req, res) => {
@@ -203,6 +230,100 @@ app.get('/api/profiles/:username', (req, res) => {
     }
 
     res.status(200).json(users[queryUsername]);
+});
+
+app.get('/api/my_profile', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).json(users['rvasutenko']);
+});
+
+app.get('/api/posts/:post_id/comments', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).json(comments);
+});
+
+app.get('/api/chats/unread', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).json(unread);
+});
+
+app.post('/api/posts/:post_id/comment', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    const comment = comments[0];
+    comment.text = req.body.text;
+
+    res.status(200).json(comment);
+});
+
+app.put('/api/comments/:comment_id', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    const comment = comments[0];
+    comment.text = req.body.text;
+
+    res.status(200).json(comment);
+});
+
+app.delete('/api/comments/:comment_id', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).end();
+});
+
+app.post('/api/comments/:comment_id/like', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).end();
+});
+
+app.delete('/api/comments/:comment_id/like', (req, res) => {
+    const id = req.cookies['podvorot'];
+    const usernameSession = ids[id];
+
+    if (!usernameSession || !users[usernameSession]) {
+        return res.status(401).end();
+    }
+
+    res.status(200).end();
 });
 
 app.get('/api/communities/:pk', (req, res) => {
@@ -268,7 +389,7 @@ app.get('/api/friends', (req, res) => {
     }
     
     res.status(200).json({
-        "body": {
+        "payload": {
             "friends": [
                 {
                     "id": "210a4267-d183-4aee-aaae-06eb6e8c5b24",
@@ -325,7 +446,6 @@ app.get('/api/friends', (req, res) => {
                     "is_online": false
                 }
             ],
-            "has_more": false,
             "total_count": 6
         }
     });
@@ -434,7 +554,6 @@ app.post('/api/messages/:username', (req, res) => {
         created_at: "2025-04-10T19:08:42.323841+03:00",
         updated_at: "2025-04-10T19:08:42.323841+03:00",
         is_read: false,
-        attachment_urls: null,
         "sender": {
             "id": "0e146b4b-b28e-44b8-8c59-f0c182459756",
             "username": "rvasutenko",

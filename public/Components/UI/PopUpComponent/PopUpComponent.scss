@@ -69,5 +69,7 @@
 @media screen and (max-width: 480px) {
     .popup {
         translate: -50%;
+        top: 48px;
+        width: calc(100vw - 32px);
     }
 }

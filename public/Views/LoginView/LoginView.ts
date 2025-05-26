@@ -1,19 +1,18 @@
-import LoginFormComponent from '@components/LoginFormComponent/LoginFormComponent';
+import LoginFormComponent from '@components/Forms/LoginFormComponent/LoginFormComponent';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
+import { FeedRequests } from '@modules/api';
 import router from '@router';
-import API from '@utils/api';
 import createElement from '@utils/createElement';
-import { getLsItem } from '@utils/localStorage';
 
 
 class LoginView {
     constructor() {}
 
     async render() {
-        // const [status, profileData] = await API.getProfile(getLsItem('username', ""));
-        // if (status === 200) {
-        //     router.go({ path: '/feed' });
-        // }
+        const [status, feedData] = await FeedRequests.getFeed(1);
+        if (status === 200) {
+            return router.go({ path: '/feed' });
+        }
 
         const containerObj = new MainLayoutComponent().render({
             type: 'auth',

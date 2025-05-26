@@ -6,19 +6,23 @@ const TIME_VISIBLE = 2 * 1000;
 const DEFAULT_SIZE = 'small';
 
 
+interface PopUpConfig {
+    icon?: string;
+    text?: string;
+    size?: string;
+    isError?: boolean;
+}
+
+
 export default class PopUpComponent {
     private parent: HTMLElement;
-    private config: {
-        icon?: string;
-        text?: string;
-        size?: string;
-        isError?: boolean;
-    };
+    private config: PopUpConfig;
+    
     private popup: HTMLElement;
     private hideTimeout: number | null = null;
     private hover: boolean = false;
 
-    constructor(config: Record<string, any>) {
+    constructor(config: PopUpConfig) {
         this.parent = document.querySelector('#parent');
         this.config = config;
         this.render();

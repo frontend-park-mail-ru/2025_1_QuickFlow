@@ -1,35 +1,36 @@
-import createElement from '../../../utils/createElement';
+import createElement from '@utils/createElement';
 
 
 const REQUIRED_MARK_TEXT = ' *';
 
 
 export default class RadioComponent {
-    #parent;
-    #config;
-    wrapper: HTMLElement | null = null;
-    constructor(parent: any, config: any) {
-        this.#parent = parent;
-        this.#config = config;
+    private parent: HTMLElement;
+    private config: Record<string, any>;
 
+    wrapper: HTMLElement | null = null;
+
+    constructor(parent: HTMLElement, config: Record<string, any>) {
+        this.parent = parent;
+        this.config = config;
         this.render();
     }
 
     render() {
         this.wrapper = createElement({
-            parent: this.#parent,
+            parent: this.parent,
             classes: ['radio'],
         });
 
-        if (this.#config.label) {
+        if (this.config.label) {
             const label = createElement({
                 tag: 'label',
-                text: this.#config.label,
+                text: this.config.label,
                 parent: this.wrapper,
                 classes: ['input__label'],
             });
 
-            if (this.#config.showRequired === true) {
+            if (this.config.showRequired === true) {
                 createElement({
                     tag: 'span',
                     text: REQUIRED_MARK_TEXT,
@@ -44,8 +45,8 @@ export default class RadioComponent {
             classes: ['radio__choices'],
         });
 
-        for (const key in this.#config.radios) {
-            const radioData = this.#config.radios[key];
+        for (const key in this.config.radios) {
+            const radioData = this.config.radios[key];
 
             const choice = createElement({
                 parent: choicesWrapper,
@@ -57,7 +58,7 @@ export default class RadioComponent {
                 parent: choice,
                 attrs: {
                     type: 'radio',
-                    name: this.#config.name,
+                    name: this.config.name,
                     value: radioData.value,
                     id: radioData.id,
                 },
@@ -66,7 +67,7 @@ export default class RadioComponent {
 
             choice.addEventListener('click', () => input.checked = true);
 
-            if (this.#config.required) {
+            if (this.config.required) {
                 input.setAttribute('required', '');
             }
 
@@ -94,7 +95,7 @@ export default class RadioComponent {
     }
 
     get required() {
-        return this.#config.required;
+        return this.config.required;
     }
 
     get value() {
@@ -102,7 +103,7 @@ export default class RadioComponent {
     }
 
     get name() {
-        return this.#config.name?.trim();
+        return this.config.name?.trim();
     }
 
     getChecked(): HTMLInputElement | null {

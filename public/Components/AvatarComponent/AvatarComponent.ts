@@ -1,3 +1,4 @@
+import PicsViewerComponent from '@components/PicsViewerComponent/PicsViewerComponent';
 import createElement from '@utils/createElement';
 import getTimeDifference from '@utils/getTimeDifference';
 
@@ -7,40 +8,52 @@ const DEFAULT_SIZE_CLASS = SIZE_PREFIX + 'm';
 const DEFAULT_SRC = '/static/img/default-avatar.jpg';
 
 
+interface AvatarConfig {
+    src: string;
+    size: 'xxs' | 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | 'xxxl';
+    href?: string;
+    class?: string;
+    type?: 'status' | 'edit';
+    status?: {
+        online?: boolean;
+        lastSeen: string;
+    };
+    hasViewer?: boolean;
+}
+
+
 export default class AvatarComponent {
-    #parent;
-    #config;
-    wrapper: HTMLElement | null;
-    avatar: HTMLElement | null;
-    constructor(parent: any, config: any) {
-        this.#parent = parent;
-        this.#config = config;
+    private parent: HTMLElement;
+    private config: AvatarConfig;
 
-        this.wrapper = null;
-        this.avatar = null;
+    wrapper: HTMLElement | null = null;
+    avatar: HTMLElement | null = null;
 
+    constructor(parent: HTMLElement, config: AvatarConfig) {
+        this.parent = parent;
+        this.config = config;
         this.render();
     }
 
     render() {
         this.wrapper = createElement({
-            tag: this.#config.href ? 'a' : 'div',
-            parent: this.#parent,
+            tag: this.config.href ? 'a' : 'div',
+            parent: this.parent,
             classes: [
                 'avatar',
-                SIZE_PREFIX + this.#config.size || DEFAULT_SIZE_CLASS
+                SIZE_PREFIX + this.config.size || DEFAULT_SIZE_CLASS
             ],
-            attrs: { href: this.#config.href || '' },
+            attrs: { href: this.config.href || '' },
         });
         
-        if (this.wrapper && this.#config.class) {
-            this.wrapper.classList.add(this.#config.class);
+        if (this.wrapper && this.config.class) {
+            this.wrapper.classList.add(this.config.class);
         }
 
         this.avatar = createElement({
             parent: this.wrapper,
             attrs: {
-                src: this.#config.src || DEFAULT_SRC,
+                src: this.config.src || DEFAULT_SRC,
                 alt: 'Аватар',
                 title: 'Аватар',
                 loading: "lazy",
@@ -48,10 +61,19 @@ export default class AvatarComponent {
             classes: ['avatar__image']
         });
 
-        if (this.#config.type === 'status') {
+        if (this.config.type === 'status') {
             this.renderStatus();
-        } else if (this.#config.type === 'edit') {
+        } else if (this.config.type === 'edit') {
             this.renderEdit();
+        }
+
+        if (this.config.hasViewer) {
+            this.wrapper.addEventListener('click', () => {
+                new PicsViewerComponent({
+                    picsWrapper: this.wrapper,
+                    target: this.avatar as HTMLImageElement,
+                });
+            });
         }
     }
 
@@ -77,7 +99,7 @@ export default class AvatarComponent {
     }
 
     renderStatus() {
-        if (this.#config.status.online) {
+        if (this.config.status.online) {
             createElement({
                 parent: this.wrapper,
                 classes: ['avatar__status_online'],
@@ -87,7 +109,7 @@ export default class AvatarComponent {
                 parent: this.wrapper,
                 classes: ['avatar__status_offline'],
                 text: getTimeDifference(
-                    this.#config.status.lastSeen,
+                    this.config.status.lastSeen,
                     { mode: 'short' }
                 ),
             });

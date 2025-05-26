@@ -2,7 +2,6 @@ import CSATComponent from '@components/CSATComponent/CSATComponent';
 import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutComponent';
 import Ajax from '@modules/ajax';
 import router from '@router';
-import createElement from '@utils/createElement';
 
 
 class СSATView {
@@ -12,9 +11,7 @@ class СSATView {
         this.feedbackPost = this.feedbackPost.bind(this);
     }
 
-    render(params: any) {
-        console.log(params);
-
+    render(params: Record<string, any>) {
         this.containerObj = new MainLayoutComponent().render({
             type: 'scores',
         });
