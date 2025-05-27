@@ -137,20 +137,20 @@ export default class ChatWindowComponent {
         this._chatsPanel?.renderLastMsg(this._chatData);
     }
 
-    private onFirstMessageSent(message: Message) {
+    private async onFirstMessageSent(message: Message) {
         const newUrl =
             window.location.protocol +
             "//" + window.location.host +
             `/messenger/${this._chatData.username}?chat_id=${message?.chat_id}`;
 
         setLsItem('active-chat', `chat-${message.chat_id}`);
-        this._chatsPanel?.renderChatList();
+        await this._chatsPanel?.renderChatList();
 
         if (this.isMobile) {
             router.go({ path: newUrl.split('?')[0] });
             return;
         }
-        
+
         window.history.pushState({ path: newUrl }, '', newUrl);
     }
 
