@@ -33,6 +33,10 @@
         &:hover {
             color: var(--text-accent-hover);
         }
+
+        &.disabled {
+            color: var(--text-secondary);
+        }
     }
 
     &__bar {

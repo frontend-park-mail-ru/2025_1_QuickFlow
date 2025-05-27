@@ -79,6 +79,12 @@ export default class CommentsComponent {
     }
 
     private async fetchComment() {
+        if (this.showMoreBtn.classList.contains('disabled')) {
+            return;
+        }
+
+        this.showMoreBtn.classList.add('disabled');
+
         let status: number, commentsData: Comment[];
         if (this.lastTs) {
             [status, commentsData] = await CommentsRequests.getComments(this.config.postId, COMMENTS_FETCH_COUNT, this.lastTs);
@@ -95,8 +101,10 @@ export default class CommentsComponent {
                 return;
             default:
                 networkErrorPopUp();
-                return;
+                break;
         }
+
+        this.showMoreBtn.classList.remove('disabled');
     }
 
     private renderFetchedComments(commentsData: Comment[]) {
