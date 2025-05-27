@@ -2,7 +2,7 @@ import AvatarComponent from "@components/AvatarComponent/AvatarComponent";
 import LsProfile from "@modules/LsProfile";
 import createElement from "@utils/createElement";
 import insertIcon from "@utils/insertIcon";
-import { CommentsRequests, PostsRequests } from "@modules/api";
+import { CommentsRequests } from "@modules/api";
 import TextareaComponent from "@components/UI/TextareaComponent/TextareaComponent";
 import { Comment, CommentRequest } from "types/PostTypes";
 import CommentComponent from "../CommentComponent/CommentComponent";
@@ -39,6 +39,7 @@ export default class CommentsComponent {
     private sendBtn: HTMLElement;
     private showMoreBtn: HTMLElement | null = null;
     private totalFetchedCount: number = 0;
+    private observer: MutationObserver | null = null;
 
     constructor(parent: HTMLElement, config: CommentsConfig) {
         this.parent = parent;
@@ -230,8 +231,43 @@ export default class CommentsComponent {
                 classes: ['comments'],
             });
             this.wrapper.prepend(this.element);
+            this.initObserver();
         }
 
         new CommentComponent(this.element, { data: commentData });
     }
+
+    private initObserver() {
+        this.observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                if (mutation.type === 'childList') {
+                    this.onCommentsChanged();
+                }
+            }
+        });
+    
+        this.observer.observe(this.element, {
+            childList: true,
+            subtree: false,
+        });
+    }
+
+    private onCommentsChanged() {
+        const children = this?.element?.children;
+
+        if (!children?.length) {
+            this?.element?.remove();
+            return;
+        }
+
+        children[0].classList?.remove('comments__divider_small');
+
+        if (
+            children?.length > 1 &&
+            children[0]?.classList?.contains('comments__divider') &&
+            children[1]?.classList?.contains('comments__divider')
+        ) {
+            children[1]?.remove();
+        }
+    }    
 }
