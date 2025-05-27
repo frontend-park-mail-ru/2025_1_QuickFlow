@@ -64,7 +64,7 @@ export default class ChatWindowComponent {
         this.render();
     }
 
-    private async render() {
+    private render() {
         this.container = createElement({
             parent: this.parent,
             classes: ['chat-window'],
@@ -77,44 +77,7 @@ export default class ChatWindowComponent {
         this.renderEmptyState();
 
         if (!this.config?.chat_id && this.config?.receiver_username) {
-            removeLsItem('active-chat');
-
-            const [status, profileData] = await UsersRequests.getProfile(this.config.receiver_username);
-
-            switch (status) {
-                case 200:
-                    if (this.container) {
-                        this.container.innerHTML = '';
-                    }
-                    this._chatData = {
-                        id: profileData?.chat_id,
-                        name: `${profileData.profile.firstname} ${profileData.profile.lastname}`,
-                        online: profileData.online,
-                        last_seen: profileData.last_seen,
-                        avatar_url: profileData.profile.avatar_url,
-                        receiver_id: profileData.id,
-                        username: profileData.profile.username,
-                    };
-                    setLsItem('active-chat', `chat-${this._chatData.id}`);
-                    this.renderHeader();
-                    this.renderChat();
-                    this.messageInput = new MessageInputComponent(this.container, {
-                        chatData: this._chatData,
-                        // renderLastMsg: this._chatsPanel?.renderLastMsg.bind(this),
-                        chatsPanel: this._chatsPanel,
-                        chatElement: this.chatElement,
-                        chat: this.chat,
-                    });
-                    break;
-
-                case 401:
-                    router.go({ path: '/login' });
-                    break;
-
-                case 404:
-                    router.go({ path: '/not-found' });
-                    break;
-            }
+            this.fetchChatData();
         }
 
         new ws().subscribe('message', (message: Message) => {
@@ -130,6 +93,33 @@ export default class ChatWindowComponent {
                 this.messageInput?.focus();
             }
         });
+    }
+
+    private async fetchChatData() {
+        const [status, profileData] = await UsersRequests.getProfile(this.config.receiver_username);
+
+        switch (status) {
+            case 401:
+                router.go({ path: '/login' });
+                return;
+            case 404:
+                router.go({ path: '/not-found' });
+                return;
+        }
+
+        removeLsItem('active-chat');
+
+        const chatData = {
+            id: profileData?.chat_id,
+            name: `${profileData.profile.firstname} ${profileData.profile.lastname}`,
+            online: profileData.online,
+            last_seen: profileData.last_seen,
+            avatar_url: profileData.profile.avatar_url,
+            receiver_id: profileData.id,
+            username: profileData.profile.username,
+        };
+
+        this.renderActiveChat(chatData);
     }
 
     private renderFeedback() {
@@ -187,15 +177,20 @@ export default class ChatWindowComponent {
         this._chatsPanel = chatsPanel;
     }
 
-    public renderActiveChat(chatData: Chat) {
+    public renderActiveChat(chatData: Chat | Record<string, any>) {
         this._chatData = chatData;
-        if (this.container) this.container.innerHTML = '';
+
+        if (this.container) {
+            this.container.innerHTML = '';
+        }
 
         if (this.isMobile) {
             this._chatsPanel.container.classList.add('hidden');
             this.container.classList.remove('hidden');
             router.menu.container.classList.add('hidden');
         }
+
+        setLsItem('active-chat', `chat-${this._chatData.id}`);
 
         this.renderHeader();
         this.renderChat();

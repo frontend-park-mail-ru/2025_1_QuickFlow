@@ -133,6 +133,14 @@ export class ChatsRequests {
         new ws().send('message', payload);
     }
 
+    static deleteChat(chat_id: string): void {
+        new ws().send('chat_delete', { chat_id });
+    }
+
+    static deleteMessage(message_id: string): void {
+        new ws().send('message_delete', { message_id });
+    }
+
     static async getUnreadChatsCount(): Promise<[number, UnreadChatsCountResponse]> {
         return new Promise((resolve) => {
             ajax.get({
