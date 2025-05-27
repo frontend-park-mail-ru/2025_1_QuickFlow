@@ -67,11 +67,38 @@ export default class ChatComponent {
         switch (status) {
             case 200:
                 this.renderChat();
+                this.onMessageDeleted();
                 break;
             case 404:
                 this.renderEmptyState();
                 break;
         }
+    }
+
+    private onMessageDeleted() {
+        ChatsRequests.onMessageDeleted(async (chatId: string, messageId: string) => {
+            const lastMessage = this.config?.chatsPanel?.chats?.querySelector(`[data-last-message-id="${messageId}"]`);
+
+            if (lastMessage) {
+                const [status, newChatsData] = await ChatsRequests.getChats(50);
+
+                if (status === 401) {
+                    router.go({ path: '/login' });
+                    return;
+                }
+
+                for (const chat of newChatsData) {
+                    if (chatId === chat.id) {
+                        this.config.chatsPanel.renderLastMsg(chat);
+                        break;
+                    }
+                }
+            }
+
+            if (chatId === this?.config?.chatData?.id) {
+                this.scroll?.querySelector(`[data-msg-id="${messageId}"]`)?.remove();
+            }
+        });
     }
 
     private renderChat() {
@@ -188,7 +215,7 @@ export default class ChatComponent {
                 // 4. Компенсируем изменение
                 this.container.scrollTop += delta;
             }
-        });        
+        });
     }
 
     public pushMessage(payload: Message) {

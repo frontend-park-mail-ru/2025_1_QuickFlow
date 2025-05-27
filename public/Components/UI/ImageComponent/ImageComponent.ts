@@ -34,7 +34,10 @@ export default class ImageComponent {
         const img = createElement({
             parent: this.element,
             classes: ['img__img'],
-            attrs: { src: this.config.src },
+            attrs: {
+                src: this.config.src,
+                loading: 'lazy'
+            },
         });
 
         if (this.config?.classes?.length) {

@@ -1,3 +1,7 @@
+.msg_selected {
+    background: var(--background-light-gray);
+}
+
 .msg__media {
     display: flex;
     flex-direction: column;
@@ -71,6 +75,11 @@
     height: 180px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
+}
+
+.context-menu.msg__context-menu {
+    right: 16px;
+    top: calc(50% - 24px);
 }
 
 @keyframes pulse {

@@ -40,11 +40,11 @@
     gap: 8px;
     word-break: break-word;
     white-space: pre-line;
+    position: relative;
 }
 
 .chat__msg_nameless {
     padding-left: 80px;
-    padding-top: 4px;
 }
 
 .chat__msg-content {

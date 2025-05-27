@@ -148,6 +148,19 @@ export class ChatsRequests {
         new ws().send('message_delete', { message_id });
     }
 
+    static onMessageDeleted(cb: (chat_id: string, message_id: string) => void) {
+        new ws().subscribe(
+            'message_delete',
+            (payload: {
+                chat_id: string,
+                message_id: string,
+            }) => cb(
+                payload.chat_id,
+                payload.message_id
+            ),
+        );
+    }
+
     static async getUnreadChatsCount(): Promise<[number, UnreadChatsCountResponse]> {
         return new Promise((resolve) => {
             ajax.get({

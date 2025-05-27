@@ -176,7 +176,9 @@ export default class ChatsPanelComponent {
     }
 
     close() {
-        if (!this.activeChatItem) return;
+        if (!this.activeChatItem) {
+            return;
+        }
 
         this.activeChatItem.classList.remove('chats-panel__chat_active');
         this.activeChatItem = null;
@@ -276,6 +278,8 @@ export default class ChatsPanelComponent {
         } else if (message?.audio?.length) {
             lastMessageText = "🔊 Голосовое сообщение"
         }
+
+        lastMsgWrapper.dataset.lastMessageId = message?.id;
 
         createElement({
             parent: lastMsgWrapper,

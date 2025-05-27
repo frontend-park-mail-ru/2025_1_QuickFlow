@@ -190,7 +190,9 @@ export default class ChatWindowComponent {
     }
 
     private renderEmptyState() {
-        if (this.container) this.container.innerHTML = '';
+        if (this.container) {
+            this.container.innerHTML = '';
+        }
 
         const wrapper = createElement({
             parent: this.container,
@@ -241,8 +243,6 @@ export default class ChatWindowComponent {
             text: this._chatData?.name,
             attrs: { href: `/profiles/${this._chatData?.username}` },
         });
-
-        console.log(this._chatData);
 
         createElement({
             parent: chatInfo,

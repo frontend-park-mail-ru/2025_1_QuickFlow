@@ -9,6 +9,11 @@ import { Message } from 'types/ChatsTypes';
 import VideoComponent from '@components/UI/VideoComponent/VideoComponent';
 import ImageComponent from '@components/UI/ImageComponent/ImageComponent';
 import { VIDEO_EXTENSIONS } from '@config/config';
+import ContextMenuComponent, { OptionConfig } from '@components/ContextMenuComponent/ContextMenuComponent';
+import copyToClipboard from '@utils/copyToClipboard';
+import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
+import { ChatsRequests } from '@modules/api';
+import DeleteMwComponent from '@components/UI/Modals/DeleteMwComponent';
 
 
 interface MessageConfig {
@@ -41,6 +46,38 @@ export default class MessageComponent {
     render() {
         this.element = this.renderMsg();
 
+        const data: Record<string, OptionConfig> = {};
+
+        if (this.config?.data?.text) {
+            data.copy = {
+                icon: 'copy-icon',
+                text: 'Скопировать текст',
+                onClick: () => copyToClipboard(
+                    this.config.data.text,
+                    () => {
+                        new PopUpComponent({
+                            text: 'Текст скопирован в буфер обмена',
+                            icon: "copy-icon",
+                        });
+                    }
+                ),
+            }
+        }
+
+        data.delete = {
+            icon: 'trash-accent-icon',
+            text: 'Удалить',
+            isCritical: true,
+            onClick: () => this.onDeleteMessageClick(),
+        }
+
+        new ContextMenuComponent(this.element, {
+            data,
+            listenersTypes: ['contextmenu'],
+            classes: 'msg__context-menu',
+            onVisibilityToggle: (isVisible) => this.toggleSelection(isVisible),
+        });
+
         switch (this.config?.position) {
             case 'top':
                 this.config.parent.prepend(this.element);
@@ -49,6 +86,34 @@ export default class MessageComponent {
                 this.config.parent.append(this.element);
                 break;
         }
+    }
+
+    private toggleSelection(isVisible: boolean) {
+        if (isVisible) {
+            this.element.classList.add('msg_selected');
+        } else {
+            this.element.classList.remove('msg_selected');
+        }
+    }
+
+    private onDeleteMessageClick() {
+        const main = document.querySelector('.main') as HTMLElement;
+        main.style.position = '';
+        const parent = main.querySelector('.container_messenger') as HTMLElement;
+        
+        new DeleteMwComponent(parent, {
+            data: {
+                title: 'Вы уверены, что хотите удалить сообщение?',
+                text: 'Сообщение удалится у обоих, это действие нельзя будет отменить',
+                cancel: 'Отменить',
+                confirm: 'Удалить',
+            },
+            delete: () => {
+                ChatsRequests.deleteMessage(this.config.data.id);
+                main.style.position = 'fixed';
+            },
+            cancel: () => main.style.position = 'fixed',
+        });
     }
 
     private renderMsg(): HTMLElement {
@@ -176,7 +241,7 @@ export default class MessageComponent {
             if (!VIDEO_EXTENSIONS.includes(extension)) {
                 mediaItem = createElement({
                     classes: ['msg__media-item'],
-                    attrs: { src: media.url },
+                    attrs: { src: media.url, loading: 'lazy' },
                 }) as HTMLImageElement | HTMLVideoElement;
             } else {
                 const video = new VideoComponent(mediaItem, {

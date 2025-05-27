@@ -15,11 +15,15 @@ export interface OptionConfig {
     onClick?: () => void;
 }
 
+type ContextMenuListenerType = 'click' | 'hover' | 'contextmenu';
+
 interface ContextMenuConfig {
     data: Record<string, OptionConfig>;
     classes?: string;
     size?: 'default' | 'mini' | 'inherit';
     position?: string;
+    listenersTypes?: ContextMenuListenerType[];
+    onVisibilityToggle?: (isVisible: boolean) => void;
 }
 
 
@@ -51,12 +55,7 @@ export default class ContextMenuComponent {
             ]
         });
 
-        this.parent.addEventListener('click', (e) => this.toggle(e));
-        this.parent.addEventListener('pointerover', (e) => this.show(e));
-        this.parent.addEventListener('pointerout', (e) => this.hide(e));
-
-        this.wrapper.addEventListener('pointerover', (e) => this.show(e));
-        this.wrapper.addEventListener('pointerout', (e) => this.hide(e));
+        this.handleEvents();
 
         Object.entries(this.config.data).forEach(([, option]: [string, any]) => {
             const { href, text, icon, isCritical, onClick } = option;
@@ -92,7 +91,44 @@ export default class ContextMenuComponent {
         });
     }
 
-    private hide(e: PointerEvent) {
+    private handleEvents() {
+        if (!this.config?.listenersTypes?.length) {
+            this.parent.addEventListener('click', (e) => this.toggle(e));
+
+            this.parent.addEventListener('pointerover', (e) => this.show(e));
+            this.parent.addEventListener('pointerout', (e) => this.hide(e));
+            this.wrapper.addEventListener('pointerover', (e) => this.show(e));
+            this.wrapper.addEventListener('pointerout', (e) => this.hide(e));
+            return;
+        }
+
+        if (this.config.listenersTypes?.includes('click')) {
+            this.parent.addEventListener('click', (e) => this.toggle(e));
+        }
+
+        if (this.config.listenersTypes?.includes('hover')) {
+            this.parent.addEventListener('pointerover', (e) => this.show(e));
+            this.parent.addEventListener('pointerout', (e) => this.hide(e));
+            this.wrapper.addEventListener('pointerover', (e) => this.show(e));
+            this.wrapper.addEventListener('pointerout', (e) => this.hide(e));
+        }
+
+        if (this.config.listenersTypes?.includes('contextmenu')) {
+            document.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                if ((e.target as HTMLElement).closest(`.${this.parent.classList[0]}`) !== this.parent) {
+                    this.hide(e as PointerEvent, 0);
+                    return;
+                }
+                this.toggle(e);
+            });
+            document.addEventListener('click', (e) => {
+                this.hide(e as PointerEvent, 0);
+            });
+        }
+    }
+
+    private hide(e: PointerEvent, delay: number = 300) {
         const related = e.relatedTarget as HTMLElement;
 
         if (this.wrapper.contains(related) || this.parent.contains(related)) {
@@ -100,13 +136,15 @@ export default class ContextMenuComponent {
         }
 
         this.hideTimeout = setTimeout(() => {
-            this.wrapper.classList.remove('context-menu_visible');                
-        }, 300);
+            this.wrapper.classList.remove('context-menu_visible');
+            this?.config?.onVisibilityToggle(false);
+        }, delay);
     }
 
     private show(e) {
         clearTimeout(this.hideTimeout);
         this.wrapper.classList.add('context-menu_visible');
+        this?.config?.onVisibilityToggle(true);
     }
 
     private toggle(e: MouseEvent) {
@@ -116,6 +154,10 @@ export default class ContextMenuComponent {
 
         clearTimeout(this.hideTimeout);
         this.wrapper.classList.toggle('context-menu_visible');
+        
+        this?.config?.onVisibilityToggle(
+            this.wrapper.classList.contains('context-menu_visible')
+        );
     }
 
     public getItem(name: string): HTMLElement {
