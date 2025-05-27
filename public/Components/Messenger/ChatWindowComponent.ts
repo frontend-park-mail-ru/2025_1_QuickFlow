@@ -143,14 +143,14 @@ export default class ChatWindowComponent {
             "//" + window.location.host +
             `/messenger/${this._chatData.username}?chat_id=${message?.chat_id}`;
 
-        if (this.isMobile) {
-            router.go({ path: newUrl });
-            return;
-        }
-
         setLsItem('active-chat', `chat-${message.chat_id}`);
         this._chatsPanel?.renderChatList();
 
+        if (this.isMobile) {
+            router.go({ path: newUrl.split('?')[0] });
+            return;
+        }
+        
         window.history.pushState({ path: newUrl }, '', newUrl);
     }
 
