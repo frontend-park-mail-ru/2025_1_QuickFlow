@@ -171,6 +171,7 @@ export default class ChatWindowComponent {
 
         this.renderHeader();
         this.renderChat();
+        
         this.messageInput = new MessageInputComponent(this.container, {
             chatData: this._chatData,
             chatsPanel: this._chatsPanel,

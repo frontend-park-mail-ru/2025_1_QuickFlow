@@ -79,7 +79,9 @@
 
 .context-menu.msg__context-menu {
     right: 16px;
-    top: calc(50% - 24px);
+    top: unset;
+    bottom: unset;
+    align-self: center;
 }
 
 @keyframes pulse {

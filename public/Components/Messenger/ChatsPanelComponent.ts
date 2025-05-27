@@ -90,7 +90,7 @@ export default class ChatsPanelComponent {
 
     async renderChatList() {
         if (this.chats) {
-            this.container?.removeChild(this.chats);
+            this.chats?.remove();
         }
 
         this.chats = createElement({
@@ -107,7 +107,7 @@ export default class ChatsPanelComponent {
                 return;
         }
 
-        if (!chatsData || !chatsData.length) {
+        if (!chatsData?.length) {
             this.chats.classList.add('chats-panel__chats_empty');
             this.renderEmptyState();
             return;
@@ -124,10 +124,10 @@ export default class ChatsPanelComponent {
 
         for (const chatData of chatsData) {
             this.unreadMessages.set(chatData.id, chatData.unread_messages);
-            console.log(this.unreadMessages);
 
             const chatItem = this.renderChatItem(chatData);
             this.chatItems.push(chatItem);
+
             if (chatItem.id === activeChatId) {
                 this.activeChatItem = chatItem;
                 this.activeChatItem?.classList.add('chats-panel__chat_active');
@@ -193,6 +193,8 @@ export default class ChatsPanelComponent {
             attrs: {id: CHAT_PREFIX + chatData.id},
         });
 
+        console.error(chatData);
+
         chat.addEventListener('pointerup', () => this.onChatItemClick(chat, chatData));
 
         new AvatarComponent(chat, {
@@ -242,9 +244,6 @@ export default class ChatsPanelComponent {
         if (chatItem) {
             chatItem.remove();
             this.chats.prepend(chatItem);
-
-            // const lastMsgWrapper = chatItem.querySelector(`#${CHAT_INFO_PREFIX + chatData.id}`) as HTMLElement;
-            // lastMsgWrapper.innerHTML = '';
         }
 
         const lastMsgWrapper = this.chats?.querySelector(`#${CHAT_INFO_PREFIX + chatData.id}`) as HTMLElement;
