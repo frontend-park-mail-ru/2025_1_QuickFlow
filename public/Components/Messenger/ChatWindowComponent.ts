@@ -138,13 +138,18 @@ export default class ChatWindowComponent {
     }
 
     private onFirstMessageSent(message: Message) {
-        setLsItem('active-chat', `chat-${message.chat_id}`);
-        this._chatsPanel?.renderChatList();
-
         const newUrl =
             window.location.protocol +
             "//" + window.location.host +
             `/messenger/${this._chatData.username}?chat_id=${message?.chat_id}`;
+
+        if (this.isMobile) {
+            router.go({ path: newUrl });
+            return;
+        }
+
+        setLsItem('active-chat', `chat-${message.chat_id}`);
+        this._chatsPanel?.renderChatList();
 
         window.history.pushState({ path: newUrl }, '', newUrl);
     }
@@ -159,7 +164,6 @@ export default class ChatWindowComponent {
 
     public renderActiveChat(chatData: Chat | Record<string, any>) {
         this._chatData = chatData;
-        this.close();
 
         if (this.container) {
             this.container.innerHTML = '';
