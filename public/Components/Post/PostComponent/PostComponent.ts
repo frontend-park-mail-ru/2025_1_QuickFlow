@@ -149,7 +149,7 @@ export default class PostComponent {
         if (this.config.media && this.config.media.length > 0) {
             this.config.media.forEach((media: Attachment) => {
                 const extension = media.url.split('.').pop();
-                
+
                 const slide = createElement({
                     parent: slider,
                     classes: ['post__slide'],
@@ -388,14 +388,14 @@ export default class PostComponent {
             copyLink: {
                 href: '/copy-link',
                 text: 'Скопировать ссылку',
-                icon: 'copy-icon',
+                icon: 'link-icon',
                 onClick: () => {
                     copyToClipboard(
                         `${window.location.origin}/posts/${this.config?.id}`,
                         () => {
                             new PopUpComponent({
-                                text: 'Текст скопирован в буфер обмена',
-                                icon: "copy-green-icon",
+                                text: 'Ссылка скопирована в буфер обмена',
+                                icon: "link-icon",
                             });
                         }
                     );
@@ -403,26 +403,30 @@ export default class PostComponent {
             },
         };
 
+        if (this.config?.text) {
+            data.copyText = {
+                href: '/copy-text',
+                text: 'Скопировать текст',
+                icon: 'copy-icon',
+                onClick: () => {
+                    copyToClipboard(
+                        this.config?.text,
+                        () => {
+                            new PopUpComponent({
+                                text: 'Текст скопирован в буфер обмена',
+                                icon: "copy-icon",
+                            });
+                        }
+                    );
+                }
+            };
+        }
+
         if (
             (this.config.author_type === 'user' && this.config?.author?.username === LsProfile.username) ||
             (this.config.author_type === 'community' && this.config?.author?.owner?.username === LsProfile.username) ||
             ADMINS_USERNAMES.includes(LsProfile.username)
         ) {
-            const dropdown = createElement({
-                classes: ['dropdown'],
-                parent: topWrapper,
-            });
-    
-            const optionsWrapper = createElement({
-                classes: ['post__options'],
-                parent: dropdown,
-            });
-    
-            createElement({
-                classes: ['post__options-icon'],
-                parent: optionsWrapper,
-            });
-
             data.edit = {
                 href: '/edit',
                 text: 'Редактировать',
@@ -452,29 +456,24 @@ export default class PostComponent {
                     });
                 }
             };
-
-            new ContextMenuComponent(dropdown, { data });
         }
-        // else {
-        //     data.notify = {
-        //         href: '/notify',
-        //         text: 'Уведомлять о постах',
-        //         icon: 'notice-icon',
-        //     };
-        //     data.notInterested = {
-        //         href: '/not-interested',
-        //         text: 'Не интересно',
-        //         icon: 'cross-circle-icon',
-        //     };
-        //     data.ban = {
-        //         href: '/ban',
-        //         text: 'Пожаловаться',
-        //         icon: 'ban-icon',
-        //         isCritical: true
-        //     };
-        // }
 
-        // new ContextMenuComponent(dropdown, { data });
+        const dropdown = createElement({
+            classes: ['dropdown'],
+            parent: topWrapper,
+        });
+
+        const optionsWrapper = createElement({
+            classes: ['post__options'],
+            parent: dropdown,
+        });
+
+        createElement({
+            classes: ['post__options-icon'],
+            parent: optionsWrapper,
+        });
+
+        new ContextMenuComponent(dropdown, { data });
     }
 
     private actionCbOk() {
