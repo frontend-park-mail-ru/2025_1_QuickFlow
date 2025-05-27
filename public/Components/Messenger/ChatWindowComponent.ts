@@ -63,7 +63,10 @@ export default class ChatWindowComponent {
         new ws().subscribe('message', (message: Message) => {
             this.renderFeedback();
 
-            if (!this._chatData?.id && this._chatData?.receiver_id) {
+            if (
+                // (!this._chatData?.id && this._chatData?.receiver_id) ||
+                !this._chatsPanel.chats?.querySelector(`#chat-${message.chat_id}`)
+            ) {
                 this.onFirstMessageSent(message);
             } else {
                 this.onNewMessageSent(message);
@@ -171,7 +174,7 @@ export default class ChatWindowComponent {
 
         this.renderHeader();
         this.renderChat();
-        
+
         this.messageInput = new MessageInputComponent(this.container, {
             chatData: this._chatData,
             chatsPanel: this._chatsPanel,

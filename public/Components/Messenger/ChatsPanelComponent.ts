@@ -197,8 +197,6 @@ export default class ChatsPanelComponent {
             attrs: {id: CHAT_PREFIX + chatData.id},
         });
 
-        console.error(chatData);
-
         chat.addEventListener('pointerup', () => this.onChatItemClick(chat, chatData));
 
         new AvatarComponent(chat, {
