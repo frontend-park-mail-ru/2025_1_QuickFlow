@@ -61,7 +61,7 @@ export default class CommentComponent {
             return;
         }
 
-        createElement({
+        this.divider = createElement({
             parent: this.parent,
             classes: [
                 'comments__divider',
