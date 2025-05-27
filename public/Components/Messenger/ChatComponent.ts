@@ -76,6 +76,11 @@ export default class ChatComponent {
 
     private onMessageDeleted() {
         ChatsRequests.onMessageDeleted(async (chatId: string, messageId: string) => {
+            if (this?.msgsData?.messages?.length === 1) {
+                ChatsRequests.deleteChat(chatId);
+                return;
+            }
+
             const lastMessage = this.config?.chatsPanel?.chats?.querySelector(`[data-last-message-id="${messageId}"]`);
 
             if (lastMessage) {
@@ -98,6 +103,7 @@ export default class ChatComponent {
                 const messageElement = this.scroll?.querySelector(`[data-msg-id="${messageId}"]`);
                 messageElement?.previousElementSibling?.classList?.remove('chat__msg_nameless');
                 messageElement?.remove();
+                this.msgsData.messages = this.msgsData.messages.filter((msg: Message) => msg.id !== messageId);
             }
         });
     }
@@ -111,7 +117,7 @@ export default class ChatComponent {
             this.lastReadByOtherTime = new Date(this.msgsData?.last_read_ts)?.getTime();
         }
 
-        if (!this.msgsData?.messages || !this.msgsData?.messages?.length) {
+        if (!this.msgsData?.messages?.length) {
             this.renderEmptyState();
             return;
         }
