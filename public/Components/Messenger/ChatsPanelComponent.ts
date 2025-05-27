@@ -42,7 +42,7 @@ export default class ChatsPanelComponent {
 
     public chats: HTMLElement = null;
     public container: HTMLElement | null = null;
-    public chatItems: Array<HTMLElement> = [];
+    public chatItems: HTMLElement[] = [];
 
     constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
@@ -91,6 +91,10 @@ export default class ChatsPanelComponent {
     async renderChatList() {
         if (this.chats) {
             this.chats?.remove();
+        }
+
+        if (this?.chatItems) {
+            this.chatItems = [];
         }
 
         this.chats = createElement({
