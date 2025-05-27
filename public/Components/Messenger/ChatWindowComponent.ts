@@ -158,11 +158,8 @@ export default class ChatWindowComponent {
     }
 
     public renderActiveChat(chatData: Chat | Record<string, any>) {
-        if (this._chatData) { // ERROR
-            this.close();
-        }
-
         this._chatData = chatData;
+        this.close();
 
         if (this.container) {
             this.container.innerHTML = '';

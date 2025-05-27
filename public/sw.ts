@@ -1,4 +1,4 @@
-const VERSION = '1.0.136'; // Версия для управления кэшами
+const VERSION = '1.0.137'; // Версия для управления кэшами
 
 const STATIC_CACHE = 'STATIC_CACHE-' + VERSION;
 const MEDIA_CACHE = 'MEDIA_CACHE-' + VERSION;
