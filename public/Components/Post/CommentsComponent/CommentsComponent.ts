@@ -257,6 +257,7 @@ export default class CommentsComponent {
 
         if (children?.length < 2) {
             this?.element?.remove();
+            this.element = null;
             return;
         }
 
