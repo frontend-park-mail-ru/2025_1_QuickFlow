@@ -1,5 +1,7 @@
+import GlobalStorage from '@modules/GlobalStorage';
 import createElement from '@utils/createElement';
 import insertIcon from '@utils/insertIcon';
+import { getLsItem } from '@utils/localStorage';
 
 
 const DEFAULT_IS_CRITICAL = false;
@@ -44,6 +46,8 @@ export default class ContextMenuComponent {
         if (!Object.keys(this.config.data).length) {
             return;
         }
+
+        this.parent.classList.add('js-context-menu-parent');
 
         this.wrapper = createElement({
             parent: this.parent,
@@ -93,12 +97,23 @@ export default class ContextMenuComponent {
 
     private handleEvents() {
         if (!this.config?.listenersTypes?.length) {
-            this.parent.addEventListener('click', (e) => this.toggle(e));
-
-            this.parent.addEventListener('pointerover', (e) => this.show(e));
-            this.parent.addEventListener('pointerout', (e) => this.hide(e));
-            this.wrapper.addEventListener('pointerover', (e) => this.show(e));
-            this.wrapper.addEventListener('pointerout', (e) => this.hide(e));
+            if (!GlobalStorage.isTouchDevice()) {
+                this.parent.addEventListener('click', (e) => this.toggle(e));
+                this.parent.addEventListener('pointerover', (e) => this.show(e));
+                this.parent.addEventListener('pointerout', (e) => this.hide(e));
+                this.wrapper.addEventListener('pointerover', (e) => this.show(e));
+                this.wrapper.addEventListener('pointerout', (e) => this.hide(e));   
+            } else {
+                document.addEventListener('click', (e: MouseEvent) => {
+                    const target = e.target as HTMLElement;
+                    if (!this.parent.contains(target) && !this.wrapper.contains(target)) {
+                        this.hide(e as PointerEvent, 0);
+                        return;
+                    }
+                    this.toggle(e);
+                });
+            }
+            
             return;
         }
 
