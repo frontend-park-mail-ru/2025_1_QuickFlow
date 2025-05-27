@@ -21,7 +21,6 @@ const OPEN_PROFILE_BTN_TEXT = 'Открыть профиль';
 
 interface ChatConfig {
     chatData: Record<string, any>;
-    // renderLastMsg: (chatData: Record<string, any>) => void;
     chatsPanel: ChatsPanelComponent;
     onMessageRead: (newLastReadByMe: string) => void;
 }
@@ -96,7 +95,9 @@ export default class ChatComponent {
             }
 
             if (chatId === this?.config?.chatData?.id) {
-                this.scroll?.querySelector(`[data-msg-id="${messageId}"]`)?.remove();
+                const messageElement = this.scroll?.querySelector(`[data-msg-id="${messageId}"]`);
+                messageElement?.previousElementSibling?.classList?.remove('chat__msg_nameless');
+                messageElement?.remove();
             }
         });
     }
@@ -219,14 +220,20 @@ export default class ChatComponent {
     }
 
     public pushMessage(payload: Message) {
+        const oldLastMessage = this.msgsData?.messages?.at(-1);
         this.msgsData?.messages?.push(payload);
+
+        const classes: string[] = [];
+        if (payload.sender.id === oldLastMessage.sender.id) {
+            classes.push('chat__msg_nameless');
+        }
 
         new MessageComponent({
             parent: this.scroll,
             data: payload,
             lastReadByMeTime: this.lastReadByMeTime,
             lastReadByOtherTime: this.lastReadByOtherTime,
-            classes: [],
+            classes,
             position: 'bottom',
             observer: this.observer,
         });
@@ -333,7 +340,7 @@ export default class ChatComponent {
         return [];
     }
 
-    private formatDateTitle(dateString: string) { // TODO: вынести в utils
+    private formatDateTitle(dateString: string) {
         const date = new Date(dateString);
         const now = new Date();
 

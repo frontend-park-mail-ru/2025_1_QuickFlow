@@ -137,14 +137,20 @@ export default class ContextMenuComponent {
 
         this.hideTimeout = setTimeout(() => {
             this.wrapper.classList.remove('context-menu_visible');
-            this?.config?.onVisibilityToggle(false);
+
+            if (this?.config?.onVisibilityToggle) {
+                this?.config?.onVisibilityToggle(false);
+            }
         }, delay);
     }
 
     private show(e) {
         clearTimeout(this.hideTimeout);
         this.wrapper.classList.add('context-menu_visible');
-        this?.config?.onVisibilityToggle(true);
+
+        if (this?.config?.onVisibilityToggle) {
+            this?.config?.onVisibilityToggle(true);
+        }
     }
 
     private toggle(e: MouseEvent) {
@@ -155,9 +161,11 @@ export default class ContextMenuComponent {
         clearTimeout(this.hideTimeout);
         this.wrapper.classList.toggle('context-menu_visible');
         
-        this?.config?.onVisibilityToggle(
-            this.wrapper.classList.contains('context-menu_visible')
-        );
+        if (this?.config?.onVisibilityToggle) {
+            this?.config?.onVisibilityToggle(
+                this.wrapper.classList.contains('context-menu_visible')
+            );
+        }
     }
 
     public getItem(name: string): HTMLElement {

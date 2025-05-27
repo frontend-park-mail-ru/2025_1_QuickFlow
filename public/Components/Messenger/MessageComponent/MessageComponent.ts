@@ -29,7 +29,7 @@ interface MessageConfig {
 
 
 const MSG_AVATAR_SIZE = 'xs';
-const ON_ROW_COUNT = 4;
+const ON_ROW_COUNT = 3;
 
 
 export default class MessageComponent {
@@ -46,6 +46,19 @@ export default class MessageComponent {
     render() {
         this.element = this.renderMsg();
 
+        this.renderContextMenu();
+
+        switch (this.config?.position) {
+            case 'top':
+                this.config.parent.prepend(this.element);
+                break;
+            case 'bottom':
+                this.config.parent.append(this.element);
+                break;
+        }
+    }
+
+    private renderContextMenu() {
         const data: Record<string, OptionConfig> = {};
 
         if (this.config?.data?.text) {
@@ -64,11 +77,17 @@ export default class MessageComponent {
             }
         }
 
-        data.delete = {
-            icon: 'trash-accent-icon',
-            text: 'Удалить',
-            isCritical: true,
-            onClick: () => this.onDeleteMessageClick(),
+        if (this.config?.data?.sender?.id === LsProfile.id) {
+            data.delete = {
+                icon: 'trash-accent-icon',
+                text: 'Удалить',
+                isCritical: true,
+                onClick: () => this.onDeleteMessageClick(),
+            }
+        }
+
+        if (!Object.keys(data).length) {
+            return;
         }
 
         new ContextMenuComponent(this.element, {
@@ -77,15 +96,6 @@ export default class MessageComponent {
             classes: 'msg__context-menu',
             onVisibilityToggle: (isVisible) => this.toggleSelection(isVisible),
         });
-
-        switch (this.config?.position) {
-            case 'top':
-                this.config.parent.prepend(this.element);
-                break;
-            case 'bottom':
-                this.config.parent.append(this.element);
-                break;
-        }
     }
 
     private toggleSelection(isVisible: boolean) {
