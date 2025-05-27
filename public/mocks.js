@@ -90,6 +90,10 @@ export const posts = [
         ],
         files: [
             {
+                url: "https://quickflowapp.ru/minio/posts/8fc5c0ca-6476-4cec-b92d-d2116d372cca.mp3",
+                name: "DAdec3.mp3"
+            },
+            {
                 url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
                 name: 'Tipa_Orig_Imya.svg',
             },

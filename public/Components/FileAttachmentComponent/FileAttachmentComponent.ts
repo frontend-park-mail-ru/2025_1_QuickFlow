@@ -1,3 +1,4 @@
+import AudioPlayerComponent from '@components/AudioPlayerComponent/AudioPlayerComponent';
 import createElement from '@utils/createElement';
 import getFileSizeFromUrl from '@utils/getFileSizeFromUrl';
 import insertIcon from '@utils/insertIcon';
@@ -52,6 +53,18 @@ export default class FileAttachmentComponent {
     }
 
     private async renderAttachedFile() {
+        const extension = this.config?.dataUrl?.split('.')?.pop() || '';
+        console.log(extension);
+
+        // if (extension === 'mp3') {
+        //     new AudioPlayerComponent(this.parent, {
+        //         src: this.config.dataUrl,
+        //         classes: ['attachment__audio'],
+        //     });
+        //     this.element.remove();
+        //     return;
+        // }
+
         const iconWrapper = createElement({
             parent: this.element,
             classes: ['attachment__icon-wrapper'],

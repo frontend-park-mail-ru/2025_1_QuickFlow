@@ -21,6 +21,7 @@ interface CommentsConfig {
 
 const COMMENT_MAX_LENGTH = 2000;
 const SHOW_NEXT_COMMENTS = 'Показать следующие комментарии';
+const SHOW_OTHER_COMMENTS = 'Показать другие комментарии';
 const EXTRA_FIX_PX = 2;
 const COMMENTS_FETCH_COUNT = 3;
 const BAR_AVATAR_SIZE = 'xxs';
@@ -70,7 +71,7 @@ export default class CommentsComponent {
         this.showMoreBtn = createElement({
             parent: this.wrapper,
             classes: ['comments__more'],
-            text: SHOW_NEXT_COMMENTS,
+            text: SHOW_OTHER_COMMENTS,
         });   
 
         this.showMoreBtn.addEventListener('click', () => this.fetchComment());
@@ -103,10 +104,14 @@ export default class CommentsComponent {
             return;
         }
 
+        if (!this.lastTs) {
+            this.element?.lastChild?.remove();
+        }
+
         for (const commentData of commentsData) {
-            if (commentData.id === this.config.lastData.id) {
-                continue;
-            }
+            // if (commentData.id === this.config.lastData.id) {
+            //     continue;
+            // }
             this.renderComment(commentData);
             this.lastTs = commentData.created_at;
             this.totalFetchedCount++;
@@ -118,6 +123,8 @@ export default class CommentsComponent {
         ) {
             this.showMoreBtn.remove();
         }
+
+        this.showMoreBtn.innerText = SHOW_NEXT_COMMENTS;
     }
 
     private async renderTextareaBar() {

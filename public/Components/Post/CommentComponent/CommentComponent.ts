@@ -35,15 +35,7 @@ export default class CommentComponent {
     }
 
     private render() {
-        this.divider = createElement({
-            parent: this.parent,
-            classes: [
-                'comments__divider',
-                this.parent.innerHTML !== '' ? 
-                    'comments__divider_small' :
-                    'comments__divider'
-            ],
-        });
+        this.renderDivider();
 
         this.element = createElement({
             parent: this.parent,
@@ -62,6 +54,22 @@ export default class CommentComponent {
 
         this.renderHeader(content);
         this.renderText(content);
+    }
+
+    private renderDivider() {
+        if (this.parent?.lastElementChild?.classList?.contains('comments__divider')) {
+            return;
+        }
+
+        createElement({
+            parent: this.parent,
+            classes: [
+                'comments__divider',
+                this.parent.innerHTML !== '' ? 
+                    'comments__divider_small' :
+                    'comments__divider'
+            ],
+        });
     }
     
     private renderHeader(parent: HTMLElement) {
