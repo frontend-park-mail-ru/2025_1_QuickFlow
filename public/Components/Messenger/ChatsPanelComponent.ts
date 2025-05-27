@@ -278,7 +278,9 @@ export default class ChatsPanelComponent {
             lastMessageText = "🔊 Голосовое сообщение"
         }
 
-        lastMsgWrapper.dataset.lastMessageId = message?.id;
+        if (lastMsgWrapper?.dataset) {
+            lastMsgWrapper.dataset.lastMessageId = message?.id;
+        }
 
         createElement({
             parent: lastMsgWrapper,
