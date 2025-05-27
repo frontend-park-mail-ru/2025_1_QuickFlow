@@ -255,7 +255,7 @@ export default class CommentsComponent {
     private onCommentsChanged() {
         const children = this?.element?.children;
 
-        if (!children?.length) {
+        if (children?.length < 2) {
             this?.element?.remove();
             return;
         }
@@ -263,7 +263,6 @@ export default class CommentsComponent {
         children[0].classList?.remove('comments__divider_small');
 
         if (
-            children?.length > 1 &&
             children[0]?.classList?.contains('comments__divider') &&
             children[1]?.classList?.contains('comments__divider')
         ) {
