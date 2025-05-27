@@ -35,15 +35,14 @@ export default class ChatsPanelComponent {
     private parent: HTMLElement;
     private config: Record<string, any>;
 
-    private chats: HTMLElement = null;
     private _chatWindow: ChatWindowComponent = null;
     private isMobile: boolean;
-
-    container: HTMLElement | null = null;
-    activeChatItem: HTMLElement | null = null;
-    chatItems: Array<HTMLElement> = [];
-
+    private activeChatItem: HTMLElement | null = null;
     private unreadMessages: Map<string, number> = new Map();
+
+    public chats: HTMLElement = null;
+    public container: HTMLElement | null = null;
+    public chatItems: Array<HTMLElement> = [];
 
     constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;

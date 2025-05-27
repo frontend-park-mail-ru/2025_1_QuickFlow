@@ -16,7 +16,6 @@ export default class ButtonComponent {
     constructor(parent: HTMLElement, config: Record<string, any>) {
         this.parent = parent;
         this.config = config;
-
         this.render();
     }
 

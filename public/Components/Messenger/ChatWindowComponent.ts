@@ -8,34 +8,15 @@ import ws from '@modules/WebSocketService';
 import router from '@router';
 import ChatsPanelComponent from './ChatsPanelComponent';
 import IFrameComponent from '@components/UI/IFrameComponent/IFrameComponent';
-import { UsersRequests } from '@modules/api';
+import { ChatsRequests, UsersRequests } from '@modules/api';
 import MessageInputComponent from './MessageBar/MessageBarComponent';
 import { Chat, Message } from 'types/ChatsTypes';
+import DeleteMwComponent from '@components/UI/Modals/DeleteMwComponent';
 
 
 const MOBILE_MAX_WIDTH = 610;
 const HEADER_AVATAR_SIZE = 'xs';
 const EMPTY_CHAT_WINDOW_TEXT = 'Выберите чат или создайте новый';
-
-const HEADER_CONTEXT_MENU_DATA = {
-    disableNotify: {
-        href: '/disable-notify',
-        text: 'Выключить уведомления',
-        icon: 'bell-off-icon',
-    },
-    deleteHistory: {
-        href: '/delete-history',
-        text: 'Очистить историю',
-        icon: 'broom-icon',
-        isCritical: true
-    },
-    ban: {
-        href: '/ban',
-        text: 'Заблокировать',
-        icon: 'ban-icon',
-        isCritical: true
-    },
-};
 
 
 interface ChatWindowConfig {
@@ -49,7 +30,6 @@ export default class ChatWindowComponent {
     private config: ChatWindowConfig | null = null;
     
     private isMobile: boolean;
-
     private chat: ChatComponent | null = null;
     private chatElement: HTMLElement | null = null;
     private _chatData: Record<string, any> | null = null;
@@ -92,6 +72,13 @@ export default class ChatWindowComponent {
             if (!this.isMobile) {
                 this.messageInput?.focus();
             }
+        });
+
+        ChatsRequests.onChatDeleted((chatId: string) => {
+            if (chatId === this._chatData?.id) {
+                this.close();
+            }
+            this._chatsPanel.chats.querySelector(`#chat-${chatId}`)?.remove();
         });
     }
 
@@ -143,18 +130,8 @@ export default class ChatWindowComponent {
 
         this._chatData.id = message.chat_id;
         this._chatData.last_message = message;
-        // this._chatData.last_message.text = message.text;
-        // this._chatData.last_message.created_at = message.created_at;
 
         this._chatsPanel?.renderLastMsg(this._chatData);
-
-        // this._chatsPanel?.renderLastMsg({
-        //     id: message.chat_id,
-        //     last_message: {
-        //         text: message.text,
-        //         created_at: message.created_at,
-        //     }
-        // });
     }
 
     private onFirstMessageSent(message: Message) {
@@ -197,7 +174,6 @@ export default class ChatWindowComponent {
         this.messageInput = new MessageInputComponent(this.container, {
             chatData: this._chatData,
             chatsPanel: this._chatsPanel,
-            // renderLastMsg: this._chatsPanel?.renderLastMsg.bind(this),
             chatElement: this.chatElement,
             chat: this.chat,
         });
@@ -209,7 +185,6 @@ export default class ChatWindowComponent {
             this._chatsPanel.container.classList.remove('hidden');
             this.container.classList.add('hidden');
             router.menu.container.classList.remove('hidden');
-
         }
         this.renderEmptyState();
     }
@@ -279,6 +254,10 @@ export default class ChatWindowComponent {
     }
 
     private renderDropdown(parent: HTMLElement) {
+        if (!this._chatData.id) {
+            return;
+        }
+
         const dropdown = createElement({
             classes: ['dropdown', 'chat-window__dropdown'],
             parent,
@@ -295,7 +274,35 @@ export default class ChatWindowComponent {
         });
 
         new ContextMenuComponent(dropdown, {
-            data: HEADER_CONTEXT_MENU_DATA,
+            data: {
+                deleteHistory: {
+                    href: '/delete-history',
+                    text: 'Очистить историю',
+                    icon: 'broom-icon',
+                    isCritical: true,
+                    onClick: () => this.onDeleteChatClick(),
+                },
+            },
+        });
+    }
+
+    private onDeleteChatClick() {
+        const main = document.querySelector('.main') as HTMLElement;
+        main.style.position = '';
+        const parent = main.querySelector('.container_messenger') as HTMLElement;
+        
+        new DeleteMwComponent(parent, {
+            data: {
+                title: 'Вы уверены, что хотите очистить историю?',
+                text: 'История чата будет удалена у обоих навсегда, это действие нельзя будет отменить',
+                cancel: 'Отменить',
+                confirm: 'Очистить история',
+            },
+            delete: () => {
+                ChatsRequests.deleteChat(this._chatData.id);
+                main.style.position = 'fixed';
+            },
+            cancel: () => main.style.position = 'fixed',
         });
     }
 
@@ -306,7 +313,6 @@ export default class ChatWindowComponent {
 
         this.chat = new ChatComponent(this.container, {
             chatData: this._chatData,
-            // user: this.config?.user,
             chatsPanel: this._chatsPanel,
             onMessageRead: (newLastReadByMe: string) => {
                 this._chatData.last_read_by_me = newLastReadByMe;

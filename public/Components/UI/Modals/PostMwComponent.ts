@@ -4,7 +4,7 @@ import createElement from '@utils/createElement';
 import insertIcon from '@utils/insertIcon';
 import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
 import ModalWindowComponent from '@components/UI/Modals/ModalWindowComponent';
-import { CONSTS, FILE, MEDIA, POST, UPLOAD_DATA } from '@config/config';
+import { FILE, MEDIA, POST, UPLOAD_DATA } from '@config/config';
 import { FilesRequests, PostsRequests } from '@modules/api';
 import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
 import networkErrorPopUp from '@utils/networkErrorPopUp';
@@ -32,6 +32,8 @@ export default class PostMwComponent extends ModalWindowComponent {
     private button: ButtonComponent;
     private files: HTMLElement;
     private scrollWrapper: HTMLElement;
+
+    protected config: PostMwConfig;
 
     constructor(parent: HTMLElement, config: PostMwConfig) {
         super(parent, config);

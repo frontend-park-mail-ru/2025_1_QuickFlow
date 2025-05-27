@@ -76,6 +76,25 @@ button {
     background: var(--button-secondary-active);
 }
 
+.button_critical {
+    border-radius: 8px;
+    width: auto;
+    background: var(--button-critical);
+    border: none;
+
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-m);
+    color: var(--text-white);
+
+    &:hover {
+        background: var(--button-critical-hover);
+    }
+
+    &:active {
+        background: var(--button-critical-active);
+    }
+}
+
 .button_overlay {
     width: auto;
     border-radius: 8px;

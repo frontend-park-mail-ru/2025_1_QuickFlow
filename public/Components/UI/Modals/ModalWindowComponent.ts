@@ -1,8 +1,7 @@
 import createElement from "@utils/createElement";
-import { PostMwConfig } from "./PostMwComponent";
 
 
-export type ModalWindowConfig = PostMwConfig;
+export interface ModalWindowConfig {}
 
 
 export default class ModalWindowComponent {

@@ -137,6 +137,13 @@ export class ChatsRequests {
         new ws().send('chat_delete', { chat_id });
     }
 
+    static onChatDeleted(cb: (chat_id: string) => void) {
+        new ws().subscribe(
+            'chat_delete',
+            (payload: { chat_id: string }) => cb(payload.chat_id),
+        );
+    }
+
     static deleteMessage(message_id: string): void {
         new ws().send('message_delete', { message_id });
     }
