@@ -2,7 +2,7 @@ import AvatarComponent from "@components/AvatarComponent/AvatarComponent";
 import LsProfile from "@modules/LsProfile";
 import createElement from "@utils/createElement";
 import insertIcon from "@utils/insertIcon";
-import { CommentsRequests } from "@modules/api";
+import { CommentsRequests, FilesRequests } from "@modules/api";
 import TextareaComponent from "@components/UI/TextareaComponent/TextareaComponent";
 import { Comment, CommentRequest } from "types/PostTypes";
 import CommentComponent from "../CommentComponent/CommentComponent";
@@ -10,6 +10,10 @@ import Router from "@router";
 import networkErrorPopUp from "@utils/networkErrorPopUp";
 import EmojiBarComponent from "@components/Messenger/MessageBar/EmojiBarComponent/EmojiBarComponent";
 import insertSym from "@utils/insertSym";
+import AttachmentsDropdownComponent from "@components/AttachmentsDropdownComponent/AttachmentsDropdownComponent";
+import FileAttachmentComponent from "@components/FileAttachmentComponent/FileAttachmentComponent";
+import validateUploadData from "@utils/validateUploadData";
+import { UploadData, UploadRequest } from "types/UploadTypes";
 
 
 interface CommentsConfig {
@@ -40,6 +44,9 @@ export default class CommentsComponent {
     private showMoreBtn: HTMLElement | null = null;
     private totalFetchedCount: number = 0;
     private observer: MutationObserver | null = null;
+
+    private attachments: HTMLElement;
+    private attachmentsDropdown: AttachmentsDropdownComponent | null = null;
 
     constructor(parent: HTMLElement, config: CommentsConfig) {
         this.parent = parent;
@@ -118,9 +125,6 @@ export default class CommentsComponent {
         }
 
         for (const commentData of commentsData) {
-            // if (commentData.id === this.config.lastData.id) {
-            //     continue;
-            // }
             this.renderComment(commentData);
             this.lastTs = commentData.created_at;
             this.totalFetchedCount++;
@@ -137,8 +141,18 @@ export default class CommentsComponent {
     }
 
     private async renderTextareaBar() {
-        const bar = createElement({
+        const barWrapper = createElement({
             parent: this.wrapper,
+            classes: ['comments__bar-wrapper'],
+        });
+
+        this.attachments = createElement({
+            classes: ['comments__attachments', 'hidden'],
+            parent: barWrapper,
+        });
+
+        const bar = createElement({
+            parent: barWrapper,
             classes: ['comments__bar'],
         });
 
@@ -151,6 +165,13 @@ export default class CommentsComponent {
         const textareaWrapper = createElement({
             parent: bar,
             classes: ['comments__textarea-wrapper'],
+        });
+
+        this.attachmentsDropdown = new AttachmentsDropdownComponent(textareaWrapper, {
+            attachments: this.attachments,
+            handleMediaUpload: this.handleMediaUpload.bind(this),
+            renderFilePreview: this.renderFilePreview.bind(this),
+            renderMediaPreview: this.renderMediaPreview.bind(this),
         });
 
         this.textarea = new TextareaComponent(textareaWrapper, {
@@ -171,7 +192,57 @@ export default class CommentsComponent {
             name: 'plane-icon',
             classes: ['comments__send-icon', 'comments__send-icon_disabled'],
         });
-        this.sendBtn.addEventListener('click', this.sendComment.bind(this));
+
+        this.sendBtn.addEventListener('click', () => {
+            this.updateSendBtnState();
+            if (this.sendBtn.classList.contains('comments__send-icon_disabled')) {
+                return;
+            }
+            this.sendComment();
+        });
+    }
+
+    private handleMediaUpload() {
+        const mediaCount = this.attachmentsDropdown.mediaInput?.getFiles().length || 0;
+        const filesCount = this.attachmentsDropdown.filesInput?.getFiles().length || 0;
+
+        if (!mediaCount && !filesCount) {
+            this.attachments.classList.add('hidden');
+        } else {
+            this.attachments.classList.remove('hidden');
+        }
+
+        this.updateSendBtnState();
+    }
+
+    private renderMediaPreview(file: File, dataUrl: string): HTMLElement {
+        const attachment = new FileAttachmentComponent(this.attachments, {
+            type: 'media',
+            file,
+            dataUrl,
+            classes: ['msg-bar__attachment'],
+        });
+
+        attachment.element.addEventListener('click', () => {
+            this.attachmentsDropdown.mediaInput.removeFile(file, attachment.element);
+        });
+
+        return attachment.element;
+    }
+
+    private renderFilePreview(file: File, dataUrl: string): HTMLElement {
+        const attachment = new FileAttachmentComponent(this.attachments, {
+            type: 'file',
+            file,
+            dataUrl,
+            classes: ['msg-bar__attachment_file'],
+        });
+
+        attachment.element.addEventListener('click', () => {
+            this.attachmentsDropdown.filesInput.removeFile(file, attachment.element);
+        });
+
+        return attachment.element;
     }
 
     private addEmoji(emoji: string) {
@@ -180,18 +251,61 @@ export default class CommentsComponent {
         });
     }
 
-    private sendSticker() {
-        console.log('Sticker is sent');
+    private sendSticker(stickerUrl: string) {
+        this.sendComment(stickerUrl);
     }
 
-    private async sendComment() {
-        if (!this.textarea?.isValid()) {
-            return;
-        }
+    private async sendComment(stickerUrl?: string) {
+        const body: CommentRequest = {};
 
-        const body: CommentRequest = {
-            text: this.textarea.value,
-        };
+        if (!stickerUrl) {
+            body.text = this?.textarea?.value;
+
+            if (
+                this.attachmentsDropdown.mediaInput?.input?.files?.length > 0 ||
+                this.attachmentsDropdown.filesInput?.input?.files?.length > 0
+            ) {
+                if (
+                    !validateUploadData({
+                        mediaInputs: [this.attachmentsDropdown.mediaInput],
+                        filesInputs: [this.attachmentsDropdown.filesInput],
+                    })
+                ) {
+                    return;
+                }
+    
+                const dataToUpload: UploadRequest = {
+                    media: this.attachmentsDropdown.mediaInput.input.files,
+                    files: this.attachmentsDropdown.filesInput.input.files,
+                };
+    
+                const [status, mediaData]: [number, UploadData] = await FilesRequests.upload(dataToUpload);
+                switch (status) {
+                    case 200:
+                        break;
+                    default:
+                        networkErrorPopUp({ text: 'Не удалось загрузить вложения, попробуйте позже' });
+                        return;
+                }
+    
+                if (mediaData?.payload?.media) {
+                    body.media = mediaData.payload.media;
+                }
+                if (mediaData?.payload?.files) {
+                    body.files = mediaData.payload.files;
+                }
+                if (mediaData?.payload?.audio) {
+                    body.audio = mediaData.payload.audio;
+                }
+    
+                this.attachmentsDropdown.mediaInput.clear();
+                this.attachmentsDropdown.filesInput.clear();
+                this.attachments.innerHTML = '';
+            }
+
+        } else {
+            body.stickers = [stickerUrl];
+        }
 
         const [status, commentData] = await CommentsRequests.createComment(this.config.postId, body);
         switch (status) {
@@ -222,15 +336,28 @@ export default class CommentsComponent {
     }
 
     private handleInput() {
-        if (this.textarea.isEmpty()) {
-            this.sendBtn.classList.add('comments__send-icon_disabled');
-        } else {
-            this.sendBtn.classList.remove('comments__send-icon_disabled');
-        }
+        this.updateSendBtnState();
+        // if (this.textarea.isEmpty()) {
+        //     this.sendBtn.classList.add('comments__send-icon_disabled');
+        // } else {
+        //     this.sendBtn.classList.remove('comments__send-icon_disabled');
+        // }
 
         const el = this.textarea.textarea;
         el.style.height = 'auto';
         el.style.height = `${this.textarea.textarea.scrollHeight + EXTRA_FIX_PX}px`;
+    }
+
+    private updateSendBtnState() {
+        if (
+            this.textarea.isEmpty() &&
+            !this.attachmentsDropdown.mediaInput.isValid() &&
+            !this.attachmentsDropdown.filesInput.isValid()
+        ) {
+            return this.sendBtn.classList.add('comments__send-icon_disabled');
+        }
+
+        this.sendBtn.classList.remove('comments__send-icon_disabled');
     }
 
     private renderComment(commentData: Comment) {

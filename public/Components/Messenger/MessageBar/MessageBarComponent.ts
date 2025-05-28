@@ -1,12 +1,9 @@
 import ChatComponent from '@components/Messenger/ChatComponent';
-import ContextMenuComponent from '@components/ContextMenuComponent/ContextMenuComponent';
 import createElement from '@utils/createElement';
 import focusInput from '@utils/focusInput';
 import { setLsItem, getLsItem, removeLsItem } from '@utils/localStorage';
 import ws from '@modules/WebSocketService';
-import { FILE, MEDIA, MSG, POST, UPLOAD_DATA } from '@config/config';
-import FileInputComponent from '@components/UI/FileInputComponent/FileInputComponent';
-import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
+import { MSG } from '@config/config';
 import { ChatsRequests, FilesRequests } from '@modules/api';
 import FileAttachmentComponent from '@components/FileAttachmentComponent/FileAttachmentComponent';
 import EmojiBarComponent from './EmojiBarComponent/EmojiBarComponent';
@@ -15,6 +12,7 @@ import { UploadRequest } from 'types/UploadTypes';
 import networkErrorPopUp from '@utils/networkErrorPopUp';
 import ChatsPanelComponent from '../ChatsPanelComponent';
 import validateUploadData from '@utils/validateUploadData';
+import AttachmentsDropdownComponent from '@components/AttachmentsDropdownComponent/AttachmentsDropdownComponent';
 
 
 const MOBILE_MAX_WIDTH = 610;
@@ -22,24 +20,10 @@ const TEXTAREA_PLACEHOLDER = 'Напишите сообщение...';
 const CHAT_DEFAULT_PADDING_BOTTOM = 16;
 const CHAT_MSG_PREFIX = 'chat-msg-';
 
-const MEDIA_CONTEXT_MENU_DATA = {
-    photo: {
-        text: 'Медиа',
-        icon: 'primary-photo-icon',
-        href: 'media',
-    },
-    file: {
-        text: 'Файл',
-        icon: 'file-icon',
-        href: 'file',
-    },
-};
-
 
 interface MessageBarConfig {
     chatData: Record<string, any>;
-    chatsPanel: ChatsPanelComponent
-    // renderLastMsg: (chatData: Record<string, any>) => void;
+    chatsPanel: ChatsPanelComponent;
     chatElement: HTMLElement;
     chat: ChatComponent;
 }
@@ -61,8 +45,7 @@ export default class MessageBarComponent {
     private focusTimer: any = null;
     private element: HTMLTextAreaElement | null = null;
     private attachments: HTMLElement | null = null;
-    private mediaInput: FileInputComponent | null = null;
-    private filesInput: FileInputComponent | null = null;
+    private attachmentsDropdown: AttachmentsDropdownComponent | null = null;
     private sendBtn: HTMLElement;
     private wrapper: HTMLElement;
 
@@ -95,65 +78,12 @@ export default class MessageBarComponent {
             parent: msgBar,
         });
 
-        const dropdown = createElement({
-            classes: ['dropdown', 'msg-bar__dropdown'],
-            parent: msgBarText,
+        this.attachmentsDropdown = new AttachmentsDropdownComponent(msgBarText, {
+            attachments: this.attachments,
+            handleMediaUpload: this.handleMediaUpload.bind(this),
+            renderFilePreview: this.renderFilePreview.bind(this),
+            renderMediaPreview: this.renderMediaPreview.bind(this),
         });
-
-        const contextMenu = new ContextMenuComponent(dropdown, {
-            data: MEDIA_CONTEXT_MENU_DATA,
-            size: 'mini',
-            position: 'above-start',
-        });
-
-        createElement({
-            classes: ['msg-bar__add-media'],
-            parent: dropdown,
-        });
-
-
-
-
-
-
-
-
-        this.mediaInput = new FileInputComponent(this.attachments, {
-            imitator: contextMenu.getItem('media'),
-            renderPreview: this.renderMediaPreview.bind(this),
-            accept: MEDIA.ACCEPT,
-            id: 'message-media-upload',
-            insertPosition: 'end',
-            multiple: true,
-            required: true,
-            maxCount: MSG.IMG_MAX_COUNT,
-            compress: true,
-            maxResolution: MEDIA.IMG_MAX_RES,
-            maxSize: UPLOAD_DATA.MAX_SIZE,
-            maxSizeSingle: UPLOAD_DATA.MAX_SINGLE_SIZE,
-        });
-
-        this.filesInput = new FileInputComponent(this.attachments, {
-            imitator: contextMenu.getItem('file'),
-            renderPreview: this.renderFilePreview.bind(this),
-            accept: FILE.ACCEPT,
-            id: 'message-file-upload',
-            insertPosition: 'end',
-            multiple: true,
-            required: true,
-            maxCount: MSG.FILE_MAX_COUNT,
-            maxSize: UPLOAD_DATA.MAX_SIZE,
-            maxSizeSingle: UPLOAD_DATA.MAX_SINGLE_SIZE,
-        });
-
-        this.mediaInput.addListener(this.handleMediaUpload.bind(this));
-        this.filesInput.addListener(this.handleMediaUpload.bind(this));
-
-
-
-
-
-
 
         const value = getLsItem(
             CHAT_MSG_PREFIX + `${this.config.chatData?.id}`,
@@ -227,8 +157,8 @@ export default class MessageBarComponent {
     }
 
     private handleMediaUpload() {
-        const mediaCount = this.mediaInput?.getFiles().length || 0;
-        const filesCount = this.filesInput?.getFiles().length || 0;
+        const mediaCount = this.attachmentsDropdown.mediaInput?.getFiles().length || 0;
+        const filesCount = this.attachmentsDropdown.filesInput?.getFiles().length || 0;
 
         if (!mediaCount && !filesCount) {
             this.attachments.classList.add('hidden');
@@ -243,40 +173,14 @@ export default class MessageBarComponent {
     private updateSendBtnState() {
         if (
             this.element?.value.trim() === '' &&
-            !this.mediaInput.isValid() &&
-            !this.filesInput.isValid()
+            !this.attachmentsDropdown.mediaInput.isValid() &&
+            !this.attachmentsDropdown.filesInput.isValid()
         ) {
             return this.sendBtn.classList.add('msg-bar__send_disabled');
         }
 
         this.sendBtn.classList.remove('msg-bar__send_disabled');   
     }
-
-    // private get areAttachmentsValid(): boolean {
-    //     if (
-    //         this.mediaInput.isLarge ||
-    //         this.filesInput.isLarge
-    //     ) {
-    //         new PopUpComponent({
-    //             text: `Размер файлов суммарно не должен превышать ${FILE.MAX_SIZE_TOTAL}Мб`,
-    //             isError: true,
-    //         });
-    //         return false;
-    //     }
-
-    //     if (
-    //         this.mediaInput.isAnyLarge ||
-    //         this.filesInput.isAnyLarge
-    //     ) {
-    //         new PopUpComponent({
-    //             text: `Размер каждого файла не должен превышать ${FILE.MAX_SIZE_SINGLE}Мб`,
-    //             isError: true,
-    //         });
-    //         return false;
-    //     }
-
-    //     return true;
-    // }
 
     private async sendMessage() {
         if (this.sendBtn.classList.contains('msg-bar__send_disabled')) {
@@ -292,25 +196,21 @@ export default class MessageBarComponent {
         }
         
         if (
-            this.mediaInput?.input?.files?.length > 0 ||
-            this.filesInput?.input?.files?.length > 0
+            this.attachmentsDropdown.mediaInput?.input?.files?.length > 0 ||
+            this.attachmentsDropdown.filesInput?.input?.files?.length > 0
         ) {
-            // if (!this.areAttachmentsValid) {
-            //     return;
-            // }
-
             if (
                 !validateUploadData({
-                    mediaInputs: [this.mediaInput],
-                    filesInputs: [this.filesInput],
+                    mediaInputs: [this.attachmentsDropdown.mediaInput],
+                    filesInputs: [this.attachmentsDropdown.filesInput],
                 })
             ) {
                 return;
             }
 
             const dataToUpload: UploadRequest = {
-                media: this.mediaInput.input.files,
-                files: this.filesInput.input.files,
+                media: this.attachmentsDropdown.mediaInput.input.files,
+                files: this.attachmentsDropdown.filesInput.input.files,
             };
 
             const [status, mediaData]: [number, UploadData] = await FilesRequests.upload(dataToUpload);
@@ -332,8 +232,8 @@ export default class MessageBarComponent {
                 wsPayload['audio'] = mediaData.payload.audio;
             }
 
-            this.mediaInput.clear();
-            this.filesInput.clear();
+            this.attachmentsDropdown.mediaInput.clear();
+            this.attachmentsDropdown.filesInput.clear();
             this.attachments.innerHTML = '';
         }
 
@@ -398,7 +298,7 @@ export default class MessageBarComponent {
         });
 
         attachment.element.addEventListener('click', () => {
-            this.mediaInput.removeFile(file, attachment.element);
+            this.attachmentsDropdown.mediaInput.removeFile(file, attachment.element);
         });
 
         return attachment.element;
@@ -413,7 +313,7 @@ export default class MessageBarComponent {
         });
 
         attachment.element.addEventListener('click', () => {
-            this.filesInput.removeFile(file, attachment.element);
+            this.attachmentsDropdown.filesInput.removeFile(file, attachment.element);
         });
 
         return attachment.element;

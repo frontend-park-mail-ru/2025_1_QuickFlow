@@ -29,7 +29,7 @@ interface BasePost {
     media?: Attachment[];
     audio?: Attachment[];
     files?: Attachment[];
-    stickers?: string[];
+    stickers?: Attachment[];
 }
 
 export interface UserPost extends BasePost {
@@ -51,9 +51,9 @@ export interface PostResponse {
 export interface CommentRequest {
     text?: string;
 
-    files?: Attachment[];
-    media?: Attachment[];
-    audio?: Attachment[];
+    files?: string[];
+    media?: string[];
+    audio?: string[];
     stickers?: string[];
 }
 
@@ -67,8 +67,8 @@ export interface Comment {
     like_count: number;
     is_liked: boolean;
 
-    media?: string[];
-    audio?: string[];
-    files?: string[];
-    stickers?: string[];
+    media?: Attachment[];
+    audio?: Attachment[];
+    files?: Attachment[];
+    stickers?: Attachment[];
 }

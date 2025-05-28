@@ -11,18 +11,6 @@ interface EmojiBarConfig {
     addToMessage: (emojiSym: string) => void;
 }
 
-const STICKER_URLS = [
-    'https://quickflowapp.ru/minio/posts/c0feed28-d97c-4296-a77a-a4d53aa83cb4.gif',
-    'https://quickflowapp.ru/minio/posts/04f7ae39-5c45-4b17-9b86-7451efbb1299.gif',
-    'https://quickflowapp.ru/minio/posts/fcb86dd9-53c6-4095-be95-98b1a8cf399f.gif',
-    'https://quickflowapp.ru/minio/posts/c8ea94aa-eee0-47bd-ad6a-439fc170fc3e.gif',
-    'https://quickflowapp.ru/minio/posts/be519cbb-a10b-4c04-8bd6-e3cc3a1b9a82.gif',
-    'https://quickflowapp.ru/minio/posts/09407d45-9523-43a0-b9c5-635af2f31c2e.gif',
-    'https://quickflowapp.ru/minio/posts/edc2546e-d5c2-473c-a3f4-f9b94f994a0f.gif',
-    'https://quickflowapp.ru/minio/posts/0a74b5e0-ed7d-4985-aaf5-0f8bd28ababb.gif',
-    'https://quickflowapp.ru/minio/posts/baa23981-a850-4ddf-a56f-1cbbd0d0072d.gif'
-];
-
 
 export default class EmojiBarComponent {
     private parent: HTMLElement | null = null;
@@ -229,13 +217,7 @@ export default class EmojiBarComponent {
                 'emoji-bar__list_emoji',
             ],
         });
-
-        createElement({
-            parent: emojiList,
-            classes: ['emoji-bar__title'],
-            text: 'Все стикеры',
-        });
-
+        
         const [status, stickerPacksData] = await StickersRequests.getStickerPacks(50);
         switch (status) {
             case 200:

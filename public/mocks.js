@@ -4,17 +4,77 @@ export const comments = [
         "text": "hihiuhihihihih!",
         "created_at": "2025-05-22T21:53:33Z",
         "updated_at": "2025-05-22T21:53:33Z",
-        "media": [
-            "media1",
-            "media2"
+        media: [
+            {
+                url: "https://quickflowapp.ru/minio/posts/d26b082e-6bc7-42a6-8207-65015bbee99f.mp4",
+                name: 'IMG_6776.jpg',
+            },
+            {
+                url: "/posts/IMG_6776.jpg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/273153700_118738253861831_5906416883131394354_n.jpeg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/272708814_1158833634855293_1743973316352152210_n.webp.jpg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/272464515_147005761018515_3100264353239753904_n.webp.jpg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/259096143_252774593424446_3292295880799640700_n.jpeg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/19984805_468099790230913_7469029070697660416_n.jpeg",
+                name: 'IMG_6778.jpg',
+            },
+            {
+                url: "/posts/16583858_168051673696142_846500378588479488_n.jpeg",
+                name: 'IMG_6778.jpg',
+            },
         ],
-        "audio": [
-            "audio1",
-            "audio2"
-        ],
-        "files": [
-            "file1",
-            "file2"
+        files: [
+            {
+                url: "https://quickflowapp.ru/minio/posts/8fc5c0ca-6476-4cec-b92d-d2116d372cca.mp3",
+                name: "DAdec3.mp3"
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
+            {
+                url: "https://quickflowapp.ru/minio/posts/929dd494-c6b4-41bc-98e5-16e98b169499.svg",
+                name: 'Tipa_Orig_Imya.svg',
+            },
         ],
         "author": {
             "id": "f7c50459-8b74-4a41-9274-4fa1b06b4ca5",
@@ -28,9 +88,15 @@ export const comments = [
     },
     {
         "id": "f9dd79ef-ce8a-4cf3-974a-b118e6b09b75",
-        "text": "hi!",
+        "text": "",
         "created_at": "2025-05-22T21:29:25Z",
         "updated_at": "2025-05-22T21:29:34Z",
+        "stickers": [
+            {
+                "url": "https://quickflowapp.ru/minio/posts/bf93498b-8671-4d40-9987-303c0540b4c9.gif",
+                "name": "33c1c3cd-763c-4fe6-97fd-7871c55d4044.gif"
+            }
+        ],
         "author": {
             "id": "f7c50459-8b74-4a41-9274-4fa1b06b4ca5",
             "username": "Nikita",
@@ -918,7 +984,10 @@ export const messages = {
                     "updated_at": "2025-04-10T19:16:27.926906+03:00",
                     "is_read": true,
                     "stickers": [
-                        "https://quickflowapp.ru/minio/posts/bf93498b-8671-4d40-9987-303c0540b4c9.gif"
+                        {
+                            "url": "https://quickflowapp.ru/minio/posts/bf93498b-8671-4d40-9987-303c0540b4c9.gif",
+                            "name": "33c1c3cd-763c-4fe6-97fd-7871c55d4044.gif"
+                        }
                     ],
                     "sender": {
                         "id": "49dc794b-d8cf-404c-be69-4886bd78ada4",

@@ -7,6 +7,15 @@ import getTimediff from "@utils/getTimeDifference";
 import insertIcon from "@utils/insertIcon";
 import ContextMenuComponent from "@components/ContextMenuComponent/ContextMenuComponent";
 import LsProfile from "@modules/LsProfile";
+import ImageComponent from "@components/UI/ImageComponent/ImageComponent";
+import FileAttachmentComponent from "@components/FileAttachmentComponent/FileAttachmentComponent";
+import downloadFile from "@utils/downloadFile";
+import { VIDEO_EXTENSIONS } from "@config/config";
+import VideoComponent from "@components/UI/VideoComponent/VideoComponent";
+import PicsViewerComponent from "@components/PicsViewerComponent/PicsViewerComponent";
+
+
+const ON_ROW_COUNT = 4;
 
 
 interface CommentConfig {
@@ -25,6 +34,8 @@ export default class CommentComponent {
     private config: CommentConfig;
 
     private divider: HTMLElement;
+    private content: HTMLElement;
+
     public element: HTMLElement;
 
     constructor(parent: HTMLElement, config: CommentConfig) {
@@ -47,13 +58,138 @@ export default class CommentComponent {
             href: `/profiles/${this.config.data.author?.username}`,
         });
 
-        const content = createElement({
+        this.content = createElement({
             parent: this.element,
             classes: ['comment__content'],
         });
 
-        this.renderHeader(content);
-        this.renderText(content);
+        this.renderHeader();
+
+        if (this.config.data?.media?.length) {
+            this.renderMedia();
+        }
+        if (this.config.data?.files?.length) {
+            this.renderFiles();
+        }
+        if (this.config.data?.stickers?.length) {
+            this.renderStickers();
+        }
+
+        this.renderText();
+    }
+
+    private renderStickers() {
+        const stickers = createElement({
+            parent: this.content,
+            classes: ['msg__stickers'],
+        });
+
+        for (const sticker of this.config.data.stickers) {
+            new ImageComponent(stickers, {
+                src: sticker.url,
+                hasSkeleton: true,
+                classes: ['msg__sticker'],
+            });
+        }
+    }
+
+    private renderFiles() {
+        const files = createElement({
+            parent: this.content,
+            classes: ['msg__files'],
+        });
+
+        for (const file of this.config.data.files) {
+            const attachment = new FileAttachmentComponent(files, {
+                type: 'file_attached',
+                dataUrl: file.url,
+                name: file.name,
+                classes: ['msg__file'],
+            });
+
+            attachment.element.addEventListener('click', async (e) => {
+                e.preventDefault();
+                await downloadFile(file.url, file.name);
+            });
+        }
+    }
+
+    private renderMedia() {
+        const media = createElement({
+            parent: this.content,
+            classes: ['msg__media']
+        });
+
+        const mediaItems: HTMLElement[] = [];
+        for (const media of this.config.data.media) {
+            const extension = media.url.split('.').pop();
+
+            let mediaItem: HTMLImageElement | HTMLVideoElement;
+            if (!VIDEO_EXTENSIONS.includes(extension)) {
+                mediaItem = createElement({
+                    classes: ['msg__media-item'],
+                    attrs: { src: media.url, loading: 'lazy' },
+                }) as HTMLImageElement | HTMLVideoElement;
+            } else {
+                const video = new VideoComponent(mediaItem, {
+                    src: media.url,
+                    classes: ['msg__media-item'],
+                    loop: true,
+                    muted: true,
+                    autoplay: true,
+                    playsInline: true,
+                });
+                mediaItem = video.element;
+            }
+
+            mediaItems.push(mediaItem);
+        }
+
+        this.adjustMsgMediaGrid(media, mediaItems);
+
+        media.addEventListener('click', (e) => {
+            if (
+                !(e.target instanceof HTMLImageElement ||
+                e.target instanceof HTMLVideoElement)
+            ) {
+                return;
+            }
+            new PicsViewerComponent({
+                picsWrapper: media,
+                target: e.target,
+            });
+        });
+    }
+
+    private adjustMsgMediaGrid(parent: HTMLElement, items: HTMLElement[]) {
+        const total = items.length;
+        const fullRowsCount = Math.floor(total / ON_ROW_COUNT);
+        const remainder = total % ON_ROW_COUNT;
+
+        for (let i = 0; i < fullRowsCount; i++) {
+            const mediaRow = createElement({
+                parent,
+                classes: ['msg__media-row'],
+            });
+            mediaRow.style.gridTemplateColumns = `repeat(${ON_ROW_COUNT}, 1fr)`;
+            mediaRow.append(
+                ...items.slice(i * ON_ROW_COUNT, i * ON_ROW_COUNT + ON_ROW_COUNT)
+            );
+        }
+
+        if (!remainder) {
+            return;
+        }
+
+        const lastMediaRow = createElement({
+            parent,
+            classes: ['msg__media-row'],
+        })
+    
+        lastMediaRow.style.gridTemplateColumns = `repeat(${remainder}, 1fr)`;
+        lastMediaRow.append(
+            ...items.slice(total - remainder, total)
+        );
     }
 
     private renderDivider() {
@@ -72,9 +208,9 @@ export default class CommentComponent {
         });
     }
     
-    private renderHeader(parent: HTMLElement) {
+    private renderHeader() {
         const header = createElement({
-            parent,
+            parent: this.content,
             classes: ['comment__header'],
         });
 
@@ -173,9 +309,13 @@ export default class CommentComponent {
         }
     }
 
-    private renderText(parent: HTMLElement) {
+    private renderText() {
+        if (!this.config?.data?.text) {
+            return;
+        }
+
         const textWrapper = createElement({
-            parent,
+            parent: this.content,
             classes: ['comment__text-wrapper'],
         });
     
