@@ -41,6 +41,10 @@
     gap: 4px;
     max-width: 280px;
     padding: 4px 0;
+
+    & .audio-player {
+        min-width: unset;
+    }
 }
 
 .msg__file {
