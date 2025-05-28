@@ -1,4 +1,4 @@
-const VERSION = '1.0.142'; // Версия для управления кэшами
+const VERSION = '1.0.143'; // Версия для управления кэшами
 
 const STATIC_CACHE = 'STATIC_CACHE-' + VERSION;
 const MEDIA_CACHE = 'MEDIA_CACHE-' + VERSION;
@@ -173,7 +173,8 @@ async function handleMediaFetch(request) {
 
     try {
         const networkResponse = await fetch(request);
-        if (networkResponse.ok) {
+        // НЕ кэшируем partial responses (206)
+        if (networkResponse.ok && networkResponse.status !== 206) {
             await cache.put(request, cloneResponse(networkResponse));
         }
         return networkResponse;
