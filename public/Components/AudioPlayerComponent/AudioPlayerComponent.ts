@@ -1,7 +1,11 @@
+import GlobalStorage from "@modules/GlobalStorage";
 import createElement from "@utils/createElement";
+import downloadFile from "@utils/downloadFile";
+import insertIcon from "@utils/insertIcon";
 
 interface AudioPlayerConfig {
     src: string;
+    name: string;
     classes?: string[];
 }
 
@@ -40,8 +44,13 @@ export default class AudioPlayerComponent {
         this.playBtn = createElement({
             parent: this.element,
             classes: ['audio-player__btn', 'audio-player__play'],
-            text: '▶️',
         });
+        
+        insertIcon(this.playBtn, {
+            name: 'play-fill-icon',
+            classes: ['audio-player__icon'],
+        });
+
         this.playBtn.addEventListener('click', () => {
             if (this.audio.paused) {
                 this.audio.play();
@@ -50,35 +59,11 @@ export default class AudioPlayerComponent {
             }
         });
 
-        // Mute
-        this.muteBtn = createElement({
+        // Time display
+        this.currentTimeDisplay = createElement({
             parent: this.element,
-            classes: ['audio-player__btn', 'audio-player__mute'],
-            text: '🔈',
-        });
-        this.muteBtn.addEventListener('click', () => {
-            this.audio.muted = !this.audio.muted;
-            this.muteBtn.textContent = this.audio.muted ? '🔇' : '🔈';
-        });
-
-        // Volume control
-        this.volumeInput = createElement({
-            tag: 'input',
-            parent: this.element,
-            classes: ['audio-player__volume'],
-            attrs: {
-                type: 'range',
-                min: '0',
-                max: '1',
-                step: '0.01',
-                value: String(this.audio.volume),
-            },
-        }) as HTMLInputElement;
-
-        this.updateRangeBackground(this.volumeInput);
-        this.volumeInput.addEventListener('input', () => {
-            this.audio.volume = parseFloat(this.volumeInput.value);
-            this.updateRangeBackground(this.volumeInput);
+            classes: ['audio-player__time'],
+            text: '0:00',
         });
 
         // Timeline (seek)
@@ -103,29 +88,79 @@ export default class AudioPlayerComponent {
         });
 
         // Time display
-        this.currentTimeDisplay = createElement({
-            parent: this.element,
-            classes: ['audio-player__time'],
-            text: '0:00',
-        });
-
         this.durationDisplay = createElement({
             parent: this.element,
             classes: ['audio-player__time'],
             text: '0:00',
         });
 
+        const rightControls = createElement({
+            parent: this.element,
+            classes: ['audio-player__controls'],
+        });
+
+        // Mute
+        const volumeControl = createElement({
+            parent: rightControls,
+            classes: ['audio-player__volume-wrapper'],
+        })
+
+        // Volume control
+        this.volumeInput = createElement({
+            tag: 'input',
+            parent: volumeControl,
+            classes: ['audio-player__volume', 'hidden'],
+            attrs: {
+                type: 'range',
+                min: '0',
+                max: '1',
+                step: '0.01',
+                value: String(this.audio.volume),
+            },
+        }) as HTMLInputElement;
+
+        this.updateRangeBackground(this.volumeInput);
+        this.volumeInput.addEventListener('input', () => {
+            this.audio.volume = parseFloat(this.volumeInput.value);
+            this.updateRangeBackground(this.volumeInput);
+        });
+
+        this.muteBtn = createElement({
+            parent: volumeControl,
+            classes: ['audio-player__btn', 'audio-player__mute'],
+        });
+
+        insertIcon(this.muteBtn, {
+            name: 'volume-fill-icon',
+            classes: ['audio-player__icon'],
+        });
+
+        this.muteBtn.addEventListener('click', () => {
+            this.audio.muted = !this.audio.muted;
+            this.muteBtn.innerHTML = '';
+
+            insertIcon(this.muteBtn, {
+                name: this.audio.muted ? 'mute-fill-icon' : 'volume-fill-icon',
+                classes: ['audio-player__icon'],
+            });
+        });
+
+        this.attachShowVolumeEvent(volumeControl);
+
         // Download button
         this.downloadBtn = createElement({
-            tag: 'a',
-            parent: this.element,
-            classes: ['audio-player__download'],
-            text: '⬇️',
-            attrs: {
-                href: this.config.src,
-                download: '',
-            },
+            parent: rightControls,
+            classes: ['audio-player__btn'],
         }) as HTMLAnchorElement;
+
+        this.downloadBtn.addEventListener('click', (e) => {
+            downloadFile(this.config.src, this.config?.name || 'qf_audio.mp3');
+        });
+
+        insertIcon(this.downloadBtn, {
+            name: 'download-icon',
+            classes: ['audio-player__icon'],
+        });
 
         // Append audio (hidden)
         this.element.appendChild(this.audio);
@@ -133,7 +168,19 @@ export default class AudioPlayerComponent {
         this.attachEvents();
     }
 
-    private updateRangeBackground(input: HTMLInputElement, color = 'var(--icon-accent)', background = 'var(--stroke-primary)') {
+    private attachShowVolumeEvent(volumeControl: HTMLElement) {
+        if (!GlobalStorage.isTouchDevice()) {
+            volumeControl.addEventListener('mouseover', () => {
+                this.volumeInput.classList.remove('hidden');
+            });
+    
+            volumeControl.addEventListener('mouseout', () => {
+                this.volumeInput.classList.add('hidden');
+            });
+        }
+    }
+
+    private updateRangeBackground(input: HTMLInputElement, color = 'var(--button-primary-disabled)', background = 'var(--stroke-primary)') {
         const min = parseFloat(input.min) || 0;
         const max = parseFloat(input.max) || 100;
         const val = parseFloat(input.value);
@@ -145,11 +192,19 @@ export default class AudioPlayerComponent {
 
     private attachEvents() {
         this.audio.addEventListener('play', () => {
-            this.playBtn.textContent = '⏸️';
+            this.playBtn.innerHTML = '';
+            insertIcon(this.playBtn, {
+                name: 'pause-fill-icon',
+                classes: ['audio-player__icon'],
+            });
         });
 
         this.audio.addEventListener('pause', () => {
-            this.playBtn.textContent = '▶️';
+            this.playBtn.innerHTML = '';
+            insertIcon(this.playBtn, {
+                name: 'play-fill-icon',
+                classes: ['audio-player__icon'],
+            });
         });
 
         this.audio.addEventListener('timeupdate', () => {

@@ -5,6 +5,7 @@ export const CONSTS = {
 };
 
 export const VIDEO_EXTENSIONS = ['mp4', 'mov'];
+const AUDIO_EXTENSIONS = ['mp3', 'wav', 'aiff', 'ogg', 'm4a'];
 
 export const UPLOAD_DATA = {
     MAX_SIZE: 200 * CONSTS.MB_MULTIPLIER,

@@ -1,8 +1,17 @@
+import PopUpComponent from "@components/UI/PopUpComponent/PopUpComponent";
+import networkErrorPopUp from "./networkErrorPopUp";
+
 export default async function downloadFile(url: string, filename?: string) {
     try {
+        new PopUpComponent({
+            icon: 'download-icon',
+            text: 'Скачивание файла скоро начнется',
+        });
+
         const response = await fetch(url, { mode: 'cors' });
 
         if (!response.ok) {
+            networkErrorPopUp({ text: 'Не удалось начать загрузку файла' });
             throw new Error(`Ошибка загрузки файла: ${response.status}`);
         }
 
@@ -20,6 +29,7 @@ export default async function downloadFile(url: string, filename?: string) {
 
         URL.revokeObjectURL(blobUrl); // Освободить память
     } catch (err) {
+        networkErrorPopUp({ text: 'Не удалось начать загрузку файла' });
         console.error('Не удалось скачать файл:', err);
     }
 }

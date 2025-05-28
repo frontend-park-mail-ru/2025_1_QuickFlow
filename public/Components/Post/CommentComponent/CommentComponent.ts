@@ -3,7 +3,6 @@ import createElement from "@utils/createElement";
 import LikeComponent from "../LikeComponent/LikeComponent";
 import { CommentsRequests } from "@modules/api";
 import { Comment } from "types/PostTypes";
-import formatTimeAgo from "@utils/formatTimeAgo";
 import getTimediff from "@utils/getTimeDifference";
 import insertIcon from "@utils/insertIcon";
 import ContextMenuComponent from "@components/ContextMenuComponent/ContextMenuComponent";
@@ -45,6 +44,7 @@ export default class CommentComponent {
         new AvatarComponent(this.element, {
             src: this.config.data.author?.avatar_url,
             size: AVATAR_SIZE,
+            href: `/profiles/${this.config.data.author?.username}`,
         });
 
         const content = createElement({
@@ -105,21 +105,6 @@ export default class CommentComponent {
             parent: header,
             classes: ['comment__actions'],
         });
-
-        // const replyAction = createElement({
-        //     parent: actions,
-        //     classes: ['comment__action'],
-        // });
-
-        // insertIcon(replyAction, {
-        //     name: 'reply-icon',
-        //     classes: ['comment__action-icon'],
-        // });
-
-        // createElement({
-        //     parent: replyAction,
-        //     text: 'Ответить',
-        // });
 
         new LikeComponent(actions, {
             isLiked: this.config.data.is_liked,

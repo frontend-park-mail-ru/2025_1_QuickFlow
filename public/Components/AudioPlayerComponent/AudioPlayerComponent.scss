@@ -1,23 +1,88 @@
 .audio-player {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
 
     min-width: 300px;
     border-radius: 8px;
     background: var(--background-light-gray);
-    padding: 8px 12px;
+    padding: 8px;
     transition: var(--trans-menu);
 
-    font-size: var(--font-size-s);
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
 }
 
-.audio-player__volume {
+.audio-player__time {
+    min-width: 28px;
+    text-align: center;
+}
+
+.audio-player__btn {
+    width: 32px;
+    height: 32px;
+    min-height: 32px;
+    min-width: 32px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: var(--trans-menu);
+    color: var(--icon-primary);
+
+    &:hover {
+        background: var(--background-gray);
+    }
+
+    &:active {
+        background: var(--background-gray-hover);
+    }
+}
+
+.audio-player__volume-wrapper {
+    gap: 2px;
+    min-height: 32px;
+    min-width: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    border-radius: 100px;
+    transition: var(--trans-menu);
+    color: var(--icon-primary);
+
+    &:hover {
+        background: var(--background-gray);
+    }
+}
+
+input[type='range'].audio-player__volume {
+    transition: var(--trans-menu);
     width: 56px;
+    opacity: 1;
+    margin: 0;
+    margin-left: 12px;
+
+    &.hidden {
+        width: 0;
+        opacity: 0;
+        margin: 0;
+    }
+}
+
+.audio-player__controls {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+}
+
+.audio-player__icon {
+    width: 16px;
+    height: 16px;
 }
 
 input[type='range'] {
-    margin: 0;
     height: 4px;
     -webkit-appearance: none;
     appearance: none;
@@ -25,6 +90,10 @@ input[type='range'] {
     outline: none;
     border-radius: 100px;
     padding: 0;
+    margin: 0 8px;
+    outline: none;
+    padding: 0;
+    width: 100%;
 
     &::-webkit-slider-runnable-track {
         height: 12px;
@@ -35,7 +104,8 @@ input[type='range'] {
         appearance: none;
         height: 12px;
         width: 12px;
-        background: var(--icon-accent);
+        background: var(--button-primary-disabled);
+        border: solid 2px var(--background-light-gray);
         border-radius: 50%;
         cursor: pointer;
     }
@@ -49,7 +119,7 @@ input[type='range'] {
         appearance: none;
         height: 12px;
         width: 12px;
-        background: var(--icon-accent);
+        background: var(--button-primary-disabled);
         border-radius: 50%;
         cursor: pointer;
     }
