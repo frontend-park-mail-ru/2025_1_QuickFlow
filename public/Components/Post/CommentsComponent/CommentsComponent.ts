@@ -258,9 +258,9 @@ export default class CommentsComponent {
     private async sendComment(stickerUrl?: string) {
         const body: CommentRequest = {};
 
-        if (!stickerUrl) {
-            body.text = this?.textarea?.value;
+        body.text = this?.textarea?.value || '';
 
+        if (!stickerUrl) {
             if (
                 this.attachmentsDropdown.mediaInput?.input?.files?.length > 0 ||
                 this.attachmentsDropdown.filesInput?.input?.files?.length > 0
@@ -302,7 +302,6 @@ export default class CommentsComponent {
                 this.attachmentsDropdown.filesInput.clear();
                 this.attachments.innerHTML = '';
             }
-
         } else {
             body.stickers = [stickerUrl];
         }
