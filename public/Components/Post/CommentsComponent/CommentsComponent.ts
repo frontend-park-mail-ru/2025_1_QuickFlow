@@ -389,6 +389,10 @@ export default class CommentsComponent {
     private onCommentsChanged() {
         const children = this?.element?.children;
 
+        if (!children?.length) {
+            return;
+        }
+
         if (children?.length < 2) {
             this?.element?.remove();
             this.element = null;
