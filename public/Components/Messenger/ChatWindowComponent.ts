@@ -36,6 +36,7 @@ export default class ChatWindowComponent {
     private container: HTMLElement | null = null;
     private _chatsPanel: ChatsPanelComponent | null = null;
     private messageInput: MessageInputComponent | null = null;
+    private wasFeedbackRendered: boolean = false;
 
     constructor(parent: HTMLElement, config: ChatWindowConfig) {
         this.parent = parent;
@@ -113,14 +114,17 @@ export default class ChatWindowComponent {
     }
 
     private renderFeedback() {
-        if (getLsItem('is-messenger-feedback-given', 'false') !== 'false') {
-            return;
-        }
+        if (
+            !this.wasFeedbackRendered &&
+            getLsItem('is-messenger-feedback-given', 'false') !== 'false'
+        ) return;
 
         new IFrameComponent(this.parent.parentNode as HTMLElement, {
             src: '/scores?type=messenger',
             deleteOther: true,
         });
+
+        this.wasFeedbackRendered = true;
     }
 
     private onNewMessageSent(message: Message) {

@@ -145,6 +145,10 @@ export default class FeedComponent {
     
 
     private cbOk(feedData: any) {
+        if (!feedData.length) {
+            return;
+        }
+
         let newPostsHeight = -48;
 
         feedData?.forEach((config: Record<string, any>) => {
