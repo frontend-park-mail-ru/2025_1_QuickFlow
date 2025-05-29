@@ -81,6 +81,13 @@ export default class ChatComponent {
                 return;
             }
 
+            if (chatId === this?.config?.chatData?.id) {
+                const messageElement = this.scroll?.querySelector(`[data-msg-id="${messageId}"]`);
+                messageElement?.previousElementSibling?.classList?.remove('chat__msg_nameless');
+                messageElement?.remove();
+                this.msgsData.messages = this.msgsData.messages.filter((msg: Message) => msg.id !== messageId);
+            }
+
             const lastMessage = this.config?.chatsPanel?.chats?.querySelector(`[data-last-message-id="${messageId}"]`);
 
             if (lastMessage) {
@@ -97,13 +104,6 @@ export default class ChatComponent {
                         break;
                     }
                 }
-            }
-
-            if (chatId === this?.config?.chatData?.id) {
-                const messageElement = this.scroll?.querySelector(`[data-msg-id="${messageId}"]`);
-                messageElement?.previousElementSibling?.classList?.remove('chat__msg_nameless');
-                messageElement?.remove();
-                this.msgsData.messages = this.msgsData.messages.filter((msg: Message) => msg.id !== messageId);
             }
         });
     }
