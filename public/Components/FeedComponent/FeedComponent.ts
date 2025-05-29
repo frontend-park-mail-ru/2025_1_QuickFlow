@@ -158,6 +158,9 @@ export default class FeedComponent {
         });
 
         // this.initVirtualization(newPostsHeight);
+        if (feedData?.length < POSTS_COUNT) {
+            return;
+        }
 
         new ExtraLoadComponent<any>({
             sentinelContainer: this.posts!,
