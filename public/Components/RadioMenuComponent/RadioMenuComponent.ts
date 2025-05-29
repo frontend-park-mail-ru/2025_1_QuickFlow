@@ -58,11 +58,20 @@ export default class RadioMenuComponent {
             this.config.items[section as string].onClick();
         }
 
+        let searchParams = window.location.search.split('&');
+        searchParams[0] = searchParams[0].replace('?', '');
+        searchParams = searchParams.filter(param => !param.startsWith('section='));
+        searchParams = searchParams.filter(param => param !== '');
+        const searchString = searchParams?.length ?
+            '&' + searchParams.join('&') :
+            '';
+
         const newUrl =
             window.location.protocol +
             "//" + window.location.host +
             window.location.pathname +
-            `?section=${section}`;
+            `?section=${section}` +
+            searchString;
 
         window.history.pushState({ path: newUrl }, '', newUrl);
     }

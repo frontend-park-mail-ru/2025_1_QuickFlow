@@ -2,11 +2,9 @@ import MainLayoutComponent from '@components/MainLayoutComponent/MainLayoutCompo
 import RadioMenuComponent from '@components/RadioMenuComponent/RadioMenuComponent';
 import createElement from '@utils/createElement';
 import FriendComponent from '@components/FriendComponent/FriendComponent';
-import { getLsItem } from '@utils/localStorage';
 import EmptyStateComponent from '@components/EmptyStateComponent/EmptyStateComponent';
 import SearchComponent from '@components/SearchComponent/SearchComponent';
 import router from '@router';
-import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import { FriendsRequests, UsersRequests } from '@modules/api';
 import LsProfile from '@modules/LsProfile';
 import networkErrorPopUp from '@utils/networkErrorPopUp';
@@ -23,9 +21,13 @@ class FriendsView {
     private containerObj: MainLayoutComponent;
     private friends: HTMLElement;
 
+    private targetUserId: string = null;
+
     constructor() {}
 
     render(params: Record<string, any>) {
+        console.log(params);
+
         this.containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });
@@ -60,23 +62,40 @@ class FriendsView {
             elementToHide: this.friends,
         });
 
-        new RadioMenuComponent(this.containerObj.right, {
-            items: {
-                friends: {
-                    title: 'Мои друзья',
-                    onClick: () => this.renderSection(Section.All),
+        this.targetUserId = params.user_id || LsProfile.id;
+        if (this.targetUserId !== LsProfile.id) {
+            new RadioMenuComponent(this.containerObj.right, {
+                items: {
+                    friends: {
+                        title: 'Все друзья',
+                        onClick: () => this.renderSection(Section.All),
+                    },
+                    incoming: {
+                        title: 'Подписчики',
+                        onClick: () => this.renderSection(Section.Incoming),
+                    },
                 },
-                incoming: {
-                    title: 'Заявки в друзья',
-                    onClick: () => this.renderSection(Section.Incoming),
+                active: params?.section || 'friends',
+            });
+        } else {
+            new RadioMenuComponent(this.containerObj.right, {
+                items: {
+                    friends: {
+                        title: 'Мои друзья',
+                        onClick: () => this.renderSection(Section.All),
+                    },
+                    incoming: {
+                        title: 'Заявки в друзья',
+                        onClick: () => this.renderSection(Section.Incoming),
+                    },
+                    outcoming: {
+                        title: 'Исходящие заявки',
+                        onClick: () => this.renderSection(Section.Outcoming),
+                    },
                 },
-                outcoming: {
-                    title: 'Исходящие заявки',
-                    onClick: () => this.renderSection(Section.Outcoming),
-                },
-            },
-            active: params?.section || 'friends',
-        });
+                active: params?.section || 'friends',
+            });
+        }
 
         return this.containerObj.container;
     }
@@ -104,11 +123,8 @@ class FriendsView {
         }
     }
 
-    async fetchFriends(section: string) {
-        const userId = LsProfile.id;
-        // const userId = getLsItem('user_id', null);
-
-        const [status, data] = await FriendsRequests.getFriends(userId, 100, 0, section);
+    async fetchFriends(section: 'all' | 'incoming' | 'outcoming') {
+        const [status, data] = await FriendsRequests.getFriends(this.targetUserId, 100, 0, section);
         switch (status) {
             case 200: 
                 this.renderFriends(data, section);
@@ -121,14 +137,16 @@ class FriendsView {
         }
     }
 
-    private renderFriends(data: Record<string, any>, section: string) {
+    private renderFriends(data: Record<string, any>, section: 'all' | 'incoming' | 'outcoming') {
         this.friends.innerHTML = '';
         const friendsData = data?.payload?.friends;
+
+        const isMine = this.targetUserId === LsProfile.id;
 
         if (!friendsData || !friendsData.length) {
             return new EmptyStateComponent(this.friends, {
                 icon: 'friends-icon',
-                text: 'У вас пока нет друзей',
+                text: isMine ? 'У вас пока нет друзей' : `У пользователя пока нет друзей`,
             });
         }
 
@@ -144,10 +162,11 @@ class FriendsView {
         });
     }
 
-    private renderFriend(parent: HTMLElement, friendData: Record<string, any>, section?: string) {
+    private renderFriend(parent: HTMLElement, friendData: Record<string, any>, section?: 'all' | 'incoming' | 'outcoming') {
         new FriendComponent(parent, {
             data: friendData,
             section: section || 'all',
+            isMine: this.targetUserId === LsProfile.id,
         });
     }
 }

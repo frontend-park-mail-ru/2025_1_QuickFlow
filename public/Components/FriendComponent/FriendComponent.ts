@@ -2,17 +2,27 @@ import createElement from '@utils/createElement';
 import AvatarComponent from '@components/AvatarComponent/AvatarComponent';
 import ContextMenuComponent, { OptionConfig } from '@components/ContextMenuComponent/ContextMenuComponent';
 import insertIcon from '@utils/insertIcon';
-import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
 import { FriendsRequests } from '@modules/api';
 import router from '@router';
+import networkErrorPopUp from '@utils/networkErrorPopUp';
+import PopUpComponent from '@components/UI/PopUpComponent/PopUpComponent';
+
+
+interface FriendConfig {
+    isMine: boolean;
+    data: Record<string, any>;
+    section: 'all' | 'incoming' | 'outcoming';
+}
 
 
 export default class FriendComponent {
     private parent: HTMLElement;
-    private config: Record<string, any>;
-    private element: HTMLElement;
+    private config: FriendConfig;
 
-    constructor(parent: HTMLElement, config: Record<string, any>) {
+    private element: HTMLElement;
+    private actionType: 'message' | 'accept' | 'decline';
+
+    constructor(parent: HTMLElement, config: FriendConfig) {
         this.parent = parent;
         this.config = config;
         this.render();
@@ -48,13 +58,33 @@ export default class FriendComponent {
             attrs: { href: `/profiles/${this.config.data.username}` },
         });
 
+        this.defineActionType();
+
         const action = createElement({
             parent: friendInfo,
             classes: ['search-item__action'],
         });
 
         this.renderAction(action, this.config.data.username);
-        this.renderDropdown(this.element, this.config.data);
+
+        if (this.config.isMine) {
+            this.renderDropdown(this.element, this.config.data);
+        }
+    }
+
+    private defineActionType(): 'message' | 'accept' | 'decline' {
+        if (!this.config.isMine) {
+            return this.actionType = 'message';    
+        }
+        
+        switch (this.config.section) {
+            case 'all':
+                return this.actionType = 'message';
+            case 'incoming':
+                return this.actionType = 'accept';
+            case 'outcoming':
+                return this.actionType = 'decline';
+        }
     }
 
     private renderDeletedFriend(friend: HTMLElement, friendData: Record<string, any>) {
@@ -68,89 +98,91 @@ export default class FriendComponent {
     private renderAction(parent: HTMLElement, username: string) {
         parent.innerHTML = '';
 
-        let action: HTMLElement;
+        let actionElement: HTMLElement;
 
-        switch (this.config.section) {
-            case 'all':
-                action = createElement({
+        switch (this.actionType) {
+            case 'message':
+                actionElement = createElement({
                     tag: 'a',
                     parent,
                     attrs: { href: `/messenger/${username}` },
                     classes: ['search-item__msg-redirect'],
                 });
         
-                insertIcon(action, {
+                insertIcon(actionElement, {
                     name: 'messenger-icon',
                     classes: ['search-item__msg-icon'],
                 });
         
                 createElement({
-                    parent: action,
+                    parent: actionElement,
                     text: 'Написать сообщение',
                     classes: ['search-item__action-text'],
                 });
                 break;
 
-            case 'incoming':
-                action = createElement({
+            case 'accept':
+                actionElement = createElement({
                     parent,
                     classes: ['search-item__msg-redirect'],
                 });
         
-                insertIcon(action, {
+                insertIcon(actionElement, {
                     name: 'user-add-icon',
                     classes: ['search-item__msg-icon'],
                 });
         
                 createElement({
-                    parent: action,
+                    parent: actionElement,
                     text: 'Принять заявку',
                     classes: ['search-item__action-text'],
                 });
 
-                action.addEventListener('click', async () => {
+                actionElement.addEventListener('click', async () => {
                     const status = await FriendsRequests.acceptFriendRequest(this.config.data.id);
                     switch (status) {
                         case 200:
                             this.element.remove();
+                            new PopUpComponent({
+                                icon: 'profile-icon',
+                                text: 'Пользователь добавлен в друзья',
+                            });
                             break;
                         default:
-                            new PopUpComponent({
-                                text: "Не удалось добавить пользователя в друзья",
-                                isError: true,
-                            });
+                            networkErrorPopUp({ text: "Не удалось добавить пользователя в друзья" });
                     }
                 });
                 break;
 
-            case 'outcoming':
-                action = createElement({
+            case 'decline':
+                actionElement = createElement({
                     parent,
                     classes: ['search-item__msg-redirect'],
                 });
         
-                insertIcon(action, {
+                insertIcon(actionElement, {
                     name: 'user-remove-icon',
                     classes: ['search-item__msg-icon'],
                 });
         
                 createElement({
-                    parent: action,
+                    parent: actionElement,
                     text: 'Отменить заявку',
                     classes: ['search-item__action-text'],
                 });
 
-                action.addEventListener('click', async () => {
+                actionElement.addEventListener('click', async () => {
                     const status = await FriendsRequests.cancelFriendRequest(this.config.data.id);
                     switch (status) {
                         case 200:
                             this.element.remove();
+                            new PopUpComponent({
+                                icon: 'profile-icon',
+                                text: 'Ваша заявка в друзья отменена',
+                            });
                             break;
                         default:
-                            new PopUpComponent({
-                                text: "Не удалось отменить заявку в друзья",
-                                isError: true,
-                            });
+                            networkErrorPopUp({ text: "Не удалось отменить заявку в друзья" });
                     }
                 });
                 break;
@@ -191,11 +223,7 @@ export default class FriendComponent {
                                 this.renderDeletedFriend(friend, friendData);
                                 break;
                             default:
-                                new PopUpComponent({
-                                    text: "Не удалось удалить пользователя из друзей",
-                                    isError: true,
-                                });
-                                break;
+                                networkErrorPopUp({ text: "Не удалось удалить пользователя из друзей" });
                         }
                     },
                 };
@@ -243,11 +271,7 @@ export default class FriendComponent {
                     this.renderDropdown(parent.parentNode.parentNode.parentNode as HTMLElement, friendData);
                     break;
                 default:
-                    new PopUpComponent({
-                        text: "Не удалось отменить действие",
-                        isError: true,
-                    });
-                    break;
+                    networkErrorPopUp({ text: "Не удалось отменить действие" });
             }
         });
     }
