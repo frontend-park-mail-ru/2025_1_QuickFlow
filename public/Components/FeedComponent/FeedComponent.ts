@@ -145,7 +145,7 @@ export default class FeedComponent {
     
 
     private cbOk(feedData: any) {
-        if (!feedData.length) {
+        if (!feedData?.length) {
             return;
         }
 
