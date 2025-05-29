@@ -148,6 +148,8 @@ class EditProfileView {
             disabled: true,
             stateUpdaters: this.stateUpdaters,
         });
+
+        this.submitButton.disable();
     }
 
     async handleFormSubmit() {
