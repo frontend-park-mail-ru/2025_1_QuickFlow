@@ -93,7 +93,7 @@ export default class ChatComponent {
 
                 for (const chat of newChatsData) {
                     if (chatId === chat.id) {
-                        this.config.chatsPanel.renderLastMsg(chat);
+                        this.config.chatsPanel.renderLastMsg(chat, 'same');
                         break;
                     }
                 }

@@ -238,12 +238,12 @@ export default class ChatsPanelComponent {
         this._chatWindow.renderActiveChat(chatData);
     }
 
-    renderLastMsg(chatData: any) {
+    renderLastMsg(chatData: any, position?: 'same') {
         const chatItem = this.chatItems?.find(
             (item) => item.id === CHAT_PREFIX + chatData.id
         );
 
-        if (chatItem) {
+        if (chatItem && position !== 'same') {
             chatItem.remove();
             this.chats.prepend(chatItem);
         }

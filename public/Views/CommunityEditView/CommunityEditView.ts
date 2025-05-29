@@ -181,6 +181,7 @@ class CommunityEditView {
         new FriendComponent(parent, {
             data: friendData,
             section: 'all',
+            isMine: false,
         });
     }
 
@@ -192,12 +193,6 @@ class CommunityEditView {
             text: 'Результаты поиска',
         });
     }
-
-
-
-
-
-
 
     private async renderFormSection(sectionName: string) {
         this.section = sectionName;
@@ -306,6 +301,8 @@ class CommunityEditView {
             disabled: true,
             stateUpdaters: this.stateUpdaters,
         });
+
+        this.submitButton.disable();
     }
 
     async handleFormSubmit() {
@@ -324,10 +321,7 @@ class CommunityEditView {
                 }
             };
             sections[this.section]?.();
-        })
-
-        // if (!body['cover']) body['cover'] = '';
-        // if (!body['avatar']) body['avatar'] = '';
+        });
         
         const newNickname = body?.nickname;
 
