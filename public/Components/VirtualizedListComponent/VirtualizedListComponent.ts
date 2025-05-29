@@ -81,12 +81,6 @@ export default class VirtualizedListComponent<T> {
             const scrollTop = document.documentElement.scrollTop;
             const containerRect = this.container.getBoundingClientRect();
 
-            console.log(
-                scrollTop,
-                this.topPadding,
-                this.bottomSpacer.getBoundingClientRect().top - window.innerHeight
-            );
-
             requestAnimationFrame(() => {
                 this.observer.disconnect();
 
@@ -94,7 +88,6 @@ export default class VirtualizedListComponent<T> {
                     scrollTop < this.topPadding &&
                     this.topItems.length
                 ) {
-                    console.log('hook top');
                     const returningPost = this.topItems.pop();
                     if (returningPost) {
                         this.topSpacer.after(returningPost);
@@ -110,7 +103,6 @@ export default class VirtualizedListComponent<T> {
                     scrollTop + this.container.clientHeight > containerRect.height - this.bottomPadding &&
                     this.bottomItems.length
                 ) {
-                    console.log('hook bottom');
                     const returningPost = this.bottomItems.shift();
                     if (returningPost) {
                         const beforeBottomSpacer = this.bottomSpacer.previousElementSibling;
@@ -146,11 +138,9 @@ export default class VirtualizedListComponent<T> {
                     el.remove();
 
                     if (top < -this.container.getBoundingClientRect().top) {
-                        console.log('!entry.isIntersecting TOP');
                         this.topPadding += height;
                         this.topItems.push(el);
                     } else {
-                        console.log('!entry.isIntersecting BOTTOM');
                         this.bottomPadding += height;
                         this.bottomItems.push(el);
                     }

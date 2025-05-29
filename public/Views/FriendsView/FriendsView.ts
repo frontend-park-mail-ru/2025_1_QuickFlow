@@ -26,8 +26,6 @@ class FriendsView {
     constructor() {}
 
     render(params: Record<string, any>) {
-        console.log(params);
-
         this.containerObj = new MainLayoutComponent().render({
             type: 'feed',
         });

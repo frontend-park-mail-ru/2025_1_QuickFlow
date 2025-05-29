@@ -101,7 +101,6 @@ export default class FeedComponent {
         });
 
         createPostBtn.addEventListener('click', () => {
-            console.log(this.config.params);
             new PostMwComponent(this.parent.parentNode as HTMLElement, {
                 type: 'create-post',
                 target: this.config?.params?.author_id ? 'community' : 'user',

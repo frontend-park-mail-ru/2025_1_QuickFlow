@@ -186,7 +186,10 @@ export default class CSATComponent {
             });
 
             this.renderCloseBtn();
-            this.textarea = new TextareaComponent(this.container, {});
+            this.textarea = new TextareaComponent(this.container, {
+                placeholder: 'Что можно улучшить?',
+                maxLength: 256,
+            });
             this.renderSubmitBtn('Отправить');
 
             return;
@@ -197,8 +200,6 @@ export default class CSATComponent {
             text: this.textarea?.value || '',
             rating: this.selectedRating,
         };
-
-        console.log(body);
 
         if (body.rating < 1 || body.rating > 5) return;
 

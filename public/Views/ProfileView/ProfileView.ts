@@ -59,7 +59,7 @@ class ProfileView {
         const [status, friendsData] = await FriendsRequests.getFriends(user_id, 8, 0);
         switch (status) {
             case 200:
-                this.friendsCbOk(friendsData.payload);
+                this.friendsCbOk(friendsData.payload, user_id);
                 break;
             case 401:
                 router.go({ path: '/login' });
@@ -70,7 +70,7 @@ class ProfileView {
         }
     }
 
-    friendsCbOk(data: Record<string, any>) {
+    friendsCbOk(data: Record<string, any>, userId: string) {
         if (!data.friends || data.friends.length === 0) return;
 
         const friendsWrapper = createElement({
@@ -79,9 +79,12 @@ class ProfileView {
         });
 
         const top = createElement({
+            tag: 'a',
             parent: friendsWrapper,
             classes: ['profile__friends-header'],
         });
+
+        top.onclick = () => router.go({ path: `/friends?section=friends&user_id=${userId}` });
 
         createElement({
             parent: top,

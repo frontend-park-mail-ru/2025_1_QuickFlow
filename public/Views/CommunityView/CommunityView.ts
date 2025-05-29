@@ -26,8 +26,6 @@ class CommunityView {
             type: 'profile',
         });
 
-        console.log(params);
-
         const address = params?.address;
 
         (async () => {
@@ -51,7 +49,6 @@ class CommunityView {
     private async renderMembers(communityId: string) {
         const [status, membersData] = await CommunitiesRequests.getCommunityMembers(communityId, 100);
 
-        console.log(membersData);
         switch (status) {
             case 200:
                 this.friendsCbOk(membersData.payload);
@@ -238,7 +235,6 @@ class CommunityView {
         if (!role) role = 'not_member';
 
         const properties = ACTIONS_PROPERTIES[role];
-        console.log(role);
 
         new ButtonComponent(this.profileActions, {
             text: properties[0].text,

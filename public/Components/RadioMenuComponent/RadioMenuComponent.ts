@@ -73,6 +73,6 @@ export default class RadioMenuComponent {
             `?section=${section}` +
             searchString;
 
-        window.history.pushState({ path: newUrl }, '', newUrl);
+        window.history.replaceState({ path: newUrl }, '', newUrl);
     }
 }
