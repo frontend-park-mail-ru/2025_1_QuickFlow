@@ -123,6 +123,7 @@ input[type='range'] {
         height: 12px;
         width: 12px;
         background: var(--button-primary-disabled);
+        border: solid 2px var(--background-light-gray);
         border-radius: 50%;
         cursor: pointer;
     }
