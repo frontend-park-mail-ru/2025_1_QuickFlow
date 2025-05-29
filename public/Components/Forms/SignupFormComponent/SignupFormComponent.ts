@@ -277,12 +277,19 @@ export default class SignupFormComponent {
         return true;
     }
 
-    continueBtnOnClick() {
+    async continueBtnOnClick() {
         setLsItem(this.usernameInput?.name, this.usernameInput?.value ?? '');
         setLsItem(this.firstnameInput?.name, this.firstnameInput?.value ?? '');
         setLsItem(this.lastnameInput?.name, this.lastnameInput?.value ?? '');
         setLsItem(this.sexInput?.name, this.sexInput?.value ?? '');
         setLsItem(this.birthDateInput?.name, this.birthDateInput?.value ?? '');
+
+        const [status] = await UsersRequests.getProfile(this.usernameInput?.value ?? '');
+        if (status === 200) {
+            this.usernameInput?.showError('Этот никнейм уже занят');
+            return;
+        }
+
         this.step = 2;
         this.render();
     }

@@ -199,10 +199,17 @@ export default class CreateCommunityFormComponent {
                 this.config.closeModal();
                 router.go({ path: `/communities/${communityData.payload.community.nickname}` });
                 break;
+            case 409:
+                this.addressInput.showError('Этот адрес уже занят');
+                this.addressInput.addListener(() => {
+                    this.addressInput.hideError();
+                    this.updateBtnState();
+                });
+                break;
             default:
-                this.nameInput.showError('Не удалось создать сообщество');
-                this.nameInput.addListener(() => {
-                    this.nameInput.hideError();
+                this.addressInput.showError('Не удалось создать сообщество');
+                this.addressInput.addListener(() => {
+                    this.addressInput.hideError();
                     this.updateBtnState();
                 });
                 break;
