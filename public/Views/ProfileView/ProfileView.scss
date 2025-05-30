@@ -211,7 +211,15 @@
     }
 
     .profile__actions {
-        display: none;
+        width: 100%;
+
+        & .button {
+            width: 100%;
+
+            & .button_textless {
+                width: unset;
+            }
+        }
     }
 
     .cover {
@@ -232,6 +240,10 @@
         width: 100%;
         justify-content: center;
         padding-top: 40px;
+
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
     }
 
     .profile__info {
