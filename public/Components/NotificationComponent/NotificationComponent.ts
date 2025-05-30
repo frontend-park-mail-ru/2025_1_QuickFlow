@@ -102,8 +102,8 @@ export default class NotificationComponent {
         });
 
         this.renderContent(
-            ``,
-            `${data?.user?.firstname} ${data?.user?.lastname} нравится ваш пост`
+            `${data?.user?.firstname} ${data?.user?.lastname}`,
+            `нравится ваш пост`
         );
     }
 
@@ -119,8 +119,8 @@ export default class NotificationComponent {
         });
 
         this.renderContent(
-            ``,
-            `${data?.comment?.author?.firstname} ${data?.comment?.author?.lastname} оставил(-а) новый комментарий`
+            `${data?.comment?.author?.firstname} ${data?.comment?.author?.lastname}`,
+            `оставил(-а) новый комментарий`
         );
     }
 
@@ -136,8 +136,8 @@ export default class NotificationComponent {
         });
 
         this.renderContent(
-            ``,
-            `${data?.user?.firstname} ${data?.user?.lastname} нравится ваш комментарий`
+            `${data?.user?.firstname} ${data?.user?.lastname}`,
+            `нравится ваш комментарий`
         );
     }
 
@@ -153,8 +153,8 @@ export default class NotificationComponent {
         });
 
         this.renderContent(
-            ``,
-            `${data?.firstname} ${data?.lastname} хочет добавить вас в друзья`
+            `${data?.firstname} ${data?.lastname}`,
+            `хочет добавить вас в друзья`
         );
     }
 
@@ -170,8 +170,8 @@ export default class NotificationComponent {
         });
 
         this.renderContent(
-            ``,
-            `${data?.firstname} ${data?.lastname} принял(-а) вашу заявку в друзья`
+            `${data?.firstname} ${data?.lastname}`,
+            `принял(-а) вашу заявку в друзья`
         );
     }
 
@@ -204,7 +204,11 @@ export default class NotificationComponent {
         if (title) {
             createElement({
                 parent: content,
-                classes: ['chat__sender'],
+                classes: [
+                    this.config.type === 'msg' ?
+                    'chat__sender' :
+                    'notification__title'
+                ],
                 text: title,
             });
         }

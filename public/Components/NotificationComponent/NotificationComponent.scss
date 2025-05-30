@@ -9,6 +9,17 @@
     opacity: 0;
     transform: translateY(-12px) scale(0.98);
     transition: var(--trans-menu);
+
+    &__title {
+        color: var(--text-primary);
+        display: -webkit-box;
+        font-weight: 500;
+        overflow: hidden;
+        word-break: break-all;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+    }
 }
 
 .notification_visible {
