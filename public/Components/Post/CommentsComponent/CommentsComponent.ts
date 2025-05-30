@@ -70,9 +70,9 @@ export default class CommentsComponent {
         }
 
         this.renderComment(this.config.lastData);
-        this.totalFetchedCount++;
+        // this.totalFetchedCount++;
 
-        if (this.config.commentsCount === this.totalFetchedCount) {
+        if (this.config.commentsCount === 1) {
             return;
         }
 
@@ -121,7 +121,8 @@ export default class CommentsComponent {
         }
 
         if (!this.lastTs) {
-            this.element?.lastChild?.remove();
+            this.element.innerHTML = '';
+            // this.element?.lastChild?.remove();
         }
 
         for (const commentData of commentsData) {
@@ -336,11 +337,6 @@ export default class CommentsComponent {
 
     private handleInput() {
         this.updateSendBtnState();
-        // if (this.textarea.isEmpty()) {
-        //     this.sendBtn.classList.add('comments__send-icon_disabled');
-        // } else {
-        //     this.sendBtn.classList.remove('comments__send-icon_disabled');
-        // }
 
         const el = this.textarea.textarea;
         el.style.height = 'auto';
