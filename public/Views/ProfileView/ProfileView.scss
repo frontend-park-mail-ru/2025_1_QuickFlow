@@ -188,7 +188,7 @@
 @media screen and (max-width: 480px) {
     .container_profile {
         margin-top: -15px;
-        gap: 24px;
+        gap: 16px;
     }
 
     .profile__avatar {
@@ -216,7 +216,7 @@
         & .button {
             width: 100%;
 
-            & .button_textless {
+            &.button_textless {
                 width: unset;
             }
         }
