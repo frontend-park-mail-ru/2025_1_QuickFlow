@@ -18,6 +18,10 @@ export default abstract class NotificationService {
         NotificationService.subscribeMessage();
 
         PostsRequests.onPostLiked((data) => {
+            if (data?.user?.id === LsProfile?.id) {
+                return;
+            }
+
             new NotificationComponent({
                 type: 'post_liked',
                 classes: ['notification_msg'],
@@ -26,6 +30,10 @@ export default abstract class NotificationService {
         });
 
         PostsRequests.onPostCommented((data) => {
+            if (data?.comment?.author?.id === LsProfile?.id) {
+                return;
+            }
+
             new NotificationComponent({
                 type: 'post_commented',
                 classes: ['notification_msg'],
@@ -34,6 +42,10 @@ export default abstract class NotificationService {
         });
 
         CommentsRequests.onCommentLiked((data) => {
+            if (data?.user?.id === LsProfile?.id) {
+                return;
+            }
+
             new NotificationComponent({
                 type: 'comment_liked',
                 classes: ['notification_msg'],

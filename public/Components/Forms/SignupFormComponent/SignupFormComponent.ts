@@ -318,7 +318,7 @@ export default class SignupFormComponent {
                     router.menu.renderProfileMenuItem();
                     router?.menu?.renderCounters();
 
-                    NotificationService.subscribe();
+                    NotificationService.subscribe(true);
 
                     router.go({ path: '/feed' });
                     return;

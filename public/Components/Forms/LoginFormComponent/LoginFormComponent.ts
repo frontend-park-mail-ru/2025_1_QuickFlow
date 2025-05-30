@@ -238,7 +238,7 @@ export default class LoginFormComponent {
                     router?.menu?.renderCounters();
                     setLsItem('is-general-feedback-ready', 'true');
 
-                    NotificationService.subscribe();
+                    NotificationService.subscribe(true);
 
                     router.go({ path: '/feed' });
                     return;
