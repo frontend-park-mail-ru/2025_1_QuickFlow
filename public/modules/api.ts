@@ -4,7 +4,7 @@ import { Chat, MessagesResponse, MessageWsSend, UnreadChatsCountResponse } from 
 import { Comment, CommentRequest, Post, PostRequest, PostResponse } from 'types/PostTypes';
 import { StickerPackRequest, StickerPackResponse, StickerPacksResponse } from 'types/StickersTypes';
 import { UploadData, UploadRequest } from 'types/UploadTypes';
-import { User } from 'types/UserTypes';
+import { User, UserPublic } from 'types/UserTypes';
 import ws from './WebSocketService';
 
 
@@ -54,6 +54,20 @@ export class PostsRequests {
                 callback: (status: number) => resolve(status),
             });
         });
+    }
+
+    static onPostLiked(cb: (payload: { post: Post, user: UserPublic }) => void) {
+        new ws().subscribe(
+            'post_liked',
+            (payload: { post: Post, user: UserPublic }) => cb(payload),
+        );
+    }
+
+    static onPostCommented(cb: (payload: { post: Post, comment: Comment }) => void) {
+        new ws().subscribe(
+            'post_commented',
+            (payload: { post: Post, comment: Comment }) => cb(payload),
+        );
     }
 };
 
@@ -114,6 +128,13 @@ export class CommentsRequests {
                 callback: (status: number) => resolve(status),
             });
         });
+    }
+
+    static onCommentLiked(cb: (payload: { comment: Comment, user: UserPublic }) => void) {
+        new ws().subscribe(
+            'comment_liked',
+            (payload: { comment: Comment, user: UserPublic }) => cb(payload),
+        );
     }
 };
 
@@ -441,6 +462,28 @@ export class FriendsRequests {
                 callback: (status: number) => resolve(status),
             });
         });
+    }
+
+
+
+
+
+    // static deleteMessage(message_id: string): void {
+    //     new ws().send('message_delete', { message_id });
+    // }
+
+    static onRequestReceived(cb: (payload: UserPublic) => void) {
+        new ws().subscribe(
+            'fr_received',
+            (payload: UserPublic) => cb(payload),
+        );
+    }
+
+    static onRequestAccepted(cb: (payload: UserPublic) => void) {
+        new ws().subscribe(
+            'fr_accepted',
+            (payload: UserPublic) => cb(payload),
+        );
     }
 };
 

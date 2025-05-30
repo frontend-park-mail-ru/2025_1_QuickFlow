@@ -9,10 +9,8 @@ import ThemeManager from '@modules/ThemeManager';
 import LsStandaloneBridge from '@modules/LsStandaloneBridge';
 import registerSW from '@utils/registerSW';
 import registerRoutes from './registerRoutes';
-import ws from '@modules/WebSocketService';
-import NotificationComponent from '@components/NotificationComponent/NotificationComponent';
 import LsProfile from '@modules/LsProfile';
-import { Message } from 'types/ChatsTypes';
+import NotificationService from '@modules/NotificationService';
 
 
 registerSW();
@@ -84,27 +82,8 @@ registerRoutes();
     
     router.menu = new MenuComponent(container, config);
     router.header = new HeaderComponent(container);
-    
-    if (
-        !router.path.startsWith('/scores') &&
-        !router.path.startsWith('/login') &&
-        !router.path.startsWith('/signup')
-    ) {
-        new ws().subscribe('message', (payload: Message) => {
-            if (
-                router.path.startsWith('/messenger') ||
-                payload?.sender?.username === LsProfile.username
-            ) return;
-        
-            new NotificationComponent({
-                type: 'msg',
-                classes: ['notification_msg'],
-                data: payload,
-            });
 
-            router.menu.renderCounters('messenger');
-        });
-    }
+    NotificationService.subscribe();
     
     router.start();
 })();

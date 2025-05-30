@@ -1,0 +1,77 @@
+import Router from "@router";
+import LsProfile from "./LsProfile";
+import NotificationComponent from "@components/NotificationComponent/NotificationComponent";
+import { Message } from "types/ChatsTypes";
+import ws from "./WebSocketService";
+import { CommentsRequests, FriendsRequests, PostsRequests } from "./api";
+
+export default abstract class NotificationService {
+    public static subscribe(skipRouteChecking: boolean = false) {
+        if (!skipRouteChecking &&
+            (
+                Router.path.startsWith('/scores') ||
+                Router.path.startsWith('/login') ||
+                Router.path.startsWith('/signup')
+            )
+        ) return;
+
+        NotificationService.subscribeMessage();
+
+        PostsRequests.onPostLiked((data) => {
+            new NotificationComponent({
+                type: 'post_liked',
+                classes: ['notification_like'],
+                data,
+            });
+        });
+
+        PostsRequests.onPostCommented((data) => {
+            new NotificationComponent({
+                type: 'post_commented',
+                classes: ['notification_like'],
+                data,
+            });
+        });
+
+        CommentsRequests.onCommentLiked((data) => {
+            new NotificationComponent({
+                type: 'comment_liked',
+                classes: ['notification_like'],
+                data,
+            });
+        });
+
+        FriendsRequests.onRequestReceived((data) => {
+            new NotificationComponent({
+                type: 'friend_request_received',
+                classes: ['notification_like'],
+                data,
+            });
+        });
+
+        FriendsRequests.onRequestAccepted((data) => {
+            new NotificationComponent({
+                type: 'friend_request_accepted',
+                classes: ['notification_like'],
+                data,
+            });
+        });
+    }
+
+    public static subscribeMessage() {
+        new ws().subscribe('message', (payload: Message) => {
+            if (
+                Router.path.startsWith('/messenger') ||
+                payload?.sender?.username === LsProfile.username
+            ) return;
+        
+            new NotificationComponent({
+                type: 'msg',
+                classes: ['notification_msg'],
+                data: payload,
+            });
+
+            Router.menu.renderCounters('messenger');
+        });
+    }
+};

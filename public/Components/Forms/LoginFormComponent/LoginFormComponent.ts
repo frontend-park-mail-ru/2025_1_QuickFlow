@@ -5,11 +5,8 @@ import createElement from '@utils/createElement';
 import focusInput from '@utils/focusInput';
 import router from '@router';
 import { setLsItem, getLsItem, removeLsItem } from '@utils/localStorage';
-import { UsersRequests } from '@modules/api';
 import LsProfile from '@modules/LsProfile';
-import ws from '@modules/WebSocketService';
-import NotificationComponent from '@components/NotificationComponent/NotificationComponent';
-import { Message } from 'types/ChatsTypes';
+import NotificationService from '@modules/NotificationService';
 
 
 export default class LoginFormComponent {
@@ -241,26 +238,7 @@ export default class LoginFormComponent {
                     router?.menu?.renderCounters();
                     setLsItem('is-general-feedback-ready', 'true');
 
-                    // (async () => {
-                    //     const [status, data] = await UsersRequests.getMyProfile();
-                    //     // const [status, data] = await UsersRequests.getProfile(getLsItem('username', null));
-                    //     if (status === 200) setLsItem('user_id', data.id);
-                    // })();
-
-                    new ws().subscribe('message', (payload: Message) => {
-                        if (
-                            router.path.startsWith('/messenger') ||
-                            payload?.sender?.username === LsProfile.username
-                        ) return;
-
-                        new NotificationComponent({
-                            type: 'msg',
-                            classes: ['notification_msg'],
-                            data: payload,
-                        });
-
-                        router.menu.renderCounters('messenger');
-                    });
+                    NotificationService.subscribe();
 
                     router.go({ path: '/feed' });
                     return;

@@ -10,9 +10,7 @@ import router from '@router';
 import { SEX } from '@config/config';
 import { UsersRequests } from '@modules/api';
 import LsProfile from '@modules/LsProfile';
-import ws from '@modules/WebSocketService';
-import NotificationComponent from '@components/NotificationComponent/NotificationComponent';
-import { Message } from 'types/ChatsTypes';
+import NotificationService from '@modules/NotificationService';
 
 
 const DEFAULT_INPUT_VALUE = '';
@@ -320,20 +318,7 @@ export default class SignupFormComponent {
                     router.menu.renderProfileMenuItem();
                     router?.menu?.renderCounters();
 
-                    new ws().subscribe('message', (payload: Message) => {
-                        if (
-                            router.path.startsWith('/messenger') ||
-                            payload?.sender?.username === LsProfile.username
-                        ) return;
-
-                        new NotificationComponent({
-                            type: 'msg',
-                            classes: ['notification_msg'],
-                            data: payload,
-                        });
-
-                        router.menu.renderCounters('messenger');
-                    });
+                    NotificationService.subscribe();
 
                     router.go({ path: '/feed' });
                     return;
