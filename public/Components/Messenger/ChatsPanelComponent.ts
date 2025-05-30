@@ -350,16 +350,16 @@ export default class ChatsPanelComponent {
             text: CHATS_TITLE,
         });
 
-        createElement({
-            parent: searchBarTop,
-            classes: ['chats-panel__filter'],
-        });
+        // createElement({
+        //     parent: searchBarTop,
+        //     classes: ['chats-panel__filter'],
+        // });
 
-        new InputComponent(searchBar, {
-            type: 'search',
-            placeholder: SEARCH_PLACEHOLDER,
-            showRequired: false,
-            classes: ['chats-panel__search']
-        });
+        // new InputComponent(searchBar, {
+        //     type: 'search',
+        //     placeholder: SEARCH_PLACEHOLDER,
+        //     showRequired: false,
+        //     classes: ['chats-panel__search']
+        // });
     }
 }
