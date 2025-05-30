@@ -1,5 +1,6 @@
 import DeleteMwComponent from '@components/UI/Modals/DeleteMwComponent';
 import Ajax from '@modules/ajax';
+import GlobalStorage from '@modules/GlobalStorage';
 import router from '@router';
 import { User } from 'types/UserTypes';
 
@@ -27,7 +28,7 @@ export const ACTIONS_PROPERTIES = {
             icon: "/static/img/messenger-primary-icon.svg",
             onClick: function(data: User) {
                 router.go({
-                    path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
+                    path: `/messenger/${data.profile.username}?${(data?.chat_id && !GlobalStorage.isTouchDevice()) ? 'chat_id=' + data?.chat_id : ''}`
                 });
             },
         }],
@@ -53,7 +54,7 @@ export const ACTIONS_PROPERTIES = {
             icon: "/static/img/messenger-primary-icon.svg",
             onClick: function(data: User) {
                 router.go({
-                    path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
+                    path: `/messenger/${data.profile.username}?${(data?.chat_id && !GlobalStorage.isTouchDevice()) ? 'chat_id=' + data?.chat_id : ''}`
                 });
             },
         }],
@@ -79,7 +80,7 @@ export const ACTIONS_PROPERTIES = {
             icon: "/static/img/messenger-primary-icon.svg",
             onClick: function(data: User) {
                 router.go({
-                    path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
+                    path: `/messenger/${data.profile.username}?${(data?.chat_id && !GlobalStorage.isTouchDevice()) ? 'chat_id=' + data?.chat_id : ''}`
                 });
             },
         }],
@@ -88,7 +89,7 @@ export const ACTIONS_PROPERTIES = {
             variant: "primary",
             onClick: function(data: User) {
                 router.go({
-                    path: `/messenger/${data.profile.username}?${data?.chat_id ? 'chat_id=' + data?.chat_id : ''}`
+                    path: `/messenger/${data.profile.username}?${(data?.chat_id && !GlobalStorage.isTouchDevice()) ? 'chat_id=' + data?.chat_id : ''}`
                 });
             },
         },
