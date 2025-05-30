@@ -1,4 +1,4 @@
-const VERSION = '1.0.170'; // Версия для управления кэшами
+const VERSION = '1.0.171'; // Версия для управления кэшами
 
 const STATIC_CACHE = 'STATIC_CACHE-' + VERSION;
 const MEDIA_CACHE = 'MEDIA_CACHE-' + VERSION;
@@ -24,7 +24,7 @@ const CACHE_ON_INSTALL = [
 ];
 
 self.addEventListener('install', (event) => {
-    console.log('Installing Service Worker', VERSION);
+    // console.log('Installing Service Worker', VERSION);
 
     event.waitUntil(
         caches.open(STATIC_CACHE).then((cache) => {
@@ -36,7 +36,7 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-    console.log('Activating Service Worker', VERSION);
+    // console.log('Activating Service Worker', VERSION);
 
     // Удаляем старые кэши, если их версия не совпадает с текущей
     event.waitUntil(
@@ -47,7 +47,7 @@ self.addEventListener('activate', (event) => {
                         cacheName.includes('CACHE') &&
                         !cacheName.includes(VERSION)
                     ) {
-                        console.log('Deleting old cache:', cacheName);
+                        // console.log('Deleting old cache:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
@@ -167,7 +167,7 @@ async function handleMediaFetch(request) {
     const cachedResponse = await cache.match(request);
 
     if (cachedResponse && checkCachedResponse(cachedResponse, MEDIA_CACHE_EXPIRES)) {
-        console.log('Serving media content from cache:', request.url);
+        // console.log('Serving media content from cache:', request.url);
         return cachedResponse;
     }
 
@@ -196,7 +196,7 @@ async function handleApiFetch(request) {
         if (networkResponse.ok) {
             const cache = await caches.open(API_CACHE);
             await cache.put(request, cloneResponse(networkResponse));
-            console.log('Cached API response for offline use:', request.url);
+            // console.log('Cached API response for offline use:', request.url);
         }
 
         return networkResponse;
