@@ -44,6 +44,8 @@ export default class NotificationComponent {
     }
 
     render() {
+        this.clearContainer();
+
         this.element = createElement({
             parent: NotificationComponent.container,
             classes: ['notification'],
@@ -88,6 +90,12 @@ export default class NotificationComponent {
                 this.element?.remove();
             }, { once: true });
         }, 5000);
+    }
+
+    private clearContainer() {
+        NotificationComponent?.container
+        ?.querySelectorAll('.notification_removing')
+        ?.forEach(notification => notification?.remove());
     }
 
     private renderPostLiked() {
