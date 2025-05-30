@@ -60,7 +60,29 @@
     position: fixed;
     bottom: 32px;
     right: 64px;
-    z-index: 1;
+    z-index: 2;
     max-width: 256px;
     transition: var(--trans-menu);
+}
+
+@media screen and (max-width: 480px) {
+    .notification__container {
+        bottom: unset;
+        top: 16px;
+        right: unset;
+        max-width: calc(100vw - 32px);
+        width: 100%;
+    }
+
+    .notification {
+        max-width: calc(100vw - 32px);
+        width: 100%;
+    }
+
+    .notification .xs {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        min-height: 48px;
+    }
 }
