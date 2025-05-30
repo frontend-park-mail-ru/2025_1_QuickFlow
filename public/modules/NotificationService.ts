@@ -20,7 +20,7 @@ export default abstract class NotificationService {
         PostsRequests.onPostLiked((data) => {
             new NotificationComponent({
                 type: 'post_liked',
-                classes: ['notification_like'],
+                classes: ['notification_msg'],
                 data,
             });
         });
@@ -28,7 +28,7 @@ export default abstract class NotificationService {
         PostsRequests.onPostCommented((data) => {
             new NotificationComponent({
                 type: 'post_commented',
-                classes: ['notification_like'],
+                classes: ['notification_msg'],
                 data,
             });
         });
@@ -36,7 +36,7 @@ export default abstract class NotificationService {
         CommentsRequests.onCommentLiked((data) => {
             new NotificationComponent({
                 type: 'comment_liked',
-                classes: ['notification_like'],
+                classes: ['notification_msg'],
                 data,
             });
         });
@@ -44,7 +44,7 @@ export default abstract class NotificationService {
         FriendsRequests.onRequestReceived((data) => {
             new NotificationComponent({
                 type: 'friend_request_received',
-                classes: ['notification_like'],
+                classes: ['notification_msg'],
                 data,
             });
         });
@@ -52,7 +52,7 @@ export default abstract class NotificationService {
         FriendsRequests.onRequestAccepted((data) => {
             new NotificationComponent({
                 type: 'friend_request_accepted',
-                classes: ['notification_like'],
+                classes: ['notification_msg'],
                 data,
             });
         });
