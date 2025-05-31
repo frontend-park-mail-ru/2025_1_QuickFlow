@@ -19,8 +19,6 @@ Frontend команды QuickFlow
 
 - [Backend repository](https://github.com/go-park-mail-ru/2025_1_QuickFlow)
 
-- [Deploy](---)
+- [Deploy](https://quickflowapp.ru/feed?section=feed)
 
 - [Figma](https://www.figma.com/design/XuDHv8fGOAkEbds1GIVEWR/QuickFlow?node-id=0-1&t=v9Fs0bVQo6B1poGY-1)
-
-- [API](---)
