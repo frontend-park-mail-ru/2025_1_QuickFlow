@@ -15,7 +15,12 @@ export default function getTimediff(ts: string, config?: GetTimediffConfig) {
     let value: number;
     let unit: string;
 
-    if (diff < msPerMinute) {
+    value = Math.round(diff / 1000);
+    if (value <= 5) {
+        return 'только что';
+    }
+
+    else if (diff < msPerMinute) {
         value = Math.round(diff / 1000);
         unit = config?.mode === 'short' ? 'с' : pluralize(value, ['секунду', 'секунды', 'секунд']);
     } else if (diff < msPerHour) {

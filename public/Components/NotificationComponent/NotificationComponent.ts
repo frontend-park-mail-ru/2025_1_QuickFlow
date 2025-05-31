@@ -96,6 +96,10 @@ export default class NotificationComponent {
         NotificationComponent?.container
         ?.querySelectorAll('.notification_removing')
         ?.forEach(notification => notification?.remove());
+
+        if (NotificationComponent?.container?.children?.length >= 5) {
+            NotificationComponent?.container?.lastElementChild?.remove();
+        }
     }
 
     private renderPostLiked() {
