@@ -131,7 +131,7 @@ export default class MenuComponent {
             return;
         }
 
-        this.container.querySelector(`[data-section="${section}"] .menu__counter`)?.remove();
+        // this.container.querySelector(`[data-section="${section}"] .menu__counter`)?.remove();
 
         if (section === 'friends') {
             return this.updateFriendsCounter();
@@ -150,6 +150,8 @@ export default class MenuComponent {
                 return;
         }
 
+        this.container.querySelector(`[data-section="friends"] .menu__counter`)?.remove();
+
         const requestsCount = friendsData?.payload?.friends?.length;
         if (requestsCount) {
             new CounterComponent(this.menuElements.friends, {
@@ -166,6 +168,8 @@ export default class MenuComponent {
                 router.go({ path: '/login' });
                 return;
         }
+
+        this.container.querySelector(`[data-section="messenger"] .menu__counter`)?.remove();
 
         if (unreadChatsData.payload.chats_count) {
             new CounterComponent(this.menuElements.messenger, {
