@@ -98,7 +98,7 @@ export default class NotificationComponent {
         ?.forEach(notification => notification?.remove());
 
         if (NotificationComponent?.container?.children?.length >= 5) {
-            NotificationComponent?.container?.lastElementChild?.remove();
+            NotificationComponent?.container?.firstElementChild?.remove();
         }
     }
 
