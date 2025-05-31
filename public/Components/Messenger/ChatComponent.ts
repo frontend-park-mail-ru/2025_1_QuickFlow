@@ -60,7 +60,7 @@ export default class ChatComponent {
             classes: ['chat__scroll'],
         });
 
-        const [status, msgsData] = await ChatsRequests.getMessages(this.config?.chatData?.id, 50);
+        const [status, msgsData] = await ChatsRequests.getMessages(this.config?.chatData?.id, 100);
         this.msgsData = msgsData;
 
         switch (status) {
